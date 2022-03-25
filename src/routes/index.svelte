@@ -403,7 +403,7 @@
 	.prev {
 		display: none;
 		position: absolute;
-		z-index: 500;
+		z-index: 180;
 		top: 35%;
 		height: 20%;
 		width: 30px;
