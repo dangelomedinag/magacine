@@ -1,55 +1,212 @@
 <script>
-	const titles = [
-		{
-			title: 'Title of Movie',
-			poster:
-				'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180'
-		},
-		{
-			title: 'the short',
-			poster:
-				'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054'
-		},
-		{
-			title: 'En busca de la felicidad',
-			poster:
-				'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217'
-		},
-		{
-			title: 'Title of Movie',
-			poster:
-				'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180'
-		},
-		{
-			title: 'the short',
-			poster:
-				'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054'
-		},
-		{
-			title: 'En busca de la felicidad',
-			poster:
-				'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217'
+	import { flip } from 'svelte/animate';
+
+	import { scale } from 'svelte/transition';
+	import { quintInOut, quintOut } from 'svelte/easing';
+	import { v4 as uuidv4 } from 'uuid';
+	let xx;
+
+	function prevPage(e) {
+		const { steps, current, element } = pages(e.target.parentNode);
+
+		let prev = 0;
+
+		for (let i = 0; i < steps.length; i++) {
+			if (current <= steps[i]) {
+				prev = steps[i - 1];
+				break;
+			}
 		}
-	];
-	const tracks = [
+
+		element.scrollLeft = prev;
+	}
+	function nextPage(e) {
+		const { steps, current, element } = pages(e.target.parentNode);
+
+		let next = 0;
+
+		for (let i = 0; i < steps.length; i++) {
+			if (current < steps[i]) {
+				next = steps[i];
+				break;
+			}
+		}
+
+		element.scrollLeft = next;
+	}
+	const getExtra = (childEle) => {
+		let extra = 0;
+		let computedStyle = window.getComputedStyle(childEle);
+		extra += parseInt(computedStyle.marginLeft, 10);
+		extra += parseInt(computedStyle.marginRight, 10);
+		extra += parseInt(computedStyle.borderWidth, 10);
+		extra += parseInt(computedStyle.paddingLeft, 10);
+		extra += parseInt(computedStyle.paddingRight, 10);
+		return extra;
+	};
+
+	function pages(node) {
+		/* ssssssssssssss */
+
+		/* ssssssssssss */
+		let margin;
+		let ele = node.querySelector('section');
+		let childs = node.querySelectorAll('section > figure');
+		let steps = [];
+		let cardWidth;
+		childs.forEach((card, index) => {
+			cardWidth = card.getBoundingClientRect().width;
+			if (index < 1) {
+				margin = getExtra(card);
+				xx = margin;
+				steps.push(cardWidth + margin);
+			}
+			if (index > 0) {
+				steps.push(steps[index - 1] + cardWidth + 16);
+			}
+		});
+
+		return { steps, current: ele.scrollLeft, element: ele };
+	}
+
+	let tracks = [
 		{
+			id: uuidv4(),
 			title: 'Trending movies',
-			level: 'primary'
+			level: 'primary',
+			movies: [
+				{
+					id: uuidv4(),
+					title: 'Title of Movie 1',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180'
+				},
+				{
+					id: uuidv4(),
+					title: 'En busca de la felicidad',
+					poster:
+						'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217'
+				},
+				{
+					id: uuidv4(),
+					title: 'Title of Movie',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180'
+				},
+				{
+					id: uuidv4(),
+					title: 'the short',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054'
+				},
+				{
+					id: uuidv4(),
+					title: 'En busca de la felicidad 1',
+					poster:
+						'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217'
+				},
+				{
+					id: uuidv4(),
+					title: 'the short 1',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054'
+				}
+			]
 		},
 		{
+			id: uuidv4(),
 			title: 'Continue watching',
-			level: 'secondary'
+			level: 'secondary',
+			movies: [
+				{
+					id: uuidv4(),
+					title: 'Title of Movie 1',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180'
+				},
+				{
+					id: uuidv4(),
+					title: 'En busca de la felicidad',
+					poster:
+						'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217'
+				},
+				{
+					id: uuidv4(),
+					title: 'Title of Movie',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180'
+				},
+				{
+					id: uuidv4(),
+					title: 'the short',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054'
+				},
+				{
+					id: uuidv4(),
+					title: 'En busca de la felicidad 1',
+					poster:
+						'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217'
+				},
+				{
+					id: uuidv4(),
+					title: 'the short 1',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054'
+				}
+			]
 		},
 		{
+			id: uuidv4(),
 			title: 'Top rated',
-			level: 'regular'
+			level: 'regular',
+			movies: [
+				{
+					id: uuidv4(),
+					title: 'Title of Movie 1',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180'
+				},
+				{
+					id: uuidv4(),
+					title: 'En busca de la felicidad',
+					poster:
+						'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217'
+				},
+				{
+					id: uuidv4(),
+					title: 'Title of Movie',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180'
+				},
+				{
+					id: uuidv4(),
+					title: 'the short',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054'
+				},
+				{
+					id: uuidv4(),
+					title: 'En busca de la felicidad 1',
+					poster:
+						'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217'
+				},
+				{
+					id: uuidv4(),
+					title: 'the short 1',
+					poster:
+						'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054'
+				}
+			]
 		}
 	];
 </script>
 
-<div class="media" />
+<div class="media">
+	{xx}
+</div>
 <div class="container">
-	<nav>
+	<nav class="topnav">
 		<div class="type">
 			<a class="active" href={'#'}>Movies</a>
 			<a href={'#'}>Series</a>
@@ -60,8 +217,9 @@
 		</div>
 	</nav>
 	<div class="content">
-		{#each tracks as track}
+		{#each tracks as track (track.id)}
 			<div class="track">
+				<!-- <button on:click={prevPage} class="next">a</button> -->
 				<header>
 					<h3>{track.title}</h3>
 					<button
@@ -82,30 +240,45 @@
 					>
 				</header>
 				<section>
-					{#each titles as movie}
-						<figure class={track.level}>
-							<a href={'#'}>
+					{#each track.movies as movie, i (movie.id)}
+						<figure
+							animate:flip={{ duration: 400, easing: quintOut }}
+							out:scale|local={{ duration: 600, start: 0.85, easing: quintInOut }}
+							class={track.level}
+						>
+							<a class="poster-link" href={'#'}>
 								<img class="poster" src={movie.poster} alt="yo robot film" />
 							</a>
 							<figcaption>
 								<div class="info">
 									<h2>{movie.title}</h2>
 									<p>2021</p>
-									<img
-										class="imdb-logo"
-										src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/640px-IMDB_Logo_2016.svg.png"
-										alt=""
-									/>
-									<span> 7.9 rating </span>
+									<div class="rating">
+										<img
+											class="imdb-logo"
+											src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/640px-IMDB_Logo_2016.svg.png"
+											alt=""
+										/>
+										<span>7.9 rating</span>
+									</div>
 								</div>
 								<div class="actions">
 									<button>Watch now</button>
-									<button>+</button>
+									<button
+										on:click={() =>
+											(track.movies = [...track.movies.filter((t) => t.id !== movie.id)])}>+</button
+									>
 								</div>
 							</figcaption>
 						</figure>
 					{/each}
 				</section>
+				<button on:click={prevPage} class="next controls">
+					{'<<'}
+				</button>
+				<button class="prev controls" on:click={nextPage}>
+					{'>>'}
+				</button>
 			</div>
 		{/each}
 	</div>
@@ -191,13 +364,15 @@
 		/* position: relative; */
 	}
 
-	.container nav {
-		/* position: sticky; */
-		/* top: 0; */
+	.topnav {
+		position: sticky;
+		top: 0;
+		z-index: 200;
+		width: 100%;
 		display: flex;
 		justify-content: space-between;
 		/* padding: 1.5em; */
-		/* background-color: bisque; */
+		background-color: black;
 		border-bottom: 1px solid rgba(128, 128, 128, 0.2);
 	}
 
@@ -221,7 +396,43 @@
 
 	.track {
 		padding-bottom: 2em;
+		position: relative;
 	}
+
+	.next,
+	.prev {
+		display: none;
+		position: absolute;
+		z-index: 500;
+		top: 35%;
+		height: 20%;
+		width: 30px;
+	}
+	.next:hover,
+	.prev:hover {
+		opacity: 1;
+		cursor: pointer;
+	}
+
+	.controls {
+		display: block;
+		opacity: 0.3;
+		border-radius: 5px;
+		border: none;
+	}
+
+	.next {
+		left: 0;
+	}
+	.prev {
+		right: 0;
+	}
+
+	/* .track:hover .prev,
+	.track:hover .next {
+		display: initial;
+	} */
+
 	.track header {
 		display: flex;
 		justify-content: space-between;
@@ -236,6 +447,7 @@
 		padding-top: 1em;
 		padding-bottom: 1em;
 		height: 300px;
+		scroll-behavior: smooth;
 	}
 
 	header h3 {
@@ -266,6 +478,7 @@
 		min-height: 200px; */
 		object-fit: cover;
 		object-position: top;
+		transition: transform 0.2s ease-in-out;
 	}
 
 	figure {
@@ -277,6 +490,14 @@
 		position: relative;
 		margin: 0;
 		margin-right: 1em;
+	}
+
+	figure:hover figcaption {
+		background: linear-gradient(transparent, rgba(255, 255, 255, 0.2));
+	}
+
+	figure:hover .poster {
+		transform: scale(1.02);
 	}
 
 	/* figure.primary {
@@ -305,6 +526,13 @@
 		background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
 	}
 
+	.rating {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		margin-bottom: 10px;
+	}
+
 	.info h2 {
 		margin: 0;
 		font-weight: 600;
@@ -318,11 +546,13 @@
 		opacity: 0.7;
 	}
 
-	.info img {
+	.rating img {
 		max-width: 28px;
 	}
-	.info span {
+	.rating span {
 		font-size: 0.8em;
+		margin-left: 5px;
+		margin-right: 5px;
 	}
 
 	.info {
@@ -342,6 +572,11 @@
 		background-color: rgba(255, 0, 0, 0.4);
 		border-radius: 50vh;
 		padding: 0.8em 1.2em;
+		cursor: pointer;
+	}
+
+	.actions button:hover {
+		background-color: rgba(255, 0, 0, 0.8);
 	}
 
 	section::-webkit-scrollbar {

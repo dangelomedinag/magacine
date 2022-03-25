@@ -4,7 +4,15 @@
 </script>
 
 <div class="wrapper">
-	<button on:click={() => (hidden = !hidden)}>menu</button>
+	<button on:click={() => (hidden = !hidden)}
+		><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+			<path
+				fill-rule="evenodd"
+				d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+				clip-rule="evenodd"
+			/>
+		</svg></button
+	>
 	<aside class="sidebar" class:hidden>
 		<AsideNav on:click={() => (hidden = true)} />
 	</aside>
@@ -16,9 +24,23 @@
 <style>
 	button {
 		position: fixed;
-		bottom: 0;
-		right: 0;
-		z-index: 100;
+		bottom: 5%;
+		right: 5%;
+		z-index: 80;
+		border-radius: 50vh;
+		width: 50px;
+		height: 50px;
+		background-color: brown;
+		color: white;
+		border: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	button svg {
+		height: 25px;
+		width: 25px;
 	}
 	/* button:hover + .sidebar {
 		transform: translateX(0);
@@ -45,7 +67,7 @@
 		position: sticky; */
 		top: 0;
 		left: 0;
-		z-index: 90;
+		z-index: 300;
 		background-color: #1a171e;
 		transition: transform 0.4s cubic-bezier(0.83, 0, 0.25, 0.99);
 	}
@@ -67,6 +89,10 @@
 		.hidden {
 			transform: translateX(0);
 			width: 10%;
+		}
+
+		button {
+			display: none;
 		}
 	}
 
