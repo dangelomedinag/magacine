@@ -53,27 +53,6 @@
 		transform: translateX(-100%);
 	}
 
-	@media (min-height: 500px) {
-		.main {
-			width: 100%;
-			height: 100%;
-		}
-
-		.sidebar {
-			height: 100vh;
-			/* display: none; */
-			width: 80%;
-			position: fixed;
-			/* position: -webkit-sticky;
-		position: sticky; */
-			top: 0;
-			left: 0;
-			z-index: 90;
-			background-color: #1a171e;
-			transition: transform 0.4s cubic-bezier(0.83, 0, 0.25, 0.99);
-		}
-	}
-
 	@media (min-width: 576px) {
 		.main {
 			width: 90%;
