@@ -1,14 +1,12 @@
 <script>
-	import { flip } from 'svelte/animate';
-
-	import { scale } from 'svelte/transition';
-	import { quintInOut, quintOut } from 'svelte/easing';
+	// @ts-nocheck
 	import { v4 as uuidv4 } from 'uuid';
-	let xx;
+	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 
 	function prevPage(e) {
-		const { steps, current, element } = pages(e.target.parentNode);
-
+		console.log(e.target.parentNode.parentNode);
+		const { steps, current, element } = pages(e.target.parentNode.parentNode);
+		console.log({ steps, current, element });
 		let prev = 0;
 
 		for (let i = 0; i < steps.length; i++) {
@@ -22,11 +20,12 @@
 	}
 	function nextPage(e) {
 		const { steps, current, element } = pages(e.target.parentNode);
+		console.log({ steps, current, element });
 
 		let next = 0;
 
 		for (let i = 0; i < steps.length; i++) {
-			if (current < steps[i]) {
+			if (current < steps[i] - 1) {
 				next = steps[i];
 				break;
 			}
@@ -69,7 +68,7 @@
 		return { steps, current: ele.scrollLeft, element: ele };
 	}
 
-	let tracks = [
+	/* let tracks = [
 		{
 			id: uuidv4(),
 			title: 'Trending movies',
@@ -199,12 +198,62 @@
 				}
 			]
 		}
+	]; */
+
+	let movies = [
+		{
+			id: uuidv4(),
+			title: 'Avengers: Endgame',
+			poster:
+				'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/108b520c55e3c9760f77a06110d6a73b_e97cf224-d57f-44e3-8477-4f5479cd746b_480x.progressive.jpg?v=1573616089',
+			progress: 25
+		},
+		{
+			id: uuidv4(),
+			title: 'After: what happens when peopel die',
+			poster:
+				'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180',
+			progress: 80
+		},
+		{
+			id: uuidv4(),
+			title: 'Moonlight',
+			poster:
+				'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217',
+			progress: 5
+		},
+		{
+			id: uuidv4(),
+			title: 'Step brothers',
+			poster:
+				'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/stepbrothers.mp_480x.progressive.jpg?v=1608672208',
+			progress: 9
+		},
+		{
+			id: uuidv4(),
+			title: 'Freedom',
+			poster:
+				'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054',
+			progress: 56
+		},
+		{
+			id: uuidv4(),
+			title: 'En busca de la felicidad 1',
+			poster:
+				'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217',
+			progress: 32
+		},
+		{
+			id: uuidv4(),
+			title: 'Guardians of the galaxy',
+			poster:
+				'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/0cc70cae1f62b215aee14211c78fe95e_cda1a52f-e010-476a-9cb8-cd4392848bf7_500x749.jpg?v=1573584677',
+			progress: 74
+		}
 	];
 </script>
 
-<div class="media">
-	{xx}
-</div>
+<div class="media" />
 <div class="container">
 	<nav class="topnav">
 		<div class="type">
@@ -217,9 +266,20 @@
 		</div>
 	</nav>
 	<div class="content">
-		{#each tracks as track (track.id)}
+		<CarouselMovies {movies} title="Trending movies" priority="large" />
+		<CarouselMovies
+			movies={movies.reverse()}
+			title="Continue watching"
+			priority="medium"
+			progress
+		/>
+		<CarouselMovies
+			movies={movies.sort((a, b) => a.title.length - b.title.length)}
+			title="Top rated"
+			priority="small"
+		/>
+		<!-- {#each tracks as track (track.id)}
 			<div class="track">
-				<!-- <button on:click={prevPage} class="next">a</button> -->
 				<header>
 					<h3>{track.title}</h3>
 					<button
@@ -263,8 +323,9 @@
 									</div>
 								</div>
 								<div class="actions">
-									<button>Watch now</button>
+									<button class="cta-btn">Watch now</button>
 									<button
+										class="more"
 										on:click={() =>
 											(track.movies = [...track.movies.filter((t) => t.id !== movie.id)])}>+</button
 									>
@@ -273,14 +334,16 @@
 						</figure>
 					{/each}
 				</section>
-				<button on:click={prevPage} class="next controls">
-					{'<<'}
-				</button>
-				<button class="prev controls" on:click={nextPage}>
-					{'>>'}
-				</button>
+				<div class="movement-action">
+					<button on:click={prevPage} class="next controls">
+						{'<<'}
+					</button>
+					<button class="prev controls" on:click={nextPage}>
+						{'>>'}
+					</button>
+				</div>
 			</div>
-		{/each}
+		{/each} -->
 	</div>
 	<footer />
 </div>
@@ -289,18 +352,22 @@
 <!-- </div> -->
 <style>
 	div.media {
-		position: absolute;
+		position: fixed;
 		right: 50%;
 		top: 0;
 		background-color: #555;
 		color: white;
-		z-index: 2;
+		z-index: 999;
 		padding: 5px;
 		opacity: 0.4;
 	}
 	div.media::before {
 		content: 'init';
 	}
+	/* @media (min-width: 576px) {}
+		@media (min-width: 768px) {}
+		@media (min-width: 992px) {}
+		@media (min-width: 1200px) {} */
 
 	@media (min-width: 576px) {
 		div.media {
@@ -338,40 +405,18 @@
 		}
 	}
 
-	/* Small devices (landscape phones, 576px and up) */
-	@media (min-width: 576px) {
-		figure.primary {
-			/* max-width: 550px; */
-			min-width: 450px;
-		}
-		figure.secondary {
-			min-width: 320px;
-		}
-	}
-	/* Medium devices (tablets, 768px and up) */
-	@media (min-width: 768px) {
-		figure.primary {
-			min-width: 550px;
-		}
-		figure.secondary {
-			min-width: 420px;
-		}
-	}
-
 	.container {
 		display: flex;
 		flex-direction: column;
-		/* position: relative; */
 	}
 
 	.topnav {
 		position: sticky;
 		top: 0;
-		z-index: 200;
+		z-index: 50;
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
-		/* padding: 1.5em; */
 		background-color: black;
 		border-bottom: 1px solid rgba(128, 128, 128, 0.2);
 	}
@@ -381,7 +426,6 @@
 		padding-right: 2em;
 		color: white;
 		font-size: 0.9em;
-		/* font-weight: bold; */
 		opacity: 0.5;
 	}
 
@@ -392,214 +436,5 @@
 	.container nav,
 	.content {
 		padding: 1.2em;
-	}
-
-	.track {
-		padding-bottom: 2em;
-		position: relative;
-	}
-
-	.next,
-	.prev {
-		display: none;
-		position: absolute;
-		z-index: 180;
-		top: 35%;
-		height: 20%;
-		width: 30px;
-	}
-	.next:hover,
-	.prev:hover {
-		opacity: 1;
-		cursor: pointer;
-	}
-
-	.controls {
-		display: block;
-		opacity: 0.3;
-		border-radius: 5px;
-		border: none;
-	}
-
-	.next {
-		left: 0;
-	}
-	.prev {
-		right: 0;
-	}
-
-	/* .track:hover .prev,
-	.track:hover .next {
-		display: initial;
-	} */
-
-	.track header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		/* height: 50px; */
-	}
-	.track section {
-		display: flex;
-		overflow-x: auto;
-		padding-left: 0;
-		padding-right: 1em;
-		padding-top: 1em;
-		padding-bottom: 1em;
-		height: 300px;
-		scroll-behavior: smooth;
-	}
-
-	header h3 {
-		margin: 0;
-	}
-	header button {
-		background-color: transparent;
-		margin: 0;
-		border: none;
-		color: gray;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	header button:hover {
-		text-decoration: underline;
-		cursor: pointer;
-	}
-
-	header .svg {
-		width: 20px;
-		height: 20px;
-	}
-
-	.poster {
-		width: 100%;
-		/* height: 300px;
-		min-height: 200px; */
-		object-fit: cover;
-		object-position: top;
-		transition: transform 0.2s ease-in-out;
-	}
-
-	figure {
-		/* border: 1px solid red; */
-		overflow: hidden;
-		border-radius: 15px;
-		min-width: 250px;
-		/* min-width: 450px; */
-		position: relative;
-		margin: 0;
-		margin-right: 1em;
-	}
-
-	figure:hover figcaption {
-		background: linear-gradient(transparent, rgba(255, 255, 255, 0.2));
-	}
-
-	figure:hover .poster {
-		transform: scale(1.02);
-	}
-
-	/* figure.primary {
-		min-width: 250px;
-		max-width: 250px;
-	}
-	figure.secondary {
-		min-width: 250px;
-		max-width: 250px;
-	}
-	figure.regular {
-		min-width: 250px;
-		max-width: 250px;
-	} */
-
-	figcaption {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		display: flex;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		width: 100%;
-		padding: 2em;
-		padding-top: 0;
-		background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
-	}
-
-	.rating {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		margin-bottom: 10px;
-	}
-
-	.info h2 {
-		margin: 0;
-		font-weight: 600;
-		font-size: 1.3rem;
-		margin-bottom: 0.2em;
-	}
-
-	.info p {
-		margin: 0;
-		margin-bottom: 0.6em;
-		opacity: 0.7;
-	}
-
-	.rating img {
-		max-width: 28px;
-	}
-	.rating span {
-		font-size: 0.8em;
-		margin-left: 5px;
-		margin-right: 5px;
-	}
-
-	.info {
-		/* min-width: 100%; */
-	}
-
-	.actions {
-		margin-top: auto;
-		flex-shrink: 0;
-		/* min-width: 100%; */
-	}
-
-	.actions button {
-		border: none;
-		color: white;
-		margin: 0;
-		background-color: rgba(255, 0, 0, 0.4);
-		border-radius: 50vh;
-		padding: 0.8em 1.2em;
-		cursor: pointer;
-	}
-
-	.actions button:hover {
-		background-color: rgba(255, 0, 0, 0.8);
-	}
-
-	section::-webkit-scrollbar {
-		/* width: 10px; */
-		height: 5px;
-		border-radius: 10px;
-	}
-
-	/* Track */
-	section::-webkit-scrollbar-track {
-		background: rgba(128, 128, 128, 0.05);
-		margin: 10px;
-		border-radius: 10px;
-		overflow: hidden;
-	}
-
-	/* Handle */
-	section::-webkit-scrollbar-thumb {
-		background: rgba(255, 255, 255, 0.05);
-	}
-
-	/* Handle on hover */
-	section::-webkit-scrollbar-thumb:hover {
-		background: #555;
 	}
 </style>

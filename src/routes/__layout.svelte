@@ -26,16 +26,26 @@
 		position: fixed;
 		bottom: 5%;
 		right: 5%;
-		z-index: 80;
+		z-index: 110;
 		border-radius: 50vh;
 		width: 50px;
 		height: 50px;
-		background-color: brown;
+		background-color: rgba(165, 42, 42, 0.8);
 		color: white;
 		border: none;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		cursor: pointer;
+		box-shadow: 5px 5px 30px -5px black;
+	}
+
+	button:hover {
+		background-color: brown;
+	}
+
+	button:active {
+		transform: translateY(5%);
 	}
 
 	button svg {
@@ -67,7 +77,7 @@
 		position: sticky; */
 		top: 0;
 		left: 0;
-		z-index: 300;
+		z-index: 100;
 		background-color: #1a171e;
 		transition: transform 0.4s cubic-bezier(0.83, 0, 0.25, 0.99);
 	}

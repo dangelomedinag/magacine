@@ -149,8 +149,8 @@
 	}
 
 	.svg {
-		width: 25px;
-		height: 25px;
+		width: 23px;
+		height: 23px;
 	}
 
 	.label {
