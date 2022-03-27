@@ -36,7 +36,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		height: 100%;
-		padding: 1em 0 6em 0;
+		padding: 1em 1em 6em 1em;
 		/* overflow-y: auto; */
 	}
 
@@ -53,11 +53,12 @@
 		font-weight: 300;
 		opacity: 0.3;
 	}
+
 	@media (min-width: 992px) {
 		#aside-wrapper {
-			padding: 1.2em 1em;
+			/* padding: 1.2em 1em; */
 		}
-		.section {
+		:global(aside.toggle) .section {
 			display: block;
 		}
 	}

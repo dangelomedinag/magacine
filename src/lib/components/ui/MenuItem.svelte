@@ -140,7 +140,13 @@
 		color: rgb(155, 33, 33);
 	}
 
-	.wrapper,
+	.wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+	}
+
 	.icon {
 		display: flex;
 		justify-content: center;
@@ -165,11 +171,7 @@
 
 	/* Small devices (landscape phones, 576px and up) */
 	@media (min-width: 576px) {
-		.label {
-			display: none;
-		}
-
-		.link:hover .label {
+		/* .link:hover .label {
 			display: inline-block;
 			position: absolute;
 			top: 0;
@@ -178,36 +180,48 @@
 			background-color: white;
 			border-radius: 50vh;
 			color: gray;
-		}
+		} */
 	}
 	/* Medium devices (tablets, 768px and up) */
 	@media (min-width: 768px) {
 	}
 	/* Large devices (desktops, 992px and up) */
 	@media (min-width: 992px) {
+		.label {
+			display: none;
+		}
 		.wrapper {
-			justify-content: flex-start;
+			justify-content: center;
 		}
 
 		.notification {
 			display: inline-block;
 		}
 
-		.link:hover .label {
-			display: inline-block;
-			position: initial;
-			background-color: initial;
-			color: white;
-			border-radius: none;
-		}
-
-		.label {
+		:global(.toggle) .label {
 			position: relative;
 			display: block;
 			width: 250px;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+
+		:global(aside:not(.toggle)) .link:hover .label {
+			display: inline-block;
+			position: absolute;
+			top: 0;
+			width: auto;
+			left: 100%;
+			background-color: white;
+			border-radius: 50vh;
+			color: gray;
+			/* position: relative;
+			display: block;
+			position: initial;
+			background-color: initial;
+			color: white;
+			border-radius: none; */
 		}
 	}
 	/* Extra large devices (large desktops, 1200px and up) */

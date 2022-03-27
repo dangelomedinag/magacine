@@ -9,6 +9,67 @@
 	export let movies;
 	export let priority;
 	export let progress = false;
+	let container;
+
+	function prevPage(e) {
+		const { steps, current } = pages();
+		let prev = 0;
+
+		for (let i = 0; i < steps.length; i++) {
+			if (current <= steps[i] + 1) {
+				prev = steps[i - 1];
+				break;
+			}
+		}
+
+		container.scrollLeft = prev;
+	}
+	function nextPage(e) {
+		const { steps, current } = pages();
+
+		let next = 0;
+
+		for (let i = 0; i < steps.length; i++) {
+			if (current < steps[i] - 2) {
+				next = steps[i] - 2;
+				break;
+			}
+		}
+
+		container.scrollLeft = next;
+	}
+	const getExtra = (node) => {
+		let extra = 0;
+		let computedStyle = window.getComputedStyle(node);
+		extra += parseInt(computedStyle.marginLeft, 10);
+		extra += parseInt(computedStyle.marginRight, 10);
+		extra += parseInt(computedStyle.borderWidth, 10);
+		extra += parseInt(computedStyle.paddingLeft, 10);
+		extra += parseInt(computedStyle.paddingRight, 10);
+		return extra;
+	};
+	function pages() {
+		/* ssssssssssssss */
+
+		/* ssssssssssss */
+		let margin;
+		let childs = container.querySelectorAll('figure');
+		let steps = [];
+		let cardWidth;
+
+		childs.forEach((card, index) => {
+			cardWidth = card.getBoundingClientRect().width;
+			if (index < 1) {
+				margin = getExtra(card);
+				steps.push(cardWidth + margin);
+			}
+			if (index > 0) {
+				steps.push(steps[index - 1] + cardWidth + 16);
+			}
+		});
+
+		return { steps, current: container.scrollLeft };
+	}
 </script>
 
 <div class="carousel-wrapper priority-{priority}">
@@ -27,7 +88,7 @@
 			</span></button
 		>
 	</header>
-	<main class="items-wrapper">
+	<main class="items-wrapper" bind:this={container}>
 		{#each movies as movie, i (movie.id)}
 			<figure
 				animate:flip={{ duration: 400, easing: quintOut, delay: 400 }}
@@ -59,14 +120,31 @@
 						<button class="actions-watch btn">Watch now</button>
 						<button
 							class="acitons-more btn"
-							on:click={() => (movies = [...movies.filter((t) => t.id !== movie.id)])}>+</button
+							on:click={() => (movies = [...movies.filter((t) => t.id !== movie.id)])}
 						>
-						<button class="actions-info">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+						</button>
+						<button class="actions-info btn">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-6 w-6"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+							>
 								<path
-									fill-rule="evenodd"
-									d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-									clip-rule="evenodd"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
 								/>
 							</svg>
 						</button>
@@ -79,14 +157,14 @@
 			</div>
 		{/each}
 	</main>
-	<!-- <div class="movement-action">
-					<button on:click={prevPage} class="next controls">
-						{'<<'}
-					</button>
-					<button class="prev controls" on:click={nextPage}>
-						{'>>'}
-					</button>
-				</div> -->
+	<div class="movement-action">
+		<button on:click={prevPage} class="next controls">
+			{'<<'}
+		</button>
+		<button class="prev controls" on:click={nextPage}>
+			{'>>'}
+		</button>
+	</div>
 </div>
 
 <style>
@@ -180,7 +258,7 @@
 		justify-content: space-between;
 		min-width: var(--w-card);
 		/* height: 100%; */
-		/* min-width: 250px; */
+		max-width: 350px;
 		max-height: 680px;
 		position: relative;
 		margin: 0;
@@ -253,6 +331,9 @@
 		margin-right: 5px;
 	}
 	.actions-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		/* justify-content: space-between; */
 		margin-top: 0.4em;
 		/* margin-top: auto; */
 		/* flex-shrink: 0; */
@@ -261,9 +342,9 @@
 
 	@media (min-width: 768px) {
 		.actions-wrapper {
-			position: absolute;
+			/* position: absolute;
 			top: 0;
-			right: 0;
+			right: 0; */
 			/* display: block; */
 		}
 	}
@@ -272,9 +353,13 @@
 		border: none;
 		border-radius: 50vh;
 		margin: 0;
-		padding: 0.5em 0.8em;
+		padding: 0.3em;
 		cursor: pointer;
 		font-size: 1rem;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0 0.2em;
 	}
 
 	.actions-watch {
@@ -288,17 +373,11 @@
 
 	.actions-info {
 		color: black;
-		padding: 0;
-		margin: 0;
-		background-color: red;
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		height: 100%;
+		background-color: white;
 	}
-	.actions-info svg {
-		width: 30px;
-		height: 30px;
+	.actions-wrapper svg {
+		width: 25px;
+		height: 25px;
 	}
 
 	/* sssssssss */
