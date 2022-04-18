@@ -26,10 +26,13 @@
 <script>
 	import Footer from '$lib/components/Footer.svelte';
 	import AsideNav from '$lib/components/ui/AsideNav.svelte';
+	import { dev } from '$app/env';
 	let toggle = false;
 </script>
 
-<div class="media" />
+{#if dev}
+	<div class="media" />
+{/if}
 <div class="wrapper">
 	<button on:click={() => (toggle = !toggle)}
 		><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
