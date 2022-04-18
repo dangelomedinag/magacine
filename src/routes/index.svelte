@@ -31,6 +31,7 @@
 <script>
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
+	// import SearchMovies from '$lib/components/ui/searchMovies.svelte';
 	export let avengers, flash, batman, tahm, got;
 
 	let tab = 'movies';

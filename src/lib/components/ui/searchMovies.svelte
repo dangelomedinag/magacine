@@ -1,7 +1,9 @@
 <script>
 	import { spring } from 'svelte/motion';
+	import Spinner from './Spinner.svelte';
 
-	let value = '';
+	export let value = '';
+	let loading = false;
 	let timer = null;
 	export let results = [];
 	let length = 0;
@@ -16,60 +18,72 @@
 		// handle negative numbers
 		return ((n % m) + m) % m;
 	}
+	const normalize = (string) => string.toLowerCase().trim();
 
-	async function getData() {
+	async function getData(parent) {
 		try {
-			const data = await fetch(`https://www.omdbapi.com/?s=${value}&type=movie&apikey=eedc324b`);
-			if (!data.ok) throw { message: 'error in search' };
+			const data = await fetch(`/api?s=${normalize(value)}&type=movie`);
+			if (!data.ok) throw new Error(data.status + ' ' + (await data.text()));
 			const json = await data.json();
-			if (json.Response === 'False') throw { message: json.Error };
+			if (json.Response === 'False') throw new Error(json.Error);
 			console.log(json);
+			loading = false;
 			results = json.Search;
 			length = +json.totalResults;
+			parent.blur();
 		} catch (error) {
-			console.log('-----sdas-dasdas-das-d-as-d--asd-a');
-			console.log(error.message);
+			// console.log('-----sdas-dasdas-das-d-as-d--asd-a');
+			console.warn(error.message);
+			loading = false;
 			results = [];
 			length = 0;
 		}
 	}
-	async function search() {
+
+	async function search(e) {
+		loading = true;
+		// console.log('set search');
 		if (timer) clearTimeout(timer);
 
 		if (value.length < 3) {
 			return;
 		}
-		timer = setTimeout(getData, 800);
+		timer = setTimeout(() => {
+			getData(e.target);
+		}, 900);
 	}
 </script>
 
 <div>
 	<div class="search-box">
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke="currentColor"
-			stroke-width="2"
-		>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+		<div class="input-group">
+			<input
+				autocomplete="off"
+				type="search"
+				name="seach"
+				bind:value
+				on:input={search}
+				placeholder="Type a movie/serie"
 			/>
-		</svg>
-		<input
-			type="search"
-			name="seach"
-			bind:value
-			on:input={search}
-			placeholder="Type a movie o serie"
-		/>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+				stroke-width="2"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+				/>
+			</svg>
+		</div>
 	</div>
 	{#if !!results.length}
 		<div class="information">
 			<!-- <h4>Seach: {value}</h4> -->
-			<span>results:</span>
+			<span>results {value.length > 0 ? `for "${normalize(value)}"` : ''}:</span>
 			<div class="counter-viewport">
 				<div class="counter-digits" style="transform: translate(0, {100 * offset}%)">
 					<strong class="hidden" aria-hidden="true">{Math.floor($displayed_count + 1)}</strong>
@@ -79,6 +93,11 @@
 			<span>movies</span>
 		</div>
 		<div class="result">
+			{#if loading}
+				<div style="margin: 0 auto">
+					<Spinner />
+				</div>
+			{/if}
 			<slot />
 		</div>
 	{:else}
@@ -91,7 +110,7 @@
 		width: 100%;
 		display: block;
 		border: 1px solid transparent;
-		border-bottom: 1px solid gray;
+		border-bottom: 2px solid rgb(87, 87, 87);
 		font-size: 1.5rem;
 		background-color: transparent;
 		outline: none;
@@ -99,11 +118,38 @@
 		padding: 1rem;
 		text-align: center;
 	}
+
 	.search-box {
-		max-width: 70%;
-		margin: 0 auto;
-		position: relative;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		/* margin: 0 auto; */
+		/* position: relative; */
 		margin-bottom: 1rem;
+		height: 250px;
+		background-image: radial-gradient(rgba(0, 0, 0), rgba(0, 0, 0, 0.4)),
+			url('/assets/banner-search.jpg');
+		background-size: 100% 100%, cover;
+		background-position: center, center;
+		background-repeat: no-repeat, no-repeat;
+	}
+
+	.input-group {
+		position: relative;
+		width: 100%;
+		/* background-color: black; */
+	}
+
+	input:hover + svg,
+	input:focus + svg {
+		color: brown;
+		/* outline: 1px solid blue; */
+	}
+	input:focus,
+	input:hover {
+		border-bottom-color: brown;
+		/* outline: 1px solid blue; */
 	}
 	.information {
 		display: flex;
@@ -114,6 +160,7 @@
 	}
 
 	svg {
+		color: rgb(87, 87, 87);
 		position: absolute;
 		top: 40%;
 		left: 0;
@@ -121,8 +168,8 @@
 	}
 
 	.counter-viewport {
-		width: calc(1rem * 4 + 1rem);
-		height: 4em;
+		width: calc(1rem * 3.5);
+		height: 1em;
 		overflow: hidden;
 		text-align: center;
 		position: relative;
@@ -133,13 +180,15 @@
 		display: flex;
 		width: 100%;
 		height: 100%;
-		font-weight: 400;
-		color: var(--accent-color);
-		font-size: 2rem;
+		font-weight: bold;
+		font-size: 1.2rem;
+		color: brown;
 		align-items: center;
 		justify-content: center;
 		font-family: monospace;
-		/* padding: 0 0.5rem; */
+		/* background-color: white;
+		border-radius: 50vh; */
+		/* margin: 0 0.5rem; */
 	}
 
 	.counter-digits {
@@ -150,5 +199,19 @@
 	.hidden {
 		top: -100%;
 		user-select: none;
+	}
+
+	@media (min-width: 576px) {
+	}
+	@media (min-width: 768px) {
+	}
+	@media (min-width: 992px) {
+		/* .search-box {
+			max-width: 70%;
+		} */
+	}
+	@media (min-width: 1200px) {
+	}
+	@media (min-width: 992px) {
 	}
 </style>
