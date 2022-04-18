@@ -1,60 +1,23 @@
 <script context="module">
-	import { v4 as uuidv4 } from 'uuid';
-	export function load() {
-		let movies = [
-			{
-				id: uuidv4(),
-				title: 'Avengers: Endgame',
-				poster:
-					'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/108b520c55e3c9760f77a06110d6a73b_e97cf224-d57f-44e3-8477-4f5479cd746b_480x.progressive.jpg?v=1573616089',
-				progress: 25
-			},
-			{
-				id: uuidv4(),
-				title: 'After: what happens when peopel die',
-				poster:
-					'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/movie-poster-template-design-21a1c803fe4ff4b858de24f5c91ec57f_screen.jpg?ts=1636996180',
-				progress: 80
-			},
-			{
-				id: uuidv4(),
-				title: 'Moonlight',
-				poster:
-					'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217',
-				progress: 5
-			},
-			{
-				id: uuidv4(),
-				title: 'Step brothers',
-				poster:
-					'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/stepbrothers.mp_480x.progressive.jpg?v=1608672208',
-				progress: 9
-			},
-			{
-				id: uuidv4(),
-				title: 'Freedom',
-				poster:
-					'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-movie-poster-template-design-0f5fff6262fdefb855e3a9a3f0fdd361_screen.jpg?ts=1636996054',
-				progress: 56
-			},
-			{
-				id: uuidv4(),
-				title: 'En busca de la felicidad 1',
-				poster:
-					'https://cdn.pastemagazine.com/www/system/images/photo_albums/best-movie-posters-2016/large/moonlight-ver2-xlg.jpg?1384968217',
-				progress: 32
-			},
-			{
-				id: uuidv4(),
-				title: 'Guardians of the galaxy',
-				poster:
-					'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/0cc70cae1f62b215aee14211c78fe95e_cda1a52f-e010-476a-9cb8-cd4392848bf7_500x749.jpg?v=1573584677',
-				progress: 74
-			}
+	export async function load({ fetch }) {
+		const urls = [
+			'http://www.omdbapi.com/?s=shrek&type=movie&apikey=eedc324b',
+			'http://www.omdbapi.com/?s=friends&type=series&apikey=eedc324b',
+			'http://www.omdbapi.com/?s=fast&type=movie&apikey=eedc324b'
 		];
+		let promises = [];
+
+		urls.forEach((url) => {
+			promises.push(fetch(url).then((res) => res.json()));
+		});
+
+		const movies = await Promise.all(promises).then((values) => values);
+
 		return {
 			stuff: {
-				movies
+				shrek: movies[0].Search,
+				friends: movies[1].Search,
+				fast: movies[2].Search
 			}
 		};
 	}

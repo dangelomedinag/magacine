@@ -72,7 +72,7 @@
 	</ul>
 
 	<div class="legal">
-		<p>&copy; 2019 Something. All rights reserved.</p>
+		<p>&copy; 2019 Magacine Inc. All rights reserved.</p>
 
 		<div class="legal__links">
 			<span>Made with <span class="heart">♥</span> remotely from Anywhere</span>
@@ -86,7 +86,7 @@
 		flex-flow: row wrap;
 		padding: 30px 30px 20px 30px;
 		/* color: #2f2f2f; */
-		background-color: rgb(24, 5, 5);
+		background-color: rgb(35, 35, 35);
 
 		border-top: 1px solid rgba(230, 230, 230, 0.2);
 	}

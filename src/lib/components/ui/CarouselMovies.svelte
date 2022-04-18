@@ -75,7 +75,7 @@
 <div class="carousel-wrapper priority-{priority}">
 	<!-- <button on:click={prevPage} class="next">a</button> -->
 	<header class="carousel-header">
-		<h3 class="header-title">{title}</h3>
+		<h3 class="header-title">{title ?? ''}</h3>
 		<button class="header-btn"
 			>See all<span>
 				<svg xmlns="http://www.w3.org/2000/svg" class="svg" viewBox="0 0 20 20" fill="currentColor">
@@ -89,14 +89,16 @@
 		>
 	</header>
 	<main class="items-wrapper" bind:this={container}>
-		{#each movies as movie, i (movie.id)}
+		{#each movies as movie, i (movie.imdbID)}
+			{@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg'}
 			<figure
 				animate:flip={{ duration: 400, easing: quintOut, delay: 400 }}
-				out:scale|local={{ duration: 600, start: 0.85, easing: quintInOut }}
+				in:scale|local={{ duration: 600, start: 0.85, easing: quintInOut, delay: 50 * i }}
+				out:scale|local={{ duration: 600, start: 0.85, easing: quintInOut, delay: 10 * i }}
 				class="item"
 			>
 				<a class="item-link" href={'#'}>
-					<img class="item-poster" src={movie.poster} alt="yo robot film" />
+					<img class="item-poster" src={poster} alt="yo robot film" />
 				</a>
 
 				{#if progress}
@@ -105,14 +107,10 @@
 
 				<figcaption class="description-wrapper">
 					<div class="info-wrapper">
-						<h2 class="movie-title">{movie.title}</h2>
+						<h2 class="movie-title">{movie.Title}</h2>
 						<span class="movie-year">2021</span>
 						<div class="rating-wrapper">
-							<img
-								class="rating-logo"
-								src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/640px-IMDB_Logo_2016.svg.png"
-								alt=""
-							/>
+							<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
 							<span class="rating-label">7.9 rating</span>
 						</div>
 					</div>
@@ -120,7 +118,7 @@
 						<button class="actions-watch btn">Watch now</button>
 						<button
 							class="acitons-more btn"
-							on:click={() => (movies = [...movies.filter((t) => t.id !== movie.id)])}
+							on:click={() => (movies = [...movies.filter((t) => t.imdbID !== movie.imdbID)])}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -152,9 +150,11 @@
 				</figcaption>
 			</figure>
 		{:else}
-			<div class="empty-wrapper">
-				<Spinner />
-			</div>
+			<slot name="empty">
+				<div class="empty-wrapper">
+					<Spinner />
+				</div>
+			</slot>
 		{/each}
 	</main>
 	<div class="movement-action">
@@ -395,6 +395,10 @@
 		padding: 2em;
 		width: 100%;
 		text-align: center;
+	}
+
+	.hidden {
+		display: none;
 	}
 
 	/* sssssssss */

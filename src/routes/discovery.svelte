@@ -1,18 +1,12 @@
-<script context="module">
-	export function load({ stuff }) {
-		return {
-			props: {
-				movies: stuff.movies
-			}
-		};
-	}
-</script>
-
 <script>
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
+	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
+	import { page } from '$app/stores';
+	$: stuff = $page.stuff;
 
-	export let movies;
+	let results = [];
+	// $: console.log(results);
 </script>
 
 <!-- <h1>Discovery</h1> -->
@@ -22,6 +16,15 @@
 	<a href={'#'}>Terror</a>
 	<a href={'#'}>Comedy</a>
 </NavbarTop>
+
 <div class="content">
-	<CarouselMovies {movies} title="Trends movies" priority="medium" />
+	<SearchMovies bind:results>
+		<CarouselMovies movies={results} title="Search" priority="small" />
+		<div slot="suggest">
+			Opps! parece que no esta disponible lo que busca...
+			<div>quizas quieras echar un vistazo a:</div>
+			<CarouselMovies movies={stuff.shrek} priority="small" />
+		</div>
+	</SearchMovies>
+	<CarouselMovies movies={stuff.fast} title="top releases" priority="small" />
 </div>
