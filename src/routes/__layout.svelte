@@ -1,9 +1,9 @@
 <script context="module">
 	export async function load({ fetch }) {
 		const urls = [
-			'http://www.omdbapi.com/?s=shrek&type=movie&apikey=eedc324b',
-			'http://www.omdbapi.com/?s=friends&type=series&apikey=eedc324b',
-			'http://www.omdbapi.com/?s=fast&type=movie&apikey=eedc324b'
+			'https://www.omdbapi.com/?s=shrek&type=movie&apikey=eedc324b',
+			'https://www.omdbapi.com/?s=friends&type=series&apikey=eedc324b',
+			'https://www.omdbapi.com/?s=fast&type=movie&apikey=eedc324b'
 		];
 		let promises = [];
 

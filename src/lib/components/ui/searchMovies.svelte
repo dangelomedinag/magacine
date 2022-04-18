@@ -19,7 +19,7 @@
 
 	async function getData() {
 		try {
-			const data = await fetch(`http://www.omdbapi.com/?s=${value}&type=movie&apikey=eedc324b`);
+			const data = await fetch(`https://www.omdbapi.com/?s=${value}&type=movie&apikey=eedc324b`);
 			if (!data.ok) throw { message: 'error in search' };
 			const json = await data.json();
 			if (json.Response === 'False') throw { message: json.Error };
@@ -45,6 +45,19 @@
 
 <div>
 	<div class="search-box">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+			/>
+		</svg>
 		<input
 			type="search"
 			name="seach"
@@ -75,9 +88,8 @@
 
 <style>
 	input {
+		width: 100%;
 		display: block;
-		min-width: 70%;
-		margin: 0 auto;
 		border: 1px solid transparent;
 		border-bottom: 1px solid gray;
 		font-size: 1.5rem;
@@ -87,12 +99,25 @@
 		padding: 1rem;
 		text-align: center;
 	}
+	.search-box {
+		max-width: 70%;
+		margin: 0 auto;
+		position: relative;
+		margin-bottom: 1rem;
+	}
 	.information {
 		display: flex;
 		align-items: center;
 	}
 	.result {
 		overflow: hidden;
+	}
+
+	svg {
+		position: absolute;
+		top: 40%;
+		left: 0;
+		height: 1.4rem;
 	}
 
 	.counter-viewport {
