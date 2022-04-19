@@ -2,13 +2,13 @@
 	"name": "magacine",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "svelte-kit dev",
-		"build": "svelte-kit build",
+		"dev": "env-cmd svelte-kit dev",
+		"build": "env-cmd svelte-kit build",
 		"package": "svelte-kit package",
-		"preview": "svelte-kit preview",
-		"prepare": "svelte-kit sync",
-		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
+		"preview": "env-cmd svelte-kit preview",
+		"prepare": "env-cmd svelte-kit sync",
+		"lint": "env-cmd prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
+		"format": "env-cmd prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
@@ -23,6 +23,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"uuid": "^8.3.2"
+		"env-cmd": "^10.1.0"
 	}
 }

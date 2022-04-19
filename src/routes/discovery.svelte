@@ -18,15 +18,15 @@
 	<a href={'#'}>Comedy</a>
 </NavbarTop>
 
+<SearchMovies bind:results bind:value>
+	<CarouselMovies movies={results} title="Search" priority="small" />
+	<div slot="suggest">
+		<p>Opps! parece que no esta disponible lo que busca...</p>
+		<p>hemos obtenido 0 resultados para "{value}"</p>
+		<!-- <div>quizas quieras echar un vistazo a:</div> -->
+		<!-- <CarouselMovies movies={stuff.shrek} priority="small" /> -->
+	</div>
+</SearchMovies>
 <div class="content">
-	<SearchMovies bind:results bind:value>
-		<CarouselMovies movies={results} title="Search" priority="small" />
-		<div slot="suggest">
-			<p>Opps! parece que no esta disponible lo que busca...</p>
-			<p>hemos obtenido 0 resultados para "{value}"</p>
-			<!-- <div>quizas quieras echar un vistazo a:</div> -->
-			<!-- <CarouselMovies movies={stuff.shrek} priority="small" /> -->
-		</div>
-	</SearchMovies>
 	<CarouselMovies movies={stuff.fast} title="top releases" priority="small" />
 </div>

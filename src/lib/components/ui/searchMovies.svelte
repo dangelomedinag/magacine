@@ -56,6 +56,7 @@
 
 <div>
 	<div class="search-box">
+		<div class="copy">buscar:</div>
 		<div class="input-group">
 			<input
 				autocomplete="off"
@@ -65,19 +66,25 @@
 				on:input={search}
 				placeholder="Type a movie/serie"
 			/>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-				/>
-			</svg>
+
+			{#if loading}
+				<!-- <div style="margin: 0 auto" /> -->
+				<Spinner position="absolute" top="0" left="0" />
+			{:else}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+					/>
+				</svg>
+			{/if}
 		</div>
 	</div>
 	{#if !!results.length}
@@ -93,11 +100,6 @@
 			<span>movies</span>
 		</div>
 		<div class="result">
-			{#if loading}
-				<div style="margin: 0 auto">
-					<Spinner />
-				</div>
-			{/if}
 			<slot />
 		</div>
 	{:else}
@@ -108,7 +110,7 @@
 <style>
 	input {
 		width: 100%;
-		display: block;
+		display: inline-block;
 		border: 1px solid transparent;
 		border-bottom: 2px solid rgb(87, 87, 87);
 		font-size: 1.5rem;
@@ -120,15 +122,15 @@
 	}
 
 	.search-box {
+		padding: 1.5rem;
 		width: 100%;
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		/* margin: 0 auto; */
-		/* position: relative; */
 		margin-bottom: 1rem;
-		height: 250px;
-		background-image: radial-gradient(rgba(0, 0, 0), rgba(0, 0, 0, 0.4)),
+		height: 200px;
+		background-image: radial-gradient(rgba(0, 0, 0), rgba(0, 0, 0, 0.5)),
 			url('/assets/banner-search.jpg');
 		background-size: 100% 100%, cover;
 		background-position: center, center;
@@ -138,18 +140,15 @@
 	.input-group {
 		position: relative;
 		width: 100%;
-		/* background-color: black; */
 	}
 
 	input:hover + svg,
 	input:focus + svg {
 		color: brown;
-		/* outline: 1px solid blue; */
 	}
 	input:focus,
 	input:hover {
 		border-bottom-color: brown;
-		/* outline: 1px solid blue; */
 	}
 	.information {
 		display: flex;

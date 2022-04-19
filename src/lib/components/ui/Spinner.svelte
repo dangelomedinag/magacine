@@ -1,12 +1,25 @@
 <script>
 	export let color = 'brown';
+	export let position = 'static';
+	export let top = false;
+	export let left = false;
+	export let right = false;
+	export let bottom = false;
 </script>
 
-<div class="lds-ripple" style="border-color: {color};">
+<div
+	class="lds-ripple"
+	style:position
+	style:top
+	style:left
+	style:right
+	style:bottom
+	style="border-color: {color};"
+>
 	<span />
 	<span />
 </div>
-<div>nothing to show</div>
+<div><slot /></div>
 
 <style>
 	.lds-ripple {
@@ -16,6 +29,11 @@
 		position: relative;
 		width: 80px;
 		height: 80px;
+	}
+	.lds-ripple.absolute {
+		position: absolute;
+		top: 0;
+		left: 0;
 	}
 	.lds-ripple span {
 		position: absolute;
