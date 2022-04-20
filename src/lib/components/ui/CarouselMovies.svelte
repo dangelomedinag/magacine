@@ -1,14 +1,15 @@
 <script>
+	import CardMovie from './cardMovie.svelte';
+	import ProgressLine from './ProgressLine.svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
 	import { quintInOut, quintOut } from 'svelte/easing';
-	import ProgressLine from './ProgressLine.svelte';
 	import Spinner from './Spinner.svelte';
 
 	export let title;
 	export let movies;
 	export let priority;
-	export let progress = false;
+	// export let progress = false;
 	let container;
 
 	function prevPage(e) {
@@ -90,81 +91,15 @@
 	</header>
 	<main class="items-wrapper" bind:this={container}>
 		{#each movies as movie, i (movie.imdbID)}
-			{@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg'}
-			<figure
-				animate:flip={{ duration: 400, easing: quintOut, delay: 400 }}
-				in:scale|local={{ duration: 600, start: 0.85, easing: quintInOut, delay: 50 * i }}
-				out:scale|local={{ duration: 600, start: 0.85, easing: quintInOut, delay: 10 * i }}
-				class="item"
-			>
-				<a class="item-link" href={'#'}>
-					<img class="item-poster" src={poster} alt="yo robot film" />
-				</a>
-
-				{#if progress}
-					<ProgressLine value={movie.progress ?? 0} />
-				{/if}
-
-				<figcaption class="description-wrapper">
-					<div class="info-wrapper">
-						<h2 class="movie-title">{movie.Title}</h2>
-						<span class="movie-year">2021</span>
-						<div class="rating-wrapper">
-							<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
-							<span class="rating-label">7.9 rating</span>
-						</div>
-					</div>
-					<div class="actions-wrapper">
-						<button class="actions-watch btn">Watch now</button>
-						<button
-							class="acitons-more btn"
-							on:click={() => (movies = [...movies.filter((t) => t.imdbID !== movie.imdbID)])}
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="2"
-							>
-								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-							</svg>
-						</button>
-						<button class="actions-info btn">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="2"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-								/>
-							</svg>
-						</button>
-					</div>
-				</figcaption>
-			</figure>
+			<CardMovie {movie} progress={movie.progress ?? 0} {i} />
 		{:else}
-			<slot name="empty">
+			<!-- <slot name="empty">
 				<div class="empty-wrapper">
 					<Spinner />
 				</div>
-			</slot>
+			</slot> -->
 		{/each}
 	</main>
-	<div class="movement-action">
-		<button on:click={prevPage} class="next controls">
-			{'<<'}
-		</button>
-		<button class="prev controls" on:click={nextPage}>
-			{'>>'}
-		</button>
-	</div>
 </div>
 
 <style>
@@ -249,7 +184,7 @@
 		/* height: 500px; */
 		scroll-behavior: smooth;
 	}
-	.item {
+	.xx {
 		position: relative;
 		overflow: hidden;
 		border-radius: 15px;
@@ -304,7 +239,7 @@
 	.movie-title {
 		margin: 0;
 		font-weight: 600;
-		font-size: 1.3rem;
+		font-size: 1.2rem;
 		margin-bottom: 0.2em;
 		width: calc(var(--w-card) - 2em);
 		white-space: nowrap;

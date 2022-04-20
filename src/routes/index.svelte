@@ -31,10 +31,12 @@
 <script>
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
-	// import SearchMovies from '$lib/components/ui/searchMovies.svelte';
+	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
 	export let avengers, flash, batman, tahm, got;
 
 	let tab = 'movies';
+	let results = [];
+	let value;
 </script>
 
 <NavbarTop>
@@ -54,6 +56,10 @@
 	>
 </NavbarTop>
 
+<SearchMovies bind:results bind:value>
+	<CarouselMovies movies={results} title="Search" priority="small" />
+</SearchMovies>
+
 <div class="content">
 	{#if tab === 'movies'}
 		<CarouselMovies movies={avengers} title="The Avengers" priority="large" />
@@ -65,7 +71,7 @@
 		/>
 		<CarouselMovies movies={batman} title="Top rated" priority="small" />
 	{:else}
-		<CarouselMovies movies={got} title="game of thrones" priority="large" />
+		<CarouselMovies movies={got} title="Game of thrones" priority="large" />
 		<CarouselMovies movies={tahm} title="Top rated" priority="medium" />
 	{/if}
 </div>

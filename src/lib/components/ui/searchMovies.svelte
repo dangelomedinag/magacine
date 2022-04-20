@@ -3,16 +3,27 @@
 	import Spinner from './Spinner.svelte';
 
 	export let value = '';
+	export let results = [];
+	let state = 'initial';
+	let input;
+	// let states = ['initial', 'typing', 'clear'];
+	let match = true;
 	let loading = false;
 	let timer = null;
-	export let results = [];
-	let length = 0;
+	let totalResults = 0;
+	let initial = true;
+	let selected = 'movie';
+	let options = ['movie', 'series'];
 
 	// let count = 0;
 
 	const displayed_count = spring();
-	$: displayed_count.set(length);
+	$: displayed_count.set(totalResults);
 	$: offset = modulo($displayed_count, 1);
+	// $: if (value.length < 1 && !initial) {
+	// 	initial = true;
+	// 	loading = false;
+	// }
 
 	function modulo(n, m) {
 		// handle negative numbers
@@ -20,36 +31,67 @@
 	}
 	const normalize = (string) => string.toLowerCase().trim();
 
-	async function getData(parent) {
+	// async function getData(parent) {
+	// 	try {
+	// 		const data = await fetch(`/api?s=${normalize(value)}&type=movie`);
+	// 		if (!data.ok) throw new Error(data.status + ' ' + (await data.text()));
+	// 		const json = await data.json();
+	// 		if (json.Response === 'False') throw new Error(json.Error);
+	// 		console.log(json);
+	// 		loading = false;
+	// 		results = json.Search;
+	// 		length = +json.totalResults;
+	// 		parent.blur();
+	// 	} catch (error) {
+	// 		console.warn(error.message);
+	// 		loading = false;
+	// 		results = [];
+	// 		length = 0;
+	// 	}
+	// }
+	async function getData() {
 		try {
-			const data = await fetch(`/api?s=${normalize(value)}&type=movie`);
+			const data = await fetch(`/api?s=${normalize(value)}&type=${selected}`);
 			if (!data.ok) throw new Error(data.status + ' ' + (await data.text()));
 			const json = await data.json();
-			if (json.Response === 'False') throw new Error(json.Error);
 			console.log(json);
-			loading = false;
+			if (json.Response === 'False') throw new Error(json.Error);
+			totalResults = +json.totalResults;
 			results = json.Search;
-			length = +json.totalResults;
-			parent.blur();
+			input.blur();
 		} catch (error) {
-			// console.log('-----sdas-dasdas-das-d-as-d--asd-a');
 			console.warn(error.message);
-			loading = false;
-			results = [];
-			length = 0;
+			match = false;
 		}
+		loading = false;
 	}
 
-	async function search(e) {
-		loading = true;
-		// console.log('set search');
+	// async function search(e) {
+	// 	loading = true;
+	// 	if (timer) clearTimeout(timer);
+
+	// 	if (value.length < 3) {
+	// 		return;
+	// 	}
+	// 	timer = setTimeout(() => {
+	// 		getData(e.target);
+	// 	}, 900);
+	// }
+
+	async function search() {
 		if (timer) clearTimeout(timer);
 
 		if (value.length < 3) {
+			results = [];
 			return;
 		}
+
+		state = 'typing';
+		loading = true;
+		// match = true;
+
 		timer = setTimeout(() => {
-			getData(e.target);
+			getData();
 		}, 900);
 	}
 </script>
@@ -62,13 +104,24 @@
 				autocomplete="off"
 				type="search"
 				name="seach"
+				bind:this={input}
 				bind:value
 				on:input={search}
+				on:keyup={(e) => {
+					if (e.code === 'Enter' || e.key === 'Enter') search();
+				}}
+				on:click={(e) => {
+					setTimeout(() => {
+						if (value.length < 1) {
+							results = [];
+							match = false;
+						}
+					}, 5);
+				}}
 				placeholder="Type a movie/serie"
 			/>
 
 			{#if loading}
-				<!-- <div style="margin: 0 auto" /> -->
 				<Spinner position="absolute" top="0" left="0" />
 			{:else}
 				<svg
@@ -86,9 +139,26 @@
 				</svg>
 			{/if}
 		</div>
+		<div class="filters">
+			{#each options as option}
+				<div class="option">
+					<input
+						class="input-radio"
+						id="radio-{option}"
+						type="radio"
+						bind:group={selected}
+						value={option}
+					/>
+					<label for="radio-{option}" class="label-radio">
+						{option}
+					</label>
+				</div>
+			{/each}
+		</div>
 	</div>
-	{#if !!results.length}
-		<div class="information">
+
+	{#if results.length > 0}
+		<div class="information content">
 			<!-- <h4>Seach: {value}</h4> -->
 			<span>results {value.length > 0 ? `for "${normalize(value)}"` : ''}:</span>
 			<div class="counter-viewport">
@@ -99,16 +169,19 @@
 			</div>
 			<span>movies</span>
 		</div>
-		<div class="result">
+
+		<div class="result content">
 			<slot />
 		</div>
-	{:else}
+	{/if}
+
+	{#if !match}
 		<slot name="suggest" />
 	{/if}
 </div>
 
 <style>
-	input {
+	input[type='search'] {
 		width: 100%;
 		display: inline-block;
 		border: 1px solid transparent;
@@ -122,15 +195,15 @@
 	}
 
 	.search-box {
-		padding: 1.5rem;
+		padding: 0 1.5rem;
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		margin-bottom: 1rem;
+		/* margin-bottom: 1rem; */
 		height: 200px;
-		background-image: radial-gradient(rgba(0, 0, 0), rgba(0, 0, 0, 0.5)),
+		background-image: linear-gradient(to bottom, transparent -100%, #0d0d0f 60%),
 			url('/assets/banner-search.jpg');
 		background-size: 100% 100%, cover;
 		background-position: center, center;
@@ -150,6 +223,28 @@
 	input:hover {
 		border-bottom-color: brown;
 	}
+
+	.filters {
+		padding: 1em 0;
+		width: 100%;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		/* align-items: center; */
+	}
+
+	.option {
+		border: 1px solid rgba(128, 128, 128, 0.228);
+		border-radius: 5px;
+		/* background-color: grey; */
+		/* display: flex; */
+		text-align: center;
+		/* width: 300px; */
+		padding: 0 1em;
+		margin: 0 1em;
+	}
+
 	.information {
 		display: flex;
 		align-items: center;
