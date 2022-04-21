@@ -1,3 +1,4 @@
+import 'dotenv/config';
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get({ url }) {
 	const API_KEY = process.env.OMDB_API_KEY;
