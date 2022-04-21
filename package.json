@@ -19,10 +19,9 @@
 		"eslint-plugin-svelte3": "^3.2.1",
 		"prettier": "^2.5.1",
 		"prettier-plugin-svelte": "^2.5.0",
-		"svelte": "^3.47.0"
+		"svelte": "^3.47.0",
+		"env-cmd": "^10.1.0"
 	},
 	"type": "module",
-	"dependencies": {
-		"env-cmd": "^10.1.0"
-	}
+	"dependencies": {}
 }
