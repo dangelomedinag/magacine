@@ -3,6 +3,7 @@
 	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
 	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
 	import { page } from '$app/stores';
+	import Toast from '$lib/components/ui/toast.svelte';
 	$: stuff = $page.stuff;
 
 	let results = [];
@@ -19,10 +20,13 @@
 </NavbarTop>
 
 <SearchMovies bind:results bind:value>
-	<CarouselMovies movies={results} title="Search" priority="small" />
-	<div slot="suggest">
+	<div slot="suggest" class="content">
+		<Toast warn>
+			Opps! parece que no se encontraron resultados para <span>"{value}"</span>
+		</Toast>
 		<CarouselMovies movies={stuff.fast} title="suggest" priority="small" />
 	</div>
+	<CarouselMovies movies={results} title={value} priority="small" />
 </SearchMovies>
 <div class="content">
 	<CarouselMovies movies={stuff.fast} title="top releases" priority="small" />

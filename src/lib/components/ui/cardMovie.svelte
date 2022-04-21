@@ -43,7 +43,7 @@
 			<p class="movie-year">{details?.Year}</p>
 			<div class="rating-wrapper">
 				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
-				<span class="rating-label">{details?.imdbRating} rating</span>
+				<span class="rating-label">{(details?.imdbRating / 2).toFixed(1)} rating</span>
 			</div>
 			{#if details?.imdbRating}
 				<div style="display: inline-flex;">

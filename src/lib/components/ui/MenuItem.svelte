@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	export let label;
 	export let href;
-	export let notification;
+	export let notification = false;
 	$: active = $page.url.pathname === href;
 </script>
 

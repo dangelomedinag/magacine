@@ -4,26 +4,20 @@
 
 	export let value = '';
 	export let results = [];
-	let state = 'initial';
-	let input;
-	// let states = ['initial', 'typing', 'clear'];
-	let match = true;
+	let match = false;
 	let loading = false;
 	let timer = null;
 	let totalResults = 0;
-	let initial = true;
-	let selected = 'movie';
-	let options = ['movie', 'series'];
+	let selected = ['movie'];
+	let options = [
+		{ value: 'movie', label: 'movies' },
+		{ value: 'series', label: 'series' }
+	];
 
-	// let count = 0;
-
+	// counter ;
 	const displayed_count = spring();
 	$: displayed_count.set(totalResults);
 	$: offset = modulo($displayed_count, 1);
-	// $: if (value.length < 1 && !initial) {
-	// 	initial = true;
-	// 	loading = false;
-	// }
 
 	function modulo(n, m) {
 		// handle negative numbers
@@ -31,64 +25,41 @@
 	}
 	const normalize = (string) => string.toLowerCase().trim();
 
-	// async function getData(parent) {
-	// 	try {
-	// 		const data = await fetch(`/api?s=${normalize(value)}&type=movie`);
-	// 		if (!data.ok) throw new Error(data.status + ' ' + (await data.text()));
-	// 		const json = await data.json();
-	// 		if (json.Response === 'False') throw new Error(json.Error);
-	// 		console.log(json);
-	// 		loading = false;
-	// 		results = json.Search;
-	// 		length = +json.totalResults;
-	// 		parent.blur();
-	// 	} catch (error) {
-	// 		console.warn(error.message);
-	// 		loading = false;
-	// 		results = [];
-	// 		length = 0;
-	// 	}
-	// }
 	async function getData() {
+		loading = true;
 		try {
-			const data = await fetch(`/api?s=${normalize(value)}&type=${selected}`);
+			const filterUnions = () => {
+				const both = selected.length == options.length;
+				if (!!!selected.length || both) return '';
+				return '&type=' + selected[0];
+			};
+			const data = await fetch(`/api?s=${normalize(value)}${filterUnions()}`);
 			if (!data.ok) throw new Error(data.status + ' ' + (await data.text()));
 			const json = await data.json();
-			console.log(json);
+			//console.log(json);
 			if (json.Response === 'False') throw new Error(json.Error);
 			totalResults = +json.totalResults;
 			results = json.Search;
-			input.blur();
+			// input.blur();
 		} catch (error) {
 			console.warn(error.message);
-			match = false;
+			match = true;
+			results = [];
 		}
 		loading = false;
 	}
 
-	// async function search(e) {
-	// 	loading = true;
-	// 	if (timer) clearTimeout(timer);
-
-	// 	if (value.length < 3) {
-	// 		return;
-	// 	}
-	// 	timer = setTimeout(() => {
-	// 		getData(e.target);
-	// 	}, 900);
-	// }
-
 	async function search() {
 		if (timer) clearTimeout(timer);
 
-		if (value.length < 3) {
+		if (value.trim().length < 3) {
 			results = [];
 			return;
 		}
 
-		state = 'typing';
+		// state = 'typing';
 		loading = true;
-		// match = true;
+		match = false;
 
 		timer = setTimeout(() => {
 			getData();
@@ -105,13 +76,13 @@
 				autocomplete="off"
 				type="search"
 				name="seach"
-				bind:this={input}
 				bind:value
 				on:input={search}
 				on:keyup={(e) => {
 					if (e.code === 'Enter' || e.key === 'Enter') search();
 				}}
 				on:click={(e) => {
+					e.value;
 					setTimeout(() => {
 						if (value.length < 1) {
 							results = [];
@@ -141,19 +112,20 @@
 			{/if}
 		</div>
 		<div class="filters">
-			{#each options as option}
-				<div class="option">
+			{#each options as { value, label }}
+				<label for="radio-{value}" class="option">
+					<span>{label}</span>
+					<!-- <div class="option"> -->
 					<input
+						id="radio-{value}"
+						on:change={search}
 						class="input-radio"
-						id="radio-{option}"
-						type="radio"
+						type="checkbox"
 						bind:group={selected}
-						value={option}
+						{value}
 					/>
-					<label for="radio-{option}" class="label-radio">
-						{option}
-					</label>
-				</div>
+				</label>
+				<!-- </div> -->
 			{/each}
 		</div>
 	</div>
@@ -161,22 +133,21 @@
 	{#if results.length > 0}
 		<div class="information content">
 			<!-- <h4>Seach: {value}</h4> -->
-			<span>results {value.length > 0 ? `for "${normalize(value)}"` : ''}:</span>
+			<span>results:</span>
 			<div class="counter-viewport">
 				<div class="counter-digits" style="transform: translate(0, {100 * offset}%)">
 					<strong class="hidden" aria-hidden="true">{Math.floor($displayed_count + 1)}</strong>
 					<strong>{Math.floor($displayed_count)}</strong>
 				</div>
 			</div>
-			<span>movies</span>
+			<span>{!!selected.length ? selected.join(' & ') : 'all'}</span>
 		</div>
-
 		<div class="result content">
 			<slot />
 		</div>
 	{/if}
 
-	{#if !match}
+	{#if match}
 		<slot name="suggest" />
 	{/if}
 </div>
@@ -226,7 +197,7 @@
 	}
 
 	.filters {
-		padding: 1em 0;
+		padding-top: 1em;
 		width: 100%;
 		display: inline-flex;
 		justify-content: center;
@@ -236,14 +207,19 @@
 	}
 
 	.option {
+		display: flex;
+		gap: 0.5em;
+		justify-content: center;
+		align-items: center;
 		border: 1px solid rgba(128, 128, 128, 0.228);
-		border-radius: 5px;
+		border-radius: 50vh;
 		/* background-color: grey; */
 		/* display: flex; */
 		text-align: center;
 		/* width: 300px; */
 		padding: 0 1em;
 		margin: 0 1em;
+		cursor: pointer;
 	}
 
 	.information {
@@ -255,10 +231,12 @@
 	}
 
 	svg {
+		user-select: none;
+		pointer-events: none;
 		color: rgb(87, 87, 87);
 		position: absolute;
 		top: 40%;
-		left: 0;
+		left: 30px;
 		height: 1.4rem;
 	}
 

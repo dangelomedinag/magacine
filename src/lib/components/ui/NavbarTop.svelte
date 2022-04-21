@@ -1,8 +1,6 @@
 <nav class="navbar-content">
 	<div class="items-wrapper">
 		<slot />
-		<!-- <a class="active" href={'#'}>Movies</a>
-		<a href={'#'}>Series</a> -->
 	</div>
 	<div class="tools">
 		<button class="bell-btn">
@@ -65,6 +63,20 @@
 		opacity: 1;
 	}
 
+	.navbar-content :global(button) {
+		font-size: 0.9em;
+		background-color: transparent;
+		border: 1px;
+		text-decoration: none;
+		padding: 0 1em;
+		color: white;
+		opacity: 0.5;
+	}
+
+	.navbar-content :global(button.active) {
+		opacity: 1;
+	}
+
 	.bell-btn {
 		display: inline-flex;
 		justify-content: center;
@@ -72,7 +84,7 @@
 	}
 
 	.bell-svg {
-		height: 1rem;
-		width: 1rem;
+		height: 1.2rem;
+		width: 1.2rem;
 	}
 </style>
