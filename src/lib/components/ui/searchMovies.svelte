@@ -172,6 +172,7 @@
 		color: white;
 		padding: 1rem;
 		text-align: center;
+		font-weight: bold;
 	}
 
 	input[type='search']:disabled {
@@ -189,7 +190,7 @@
 		align-items: center;
 		/* margin-bottom: 1rem; */
 		height: 200px;
-		background-image: linear-gradient(to bottom, transparent -100%, #0d0d0f 60%),
+		background-image: linear-gradient(to bottom, transparent -100%, var(--c-main) 60%),
 			url('/assets/banner-search.jpg');
 		background-size: 100% 100%, cover;
 		background-position: center, center;

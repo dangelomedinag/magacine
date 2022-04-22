@@ -27,7 +27,12 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import AsideNav from '$lib/components/ui/AsideNav.svelte';
 	import { dev } from '$app/env';
+	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
+	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
+	import Toast from '$lib/components/ui/toast.svelte';
 	let toggle = false;
+	let results = [];
+	let value;
 </script>
 
 {#if dev}
@@ -47,6 +52,14 @@
 		<AsideNav on:click={() => (toggle = false)} />
 	</aside>
 	<main class="main">
+		<!-- <SearchMovies bind:results bind:value>
+			<CarouselMovies movies={results} title={value} priority="small" />
+			<div slot="suggest" class="content">
+				<Toast warn>
+					Opps! parece que no se encontraron resultados para <span>"{value}"</span>
+				</Toast>
+			</div>
+		</SearchMovies> -->
 		<div class="container">
 			<slot />
 		</div>
@@ -101,6 +114,7 @@
 	.main {
 		width: 100%;
 		height: 100%;
+		background-color: var(--c-main-content);
 	}
 
 	.sidebar {
@@ -110,11 +124,12 @@
 		top: 0;
 		left: 0;
 		z-index: 100;
-		backdrop-filter: blur(20px);
-		background-color: rgba(26, 23, 30, 0.85);
+		/* backdrop-filter: blur(20px); */
+		background-color: var(--c-main);
 		/* background-color: #1a171e; */
 		transition: transform 0.4s cubic-bezier(0.83, 0, 0.25, 0.99);
 		transform: translateX(-100%);
+		border-right: 1px solid rgba(255, 255, 255, 0.1);
 	}
 	.toggle {
 		transform: translateX(0);

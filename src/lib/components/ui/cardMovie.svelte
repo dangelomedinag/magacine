@@ -144,7 +144,7 @@
 		/* justify-content: space-between; */
 		/* flex-wrap: wrap; */
 		padding: 1em;
-		background: rgb(0, 0, 0);
+		/* background: rgb(0, 0, 0); */
 	}
 
 	@media (min-width: 768px) {

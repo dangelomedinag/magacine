@@ -87,14 +87,14 @@
 
 <Tabs {tabs}>
 	<svelte:fragment let:active>
-		<SearchMovies bind:results bind:value>
+		<!-- <SearchMovies bind:results bind:value>
 			<CarouselMovies movies={results} title={value} priority="small" />
 			<div slot="suggest" class="content">
 				<Toast warn>
 					Opps! parece que no se encontraron resultados para <span>"{value}"</span>
 				</Toast>
 			</div>
-		</SearchMovies>
+		</SearchMovies> -->
 
 		<div class="content">
 			{#if active == tabs[0]}

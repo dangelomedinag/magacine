@@ -46,8 +46,8 @@
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
-		background-color: black;
-		border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+		background-color: var(--c-main);
+		border-bottom: 1px solid rgba(128, 128, 128, 0.1);
 		padding: var(--gap-content);
 	}
 

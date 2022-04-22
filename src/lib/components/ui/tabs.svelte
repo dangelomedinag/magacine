@@ -1,4 +1,6 @@
 <script>
+	// import { page } from '$app/stores';
+
 	import NavbarTop from './NavbarTop.svelte';
 
 	export let tabs;

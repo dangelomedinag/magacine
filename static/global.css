@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700;800&display=swap');
 
 :root {
+	--c-main: #1f1c23;
+	--c-main-content: hsl(273, 13%, 16%);
 	--gap-content: 1.2em;
 }
 
@@ -24,7 +26,7 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	margin: 0;
 	padding: 0;
-	background-color: #0d0d0f;
+	background-color: var(--c-main);
 	color: white;
 }
 
