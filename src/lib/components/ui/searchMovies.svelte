@@ -1,9 +1,12 @@
 <script>
+	import { onMount } from 'svelte';
+
 	import { spring } from 'svelte/motion';
 	import Spinner from './Spinner.svelte';
 
 	export let value = '';
 	export let results = [];
+	let ready = false;
 	let match = false;
 	let loading = false;
 	let timer = null;
@@ -65,6 +68,7 @@
 			getData();
 		}, 900);
 	}
+
 	// sdada
 </script>
 
@@ -112,17 +116,21 @@
 			{/if}
 		</div>
 		<div class="filters">
-			{#each options as { value, label }}
-				<label for="radio-{value}" class="option">
-					<span>{label}</span>
+			{#each options as item}
+				<label
+					for="radio-{item.value}"
+					class="option"
+					class:option--active={selected.includes(item.value)}
+				>
+					<span>{item.label}</span>
 					<!-- <div class="option"> -->
 					<input
-						id="radio-{value}"
+						id="radio-{item.value}"
 						on:change={search}
 						class="input-radio"
 						type="checkbox"
 						bind:group={selected}
-						{value}
+						value={item.value}
 					/>
 				</label>
 				<!-- </div> -->
@@ -166,6 +174,12 @@
 		text-align: center;
 	}
 
+	input[type='search']:disabled {
+		background-color: rgba(255, 255, 255, 0.05);
+		cursor: not-allowed;
+		border-bottom: 2px solid rgb(87, 87, 87);
+	}
+
 	.search-box {
 		padding: 0 1.5rem;
 		width: 100%;
@@ -187,12 +201,12 @@
 		width: 100%;
 	}
 
-	input:hover + svg,
-	input:focus + svg {
+	input[type='search']:not(:disabled):hover + svg,
+	input[type='search']:not(:disabled):focus + svg {
 		color: brown;
 	}
-	input:focus,
-	input:hover {
+	input[type='search']:not(:disabled):focus,
+	input[type='search']:not(:disabled):hover {
 		border-bottom-color: brown;
 	}
 
@@ -213,13 +227,22 @@
 		align-items: center;
 		border: 1px solid rgba(128, 128, 128, 0.228);
 		border-radius: 50vh;
-		/* background-color: grey; */
 		/* display: flex; */
 		text-align: center;
 		/* width: 300px; */
 		padding: 0 1em;
 		margin: 0 1em;
 		cursor: pointer;
+		user-select: none;
+	}
+	.option--active {
+		border-color: rgb(1, 87, 44);
+		color: rgb(127, 211, 169);
+		background-color: rgb(0, 56, 28);
+	}
+
+	input[type='checkbox'] {
+		display: none;
 	}
 
 	.information {

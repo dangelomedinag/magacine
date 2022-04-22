@@ -1,6 +1,7 @@
 <script>
 	export let color = 'brown';
 	export let position = 'static';
+	export let size = 80;
 	export let top = false;
 	export let left = false;
 	export let right = false;
@@ -14,6 +15,8 @@
 	style:left
 	style:right
 	style:bottom
+	style:width={size + 'px'}
+	style:height={size + 'px'}
 	style="border-color: {color};"
 >
 	<span />
@@ -27,14 +30,14 @@
 		justify-content: center;
 		align-items: center;
 		position: relative;
-		width: 80px;
-		height: 80px;
+		/* width: 80px;
+		height: 80px; */
 	}
-	.lds-ripple.absolute {
+	/* .lds-ripple.absolute {
 		position: absolute;
 		top: 0;
 		left: 0;
-	}
+	} */
 	.lds-ripple span {
 		position: absolute;
 		border-color: inherit;

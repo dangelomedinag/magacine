@@ -1,9 +1,10 @@
 <script>
 	// import { flip } from 'svelte/animate';
-	import { scale } from 'svelte/transition';
+	import { scale, fade } from 'svelte/transition';
 	import ProgressLine from './ProgressLine.svelte';
 	import { quintInOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
+	import Spinner from './Spinner.svelte';
 	export let movie;
 	export let progress;
 	export let i;
@@ -12,7 +13,6 @@
 
 	onMount(async () => {
 		details = await getDetails(movie.imdbID);
-		// console.log(details);
 	});
 
 	async function getDetails(imdbID) {
@@ -25,12 +25,12 @@
 
 <!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg'} -->
 <figure
-	in:scale={{ duration: 600, start: 0.85, easing: quintInOut, delay: 50 * i }}
+	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
 	out:scale={{ duration: 200, start: 0.95, easing: quintInOut }}
 	class="item"
 >
 	<a class="item-link" href={'#'}>
-		<img class="item-poster" src={poster} alt={movie.Title} />
+		<img class="item-poster" src={poster} alt={movie.Title} loading="lazy" />
 	</a>
 
 	{#if progress}
@@ -39,97 +39,58 @@
 
 	<figcaption class="description-wrapper">
 		<div class="info-wrapper">
-			<h2 class="movie-title">{movie.Title}</h2>
-			<p class="movie-year">{details?.Year}</p>
-			<div class="rating-wrapper">
-				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
-				<span class="rating-label">{(details?.imdbRating / 2).toFixed(1)} rating</span>
-			</div>
-			{#if details?.imdbRating}
-				<div style="display: inline-flex;">
-					{#each [1, 2, 3, 4, 5] as ele, i}
-						{@const percent = Math.floor(+details.imdbRating) * 0.1}
-						{@const sc = Math.floor(5 * percent)}
-						{@const fill = ele > sc}
-
-						<!-- {ele} -->
-						{#if fill}
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="2"
-								style="color: #3b3b00;"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-								/>
-							</svg>
-						{:else}
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-								style="color: #e9cd50;"
-							>
-								<path
-									d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-								/>
-							</svg>
-						{/if}
-					{/each}
+			{#if details}
+				<h2 class="movie-title">{movie.Title}</h2>
+				<p class="movie-year">{details.Year}</p>
+				<div class="rating-wrapper">
+					<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
+					<span class="rating-label">{(details.imdbRating / 2).toFixed(1)} rating</span>
 				</div>
+				{#if details.imdbRating}
+					<div style="display: inline-flex;">
+						{#each [1, 2, 3, 4, 5] as ele, i}
+							{@const percent = Math.floor(+details.imdbRating) * 0.1}
+							{@const sc = Math.floor(5 * percent)}
+							{@const fill = ele > sc}
+
+							<!-- {ele} -->
+							{#if fill}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-6 w-6"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="2"
+									style="color: #3b3b00;"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+									/>
+								</svg>
+							{:else}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 w-5"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+									style="color: #e9cd50;"
+								>
+									<path
+										d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+									/>
+								</svg>
+							{/if}
+						{/each}
+					</div>
+				{/if}
+			{:else}
+				<Spinner color="grey" size={20} />
 			{/if}
 		</div>
-		<!-- <div class="actions-wrapper">
-			<button class="actions-watch btn">Watch now</button>
-			<button
-				class="acitons-more btn"
-				on:click={() => {
-					/* movies = [...movies.filter((t) => t.imdbID !== movie.imdbID)] */
-				}}
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-				</svg>
-			</button>
-			<button class="actions-info btn">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-6 w-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-					/>
-				</svg>
-			</button>
-		</div> -->
 	</figcaption>
-	<!-- <div class="movement-action">
-					<button on:click={prevPage} class="next controls">
-						{'<<'}
-					</button>
-					<button class="prev controls" on:click={nextPage}>
-						{'>>'}
-					</button>
-				</div> -->
 </figure>
 
 <style>
@@ -154,6 +115,12 @@
 		margin-right: 1em;
 		/* height: 400px; */
 		border: 1px solid rgba(128, 128, 128, 0.3);
+	}
+
+	.item--loading {
+		border-color: transparent;
+		/* min-height: 400px; */
+		background-color: rgba(57, 57, 57, 0.1);
 	}
 
 	.item-link {
@@ -188,6 +155,7 @@
 	}
 
 	.info-wrapper {
+		position: relative;
 	}
 
 	.movie-title {
@@ -236,37 +204,6 @@
 			right: 0; */
 			/* display: block; */
 		}
-	}
-
-	.btn {
-		border: none;
-		border-radius: 50vh;
-		margin: 0;
-		padding: 0.3em;
-		cursor: pointer;
-		font-size: 1rem;
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		margin: 0 0.2em;
-	}
-
-	.actions-watch {
-		background-color: rgba(255, 0, 0, 0.4);
-		color: white;
-	}
-	.actions-more {
-		background-color: rgba(255, 255, 255, 0.5);
-		color: black;
-	}
-
-	.actions-info {
-		color: black;
-		background-color: white;
-	}
-	.actions-wrapper svg {
-		width: 25px;
-		height: 25px;
 	}
 
 	/* sssssssss */

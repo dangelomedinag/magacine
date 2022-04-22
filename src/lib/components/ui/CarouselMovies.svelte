@@ -1,10 +1,10 @@
 <script>
 	import CardMovie from './cardMovie.svelte';
-	import ProgressLine from './ProgressLine.svelte';
-	import { flip } from 'svelte/animate';
-	import { scale } from 'svelte/transition';
-	import { quintInOut, quintOut } from 'svelte/easing';
-	import Spinner from './Spinner.svelte';
+	// import ProgressLine from './ProgressLine.svelte';
+	// import { flip } from 'svelte/animate';
+	// import { scale } from 'svelte/transition';
+	// import { quintInOut, quintOut } from 'svelte/easing';
+	// import Spinner from './Spinner.svelte';
 
 	export let title;
 	export let movies;
@@ -100,6 +100,14 @@
 			</slot> -->
 		{/each}
 	</main>
+	<div class="movement-action">
+		<button on:click={prevPage} class="next controls">
+			{'<<'}
+		</button>
+		<button class="prev controls" on:click={nextPage}>
+			{'>>'}
+		</button>
+	</div>
 </div>
 
 <style>
@@ -183,146 +191,6 @@
 		padding-bottom: 1em;
 		/* height: 500px; */
 		scroll-behavior: smooth;
-	}
-	.xx {
-		position: relative;
-		overflow: hidden;
-		border-radius: 15px;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		min-width: var(--w-card);
-		/* height: 100%; */
-		max-width: 350px;
-		max-height: 680px;
-		position: relative;
-		margin: 0;
-		margin-right: 1em;
-		/* height: 400px; */
-		border: 1px solid rgba(128, 128, 128, 0.3);
-	}
-
-	.item-link {
-		display: block;
-		height: 100%;
-		width: 100%;
-		overflow: hidden;
-		/* height: 200px; */
-	}
-
-	.item-poster {
-		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform 0.2s ease-in-out;
-	}
-
-	.description-wrapper {
-		/* display: flex; */
-		/* justify-content: space-between; */
-		/* flex-wrap: wrap; */
-		padding: 1em;
-		background: rgb(0, 0, 0);
-	}
-
-	@media (min-width: 768px) {
-		/* .description-wrapper {
-			display: flex;
-			justify-content: space-between;
-		} */
-	}
-
-	.info-wrapper {
-	}
-
-	.movie-title {
-		margin: 0;
-		font-weight: 600;
-		font-size: 1.2rem;
-		margin-bottom: 0.2em;
-		width: calc(var(--w-card) - 2em);
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	.movie-year {
-		margin: 0;
-		/* margin-bottom: 0.4em; */
-		opacity: 0.7;
-	}
-	.rating-wrapper {
-		display: inline-flex;
-		justify-content: flex-start;
-		align-items: center;
-		/* margin-bottom: 10px; */
-	}
-	.rating-logo {
-		max-width: 28px;
-	}
-	.rating-label {
-		font-size: 0.8em;
-		margin-left: 5px;
-		margin-right: 5px;
-	}
-	.actions-wrapper {
-		display: flex;
-		flex-wrap: wrap;
-		/* justify-content: space-between; */
-		margin-top: 0.4em;
-		/* margin-top: auto; */
-		/* flex-shrink: 0; */
-		/* display: none; */
-	}
-
-	@media (min-width: 768px) {
-		.actions-wrapper {
-			/* position: absolute;
-			top: 0;
-			right: 0; */
-			/* display: block; */
-		}
-	}
-
-	.btn {
-		border: none;
-		border-radius: 50vh;
-		margin: 0;
-		padding: 0.3em;
-		cursor: pointer;
-		font-size: 1rem;
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		margin: 0 0.2em;
-	}
-
-	.actions-watch {
-		background-color: rgba(255, 0, 0, 0.4);
-		color: white;
-	}
-	.actions-more {
-		background-color: rgba(255, 255, 255, 0.5);
-		color: black;
-	}
-
-	.actions-info {
-		color: black;
-		background-color: white;
-	}
-	.actions-wrapper svg {
-		width: 25px;
-		height: 25px;
-	}
-
-	/* sssssssss */
-
-	.item:hover .description-wrapper {
-		background: linear-gradient(transparent, rgba(255, 255, 255, 0.2));
-	}
-
-	.item:hover .item-poster {
-		transform: scale(1.02);
 	}
 
 	.empty-wrapper {
