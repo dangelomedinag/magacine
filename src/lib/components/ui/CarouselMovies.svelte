@@ -14,6 +14,7 @@
 
 	function prevPage(e) {
 		const { steps, current } = pages();
+		console.log(steps);
 		let prev = 0;
 
 		for (let i = 0; i < steps.length; i++) {
@@ -102,10 +103,28 @@
 	</main>
 	<div class="movement-action">
 		<button on:click={prevPage} class="next controls">
-			{'<<'}
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-6 w-6"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+				stroke-width="2"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+			</svg>
 		</button>
 		<button class="prev controls" on:click={nextPage}>
-			{'>>'}
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-6 w-6"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+				stroke-width="2"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+			</svg>
 		</button>
 	</div>
 </div>
@@ -206,29 +225,31 @@
 
 	/* sssssssss */
 
-	/* .controls:hover {
+	.controls:hover {
 		opacity: 1;
 		cursor: pointer;
-	} */
+	}
 
-	/* .controls {
+	.controls {
 		display: block;
 		position: absolute;
 		z-index: 15;
 		top: 35%;
-		height: 20%;
+		height: 80px;
 		width: 30px;
-		opacity: 0.3;
-		border-radius: 5px;
+		/* opacity: 0.3; */
+		color: white;
+		background-color: brown;
+		/* border-radius: 5px; */
 		border: none;
-	} */
+	}
 
-	/* .next {
+	.next {
 		left: 0;
-	} */
-	/* .prev {
+	}
+	.prev {
 		right: 0;
-	} */
+	}
 
 	/* .track:hover .prev,
 	.track:hover .next {

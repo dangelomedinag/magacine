@@ -31,6 +31,8 @@
 	import NProgress from 'nprogress';
 	import 'nprogress/nprogress.css';
 	import { navigating } from '$app/stores';
+	import ButtonToTop from '$lib/components/ui/buttonToTop.svelte';
+	import MediaQueries from '$lib/components/mediaQueries.svelte';
 
 	// NProgress css
 
@@ -50,18 +52,10 @@
 </script>
 
 {#if dev}
-	<div class="media" />
+	<MediaQueries />
 {/if}
 <div class="wrapper">
-	<button on:click={() => (toggle = !toggle)}
-		><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-			<path
-				fill-rule="evenodd"
-				d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-				clip-rule="evenodd"
-			/>
-		</svg></button
-	>
+	<ButtonToTop on:click={() => (toggle = !toggle)} />
 	<aside class="sidebar" class:toggle>
 		<AsideNav on:click={() => (toggle = false)} />
 	</aside>
@@ -183,52 +177,5 @@
 	@media (min-width: 1200px) {
 	}
 	@media (min-width: 992px) {
-	}
-
-	div.media {
-		position: fixed;
-		right: 50%;
-		top: 0;
-		background-color: #555;
-		color: white;
-		z-index: 999;
-		padding: 5px;
-		opacity: 0.4;
-	}
-	div.media::before {
-		content: 'init';
-	}
-
-	@media (min-width: 576px) {
-		div.media {
-			background-color: blue;
-		}
-		div.media::before {
-			content: '576px';
-		}
-	}
-	@media (min-width: 768px) {
-		div.media {
-			background-color: red;
-		}
-		div.media::before {
-			content: '768px';
-		}
-	}
-	@media (min-width: 992px) {
-		div.media {
-			background-color: green;
-		}
-		div.media::before {
-			content: '992px';
-		}
-	}
-	@media (min-width: 1200px) {
-		div.media {
-			background-color: purple;
-		}
-		div.media::before {
-			content: '1200px';
-		}
 	}
 </style>

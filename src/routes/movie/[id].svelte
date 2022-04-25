@@ -22,6 +22,9 @@
 </script>
 
 <script>
+	import { page } from '$app/stores';
+	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
+
 	export let movie;
 
 	/* {
@@ -58,45 +61,170 @@
 </script>
 
 <!-- <div class="content"> -->
-<img src={movie.Poster} alt={movie.Title} />
-<div class="information content">
-	<div>
-		<span>title:</span>
-		<h1>{movie.Title}</h1>
+<div class="wrapper">
+	<div
+		class="poster-wrapper"
+		style="background: linear-gradient(rgba(0,0,0,0.7), black), url({movie.Poster});"
+	>
+		<img src={movie.Poster} alt={movie.Title} />
+		<button>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+				<path
+					fill-rule="evenodd"
+					d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+					clip-rule="evenodd"
+				/>
+			</svg>
+		</button>
 	</div>
-
-	<h4>{movie.Year} - <span>{movie.Runtime}</span></h4>
-	<span>synopsis:</span>
-	<p>{movie.Plot}</p>
-	<span>genders:</span>
+	<div class="information">
+		<div class="item">
+			<span class="property">title:</span>
+			<h1>{movie.Title}</h1>
+		</div>
+		<div class="item">
+			<span class="property">Year / duration:</span>
+			<span>{movie.Year} - <span>{movie.Runtime}</span></span>
+		</div>
+		<div class="synopsis item">
+			<span class="property">synopsis:</span>
+			<p>{movie.Plot}</p>
+		</div>
+		<div class="item">
+			<span class="property">genders:</span>
+			{#each movie.Genre.split(',') ?? [] as item}
+				<span class="tag">{item}</span>
+			{/each}
+		</div>
+		<div class="item">
+			<span class="property">language:</span>
+			<p>{movie.Language}</p>
+		</div>
+		<div class="item">
+			<span class="property">rating:</span>
+			<p>{movie.imdbRating}</p>
+		</div>
+		<div class="suggest">
+			<CarouselMovies movies={$page.stuff.shrek} title="suggest" />
+		</div>
+	</div>
 </div>
 
 <!-- </div> -->
 <style>
+	@keyframes play-wave {
+		0% {
+			background: radial-gradient(white 70%, transparent);
+
+			/* background: red; */
+		}
+		100% {
+			background: radial-gradient(transparent, white);
+			/* background: blue; */
+		}
+	}
+
 	.content {
 		padding-top: 1em;
 	}
-
-	img {
+	.wrapper {
+		/* position: relative; */
+	}
+	.poster-wrapper {
 		position: sticky;
 		top: 0;
-		display: block;
+		z-index: 0;
+		height: 100%;
 		width: 100%;
-		min-height: 200px;
-		height: auto;
-		max-height: 60vh;
-		object-fit: cover;
-	}
-	.information {
-		z-index: 1;
-		background-color: var(--c-main-content);
 	}
 
-	div span {
-		opacity: 0.5;
-		text-transform: uppercase;
+	img {
+		display: block;
+		margin: 0 auto;
+		/* width: 100%;
+		min-height: 200px;
+		height: auto; */
+		/* max-height: 60vh; */
+		object-fit: cover;
 	}
-	div h1 {
+
+	.poster-wrapper button {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		border: none;
+		color: brown;
+		transform: translate(-50%, -50%);
+		border-radius: 50vh;
+		padding: 1em;
+		background: radial-gradient(white 20%, transparent 20%);
+		cursor: pointer;
+		transition: background 500ms ease-in-out;
+		/* box-shadow: 0px 0px 20px -5px red; */
+		/* cursor: pointer;
+		animation-name: play-wave;
+		animation-duration: 500ms;
+		animation-timing-function: ease-in-out;
+		animation-iteration-count: infinite; */
+	}
+	.poster-wrapper button:hover {
+		background: radial-gradient(white 30%, transparent 60%);
+	}
+	.poster-wrapper svg {
+		height: 4rem;
+		width: 4rem;
+	}
+	.poster-wrapper path {
+		box-shadow: 0px 0px 60px -5px red;
+	}
+
+	.information::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 150px;
+		background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+		transform: translateY(-100%);
+	}
+
+	.information {
+		position: relative;
+		z-index: 1;
+		background-color: var(--c-main-content);
+		padding-bottom: 30rem;
+		min-height: 100vh;
+		padding: 1em;
+	}
+
+	.item {
+		padding-bottom: 1em;
+	}
+
+	.property {
+		opacity: 0.5;
+		text-transform: capitalize;
+	}
+
+	.tag {
+		border: 1px solid rgb(46, 68, 45);
+		padding-left: 0.5em;
+		padding-right: 0.5em;
+		margin-left: 0.175em;
+		margin-right: 0.175em;
+		background-color: rgb(2, 48, 0);
+		color: rgb(103, 167, 100);
+		border-radius: 50vh;
+	}
+	.synopsis p {
+		margin-top: 0;
+	}
+
+	h1 {
 		margin: 0;
 		font-size: 2rem;
 	}
@@ -105,4 +233,30 @@
 	@media (min-width: 768px) {}
 	@media (min-width: 992px) {}
 	@media (min-width: 1200px) {} */
+
+	@media (min-width: 768px) {
+		.wrapper {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.poster-wrapper {
+			position: relative;
+		}
+
+		img {
+			display: block;
+			/* width: 100%; */
+			height: 100%;
+			/* max-width: 600px; */
+			/* width: 200px; */
+			/* object-fit: cover; */
+		}
+
+		.information {
+			/* height: initial; */
+		}
+	}
+	@media (min-width: 992px) {
+	}
 </style>
