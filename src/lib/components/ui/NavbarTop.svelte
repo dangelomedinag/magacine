@@ -1,9 +1,37 @@
+<script>
+	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
+	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
+	import Toast from '$lib/components/ui/toast.svelte';
+	import { page } from '$app/stores';
+	$: stuff = $page.stuff;
+
+	let searching = false;
+	let results = [];
+	let value;
+</script>
+
 <nav class="navbar-content">
 	<div class="items-wrapper">
 		<slot />
 	</div>
 	<div class="tools">
-		<button class="bell-btn">
+		<button class="tool-btn" on:click={() => (searching = !searching)}>
+			<svg
+				class="bell-svg"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+				stroke-width="2"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+				/>
+			</svg>
+		</button>
+		<button class="tool-btn">
 			<svg
 				class="bell-svg"
 				xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +47,7 @@
 				/>
 			</svg>
 		</button>
-		<button class="profile-btn">
+		<button class="tool-btn">
 			<svg
 				class="bell-svg"
 				xmlns="http://www.w3.org/2000/svg"
@@ -37,12 +65,36 @@
 		</button>
 	</div>
 </nav>
+{#if searching}
+	<div class="filter-sticky">
+		<SearchMovies bind:results bind:value>
+			<CarouselMovies movies={results} title={value} priority="small" />
+
+			<div slot="suggest" class="content">
+				<Toast warn>
+					Opps! parece que no se encontraron resultados para <span>"{value}"</span>
+				</Toast>
+				<div>
+					<CarouselMovies movies={stuff.shrek} title="sugesst" priority="small" />
+				</div>
+			</div>
+		</SearchMovies>
+	</div>
+{/if}
 
 <style>
+	.filter-sticky {
+		position: sticky;
+		top: 63.59px;
+		/* top: 0; */
+		z-index: 50;
+		width: 100%;
+	}
+
 	.navbar-content {
 		position: sticky;
 		top: 0;
-		z-index: 50;
+		z-index: 51;
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
@@ -77,10 +129,11 @@
 		opacity: 1;
 	}
 
-	.bell-btn {
+	.tool-btn {
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
+		cursor: pointer;
 	}
 
 	.bell-svg {

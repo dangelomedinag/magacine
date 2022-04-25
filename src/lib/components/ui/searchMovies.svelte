@@ -1,6 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
-
+	import { slide } from 'svelte/transition';
 	import { spring } from 'svelte/motion';
 	import Spinner from './Spinner.svelte';
 
@@ -47,6 +46,7 @@
 		} catch (error) {
 			console.warn(error.message);
 			match = true;
+			console.log(match);
 			results = [];
 		}
 		loading = false;
@@ -72,7 +72,7 @@
 	// sdada
 </script>
 
-<div>
+<div class="search-container" transition:slide>
 	<div class="search-box">
 		<div class="copy">buscar:</div>
 		<div class="input-group">
@@ -161,6 +161,12 @@
 </div>
 
 <style>
+	.search-container {
+		background-color: var(--c-main);
+		/* padding-bottom: 1em; */
+		max-height: calc(100vh - 63.59px);
+		overflow-y: auto;
+	}
 	input[type='search'] {
 		width: 100%;
 		display: inline-block;
@@ -182,14 +188,14 @@
 	}
 
 	.search-box {
-		padding: 0 1.5rem;
+		padding: 0.5em 1.5em;
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		/* margin-bottom: 1rem; */
-		height: 200px;
+		/* height: 200px; */
 		background-image: linear-gradient(to bottom, transparent -100%, var(--c-main) 60%),
 			url('/assets/banner-search.jpg');
 		background-size: 100% 100%, cover;

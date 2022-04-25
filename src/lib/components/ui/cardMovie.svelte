@@ -29,7 +29,7 @@
 	out:scale={{ duration: 200, start: 0.95, easing: quintInOut }}
 	class="item"
 >
-	<a class="item-link" href={'#'}>
+	<a class="item-link" href="/movie/{movie.imdbID}">
 		<img class="item-poster" src={poster} alt={movie.Title} loading="lazy" />
 	</a>
 

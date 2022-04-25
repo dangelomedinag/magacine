@@ -1,6 +1,6 @@
 <script>
-	export let success,
-		warn,
+	export let success = false,
+		warn = false,
 		danger = false;
 </script>
 

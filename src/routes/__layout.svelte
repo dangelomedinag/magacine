@@ -27,12 +27,26 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import AsideNav from '$lib/components/ui/AsideNav.svelte';
 	import { dev } from '$app/env';
-	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
-	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
-	import Toast from '$lib/components/ui/toast.svelte';
 	let toggle = false;
-	let results = [];
-	let value;
+	import NProgress from 'nprogress';
+	import 'nprogress/nprogress.css';
+	import { navigating } from '$app/stores';
+
+	// NProgress css
+
+	NProgress.configure({
+		// Full list: https://github.com/rstacruz/nprogress#configuration
+		minimum: 0.16
+	});
+
+	$: {
+		if ($navigating) {
+			NProgress.start();
+		}
+		if (!$navigating) {
+			NProgress.done();
+		}
+	}
 </script>
 
 {#if dev}
@@ -52,14 +66,6 @@
 		<AsideNav on:click={() => (toggle = false)} />
 	</aside>
 	<main class="main">
-		<!-- <SearchMovies bind:results bind:value>
-			<CarouselMovies movies={results} title={value} priority="small" />
-			<div slot="suggest" class="content">
-				<Toast warn>
-					Opps! parece que no se encontraron resultados para <span>"{value}"</span>
-				</Toast>
-			</div>
-		</SearchMovies> -->
 		<div class="container">
 			<slot />
 		</div>
@@ -68,6 +74,10 @@
 </div>
 
 <style>
+	:global(#nprogress .bar) {
+		background-color: brown;
+	}
+
 	.container {
 		display: flex;
 		flex-direction: column;
