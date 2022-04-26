@@ -177,9 +177,6 @@
 		height: 4rem;
 		width: 4rem;
 	}
-	.poster-wrapper path {
-		box-shadow: 0px 0px 60px -5px red;
-	}
 
 	.information::before {
 		content: '';
@@ -236,8 +233,8 @@
 
 	@media (min-width: 768px) {
 		.wrapper {
-			display: flex;
-			flex-wrap: wrap;
+			/* display: flex;
+			flex-wrap: wrap; */
 		}
 
 		.poster-wrapper {

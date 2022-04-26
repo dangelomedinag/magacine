@@ -11,10 +11,14 @@
 	export let priority;
 	// export let progress = false;
 	let container;
+	let activesControls = {
+		prev: false,
+		next: true
+	};
 
 	function prevPage(e) {
 		const { steps, current } = pages();
-		console.log(steps);
+		console.log('prev:', steps, current);
 		let prev = 0;
 
 		for (let i = 0; i < steps.length; i++) {
@@ -28,7 +32,7 @@
 	}
 	function nextPage(e) {
 		const { steps, current } = pages();
-
+		console.log('next:', steps, current);
 		let next = 0;
 
 		for (let i = 0; i < steps.length; i++) {
@@ -102,19 +106,7 @@
 		{/each}
 	</main>
 	<div class="movement-action">
-		<button on:click={prevPage} class="next controls">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-6 w-6"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-			</svg>
-		</button>
-		<button class="prev controls" on:click={nextPage}>
+		<button on:click={nextPage} class="prev controls" disabled={activesControls.prev}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
@@ -124,6 +116,18 @@
 				stroke-width="2"
 			>
 				<path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+			</svg>
+		</button>
+		<button class="next controls" on:click={prevPage} disabled={activesControls.next}>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-6 w-6"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+				stroke-width="2"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
 			</svg>
 		</button>
 	</div>
@@ -242,6 +246,10 @@
 		background-color: brown;
 		/* border-radius: 5px; */
 		border: none;
+	}
+
+	.controls:disabled {
+		background-color: aqua;
 	}
 
 	.next {
