@@ -2,6 +2,7 @@
 	import { slide } from 'svelte/transition';
 	import { spring } from 'svelte/motion';
 	import Spinner from './Spinner.svelte';
+	import { goto } from '$app/navigation';
 
 	export let value = '';
 	export let results = [];
@@ -42,6 +43,7 @@
 			if (json.Response === 'False') throw new Error(json.Error);
 			totalResults = +json.totalResults;
 			results = json.Search;
+			// goto('?search=' + `${normalize(value)}${filterUnions()}`, { state: {} });
 			// input.blur();
 		} catch (error) {
 			console.warn(error.message);

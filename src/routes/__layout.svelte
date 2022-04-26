@@ -26,16 +26,15 @@
 <script>
 	import Footer from '$lib/components/Footer.svelte';
 	import AsideNav from '$lib/components/ui/AsideNav.svelte';
-	import { dev } from '$app/env';
-	let toggle = false;
 	import NProgress from 'nprogress';
-	import 'nprogress/nprogress.css';
-	import { navigating } from '$app/stores';
 	import ButtonToTop from '$lib/components/ui/buttonToTop.svelte';
 	import MediaQueries from '$lib/components/mediaQueries.svelte';
+	import { dev } from '$app/env';
+	import { navigating } from '$app/stores';
+	import 'nprogress/nprogress.css';
+	let toggle = false;
 
 	// NProgress css
-
 	NProgress.configure({
 		// Full list: https://github.com/rstacruz/nprogress#configuration
 		minimum: 0.16
@@ -52,14 +51,21 @@
 </script>
 
 {#if dev}
-	<MediaQueries />
+	<MediaQueries left="50%" />
 {/if}
 <div class="wrapper">
 	<ButtonToTop on:click={() => (toggle = !toggle)} />
 	<aside class="sidebar" class:toggle>
 		<AsideNav on:click={() => (toggle = false)} />
 	</aside>
-	<main class="main">
+	<main
+		class="main"
+		on:click={() => {
+			if (toggle) {
+				toggle = false;
+			}
+		}}
+	>
 		<div class="container">
 			<slot />
 		</div>
@@ -77,37 +83,6 @@
 		flex-direction: column;
 	}
 
-	button {
-		position: fixed;
-		bottom: 5%;
-		right: 5%;
-		z-index: 110;
-		border-radius: 50vh;
-		width: 50px;
-		height: 50px;
-		background-color: rgba(165, 42, 42, 0.8);
-		color: white;
-		border: none;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		cursor: pointer;
-		box-shadow: 5px 5px 30px -5px black;
-	}
-
-	button:hover {
-		background-color: brown;
-	}
-
-	button:active {
-		transform: translateY(5%);
-	}
-
-	button svg {
-		height: 25px;
-		width: 25px;
-	}
-
 	.wrapper {
 		display: flex;
 		justify-content: center;
@@ -119,6 +94,16 @@
 		width: 100%;
 		height: 100%;
 		background-color: var(--c-main-content);
+	}
+	.toggle + .main::after {
+		content: '';
+		height: 100%;
+		width: 100%;
+		background-color: rgba(0, 0, 0, 0.6);
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 95;
 	}
 
 	.sidebar {

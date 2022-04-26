@@ -1,29 +1,26 @@
 <script>
+	import { onMount } from 'svelte';
+
 	import CardMovie from './cardMovie.svelte';
-	// import ProgressLine from './ProgressLine.svelte';
-	// import { flip } from 'svelte/animate';
-	// import { scale } from 'svelte/transition';
-	// import { quintInOut, quintOut } from 'svelte/easing';
-	// import Spinner from './Spinner.svelte';
 
 	export let title;
 	export let movies;
 	export let priority;
-	// export let progress = false;
 	let container;
-	let activesControls = {
-		prev: false,
-		next: true
-	};
+	let pageInfo;
+	let offset = 0;
+
+	onMount(() => {
+		pageInfo = pages();
+	});
 
 	function prevPage(e) {
-		const { steps, current } = pages();
-		console.log('prev:', steps, current);
+		offset = container.scrollLeft;
 		let prev = 0;
 
-		for (let i = 0; i < steps.length; i++) {
-			if (current <= steps[i] + 1) {
-				prev = steps[i - 1];
+		for (let i = 0; i < pageInfo.steps.length; i++) {
+			if (offset <= pageInfo.steps[i] + 1) {
+				prev = pageInfo.steps[i - 1];
 				break;
 			}
 		}
@@ -31,18 +28,18 @@
 		container.scrollLeft = prev;
 	}
 	function nextPage(e) {
-		const { steps, current } = pages();
-		console.log('next:', steps, current);
+		offset = container.scrollLeft;
 		let next = 0;
 
-		for (let i = 0; i < steps.length; i++) {
-			if (current < steps[i] - 2) {
-				next = steps[i] - 2;
+		for (let i = 0; i < pageInfo.steps.length; i++) {
+			if (offset < pageInfo.steps[i] - 2) {
+				next = pageInfo.steps[i] - 2;
 				break;
 			}
 		}
 
 		container.scrollLeft = next;
+		// currentNext = next;
 	}
 	const getExtra = (node) => {
 		let extra = 0;
@@ -106,7 +103,7 @@
 		{/each}
 	</main>
 	<div class="movement-action">
-		<button on:click={nextPage} class="prev controls" disabled={activesControls.prev}>
+		<button on:click={nextPage} class="prev controls">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
@@ -118,7 +115,7 @@
 				<path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
 			</svg>
 		</button>
-		<button class="next controls" on:click={prevPage} disabled={activesControls.next}>
+		<button class="next controls" on:click={prevPage}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
@@ -158,18 +155,18 @@
 	} */
 
 	@media (min-width: 768px) {
-		.priority-small .item {
+		.priority-small :global(.item) {
 			--w-card: 200px;
 			max-height: 450px;
 			/* min-width: 200px; */
 		}
-		.priority-medium .item {
+		.priority-medium :global(.item) {
 			--w-card: 250px;
 			max-height: 550px;
 			/* min-width: 250px; */
 		}
-		.priority-large .item {
-			--w-card: 350px;
+		.priority-large :global(.item) {
+			--w-card: 300px;
 			/* min-width: 350px; */
 		}
 	}
@@ -241,11 +238,14 @@
 		top: 35%;
 		height: 80px;
 		width: 30px;
-		/* opacity: 0.3; */
+		/* opacity: 0.8; */
 		color: white;
 		background-color: brown;
 		/* border-radius: 5px; */
 		border: none;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
+			0 32px 64px rgba(0, 0, 0, 0.07);
 	}
 
 	.controls:disabled {
@@ -253,9 +253,11 @@
 	}
 
 	.next {
+		border-radius: 0 5px 5px 0;
 		left: 0;
 	}
 	.prev {
+		border-radius: 5px 0 0 5px;
 		right: 0;
 	}
 

@@ -43,6 +43,12 @@ button {
 	font-family: inherit;
 }
 
+button,
+a {
+	font-size: 1rem;
+	padding: 1px 6px;
+}
+
 /* a {
 	color: rgb(97, 216, 255);
 	text-decoration: none;

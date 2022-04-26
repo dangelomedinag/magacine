@@ -117,17 +117,13 @@
 		border: 1px solid rgba(128, 128, 128, 0.3);
 	}
 
-	.item--loading {
-		border-color: transparent;
-		/* min-height: 400px; */
-		background-color: rgba(57, 57, 57, 0.1);
-	}
-
 	.item-link {
 		display: block;
 		height: 100%;
 		width: 100%;
 		overflow: hidden;
+		margin: 0;
+		padding: 0;
 		/* height: 200px; */
 	}
 
@@ -187,23 +183,8 @@
 		margin-left: 5px;
 		margin-right: 5px;
 	}
-	.actions-wrapper {
-		display: flex;
-		flex-wrap: wrap;
-		/* justify-content: space-between; */
-		margin-top: 0.4em;
-		/* margin-top: auto; */
-		/* flex-shrink: 0; */
-		/* display: none; */
-	}
 
 	@media (min-width: 768px) {
-		.actions-wrapper {
-			/* position: absolute;
-			top: 0;
-			right: 0; */
-			/* display: block; */
-		}
 	}
 
 	/* sssssssss */

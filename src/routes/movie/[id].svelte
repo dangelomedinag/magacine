@@ -1,6 +1,4 @@
 <script context="module">
-	import Error from '../__error.svelte';
-
 	/** @type {import("@sveltejs/kit").Load}*/
 	export async function load({ fetch, params }) {
 		const req = await fetch('/api?i=' + params.id);
@@ -26,6 +24,15 @@
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 
 	export let movie;
+	let header;
+	let display = 'none';
+	function showHeader() {
+		if (window.scrollY >= header.offsetTop - 60) {
+			display = 'flex';
+		} else if (window.scrollY < header.offsetTop + 60) {
+			display = 'none';
+		}
+	}
 
 	/* {
 		Title: 'The Avengers',
@@ -60,6 +67,8 @@
 	} */
 </script>
 
+<svelte:window on:scroll={showHeader} />
+
 <!-- <div class="content"> -->
 <div class="wrapper">
 	<div
@@ -77,7 +86,35 @@
 			</svg>
 		</button>
 	</div>
-	<div class="information">
+	<header style:display>
+		<a href="/">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+				stroke-width="2"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+			</svg>
+			<span>back</span>
+		</a>
+		<span class="title">{movie.Title}</span>
+		<div class="wrapper-controls">
+			<button>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+					<path
+						fill-rule="evenodd"
+						d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+				<span>watch</span>
+			</button>
+			<!-- <button>more</button> -->
+		</div>
+	</header>
+	<div class="information" bind:this={header}>
 		<div class="item">
 			<span class="property">title:</span>
 			<h1>{movie.Title}</h1>
@@ -105,31 +142,13 @@
 			<p>{movie.imdbRating}</p>
 		</div>
 		<div class="suggest">
-			<CarouselMovies movies={$page.stuff.shrek} title="suggest" />
+			<CarouselMovies movies={$page.stuff.shrek} title="suggest" priority="small" />
 		</div>
 	</div>
 </div>
 
 <!-- </div> -->
 <style>
-	@keyframes play-wave {
-		0% {
-			background: radial-gradient(white 70%, transparent);
-
-			/* background: red; */
-		}
-		100% {
-			background: radial-gradient(transparent, white);
-			/* background: blue; */
-		}
-	}
-
-	.content {
-		padding-top: 1em;
-	}
-	.wrapper {
-		/* position: relative; */
-	}
 	.poster-wrapper {
 		position: sticky;
 		top: 0;
@@ -138,7 +157,7 @@
 		width: 100%;
 	}
 
-	img {
+	.poster-wrapper img {
 		display: block;
 		margin: 0 auto;
 		/* width: 100%;
@@ -187,6 +206,8 @@
 		height: 150px;
 		background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
 		transform: translateY(-100%);
+		user-select: none;
+		pointer-events: none;
 	}
 
 	.information {
@@ -196,6 +217,66 @@
 		padding-bottom: 30rem;
 		min-height: 100vh;
 		padding: 1em;
+	}
+
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		position: sticky;
+		top: 0;
+		background-color: var(--c-main-content);
+		height: 60px;
+		z-index: 10;
+		width: 100%;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
+			0 32px 64px rgba(0, 0, 0, 0.07);
+		/* opacity: 0; */
+	}
+
+	header .wrapper-controls {
+		/* display: inline; */
+		height: 100%;
+	}
+
+	header button {
+		display: inline-flex;
+		gap: 0.5em;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		border: none;
+		background-color: brown;
+		margin: 0;
+		color: white;
+		font-weight: bold;
+		cursor: pointer;
+	}
+	header a {
+		color: white;
+		font-weight: bold;
+		cursor: pointer;
+		display: inline-flex;
+		gap: 0.5em;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		background-color: brown;
+		text-decoration: none;
+	}
+	header button:hover {
+		background-color: rgb(120, 31, 31);
+	}
+
+	header svg {
+		height: 1.3rem;
+		width: 1.3rem;
+	}
+
+	header .title {
+		font-weight: bold;
+		padding-left: var(--gap-content);
 	}
 
 	.item {
@@ -232,27 +313,6 @@
 	@media (min-width: 1200px) {} */
 
 	@media (min-width: 768px) {
-		.wrapper {
-			/* display: flex;
-			flex-wrap: wrap; */
-		}
-
-		.poster-wrapper {
-			position: relative;
-		}
-
-		img {
-			display: block;
-			/* width: 100%; */
-			height: 100%;
-			/* max-width: 600px; */
-			/* width: 200px; */
-			/* object-fit: cover; */
-		}
-
-		.information {
-			/* height: initial; */
-		}
 	}
 	@media (min-width: 992px) {
 	}
