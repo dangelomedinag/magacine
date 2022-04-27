@@ -1,11 +1,13 @@
 <script>
 	export let rating;
+	const starsLenght = 5;
+	const stars = [1, 2, 3, 4, 5];
+	const percent = Math.floor(rating) * 0.1;
+	const sc = Math.floor(starsLenght * percent);
 </script>
 
 <div style="display: inline-flex;">
-	{#each [1, 2, 3, 4, 5] as ele, i}
-		{@const percent = Math.floor(rating) * 0.1}
-		{@const sc = Math.floor(5 * percent)}
+	{#each stars as ele}
 		{@const fill = ele > sc}
 
 		<!-- {ele} -->
@@ -38,3 +40,10 @@
 		{/if}
 	{/each}
 </div>
+
+<style>
+	svg {
+		height: 1rem;
+		width: 1rem;
+	}
+</style>

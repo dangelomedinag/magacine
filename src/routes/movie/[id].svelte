@@ -21,6 +21,7 @@
 
 <script>
 	import { page } from '$app/stores';
+	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 
 	export let movie;
@@ -140,6 +141,7 @@
 		<div class="item">
 			<span class="property">rating:</span>
 			<p>{movie.imdbRating}</p>
+			<CardRatingStarts rating={movie.imdbRating} />
 		</div>
 		<div class="suggest">
 			<CarouselMovies movies={$page.stuff.shrek} title="suggest" priority="small" />

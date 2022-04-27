@@ -100,7 +100,7 @@
 		height: 100%;
 		width: 100%;
 		background-color: rgba(0, 0, 0, 0.6);
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		z-index: 95;
@@ -150,6 +150,10 @@
 		}
 		.toggle + main {
 			width: 80%;
+		}
+		.toggle + .main::after {
+			/* content: ''; */
+			display: none;
 		}
 		/* .main {
 			width: 80%;

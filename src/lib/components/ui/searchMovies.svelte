@@ -1,8 +1,8 @@
 <script>
-	import { slide } from 'svelte/transition';
 	import { spring } from 'svelte/motion';
 	import Spinner from './Spinner.svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	export let value = '';
 	export let results = [];
@@ -43,8 +43,16 @@
 			if (json.Response === 'False') throw new Error(json.Error);
 			totalResults = +json.totalResults;
 			results = json.Search;
-			// goto('?search=' + `${normalize(value)}${filterUnions()}`, { state: {} });
+
+			const url = new URL(location);
+			url.searchParams.set('search', value);
+			console.log(url);
+			await goto(url.href, { replaceState: true });
+
+			// goto('/?search=' + `${normalize(value)}${filterUnions()}`, { replaceState: true });
+			// window.history.pushState({}, '', '?search=' + `${normalize(value)}${filterUnions()}`);
 			// input.blur();
+			// console.log($page.url.host);
 		} catch (error) {
 			console.warn(error.message);
 			match = true;
@@ -70,11 +78,9 @@
 			getData();
 		}, 900);
 	}
-
-	// sdada
 </script>
 
-<div class="search-container" transition:slide>
+<div class="search-container">
 	<div class="search-box">
 		<div class="copy">buscar:</div>
 		<div class="input-group">
@@ -164,7 +170,7 @@
 
 <style>
 	.search-container {
-		background-color: var(--c-main);
+		background-color: var(--c-main-content);
 		/* padding-bottom: 1em; */
 		max-height: calc(100vh - 63.59px);
 		overflow-y: auto;
@@ -198,7 +204,7 @@
 		align-items: center;
 		/* margin-bottom: 1rem; */
 		/* height: 200px; */
-		background-image: linear-gradient(to bottom, transparent -100%, var(--c-main) 60%),
+		background-image: linear-gradient(to bottom, transparent -100%, var(--c-main-content) 60%),
 			url('/assets/banner-search.jpg');
 		background-size: 100% 100%, cover;
 		background-position: center, center;

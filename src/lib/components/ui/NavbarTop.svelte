@@ -1,21 +1,9 @@
-<script>
-	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
-	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
-	import Toast from '$lib/components/ui/toast.svelte';
-	import { page } from '$app/stores';
-	$: stuff = $page.stuff;
-
-	let searching = false;
-	let results = [];
-	let value;
-</script>
-
 <nav class="navbar-content">
 	<div class="items-wrapper">
 		<slot />
 	</div>
 	<div class="tools">
-		<button class="tool-btn" on:click={() => (searching = !searching)}>
+		<a href="/search" class="tool-btn">
 			<svg
 				class="bell-svg"
 				xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +18,7 @@
 					d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
 				/>
 			</svg>
-		</button>
+		</a>
 		<button class="tool-btn">
 			<svg
 				class="bell-svg"
@@ -65,7 +53,8 @@
 		</button>
 	</div>
 </nav>
-{#if searching}
+
+<!-- {#if searching}
 	<div class="filter-sticky">
 		<SearchMovies bind:results bind:value>
 			<CarouselMovies movies={results} title={value} priority="small" />
@@ -80,17 +69,8 @@
 			</div>
 		</SearchMovies>
 	</div>
-{/if}
-
+{/if} -->
 <style>
-	.filter-sticky {
-		position: sticky;
-		top: 63.59px;
-		/* top: 0; */
-		z-index: 50;
-		width: 100%;
-	}
-
 	.navbar-content {
 		position: sticky;
 		top: 0;
