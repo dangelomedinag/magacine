@@ -18,7 +18,6 @@
 	async function getDetails(imdbID) {
 		const req = await fetch('/api/' + imdbID);
 		const details = await req.json();
-		// console.log(details);
 
 		return details;
 	}
@@ -45,10 +44,10 @@
 				<p class="movie-year">{details.year}</p>
 				<div class="rating-wrapper">
 					<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
-					<span class="rating-label">{(details.imdbRating / 2).toFixed(1)} rating</span>
+					<span class="rating-label">{(details.imdbrating / 2).toFixed(1)} rating</span>
 				</div>
-				{#if details.imdbRating}
-					<CardRatingStarts rating={details.imdbRating} />
+				{#if details.imdbrating}
+					<CardRatingStarts rating={details.imdbrating} />
 				{/if}
 			{:else}
 				<Spinner color="grey" size={20} />

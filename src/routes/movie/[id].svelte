@@ -10,7 +10,7 @@
 			};
 		}
 
-		console.log(details);
+		// console.log(details);
 		return {
 			props: {
 				movie: details
@@ -25,11 +25,11 @@
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 
 	export let movie;
-	$: console.log(movie);
+	// $: console.log(movie);
 	let header;
 	let display = 'none';
 	function showHeader() {
-		if (window.scrollY >= header.offsetTop - 60) {
+		if (window.scrollY >= header.offsetTop + 60) {
 			display = 'flex';
 		} else if (window.scrollY < header.offsetTop + 60) {
 			display = 'none';
@@ -104,6 +104,7 @@
 		<span class="title">{movie.title}</span>
 		<div class="wrapper-controls">
 			<button>
+				<span>watch</span>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 					<path
 						fill-rule="evenodd"
@@ -111,7 +112,6 @@
 						clip-rule="evenodd"
 					/>
 				</svg>
-				<span>watch</span>
 			</button>
 			<!-- <button>more</button> -->
 		</div>
@@ -119,16 +119,59 @@
 	<div class="information" bind:this={header}>
 		<div class="item">
 			<span class="property">title:</span>
-			<h1>{movie.title}</h1>
+			<h1 class="title">{movie.title}</h1>
 		</div>
-		<div class="item">
-			<span class="property">Year / duration:</span>
-			<span>{movie.year} - <span>{movie.runtime.duration} {movie.runtime.units}</span></span>
-		</div>
-		<div class="synopsis item">
-			<span class="property">synopsis:</span>
-			<p>{movie.plot}</p>
-		</div>
+
+		{#if movie.year}
+			<div class="item">
+				<span class="property">
+					Year
+					{#if movie.runtime}
+						/ duration
+					{/if}
+					:
+				</span>
+				<span
+					><svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+						/>
+					</svg>
+					{movie.year}
+					{#if movie.runtime}
+						/ <svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
+						</svg> <span>{movie.runtime} </span>
+					{/if}
+				</span>
+			</div>
+		{/if}
+
+		{#if movie.plot}
+			<div class="synopsis item">
+				<span class="property">synopsis:</span>
+				<p>{movie.plot}</p>
+			</div>
+		{/if}
+
 		<div class="item">
 			<span class="property">genders:</span>
 			{#each movie.genre as item}
@@ -137,23 +180,41 @@
 				<span class="tag">desconocido</span>
 			{/each}
 		</div>
-		<div class="item">
-			<span class="property">language:</span>
-			<p>{movie.language}</p>
-		</div>
-		<div class="item">
-			<span class="property">rating:</span>
-			<p>{movie.imdbRating}</p>
-			<CardRatingStarts rating={movie.imdbRating} />
-		</div>
-		<div class="suggest">
+
+		{#if movie.language}
+			<div class="item">
+				<span class="property">language:</span>
+
+				<span>
+					{new Intl.ListFormat('es-CL', { style: 'long', type: 'conjunction' }).format(
+						movie.language
+					)}
+				</span>
+			</div>
+		{/if}
+
+		{#if movie.imdbrating}
+			<div class="item">
+				<span class="property">rating:</span>
+				<div>{movie.imdbrating}</div>
+				<CardRatingStarts --icon-fz="1.5rem" rating={movie.imdbrating} />
+			</div>
+		{/if}
+
+		<!-- <div class="suggest">
 			<CarouselMovies movies={$page.stuff.shrek} title="suggest" priority="small" />
-		</div>
+		</div> -->
 	</div>
 </div>
 
 <!-- </div> -->
 <style>
+	.information svg {
+		width: 1rem;
+		height: 1rem;
+		color: brown;
+	}
+
 	.poster-wrapper {
 		position: sticky;
 		top: 0;
@@ -247,12 +308,12 @@
 
 	header button {
 		display: inline-flex;
-		gap: 0.5em;
+		/* gap: 0.5em; */
 		justify-content: center;
 		align-items: center;
 		height: 100%;
 		border: none;
-		background-color: brown;
+		background-color: transparent;
 		margin: 0;
 		color: white;
 		font-weight: bold;
@@ -263,11 +324,11 @@
 		font-weight: bold;
 		cursor: pointer;
 		display: inline-flex;
-		gap: 0.5em;
-		justify-content: center;
+		/* gap: 0.5em; */
+		justify-content: flex-start;
 		align-items: center;
 		height: 100%;
-		background-color: brown;
+		/* background-color: brown; */
 		text-decoration: none;
 	}
 	header button:hover {
@@ -294,13 +355,17 @@
 	}
 
 	.tag {
-		border: 1px solid rgb(46, 68, 45);
+		display: inline-block;
+		border: 1px solid rgba(21, 196, 123, 0.3);
 		padding-left: 0.5em;
 		padding-right: 0.5em;
+		/* margin: 1rem .175rem; */
+		margin-top: 0.3rem;
+		/* margin-bottom: 0.175rem; */
 		margin-left: 0.175em;
 		margin-right: 0.175em;
-		background-color: rgb(2, 48, 0);
-		color: rgb(103, 167, 100);
+		background-color: rgb(18, 54, 42);
+		color: rgb(21, 196, 123);
 		border-radius: 50vh;
 	}
 	.synopsis p {

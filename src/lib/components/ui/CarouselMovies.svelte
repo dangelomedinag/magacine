@@ -92,7 +92,7 @@
 		>
 	</header>
 	<main class="items-wrapper" bind:this={container}>
-		{#each movies as movie, i (movie.imdbID)}
+		{#each movies as movie, i (movie.uuid)}
 			<CardMovie {movie} progress={movie.progress ?? 0} {i} />
 		{:else}
 			<!-- <slot name="empty">

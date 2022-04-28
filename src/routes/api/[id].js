@@ -11,60 +11,67 @@ export async function get({ params }) {
 	url.searchParams.set('i', id);
 	url.searchParams.set('apikey', API_KEY);
 
-	function splitter(string, fall = [], char = ',') {
-		if (string === 'N/A') {
-			return fall;
-		}
-
-		if (string.includes(char)) {
-			return string.split(char);
-		} else {
-			return [string];
-		}
-	}
 	try {
-		const data = await fetch(url.href).then((r) => r.json());
-		console.log('=========', data);
+		const data = await fetch(url.href);
+		const json = await data.json();
+		// console.log(json);
 
-		let newYear = data.Year.includes('-') ? data.Year.split('-') : data.Year;
-		let newRuntime = { duration: data.Runtime.split(' ')[0], units: data.Runtime.split(' ')[1] };
-		// let newRatings = data.Ratings.map((e) => {
-		// 	let obj = {};
-		// 	for (const key of e) {
-		// 		obj[key.toLowerCase()] = e[key];
-		// 	}
-		// 	return obj;
-		// });
+		let obj = {};
 
-		let movie = {
-			title: data.Title,
-			year: data.Year === 'N/A' ? null : newYear,
-			rated: data.Rated === 'N/A' ? null : data.Rated,
-			released: data.Released === 'N/A' ? null : data.Released,
-			runtime: data.Runtime === 'N/A' ? null : newRuntime,
-			genre: splitter(data.Genre),
-			director: splitter(data.Director),
-			writer: splitter(data.Writer),
-			actors: splitter(data.Actors),
-			plot: data.Plot === 'N/A' ? null : data.Plot,
-			language: splitter(data.Language),
-			country: splitter(data.Country),
-			awards: data.Awards === 'N/A' ? null : data.Awards,
-			poster: data.Poster === 'N/A' ? null : data.Poster,
-			ratings: data.Ratings,
-			metaScore: data.Metascore === 'N/A' ? null : data.Metascore,
-			imdbRating: data.imdbRating === 'N/A' ? null : data.imdbRating,
-			imdbVotes: data.imdbVotes === 'N/A' ? null : data.imdbVotes,
-			imdbId: data.imdbID,
-			type: data.Type === 'N/A' ? null : data.Type,
-			dvd: data.DVD === 'N/A' ? null : data.DVD,
-			boxOffice: data.BoxOffice === 'N/A' ? null : data.BoxOffice,
-			production: data.Production === 'N/A' ? null : data.Production,
-			website: data.Website === 'N/A' ? null : data.Website,
-			response: data.Response === 'True' ? true : false
-		};
+		for (const key in json) {
+			let value = json[key];
 
-		// console.log(movie);
+			if (value === 'N/A') {
+				value = null;
+			}
+
+			if (key === 'Response') {
+				value = json[key] === 'True';
+			}
+			if (key === 'Year') {
+				if (value.endsWith('-')) value = value.slice(-1);
+			}
+
+			if (key === 'Genre' || key === 'Language') {
+				if (value.includes(',')) value = json[key].split(',').map((e) => e.trim());
+				else value = [];
+			}
+
+			obj[key.toLowerCase()] = value;
+		}
+		// console.log(obj);
+
+		// }
+
+		// let movie = {
+		// 	title: data.Title,
+		// 	year: data.Year.includes('-') ? data.Year.split('-') : data.Year,
+		// 	rated: data.Rated,
+		// 	released: data.Released,
+		// 	runtime: data.Runtime,
+		// 	genre: splitter(data.Genre),
+		// 	director: splitter(data.Director),
+		// 	writer: splitter(data.Writer),
+		// 	actors: splitter(data.Actors),
+		// 	plot: data.Plot,
+		// 	language: splitter(data.Language),
+		// 	country: splitter(data.Country),
+		// 	awards: splitter(data.Awards),
+		// 	poster: data.Poster === 'N/A' ? '/assets/image-fallback.jpg' : data.Poster,
+		// 	ratings: data.Ratings,
+		// 	metaScore: data.Metascore,
+		// 	imdbRating: data.imdbRating,
+		// 	imdbVotes: data.imdbVotes,
+		// 	imdbId: data.imdbID,
+		// 	type: data.Type,
+		// 	dvd: data.DVD,
+		// 	boxOffice: data.BoxOffice,
+		// 	production: data.Production,
+		// 	website: data.Website,
+		// 	response: data.Response === 'True' ? true : false
+		// };
+
+		// console.log(obj);
 
 		/* 
 		Title: 'The Avengers',
@@ -99,7 +106,7 @@ export async function get({ params }) {
 
 		return {
 			status: data.status,
-			body: movie
+			body: obj
 		};
 	} catch (error) {
 		console.log(error);

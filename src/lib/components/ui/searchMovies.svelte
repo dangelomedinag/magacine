@@ -52,13 +52,13 @@
 
 			const url = new URL(location);
 			url.searchParams.set('search', value);
-			console.log(url.searchParams.toString());
+			// console.log(url.searchParams.toString());
 			if (!Boolean(selected.length) || selected.length > 1) {
 				url.searchParams.delete('type');
 			} else {
 				url.searchParams.set('type', selected[0]);
 			}
-			console.log(url);
+			// console.log(url);
 			await goto(url.href, { replaceState: true });
 
 			// goto('/?search=' + `${normalize(value)}${filterUnions()}`, { replaceState: true });
@@ -68,7 +68,7 @@
 		} catch (error) {
 			console.warn(error.message);
 			match = true;
-			console.log(match);
+			// console.log(match);
 			results = [];
 		}
 		loading = false;

@@ -42,8 +42,11 @@
 </div>
 
 <style>
+	:root {
+		--icon-fz: 1rem;
+	}
 	svg {
-		height: 1rem;
-		width: 1rem;
+		height: var(--icon-fz);
+		width: var(--icon-fz);
 	}
 </style>
