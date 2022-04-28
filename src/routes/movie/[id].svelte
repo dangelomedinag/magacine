@@ -1,9 +1,9 @@
 <script context="module">
 	/** @type {import("@sveltejs/kit").Load}*/
 	export async function load({ fetch, params }) {
-		const req = await fetch('/api?i=' + params.id);
+		const req = await fetch('/api/' + params.id);
 		const details = await req.json();
-		if (!details.Response) {
+		if (!details.response) {
 			return {
 				status: 400,
 				error: new Error('movie not found')
@@ -25,6 +25,7 @@
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 
 	export let movie;
+	$: console.log(movie);
 	let header;
 	let display = 'none';
 	function showHeader() {
@@ -74,9 +75,9 @@
 <div class="wrapper">
 	<div
 		class="poster-wrapper"
-		style="background: linear-gradient(rgba(0,0,0,0.7), black), url({movie.Poster});"
+		style="background: linear-gradient(rgba(0,0,0,0.7), black), url({movie.poster});"
 	>
-		<img src={movie.Poster} alt={movie.Title} />
+		<img src={movie.poster} alt={movie.title} />
 		<button>
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 				<path
@@ -100,7 +101,7 @@
 			</svg>
 			<span>back</span>
 		</a>
-		<span class="title">{movie.Title}</span>
+		<span class="title">{movie.title}</span>
 		<div class="wrapper-controls">
 			<button>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -118,25 +119,27 @@
 	<div class="information" bind:this={header}>
 		<div class="item">
 			<span class="property">title:</span>
-			<h1>{movie.Title}</h1>
+			<h1>{movie.title}</h1>
 		</div>
 		<div class="item">
 			<span class="property">Year / duration:</span>
-			<span>{movie.Year} - <span>{movie.Runtime}</span></span>
+			<span>{movie.year} - <span>{movie.runtime.duration} {movie.runtime.units}</span></span>
 		</div>
 		<div class="synopsis item">
 			<span class="property">synopsis:</span>
-			<p>{movie.Plot}</p>
+			<p>{movie.plot}</p>
 		</div>
 		<div class="item">
 			<span class="property">genders:</span>
-			{#each movie.Genre.split(',') ?? [] as item}
+			{#each movie.genre as item}
 				<span class="tag">{item}</span>
+			{:else}
+				<span class="tag">desconocido</span>
 			{/each}
 		</div>
 		<div class="item">
 			<span class="property">language:</span>
-			<p>{movie.Language}</p>
+			<p>{movie.language}</p>
 		</div>
 		<div class="item">
 			<span class="property">rating:</span>

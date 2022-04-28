@@ -1,9 +1,8 @@
 <script>
-	// import { flip } from 'svelte/animate';
 	import { scale, fade } from 'svelte/transition';
-	import ProgressLine from './ProgressLine.svelte';
 	import { quintInOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
+	import ProgressLine from './ProgressLine.svelte';
 	import Spinner from './Spinner.svelte';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	export let movie;
@@ -17,8 +16,9 @@
 	});
 
 	async function getDetails(imdbID) {
-		const req = await fetch('/api?i=' + imdbID);
+		const req = await fetch('/api/' + imdbID);
 		const details = await req.json();
+		// console.log(details);
 
 		return details;
 	}
@@ -42,7 +42,7 @@
 		<div class="info-wrapper">
 			{#if details}
 				<h2 class="movie-title">{movie.Title}</h2>
-				<p class="movie-year">{details.Year}</p>
+				<p class="movie-year">{details.year}</p>
 				<div class="rating-wrapper">
 					<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
 					<span class="rating-label">{(details.imdbRating / 2).toFixed(1)} rating</span>

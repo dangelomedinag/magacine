@@ -30,14 +30,20 @@
 
 	async function getData() {
 		loading = true;
+
 		try {
 			const filterUnions = () => {
 				const both = selected.length == options.length;
 				if (!!!selected.length || both) return '';
 				return '&type=' + selected[0];
 			};
+
 			const data = await fetch(`/api?s=${normalize(value)}${filterUnions()}`);
-			if (!data.ok) throw new Error(data.status + ' ' + (await data.text()));
+
+			if (!data.ok) {
+				const message = data.status + ' ' + (await data.text());
+				throw new Error(message);
+			}
 			const json = await data.json();
 			//console.log(json);
 			if (json.Response === 'False') throw new Error(json.Error);
@@ -46,6 +52,12 @@
 
 			const url = new URL(location);
 			url.searchParams.set('search', value);
+			console.log(url.searchParams.toString());
+			if (!Boolean(selected.length) || selected.length > 1) {
+				url.searchParams.delete('type');
+			} else {
+				url.searchParams.set('type', selected[0]);
+			}
 			console.log(url);
 			await goto(url.href, { replaceState: true });
 
