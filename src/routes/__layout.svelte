@@ -1,10 +1,12 @@
 <script context="module">
-	export async function load({ fetch }) {
+	/** @type {import("@sveltejs/kit").load}*/
+	export const load = async ({ fetch }) => {
 		const urls = [
-			'https://www.omdbapi.com/?s=shrek&type=movie&apikey=eedc324b',
-			'https://www.omdbapi.com/?s=friends&type=series&apikey=eedc324b',
-			'https://www.omdbapi.com/?s=fast&type=movie&apikey=eedc324b'
+			'/api?s=shrek&type=movie',
+			'/api?s=friends&type=series',
+			'/api?s=fast&type=movie'
 		];
+
 		let promises = [];
 
 		urls.forEach((url) => {
@@ -20,7 +22,7 @@
 				fast: movies[2].Search
 			}
 		};
-	}
+	};
 </script>
 
 <script>

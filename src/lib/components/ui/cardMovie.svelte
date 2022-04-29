@@ -6,7 +6,7 @@
 	import Spinner from './Spinner.svelte';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	export let movie;
-	export let progress;
+	export let progress = 0;
 	export let i;
 	export let poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg';
 	let details;
@@ -29,12 +29,19 @@
 	out:scale={{ duration: 200, start: 0.95, easing: quintInOut }}
 	class="item"
 >
-	<a class="item-link" href="/movie/{movie.imdbID}">
+	<a
+		class="item-link"
+		href="/movie/{movie.imdbID}"
+		on:click={() => {
+			// dispatch('setmovie', { movie: details })
+			// currentMovie.set(details);
+		}}
+	>
 		<img class="item-poster" src={poster} alt={movie.Title} loading="lazy" />
 	</a>
 
 	{#if progress}
-		<ProgressLine value={movie.progress ?? 0} />
+		<ProgressLine value={movie.progress} />
 	{/if}
 
 	<figcaption class="description-wrapper">
@@ -57,10 +64,10 @@
 </figure>
 
 <style>
-	svg {
+	/* svg {
 		height: 1rem;
 		width: 1rem;
-	}
+	} */
 
 	.item {
 		position: relative;

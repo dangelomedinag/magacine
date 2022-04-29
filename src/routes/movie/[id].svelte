@@ -1,33 +1,13 @@
-<script context="module">
-	/** @type {import("@sveltejs/kit").Load}*/
-	export async function load({ fetch, params }) {
-		const req = await fetch('/api/' + params.id);
-		const details = await req.json();
-		if (!details.response) {
-			return {
-				status: 400,
-				error: new Error('movie not found')
-			};
-		}
-
-		// console.log(details);
-		return {
-			props: {
-				movie: details
-			}
-		};
-	}
-</script>
-
 <script>
 	import { page } from '$app/stores';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 
+	// export let id;
 	export let movie;
-	// $: console.log(movie);
 	let header;
 	let display = 'none';
+
 	function showHeader() {
 		if (window.scrollY >= header.offsetTop + 60) {
 			display = 'flex';
@@ -36,42 +16,16 @@
 		}
 	}
 
-	/* {
-		Title: 'The Avengers',
-		Year: '2012',
-		Rated: 'PG-13',
-		Released: '04 May 2012',
-		Runtime: '143 min',
-		Genre: 'Action, Adventure, Sci-Fi',
-		Director: 'Joss Whedon',
-		Writer: 'Joss Whedon, Zak Penn',
-		Actors: 'Robert Downey Jr., Chris Evans, Scarlett Johansson',
-		Plot: "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",
-		Language: 'English, Russian, Hindi',
-		Country: 'United States',
-		Awards: 'Nominated for 1 Oscar. 38 wins & 80 nominations total',
-		Poster: 'https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg',
-		Ratings: [
-			{ Source: 'Internet Movie Database', Value: '8.1/10' },
-			{ Source: 'Rotten Tomatoes', Value: '91%' },
-			{ Source: 'Metacritic', Value: '69/100' }
-		],
-		Metascore: '69',
-		imdbRating: '8.1',
-		imdbVotes: '1,345,654',
-		imdbID: 'tt0848228',
-		Type: 'movie',
-		DVD: '25 Sep 2012',
-		BoxOffice: '$623,357,910',
-		Production: 'N/A',
-		Website: 'N/A',
-		Response: 'True'
-	} */
+	function listFormat(array, language = 'es-ES', opts = { style: 'long', type: 'conjunction' }) {
+		const intl = new Intl.ListFormat(language, opts);
+		return intl.format(array);
+	}
 </script>
 
 <svelte:window on:scroll={showHeader} />
 
 <!-- <div class="content"> -->
+<!-- {#if movie} -->
 <div class="wrapper">
 	<div
 		class="poster-wrapper"
@@ -177,18 +131,15 @@
 			{#each movie.genre as item}
 				<span class="tag">{item}</span>
 			{:else}
-				<span class="tag">desconocido</span>
+				<span class="tag tag--unknown">desconocido</span>
 			{/each}
 		</div>
 
 		{#if movie.language}
 			<div class="item">
 				<span class="property">language:</span>
-
 				<span>
-					{new Intl.ListFormat('es-CL', { style: 'long', type: 'conjunction' }).format(
-						movie.language
-					)}
+					{listFormat(movie.language)}
 				</span>
 			</div>
 		{/if}
@@ -201,11 +152,12 @@
 			</div>
 		{/if}
 
-		<!-- <div class="suggest">
+		<div class="suggest">
 			<CarouselMovies movies={$page.stuff.shrek} title="suggest" priority="small" />
-		</div> -->
+		</div>
 	</div>
 </div>
+<!-- {/if} -->
 
 <!-- </div> -->
 <style>
@@ -331,7 +283,8 @@
 		/* background-color: brown; */
 		text-decoration: none;
 	}
-	header button:hover {
+	header button:hover,
+	header a:hover {
 		background-color: rgb(120, 31, 31);
 	}
 
@@ -368,6 +321,13 @@
 		color: rgb(21, 196, 123);
 		border-radius: 50vh;
 	}
+
+	.tag--unknown {
+		border: 1px solid rgba(196, 21, 56, 0.3);
+		background-color: rgb(64, 35, 38);
+		color: rgb(185, 63, 88);
+	}
+
 	.synopsis p {
 		margin-top: 0;
 	}

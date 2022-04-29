@@ -9,12 +9,10 @@ export async function get({ url }) {
 			r.json()
 		);
 
-		const newdata = data.Search.map((e) => ({
+		data.Search = data.Search.map((e) => ({
 			...e,
 			uuid: Date.now().toString(36) + Math.random().toString(36).substring(2)
 		}));
-
-		data.Search = newdata;
 
 		// console.log(newdata);
 
@@ -23,6 +21,9 @@ export async function get({ url }) {
 			body: data
 		};
 	} catch (error) {
-		return {};
+		return {
+			status: 404,
+			error: new Error(error)
+		};
 	}
 }

@@ -30,72 +30,17 @@
 
 <script>
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
-	// import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
-	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
 	import Tabs from '$lib/components/ui/tabs.svelte';
-	import Toast from '$lib/components/ui/toast.svelte';
 
 	export let avengers, flash, batman, tahm, got;
 
-	// let tab = 'movies';
 	let tabs = ['Movies', 'Series'];
 	let results = [];
 	let value;
 </script>
 
-<!-- <NavbarTop>
-	<a
-		class:active={tab === 'movies'}
-		href={'#'}
-		on:click={(e) => {
-			tab = 'movies';
-		}}>Movies</a
-	>
-	<a
-		class:active={tab === 'series'}
-		href={'#'}
-		on:click={(e) => {
-			tab = 'series';
-		}}>Series</a
-	>
-</NavbarTop> -->
-
-<!-- <SearchMovies bind:results bind:value>
-	<CarouselMovies movies={results} title={value} priority="small" />
-	<div slot="suggest" class="content">
-		<Toast warn>
-			Opps! parece que no se encontraron resultados para <span>"{value}"</span>
-		</Toast>
-	</div>
-</SearchMovies> -->
-
-<!-- <div class="content">
-	{#if tab === 'movies'}
-		<CarouselMovies movies={avengers} title="The Avengers" priority="large" />
-		<CarouselMovies
-			movies={flash.map((m) => ({ ...m, progress: Math.floor(Math.random() * 100) + 1 }))}
-			title="Continue watching"
-			priority="medium"
-			progress
-		/>
-		<CarouselMovies movies={batman} title="Top rated" priority="small" />
-	{:else}
-		<CarouselMovies movies={got} title="Game of thrones" priority="large" />
-		<CarouselMovies movies={tahm} title="Top rated" priority="medium" />
-	{/if}
-</div> -->
-
 <Tabs {tabs}>
 	<svelte:fragment let:active>
-		<!-- <SearchMovies bind:results bind:value>
-			<CarouselMovies movies={results} title={value} priority="small" />
-			<div slot="suggest" class="content">
-				<Toast warn>
-					Opps! parece que no se encontraron resultados para <span>"{value}"</span>
-				</Toast>
-			</div>
-		</SearchMovies> -->
-
 		<div class="content">
 			{#if active == tabs[0]}
 				<CarouselMovies movies={avengers} title="The Avengers" priority="large" />
@@ -124,6 +69,5 @@
 
 	.content {
 		padding-top: 1em;
-		/* padding-bottom: ; */
 	}
 </style>

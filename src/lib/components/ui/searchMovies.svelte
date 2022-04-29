@@ -3,10 +3,10 @@
 	import Spinner from './Spinner.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	export let value = '';
 	export let results = [];
-	let ready = false;
 	let match = false;
 	let loading = false;
 	let timer = null;
@@ -60,11 +60,6 @@
 			}
 			// console.log(url);
 			await goto(url.href, { replaceState: true });
-
-			// goto('/?search=' + `${normalize(value)}${filterUnions()}`, { replaceState: true });
-			// window.history.pushState({}, '', '?search=' + `${normalize(value)}${filterUnions()}`);
-			// input.blur();
-			// console.log($page.url.host);
 		} catch (error) {
 			console.warn(error.message);
 			match = true;
@@ -90,6 +85,17 @@
 			getData();
 		}, 900);
 	}
+
+	onMount(() => {
+		if ($page.stuff?.search?.Response === 'True') {
+			value = $page.url.searchParams.get('search');
+			results = $page.stuff.search.Search;
+			totalResults = Number($page.stuff.search.totalResults);
+			selected = $page.url.searchParams.has('type')
+				? [$page.url.searchParams.get('type')]
+				: options.map((opt) => opt.value);
+		}
+	});
 </script>
 
 <div class="search-container">
@@ -107,7 +113,7 @@
 				}}
 				on:click={(e) => {
 					e.value;
-					setTimeout(() => {
+					setTimeout(async () => {
 						if (value.length < 1) {
 							results = [];
 							match = false;
@@ -184,8 +190,8 @@
 	.search-container {
 		background-color: var(--c-main-content);
 		/* padding-bottom: 1em; */
-		max-height: calc(100vh - 63.59px);
-		overflow-y: auto;
+		/* max-height: calc(100vh - 63.59px); */
+		/* overflow-y: auto; */
 	}
 	input[type='search'] {
 		width: 100%;
