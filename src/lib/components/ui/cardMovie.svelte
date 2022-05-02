@@ -1,26 +1,27 @@
 <script>
 	import { scale, fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
+	// import { onMount } from 'svelte';
 	import ProgressLine from './ProgressLine.svelte';
 	import Spinner from './Spinner.svelte';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	export let movie;
 	export let progress = 0;
 	export let i;
-	export let poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg';
+	export let poster = movie.poster !== 'N/A' ? movie.poster : '/assets/image-fallback.jpg';
 	let details;
 
-	onMount(async () => {
-		details = await getDetails(movie.imdbID);
-	});
+	// onMount(async () => {
+	// 	details = await getDetails(movie.imdbID);
+	// });
 
-	async function getDetails(imdbID) {
-		const req = await fetch('/api/' + imdbID);
-		const details = await req.json();
+	// async function getDetails(imdbID) {
+	// 	const req = await fetch('/api/' + imdbID);
+	// 	const details = await req.json();
+	// 	console.log(details);
 
-		return details;
-	}
+	// 	return details;
+	// }
 </script>
 
 <!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg'} -->
@@ -31,13 +32,13 @@
 >
 	<a
 		class="item-link"
-		href="/movie/{movie.imdbID}"
+		href="/movie/{movie.imdbid}"
 		on:click={() => {
 			// dispatch('setmovie', { movie: details })
 			// currentMovie.set(details);
 		}}
 	>
-		<img class="item-poster" src={poster} alt={movie.Title} loading="lazy" />
+		<img class="item-poster" src={poster} alt={movie.title} loading="lazy" />
 	</a>
 
 	{#if progress}
@@ -46,19 +47,19 @@
 
 	<figcaption class="description-wrapper">
 		<div class="info-wrapper">
-			{#if details}
-				<h2 class="movie-title">{movie.Title}</h2>
-				<p class="movie-year">{details.year}</p>
+			<!-- {#if details} -->
+			<h2 class="movie-title">{movie.title}</h2>
+			<p class="movie-year">{movie.year}</p>
+			{#if movie.imdbrating}
+				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
 				<div class="rating-wrapper">
-					<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
-					<span class="rating-label">{(details.imdbrating / 2).toFixed(1)} rating</span>
+					<span class="rating-label">rating {(movie.imdbrating / 2).toFixed(1)}</span>
 				</div>
-				{#if details.imdbrating}
-					<CardRatingStarts rating={details.imdbrating} />
-				{/if}
-			{:else}
-				<Spinner color="grey" size={20} />
+				<CardRatingStarts rating={movie.imdbrating} />
 			{/if}
+			<!-- {:else} -->
+			<!-- <Spinner color="grey" size={20} /> -->
+			<!-- {/if} -->
 		</div>
 	</figcaption>
 </figure>

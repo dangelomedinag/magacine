@@ -1,8 +1,10 @@
-/**@type {import("./[id]").RequestHandler} */
+/**@type {import("../../../.svelte-kit/types/src/routes/movie/[id]").RequestHandler} */
 export async function get({ params, url }) {
 	// console.log(url);
 	const req = await fetch(url.origin + '/api/' + params.id);
+	console.log('/movie/[id] => fetch: ', req.ok, req.status);
 	const details = await req.json();
+	console.log('/movie/[id] => fetch: ', details);
 
 	return {
 		body: {

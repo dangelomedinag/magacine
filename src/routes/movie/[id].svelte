@@ -1,3 +1,20 @@
+<script context="module">
+	// export const prerender = true;
+
+	/**  @type {import("@sveltejs/kit").Load}*/
+	export const load = async ({ fetch, params }) => {
+		const req = await fetch('/api/' + params.id);
+		console.log('/movie/[id].svelte => fetch: ', req.ok, req.status);
+		const details = await req.json();
+		console.log('/movie/[id].svelte => fetch: ', details);
+		return {
+			props: {
+				movie: details
+			}
+		};
+	};
+</script>
+
 <script>
 	import { page } from '$app/stores';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
@@ -5,8 +22,10 @@
 
 	// export let id;
 	export let movie;
+	// export let error;
 	let header;
 	let display = 'none';
+	// $: console.log(error);
 
 	function showHeader() {
 		if (window.scrollY >= header.offsetTop + 60) {
@@ -23,7 +42,7 @@
 </script>
 
 <svelte:window on:scroll={showHeader} />
-
+<!-- {@debug movie} -->
 <!-- <div class="content"> -->
 <!-- {#if movie} -->
 <div class="wrapper">
@@ -153,7 +172,7 @@
 		{/if}
 
 		<div class="suggest">
-			<CarouselMovies movies={$page.stuff.shrek} title="suggest" priority="small" />
+			<!-- <CarouselMovies movies={$page.stuff.shrek} title="suggest" priority="small" /> -->
 		</div>
 	</div>
 </div>

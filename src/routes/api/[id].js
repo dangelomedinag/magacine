@@ -3,18 +3,26 @@ const API_KEY = process.env.OMDB_API_KEY;
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get({ params }) {
-	const API_URL = 'https://www.omdbapi.com';
+	// get params
 	const id = params.id;
 
-	// GET resource url
-	const url = new URL(API_URL);
-	url.searchParams.set('i', id);
-	url.searchParams.set('apikey', API_KEY);
+	// create URL object for get resource
+	const API_URL = new URL('https://www.omdbapi.com');
+	API_URL.searchParams.set('i', id);
+	API_URL.searchParams.set('apikey', API_KEY);
+
+	// create URL object for get resource
 
 	try {
-		const data = await fetch(url.href);
+		const data = await fetch(API_URL.href);
+		console.log('api/[id].js endpoint => fetch: ', data.ok, data.status);
 		const json = await data.json();
-		// console.log(json);
+		// console.log('api/[id].js endpoint => response.json: ', json);
+
+		if (json.Response === 'False') {
+			console.log('api/[id].js endpoint => json.Response: ', json.Response);
+			throw new Error(json.Error);
+		}
 
 		let obj = {};
 
@@ -42,19 +50,28 @@ export async function get({ params }) {
 					if (value.includes(',')) value = json[key].split(',').map((e) => e.trim());
 					else value = [value];
 				}
+			} else {
+				if (key === 'Genre') {
+					value = [];
+				}
+				if (key === 'Language') {
+					value = [];
+				}
 			}
 
 			obj[key.toLowerCase()] = value;
-			// console.log(obj);
 		}
-		// console.log(obj);
+
+		console.log(obj);
 
 		return {
 			status: data.status,
 			body: obj
 		};
 	} catch (error) {
-		console.log(error);
-		return {};
+		return {
+			status: 404,
+			body: { message: error.message }
+		};
 	}
 }

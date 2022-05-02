@@ -1,4 +1,4 @@
-import { minify } from 'html-minifier';
+/* import { minify } from 'html-minifier';
 import { prerendering } from '$app/env';
 
 const minification_options = {
@@ -18,10 +18,10 @@ const minification_options = {
 	removeStyleLinkTypeAttributes: true,
 	sortAttributes: true,
 	sortClassName: true
-};
+}; */
 
 /** @type {import('@sveltejs/kit').Handle} */
-export async function handle({ event, resolve }) {
+/* export async function handle({ event, resolve }) {
 	const response = await resolve(event);
 
 	if (prerendering && response.headers.get('content-type') === 'text/html') {
@@ -33,3 +33,4 @@ export async function handle({ event, resolve }) {
 
 	return response;
 }
+ */

@@ -8,7 +8,7 @@
 			return { status: 200 };
 		}
 
-		const api_url = new URL(`${url.origin}/api`);
+		const api_url = new URL('/api');
 		api_url.searchParams.set('s', url.searchParams.get('search'));
 		if (type) api_url.searchParams.set('type', url.searchParams.get('type'));
 		const data = await fetch(api_url.href);

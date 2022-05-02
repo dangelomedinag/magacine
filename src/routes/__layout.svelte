@@ -1,4 +1,4 @@
-<script context="module">
+<!-- <script context="module">
 	/** @type {import("@sveltejs/kit").load}*/
 	export const load = async ({ fetch }) => {
 		const urls = [
@@ -23,8 +23,7 @@
 			}
 		};
 	};
-</script>
-
+</script> -->
 <script>
 	import Footer from '$lib/components/Footer.svelte';
 	import AsideNav from '$lib/components/ui/AsideNav.svelte';
