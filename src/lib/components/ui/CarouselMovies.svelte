@@ -235,12 +235,14 @@
 		display: block;
 		position: absolute;
 		z-index: 15;
-		top: 35%;
-		height: 80px;
+		/* top: 0; */
+		top: 15%;
+		height: 50px;
+		/* height: 100%; */
 		width: 30px;
-		/* opacity: 0.8; */
+		opacity: 0.5;
 		color: white;
-		background-color: brown;
+		background-color: var(--c-front-dark);
 		/* border-radius: 5px; */
 		border: none;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
@@ -254,11 +256,15 @@
 
 	.next {
 		border-radius: 0 5px 5px 0;
-		left: 0;
+		left: calc(var(--gap-content) * -1);
 	}
 	.prev {
 		border-radius: 5px 0 0 5px;
-		right: 0;
+		right: calc(var(--gap-content) * -1);
+	}
+
+	.carousel-wrapper:hover .controls {
+		opacity: 1;
 	}
 
 	/* .track:hover .prev,

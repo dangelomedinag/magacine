@@ -17,7 +17,8 @@
 		border-radius: 50vh;
 		width: 50px;
 		height: 50px;
-		background-color: rgba(165, 42, 42, 0.8);
+		background-color: var(--c-front-dark);
+		opacity: 0.5;
 		color: white;
 		border: none;
 		display: flex;
@@ -28,7 +29,8 @@
 	}
 
 	button:hover {
-		background-color: brown;
+		opacity: 1;
+		background-color: var(--c-front);
 	}
 
 	button:active {

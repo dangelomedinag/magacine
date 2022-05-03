@@ -107,6 +107,7 @@
 
 <style>
 	.link {
+		font-size: 1rem;
 		width: 100%;
 		display: block;
 		color: white;
@@ -126,7 +127,7 @@
 		display: inline-block;
 		top: -50%;
 		right: -10px;
-		background-color: brown;
+		background-color: var(--c-front);
 		padding: 0 7px;
 		/* padding-left: 5px;
 		padding-right: 5px; */
@@ -137,7 +138,7 @@
 		opacity: 1;
 	}
 	.active .svg {
-		color: rgb(155, 33, 33);
+		color: var(--c-front);
 	}
 
 	.wrapper {
@@ -161,7 +162,7 @@
 
 	.label {
 		/* display: none; */
-		padding: 0 1em;
+		padding: 0 0.8em;
 		width: 250px;
 		white-space: nowrap;
 		overflow: hidden;
@@ -212,16 +213,21 @@
 			position: absolute;
 			top: 0;
 			width: auto;
-			left: 100%;
+			left: 20px;
 			background-color: white;
 			border-radius: 50vh;
-			color: gray;
-			/* position: relative;
-			display: block;
-			position: initial;
-			background-color: initial;
+			color: var(--c-main);
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+				0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
+				0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
+		}
+		:global(aside:not(.toggle)) .link:hover .notification {
+			background-color: var(--c-front);
+			border-radius: 50vh;
 			color: white;
-			border-radius: none; */
+			/* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+				0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
+				0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07); */
 		}
 	}
 	/* Extra large devices (large desktops, 1200px and up) */

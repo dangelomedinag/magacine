@@ -3,25 +3,22 @@
 	import { quintInOut } from 'svelte/easing';
 	// import { onMount } from 'svelte';
 	import ProgressLine from './ProgressLine.svelte';
-	import Spinner from './Spinner.svelte';
+	// import Spinner from './Spinner.svelte';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
+	import { onMount } from 'svelte';
 	export let movie;
 	export let progress = 0;
 	export let i;
 	export let poster = movie.poster !== 'N/A' ? movie.poster : '/assets/image-fallback.jpg';
-	let details;
+	let promiseDetails = fetch('/api/' + movie.imdbid).then((r) => r.json());
 
-	// onMount(async () => {
-	// 	details = await getDetails(movie.imdbID);
+	// onMount(() => {
+	// 	promiseDetails = getDetails(movie.imdbid);
 	// });
 
-	// async function getDetails(imdbID) {
-	// 	const req = await fetch('/api/' + imdbID);
-	// 	const details = await req.json();
-	// 	console.log(details);
-
-	// 	return details;
-	// }
+	function getDetails(id) {
+		return fetch('/api/' + id).then((r) => r.json());
+	}
 </script>
 
 <!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg'} -->
@@ -50,13 +47,26 @@
 			<!-- {#if details} -->
 			<h2 class="movie-title">{movie.title}</h2>
 			<p class="movie-year">{movie.year}</p>
-			{#if movie.imdbrating}
+			<!-- {#if details} -->
+
+			{#await promiseDetails then details}
+				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
+				<div class="rating-wrapper">
+					<span class="rating-label">rating {details.imdbrating}</span>
+				</div>
+				<CardRatingStarts rating={details.imdbrating} />
+			{/await}
+
+			<!-- {#await promiseDetails}
+				xxxxx
+			{:then value}
 				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
 				<div class="rating-wrapper">
-					<span class="rating-label">rating {(movie.imdbrating / 2).toFixed(1)}</span>
+					<span class="rating-label">rating {value.imdbrating}</span>
 				</div>
-				<CardRatingStarts rating={movie.imdbrating} />
-			{/if}
+				<CardRatingStarts rating={value.imdbrating} />
+			{/await} -->
+			<!-- {/if} -->
 			<!-- {:else} -->
 			<!-- <Spinner color="grey" size={20} /> -->
 			<!-- {/if} -->
@@ -70,6 +80,11 @@
 		width: 1rem;
 	} */
 
+	/* :root {
+		--card-w: 250px;
+		--card-h: 600px;
+	} */
+
 	.item {
 		position: relative;
 		overflow: hidden;
@@ -77,7 +92,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		min-width: var(--w-card);
+		min-width: var(--card-w);
 		/* height: 100%; */
 		max-width: 350px;
 		max-height: 680px;

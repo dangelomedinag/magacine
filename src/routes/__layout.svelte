@@ -76,7 +76,7 @@
 
 <style>
 	:global(#nprogress .bar) {
-		background-color: brown;
+		background-color: var(--c-front);
 	}
 
 	.container {

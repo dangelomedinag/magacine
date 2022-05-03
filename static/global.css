@@ -3,6 +3,9 @@
 :root {
 	--c-main: #1f1c23;
 	--c-main-content: hsl(273, 13%, 16%);
+	--c-perl: #f1faee;
+	--c-front: #e63946;
+	--c-front-dark: #d13440;
 	--gap-content: 1.2em;
 }
 
@@ -23,6 +26,7 @@ body {
 }
 
 body {
+	scroll-behavior: smooth;
 	font-family: 'Open Sans', sans-serif;
 	margin: 0;
 	padding: 0;

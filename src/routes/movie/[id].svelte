@@ -16,35 +16,74 @@
 </script>
 
 <script>
-	import { page } from '$app/stores';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
+	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
+	import Toast from '$lib/components/ui/toast.svelte';
+	import { onMount } from 'svelte';
 
 	// export let id;
 	export let movie;
 	// export let error;
+	let suggest;
 	let header;
 	let display = 'none';
 	// $: console.log(error);
 
-	function showHeader() {
-		if (window.scrollY >= header.offsetTop + 60) {
-			display = 'flex';
-		} else if (window.scrollY < header.offsetTop + 60) {
-			display = 'none';
-		}
-	}
+	// function showHeader() {
+	// 	if (window.scrollY >= header.offsetTop + 60) {
+	// 		display = 'flex';
+	// 	} else if (window.scrollY < header.offsetTop + 60) {
+	// 		display = 'none';
+	// 	}
+	// }
 
-	function listFormat(array, language = 'es-ES', opts = { style: 'long', type: 'conjunction' }) {
+	function listFormat(array, language = 'en', opts = { style: 'long', type: 'conjunction' }) {
 		const intl = new Intl.ListFormat(language, opts);
 		return intl.format(array);
 	}
+
+	const rndInt = (MAX) => Math.floor(Math.random() * MAX) + 1;
+
+	async function getSuggest() {
+		const { plot } = movie;
+		const plotArr = plot.split(' ');
+		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
+		let selected = plotArrFilter[rndInt(plotArrFilter.length - 1)];
+		// if (!selected) {
+		console.log(selected);
+		// }
+
+		const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
+		if (!req.ok) {
+			return Promise.reject(await req.json());
+		}
+		// console.log('/movie/[id].svelte => fetch: ', req.ok, req.status);
+		// const res = req.json();
+		// console.log('/movie/[id].svelte => fetch: ', details);
+		// suggest = res.results;
+		return req.json();
+	}
+
+	onMount(() => {
+		console.log('hello');
+	});
 </script>
 
-<svelte:window on:scroll={showHeader} />
+<!-- <svelte:window on:scroll={showHeader} /> -->
 <!-- {@debug movie} -->
 <!-- <div class="content"> -->
 <!-- {#if movie} -->
+
+<NavbarTop>
+	<button
+		on:click={() => {
+			window.history.back();
+		}}>back</button
+	>
+	<a href="#info">info</a>
+	<a href="#suggest">suggest</a>
+</NavbarTop>
 <div class="wrapper">
 	<div
 		class="poster-wrapper"
@@ -61,7 +100,7 @@
 			</svg>
 		</button>
 	</div>
-	<header style:display>
+	<!-- <header style:display>
 		<a href="/">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -86,10 +125,9 @@
 					/>
 				</svg>
 			</button>
-			<!-- <button>more</button> -->
 		</div>
-	</header>
-	<div class="information" bind:this={header}>
+	</header> -->
+	<div class="information" id="info" bind:this={header}>
 		<div class="item">
 			<span class="property">title:</span>
 			<h1 class="title">{movie.title}</h1>
@@ -147,7 +185,7 @@
 
 		<div class="item">
 			<span class="property">genders:</span>
-			{#each movie.genre as item}
+			{#each movie?.genre ?? [] as item}
 				<span class="tag">{item}</span>
 			{:else}
 				<span class="tag tag--unknown">desconocido</span>
@@ -171,9 +209,25 @@
 			</div>
 		{/if}
 
-		<div class="suggest">
-			<!-- <CarouselMovies movies={$page.stuff.shrek} title="suggest" priority="small" /> -->
-		</div>
+		<!-- {#if suggest}
+			<div class="suggest" id="suggest">
+				<CarouselMovies movies={suggest} title="suggest" priority="small" />
+			</div>
+			{/if} -->
+
+		{#await getSuggest()}
+			<p>cargando sugerencias...</p>
+		{:then value}
+			{#if Array.isArray(value?.results)}
+				<div class="suggest" id="suggest">
+					<CarouselMovies movies={value.results} title="suggest" priority="small" />
+				</div>
+			{/if}
+		{:catch}
+			<Toast>
+				for now we do <span>not have related movies or series</span>
+			</Toast>
+		{/await}
 	</div>
 </div>
 <!-- {/if} -->
@@ -234,7 +288,11 @@
 		width: 4rem;
 	}
 
-	.information::before {
+	.suggest {
+		padding-top: 3em;
+	}
+
+	/* .information::before {
 		content: '';
 		position: absolute;
 		top: 0;
@@ -245,18 +303,21 @@
 		transform: translateY(-100%);
 		user-select: none;
 		pointer-events: none;
-	}
+	} */
 
 	.information {
 		position: relative;
 		z-index: 1;
 		background-color: var(--c-main-content);
-		padding-bottom: 30rem;
-		min-height: 100vh;
+		/* padding-bottom: 30rem; */
+		/* min-height: 100vh; */
 		padding: 1em;
+		padding-top: 3em;
+
+		border-top: 2px solid brown;
 	}
 
-	header {
+	/* header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -269,8 +330,7 @@
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
 			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
 			0 32px 64px rgba(0, 0, 0, 0.07);
-		/* opacity: 0; */
-	}
+	} */
 
 	header .wrapper-controls {
 		/* display: inline; */

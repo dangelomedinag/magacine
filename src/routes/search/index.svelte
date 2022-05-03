@@ -8,10 +8,11 @@
 			return { status: 200 };
 		}
 
-		const api_url = new URL('/api');
-		api_url.searchParams.set('s', url.searchParams.get('search'));
-		if (type) api_url.searchParams.set('type', url.searchParams.get('type'));
-		const data = await fetch(api_url.href);
+		const searchParams = new URLSearchParams();
+		searchParams.set('s', url.searchParams.get('search'));
+		if (type) searchParams.set('type', url.searchParams.get('type'));
+
+		const data = await fetch('/api?' + searchParams.toString());
 		const json = await data.json();
 
 		return {
@@ -28,7 +29,6 @@
 
 	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
 	import Toast from '$lib/components/ui/toast.svelte';
-	import { page } from '$app/stores';
 	let results = [];
 	let value;
 </script>
@@ -37,11 +37,11 @@
 	<CarouselMovies movies={results} title={value} priority="small" />
 
 	<div slot="suggest" class="content">
-		<Toast warn>
+		<Toast>
 			Opps! parece que no se encontraron resultados para <span>"{value}"</span>
 		</Toast>
 		<div>
-			<CarouselMovies movies={$page.stuff.shrek} title="sugesst" priority="small" />
+			<CarouselMovies movies={[]} title="sugesst" priority="small" />
 		</div>
 	</div>
 </SearchMovies>

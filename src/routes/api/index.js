@@ -48,37 +48,52 @@ export async function get({ url }) {
 			throw new Error(json.Error);
 		}
 
+		/* const _url = new URL(API_URL.origin);
+		_url.searchParams.set('apikey', API_KEY);
 		json.Search = await Promise.all(
 			json.Search.map(async (e) => {
 				let obj = {};
-				// const xxx = new URL(url.origin + '/api/' + e.imdbID);
-				// console.log(xxx.href);
 
-				const _url = new URL(API_URL.origin);
 				_url.searchParams.set('i', e.imdbID);
-				_url.searchParams.set('apikey', API_KEY);
-				// console.log(_url.href);
 				const d = await fetch(_url.href);
 				const j = await d.json();
-				// console.log(j);
 
 				for (const key in j) {
-					obj[key.toLowerCase()] = j[key];
+					if (key === 'Year') {
+						if (j[key].endsWith('–')) {
+							obj[key.toLowerCase()] = j[key].slice(0, -1);
+						} else {
+							obj[key.toLowerCase()] = j[key];
+						}
+					} else {
+						obj[key.toLowerCase()] = j[key];
+					}
 				}
-				// console.log(obj);
 
 				return {
 					...obj,
 					uuid: uuid()
 				};
 			})
-		);
+		); */
+
+		json.Search = json.Search.map((m) => {
+			let obj = {};
+			for (const key in m) {
+				if (key === 'Year' && m[key].endsWith('–')) obj[key.toLowerCase()] = m[key].slice(0, -1);
+				else obj[key.toLowerCase()] = m[key];
+			}
+			return {
+				...obj,
+				uuid: uuid()
+			};
+		});
 
 		// console.log('list: ', json.Search);
 
 		return {
 			status: data.status,
-			body: { results: json.Search, totalResults: json.totalResults }
+			body: { results: json.Search, totalResults: +json.totalResults }
 		};
 	} catch (error) {
 		return {

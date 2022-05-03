@@ -1,6 +1,4 @@
 <script>
-	// @ts-nocheck
-
 	import MenuItem from '$lib/components/ui/MenuItem.svelte';
 </script>
 
@@ -44,11 +42,30 @@
 		#aside-wrapper {
 			overflow-y: auto;
 		}
+		#aside-wrapper::-webkit-scrollbar {
+			width: 5px;
+			border-radius: 10px;
+		}
+
+		#aside-wrapper::-webkit-scrollbar-track {
+			background: rgba(128, 128, 128, 0.05);
+			margin: 10px;
+			border-radius: 10px;
+			overflow: hidden;
+		}
+
+		#aside-wrapper::-webkit-scrollbar-thumb {
+			background: rgba(255, 255, 255, 0.05);
+		}
+
+		#aside-wrapper::-webkit-scrollbar-thumb:hover {
+			background: #555;
+		}
 	}
 
 	.section {
 		display: none;
-		font-size: small;
+		/* font-size: 1.5rem; */
 		letter-spacing: 1px;
 		font-weight: 300;
 		opacity: 0.3;

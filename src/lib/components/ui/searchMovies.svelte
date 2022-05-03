@@ -41,16 +41,17 @@
 			const data = await fetch(`/api?s=${normalize(value)}${filterUnions()}`);
 
 			if (!data.ok) {
-				const message = data.status + ' ' + (await data.text());
+				const json = await data.json();
+				const message = data.status + ' ' + json.error;
 				throw new Error(message);
 			}
 			const json = await data.json();
-			//console.log(json);
-			if (json.Response === 'False') throw new Error(json.Error);
-			totalResults = +json.totalResults;
-			results = json.Search;
+			console.log(json);
+			// if (!json.response) throw new Error(json.error);
+			totalResults = json.totalResults;
+			results = json.results;
 
-			const url = new URL(location);
+			const url = new URL('http://localhost:3000/search');
 			url.searchParams.set('search', value);
 			// console.log(url.searchParams.toString());
 			if (!Boolean(selected.length) || selected.length > 1) {
@@ -87,10 +88,10 @@
 	}
 
 	onMount(() => {
-		if ($page.stuff?.search?.Response === 'True') {
+		if ($page.stuff?.search) {
 			value = $page.url.searchParams.get('search');
-			results = $page.stuff.search.Search;
-			totalResults = Number($page.stuff.search.totalResults);
+			results = $page.stuff.search.results;
+			totalResults = $page.stuff.search.totalResults;
 			selected = $page.url.searchParams.has('type')
 				? [$page.url.searchParams.get('type')]
 				: options.map((opt) => opt.value);
@@ -236,11 +237,11 @@
 
 	input[type='search']:not(:disabled):hover + svg,
 	input[type='search']:not(:disabled):focus + svg {
-		color: brown;
+		color: var(--c-front);
 	}
 	input[type='search']:not(:disabled):focus,
 	input[type='search']:not(:disabled):hover {
-		border-bottom-color: brown;
+		border-bottom-color: var(--c-front);
 	}
 
 	.filters {
@@ -311,7 +312,7 @@
 		height: 100%;
 		font-weight: bold;
 		font-size: 1.2rem;
-		color: brown;
+		color: var(--c-front);
 		align-items: center;
 		justify-content: center;
 		font-family: monospace;

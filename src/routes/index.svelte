@@ -13,10 +13,6 @@
 		return {
 			props: {
 				movies: json
-			},
-			cache: {
-				maxage: 60 * 60 * 24,
-				private: false
 			}
 		};
 	}
