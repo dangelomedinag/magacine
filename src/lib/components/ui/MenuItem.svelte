@@ -213,7 +213,7 @@
 			position: absolute;
 			top: 0;
 			width: auto;
-			left: 20px;
+			left: 40px;
 			background-color: white;
 			border-radius: 50vh;
 			color: var(--c-main);

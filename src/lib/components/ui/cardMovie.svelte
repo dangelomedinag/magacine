@@ -52,7 +52,7 @@
 			{#await promiseDetails then details}
 				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
 				<div class="rating-wrapper">
-					<span class="rating-label">rating {details.imdbrating}</span>
+					<span class="rating-label">{details.imdbrating}</span>
 				</div>
 				<CardRatingStarts rating={details.imdbrating} />
 			{/await}
@@ -80,10 +80,10 @@
 		width: 1rem;
 	} */
 
-	/* :root {
+	:root {
 		--card-w: 250px;
 		--card-h: 600px;
-	} */
+	}
 
 	.item {
 		position: relative;
@@ -93,15 +93,16 @@
 		flex-direction: column;
 		justify-content: space-between;
 		min-width: var(--card-w);
-		/* height: 100%; */
-		max-width: 350px;
-		max-height: 680px;
+		height: var(--card-h);
+		max-width: var(--card-w);
+		/* max-height: var(--card-h); */
 		position: relative;
 		margin: 0;
 		margin-right: 1em;
 		/* height: 400px; */
 		/* background-color: var(--c-main); */
 		border: 1px solid rgba(128, 128, 128, 0.3);
+		transition: transform 100ms ease-in-out;
 	}
 
 	.item-link {
@@ -146,7 +147,7 @@
 		font-weight: 600;
 		font-size: 1rem;
 		margin-bottom: 0.2em;
-		width: calc(var(--w-card) - 2em);
+		width: calc(var(--card-w) - 2em);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -182,15 +183,16 @@
 			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
 			0 32px 64px rgba(0, 0, 0, 0.07);
 		background-color: var(--c-main);
+		transform: translateY(-1%);
 	}
 
 	/* .item:hover .description-wrapper { */
 	/* background: linear-gradient(transparent, rgba(255, 255, 255, 0.2)); */
 	/* } */
 
-	.item:hover .item-poster {
+	/* .item:hover .item-poster {
 		transform: scale(1.02);
-	}
+	} */
 
 	/* .empty-wrapper {
 		border: 1px solid rgba(128, 128, 128, 0.3);
