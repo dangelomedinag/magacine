@@ -25,6 +25,8 @@
 </script>
 
 <script>
+	import { page } from '$app/stores';
+
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 
 	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
@@ -37,11 +39,22 @@
 	<CarouselMovies movies={results} title={value} priority="small" />
 
 	<div slot="suggest" class="content">
-		<Toast>
+		<Toast warn>
 			Opps! parece que no se encontraron resultados para <span>"{value}"</span>
 		</Toast>
 		<div>
-			<CarouselMovies movies={[]} title="sugesst" priority="small" />
+			<CarouselMovies
+				details={false}
+				movies={$page.stuff?.suggest.results}
+				title="sugesst ({$page.stuff.suggest.totalResults})"
+				priority="small"
+			/>
 		</div>
 	</div>
 </SearchMovies>
+
+<style>
+	.content {
+		padding-bottom: var(--gap-content);
+	}
+</style>

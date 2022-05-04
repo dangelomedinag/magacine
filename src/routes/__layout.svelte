@@ -24,6 +24,29 @@
 		};
 	};
 </script> -->
+<script context="module">
+	/** @type {import("@sveltejs/kit").load}*/
+	export const load = async ({ fetch }) => {
+		const url = '/api?s=happy';
+
+		const req = await fetch(url);
+		if (!req.ok) {
+			return {
+				stuff: {
+					suggest: []
+				}
+			};
+		}
+		const movies = await req.json();
+
+		return {
+			stuff: {
+				suggest: movies
+			}
+		};
+	};
+</script>
+
 <script>
 	import Footer from '$lib/components/Footer.svelte';
 	import AsideNav from '$lib/components/ui/AsideNav.svelte';

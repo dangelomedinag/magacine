@@ -5,20 +5,21 @@
 	import ProgressLine from './ProgressLine.svelte';
 	// import Spinner from './Spinner.svelte';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
-	import { onMount } from 'svelte';
+	// import { onMount } from 'svelte';
+	export let details = true;
 	export let movie;
 	export let progress = 0;
 	export let i;
 	export let poster = movie.poster !== 'N/A' ? movie.poster : '/assets/image-fallback.jpg';
-	let promiseDetails = fetch('/api/' + movie.imdbid).then((r) => r.json());
+	let promiseDetails = details ? fetch('/api/' + movie.imdbid).then((r) => r.json()) : null;
 
 	// onMount(() => {
 	// 	promiseDetails = getDetails(movie.imdbid);
 	// });
 
-	function getDetails(id) {
-		return fetch('/api/' + id).then((r) => r.json());
-	}
+	// function getDetails(id) {
+	// 	return fetch('/api/' + id).then((r) => r.json());
+	// }
 </script>
 
 <!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg'} -->
@@ -49,12 +50,12 @@
 			<p class="movie-year">{movie.year}</p>
 			<!-- {#if details} -->
 
-			{#await promiseDetails then details}
+			{#await promiseDetails then detail}
 				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
 				<div class="rating-wrapper">
-					<span class="rating-label">{details.imdbrating}</span>
+					<span class="rating-label">{detail.imdbrating}</span>
 				</div>
-				<CardRatingStarts rating={details.imdbrating} />
+				<CardRatingStarts rating={detail.imdbrating} />
 			{/await}
 
 			<!-- {#await promiseDetails}

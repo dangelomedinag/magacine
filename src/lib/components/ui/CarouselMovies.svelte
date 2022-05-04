@@ -3,6 +3,7 @@
 
 	import CardMovie from './cardMovie.svelte';
 
+	export let details = true;
 	export let title;
 	export let movies;
 	export let priority;
@@ -93,7 +94,7 @@
 	</header>
 	<main class="items-wrapper" bind:this={container}>
 		{#each movies as movie, i (movie.uuid)}
-			<CardMovie {movie} progress={movie.progress ?? 0} {i} />
+			<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
 		{:else}
 			<!-- <slot name="empty">
 				<div class="empty-wrapper">
@@ -102,32 +103,34 @@
 			</slot> -->
 		{/each}
 	</main>
-	<div class="movement-action">
-		<button on:click={nextPage} class="prev controls">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-6 w-6"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-			</svg>
-		</button>
-		<button class="next controls" on:click={prevPage}>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-6 w-6"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-			</svg>
-		</button>
-	</div>
+	{#if movies?.length > 0}
+		<div class="movement-action">
+			<button on:click={nextPage} class="prev controls">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+				</svg>
+			</button>
+			<button class="next controls" on:click={prevPage}>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+				</svg>
+			</button>
+		</div>
+	{/if}
 </div>
 
 <style>

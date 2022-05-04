@@ -51,7 +51,7 @@
 			totalResults = json.totalResults;
 			results = json.results;
 
-			const url = new URL('http://localhost:3000/search');
+			const url = new URL(location);
 			url.searchParams.set('search', value);
 			// console.log(url.searchParams.toString());
 			if (!Boolean(selected.length) || selected.length > 1) {
