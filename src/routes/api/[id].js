@@ -46,6 +46,10 @@ export async function get({ params }) {
 					else value = [];
 				}
 
+				if (key === 'imdbRating') {
+					value = (Number(json[key].trim()) / 2).toFixed(1);
+				}
+
 				if (key === 'Language') {
 					if (value.includes(',')) value = json[key].split(',').map((e) => e.trim());
 					else value = [value];

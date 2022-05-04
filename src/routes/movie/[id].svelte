@@ -65,9 +65,9 @@
 		return req.json();
 	}
 
-	onMount(() => {
-		console.log('hello');
-	});
+	// onMount(() => {
+	// 	console.log('hello');
+	// });
 </script>
 
 <!-- <svelte:window on:scroll={showHeader} /> -->
@@ -220,7 +220,14 @@
 		{:then value}
 			{#if Array.isArray(value?.results)}
 				<div class="suggest" id="suggest">
-					<CarouselMovies movies={value.results} title="suggest" priority="small" />
+					<CarouselMovies
+						--card-w="350px"
+						--card-h="250px"
+						details={false}
+						movies={value.results}
+						title="suggest"
+						priority="small"
+					/>
 				</div>
 			{/if}
 		{:catch}

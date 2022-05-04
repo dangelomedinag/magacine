@@ -28,12 +28,15 @@
 	import { page } from '$app/stores';
 
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
+	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
 
 	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
 	import Toast from '$lib/components/ui/toast.svelte';
 	let results = [];
 	let value;
 </script>
+
+<NavbarTop><a href="/">home</a></NavbarTop>
 
 <SearchMovies bind:results bind:value>
 	<CarouselMovies movies={results} title={value} priority="small" />

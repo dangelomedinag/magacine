@@ -32,14 +32,6 @@
 	<svelte:fragment let:active>
 		<div class="content">
 			{#if active == tabs[0]}
-				<!-- <CarouselMovies movies={avengers} title="The Avengers" priority="large" />
-				<CarouselMovies
-					movies={flash.map((m) => ({ ...m, progress: Math.floor(Math.random() * 100) + 1 }))}
-					title="Continue watching"
-					priority="medium"
-					progress
-				/>
-				<CarouselMovies movies={batman} title="Top rated" priority="small" /> -->
 				<CarouselMovies
 					movies={movies.results}
 					title="Top rated  ({movies.totalResults} results)"

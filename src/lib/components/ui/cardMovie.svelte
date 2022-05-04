@@ -5,13 +5,16 @@
 	import ProgressLine from './ProgressLine.svelte';
 	// import Spinner from './Spinner.svelte';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
+	import Toast from './toast.svelte';
 	// import { onMount } from 'svelte';
 	export let details = true;
 	export let movie;
 	export let progress = 0;
 	export let i;
 	export let poster = movie.poster !== 'N/A' ? movie.poster : '/assets/image-fallback.jpg';
-	let promiseDetails = details ? fetch('/api/' + movie.imdbid).then((r) => r.json()) : null;
+	let promiseDetails = details
+		? fetch('/api/' + movie.imdbid).then((r) => r.json())
+		: Promise.reject(false);
 
 	// onMount(() => {
 	// 	promiseDetails = getDetails(movie.imdbid);
@@ -45,32 +48,21 @@
 
 	<figcaption class="description-wrapper">
 		<div class="info-wrapper">
-			<!-- {#if details} -->
 			<h2 class="movie-title">{movie.title}</h2>
+
 			<p class="movie-year">{movie.year}</p>
-			<!-- {#if details} -->
 
-			{#await promiseDetails then detail}
-				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
-				<div class="rating-wrapper">
-					<span class="rating-label">{detail.imdbrating}</span>
-				</div>
-				<CardRatingStarts rating={detail.imdbrating} />
-			{/await}
-
-			<!-- {#await promiseDetails}
-				xxxxx
+			{#await promiseDetails}
+				wait...
 			{:then value}
 				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
 				<div class="rating-wrapper">
 					<span class="rating-label">rating {value.imdbrating}</span>
 				</div>
 				<CardRatingStarts rating={value.imdbrating} />
-			{/await} -->
-			<!-- {/if} -->
-			<!-- {:else} -->
-			<!-- <Spinner color="grey" size={20} /> -->
-			<!-- {/if} -->
+			{:catch}
+				<!-- error handle -->
+			{/await}
 		</div>
 	</figcaption>
 </figure>
@@ -82,8 +74,8 @@
 	} */
 
 	:root {
-		--card-w: 250px;
-		--card-h: 600px;
+		--card-w: 200px;
+		--card-h: 350px;
 	}
 
 	.item {
@@ -185,6 +177,11 @@
 			0 32px 64px rgba(0, 0, 0, 0.07);
 		background-color: var(--c-main);
 		transform: translateY(-1%);
+	}
+
+	.item:hover .movie-title {
+		/* text-decoration: underline; */
+		color: var(--c-front);
 	}
 
 	/* .item:hover .description-wrapper { */
