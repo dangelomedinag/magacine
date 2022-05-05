@@ -38,13 +38,18 @@ export async function get({ params }) {
 
 			if (value) {
 				if (key === 'Year') {
-					if (value.endsWith('-')) value = value.slice(-1);
+					if (value.trim().endsWith('–')) value = value.slice(0, -1);
 				}
 
 				if (key === 'Genre') {
 					if (value.includes(',')) value = json[key].split(',').map((e) => e.trim());
 					else value = [];
 				}
+
+				// if (key === 'Year') {
+				// 	if (m[key]?.endsWith('–')) obj[key.toLowerCase()] = m[key].slice(0, -1);
+				// 	else obj[key.toLowerCase()] = m[key];
+				// }
 
 				// if (key === 'imdbRating') {
 				// 	const n = Number(json[key]) / 2;

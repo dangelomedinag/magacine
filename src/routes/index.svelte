@@ -19,33 +19,46 @@
 </script>
 
 <script>
+	import { page } from '$app/stores';
+
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
-	import Tabs from '$lib/components/ui/tabs.svelte';
+	import Hero from '$lib/components/ui/hero.svelte';
+	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
+	// import Tabs from '$lib/components/ui/tabs.svelte';
 
 	export let movies;
-	// export let avengers, flash, batman, tahm, got;
+	let act = 'movies';
 
-	let tabs = ['Movies', 'Series'];
+	const setTab = (tab) => (act = tab);
 </script>
 
-<Tabs {tabs}>
-	<svelte:fragment let:active>
-		<div class="content">
-			{#if active == tabs[0]}
-				<CarouselMovies
-					movies={movies.results}
-					title="Top rated  ({movies.totalResults} results)"
-					priority="small"
-				/>
-			{/if}
+<NavbarTop>
+	<button on:click={() => setTab('movies')} class:active={act === 'movies'}>Movies</button>
+	<button on:click={() => setTab('series')} class:active={act === 'series'}>Series</button>
+	<a href="/search">link</a>
+</NavbarTop>
 
-			{#if active == tabs[1]}
-				<!-- <CarouselMovies movies={got} title="Game of thrones" priority="large" />
-				<CarouselMovies movies={tahm} title="Top rated" priority="medium" /> -->
-			{/if}
-		</div>
-	</svelte:fragment>
-</Tabs>
+<Hero />
+<div class="content">
+	<!-- tab 1 -->
+	{#if act === 'movies'}
+		<CarouselMovies
+			movies={movies.results}
+			title="Top rated  ({movies.totalResults} results)"
+			priority="small"
+		/>
+	{/if}
+
+	<!-- tab 2 -->
+	{#if act === 'series'}
+		<CarouselMovies
+			details={false}
+			movies={$page.stuff.suggest.results}
+			title="Top rated ({$page.stuff.suggest.totalResults} results)"
+			priority="small"
+		/>
+	{/if}
+</div>
 
 <style>
 	/* @media (min-width: 576px) {}

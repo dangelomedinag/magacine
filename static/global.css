@@ -17,6 +17,7 @@
 
 html {
 	font-size: 16px;
+	scroll-behavior: smooth;
 }
 
 html,
@@ -26,7 +27,6 @@ body {
 }
 
 body {
-	scroll-behavior: smooth;
 	font-family: 'Open Sans', sans-serif;
 	margin: 0;
 	padding: 0;

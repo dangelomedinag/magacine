@@ -1,8 +1,27 @@
+<script>
+	// import { onMount, createEventDispatcher, onDestroy } from 'svelte';
+	// const dispatch = createEventDispatcher();
+	// let tabsBox;
+	// let items;
+
+	// function handle(e) {
+	// 	dispatch('tab', e.target.dataset.tab);
+	// }
+
+	// onMount(() => {
+	// 	items = tabsBox.querySelectorAll('button');
+
+	// 	items.forEach((btn) => {
+	// 		btn.addEventListener('click', handle);
+	// 	});
+	// });
+</script>
+
 <nav class="navbar-content">
 	<div class="items-wrapper">
 		<slot />
 	</div>
-	<div class="tools">
+	<div class="tools-wrapper">
 		<a href="/search" class="tool-btn">
 			<svg
 				class="bell-svg"
@@ -71,6 +90,10 @@
 	</div>
 {/if} -->
 <style>
+	:root {
+		--navbar-item-gap: 0.5em;
+	}
+
 	.navbar-content {
 		position: sticky;
 		top: 0;
@@ -86,30 +109,51 @@
 			0 32px 64px rgba(0, 0, 0, 0.07);
 	}
 
-	.navbar-content :global(a) {
+	.items-wrapper :global(a),
+	.items-wrapper :global(button),
+	.tools-wrapper a,
+	.tools-wrapper button {
+		cursor: pointer;
+		background-color: transparent;
+		/* background-color: var(--c-front); */
 		text-decoration: none;
-		padding-right: 2em;
+		padding-left: var(--navbar-item-gap);
+		padding-right: var(--navbar-item-gap);
+		margin: 0;
+		border: 1px solid transparent;
 		color: white;
 		font-size: 0.9em;
+		/* font-weight: bold; */
 		opacity: 0.5;
 	}
 
-	.navbar-content :global(a.active) {
-		opacity: 1;
+	.items-wrapper :global(button:first-child) {
+		/* background-color: greenyellow; */
+		padding-left: 0;
 	}
 
-	.navbar-content :global(button) {
+	.navbar-content :global(.active) {
+		opacity: 1;
+		/* color: var(--c-front) */
+	}
+
+	/* .navbar-content :global(button) {
 		font-size: 0.9em;
 		background-color: transparent;
-		border: 1px;
 		text-decoration: none;
 		padding: 0 1em;
 		color: white;
 		opacity: 0.5;
+	} */
+
+	.items-wrapper,
+	.tools-wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
-	.navbar-content :global(button.active) {
-		opacity: 1;
+	.tools-wrapper {
 	}
 
 	.tool-btn {
