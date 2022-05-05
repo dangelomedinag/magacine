@@ -84,10 +84,11 @@
 	<a href="#info">info</a>
 	<a href="#suggest">suggest</a>
 </NavbarTop>
+
 <div class="wrapper">
 	<div
 		class="poster-wrapper"
-		style="background: linear-gradient(rgba(0,0,0,0.7), black), url({movie.poster});"
+		style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('{movie.poster}') ; background-size: contain;"
 	>
 		<img src={movie.poster} alt={movie.title} />
 		<button>
@@ -100,7 +101,8 @@
 			</svg>
 		</button>
 	</div>
-	<!-- <header style:display>
+</div>
+<!-- <header style:display>
 		<a href="/">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -127,23 +129,38 @@
 			</button>
 		</div>
 	</header> -->
-	<div class="information" id="info" bind:this={header}>
-		<div class="item">
-			<span class="property">title:</span>
-			<h1 class="title">{movie.title}</h1>
-		</div>
+<div class="information" id="info" bind:this={header}>
+	<div class="item">
+		<span class="property">title:</span>
+		<h1 class="title">{movie.title}</h1>
+	</div>
 
-		{#if movie.year}
-			<div class="item">
-				<span class="property">
-					Year
-					{#if movie.runtime}
-						/ duration
-					{/if}
-					:
-				</span>
-				<span
-					><svg
+	{#if movie.year}
+		<div class="item">
+			<span class="property">
+				Year
+				{#if movie.runtime}
+					/ duration
+				{/if}
+				:
+			</span>
+			<span
+				><svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+					/>
+				</svg>
+				{movie.year}
+				{#if movie.runtime}
+					/ <svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
@@ -153,90 +170,75 @@
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+							d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
 						/>
-					</svg>
-					{movie.year}
-					{#if movie.runtime}
-						/ <svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							stroke-width="2"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg> <span>{movie.runtime} </span>
-					{/if}
-				</span>
-			</div>
-		{/if}
-
-		{#if movie.plot}
-			<div class="synopsis item">
-				<span class="property">synopsis:</span>
-				<p>{movie.plot}</p>
-			</div>
-		{/if}
-
-		<div class="item">
-			<span class="property">genders:</span>
-			{#each movie?.genre ?? [] as item}
-				<span class="tag">{item}</span>
-			{:else}
-				<span class="tag tag--unknown">desconocido</span>
-			{/each}
+					</svg> <span>{movie.runtime} </span>
+				{/if}
+			</span>
 		</div>
+	{/if}
 
-		{#if movie.language}
-			<div class="item">
-				<span class="property">language:</span>
-				<span>
-					{listFormat(movie.language)}
-				</span>
-			</div>
-		{/if}
+	{#if movie.plot}
+		<div class="synopsis item">
+			<span class="property">synopsis:</span>
+			<p>{movie.plot}</p>
+		</div>
+	{/if}
 
-		{#if movie.imdbrating}
-			<div class="item">
-				<span class="property">rating:</span>
-				<div>{movie.imdbrating}</div>
-				<CardRatingStarts --icon-fz="1.5rem" rating={movie.imdbrating} />
-			</div>
-		{/if}
+	<div class="item">
+		<span class="property">genders:</span>
+		{#each movie?.genre ?? [] as item}
+			<span class="tag">{item}</span>
+		{:else}
+			<span class="tag tag--unknown">desconocido</span>
+		{/each}
+	</div>
 
-		<!-- {#if suggest}
+	{#if movie.language}
+		<div class="item">
+			<span class="property">language:</span>
+			<span>
+				{listFormat(movie.language)}
+			</span>
+		</div>
+	{/if}
+
+	{#if movie.imdbrating}
+		<div class="item">
+			<span class="property">rating:</span>
+			<div>{movie.imdbrating}</div>
+			<CardRatingStarts --icon-fz="1.5rem" rating={movie.imdbrating} />
+		</div>
+	{/if}
+
+	<!-- {#if suggest}
 			<div class="suggest" id="suggest">
 				<CarouselMovies movies={suggest} title="suggest" priority="small" />
 			</div>
 			{/if} -->
 
-		{#await getSuggest()}
-			<p>cargando sugerencias...</p>
-		{:then value}
-			{#if Array.isArray(value?.results)}
-				<div class="suggest" id="suggest">
-					<CarouselMovies
-						--card-w="350px"
-						--card-h="250px"
-						details={false}
-						movies={value.results}
-						title="suggest"
-						priority="small"
-					/>
-				</div>
-			{/if}
-		{:catch}
-			<Toast>
-				for now we do <span>not have related movies or series</span>
-			</Toast>
-		{/await}
-	</div>
+	{#await getSuggest()}
+		<p>cargando sugerencias...</p>
+	{:then value}
+		{#if Array.isArray(value?.results)}
+			<div class="suggest" id="suggest">
+				<CarouselMovies
+					--card-w="350px"
+					--card-h="250px"
+					details={false}
+					movies={value.results}
+					title="suggest"
+					priority="small"
+				/>
+			</div>
+		{/if}
+	{:catch}
+		<Toast>
+			for now we do <span>not have related movies or series</span>
+		</Toast>
+	{/await}
 </div>
+
 <!-- {/if} -->
 
 <!-- </div> -->
@@ -248,9 +250,11 @@
 	}
 
 	.poster-wrapper {
-		position: sticky;
+		/* position: sticky;
 		top: 0;
-		z-index: 0;
+		z-index: 0; */
+		/* display: block; */
+		position: relative;
 		height: 100%;
 		width: 100%;
 	}
@@ -272,28 +276,33 @@
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		border: none;
-		color: brown;
 		transform: translate(-50%, -50%);
-		border-radius: 50vh;
-		padding: 1em;
-		background: radial-gradient(white 20%, transparent 20%);
+		border: none;
+		color: var(--c-front);
+		padding: 0;
+		margin: 0;
+		background-color: transparent;
+		/* padding: 0.5em; */
+		/* background: radial-gradient(white 20%, transparent 20%); */
 		cursor: pointer;
-		transition: background 500ms ease-in-out;
-		/* box-shadow: 0px 0px 20px -5px red; */
-		/* cursor: pointer;
-		animation-name: play-wave;
-		animation-duration: 500ms;
-		animation-timing-function: ease-in-out;
-		animation-iteration-count: infinite; */
 	}
-	.poster-wrapper button:hover {
+	/* .poster-wrapper button:hover {
 		background: radial-gradient(white 30%, transparent 60%);
-	}
+		color: var(--c-front-dark);
+	} */
 	.poster-wrapper svg {
+		filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 1));
+		border-radius: 50vh;
+		background-color: white;
 		height: 4rem;
 		width: 4rem;
+		/* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
+			0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
+			0 32px 32px rgba(0, 0, 0, 0.11); */
 	}
+
+	/* .poster-wrapper path {
+	} */
 
 	.suggest {
 		padding-top: 3em;
@@ -318,7 +327,7 @@
 		background-color: var(--c-main-content);
 		/* padding-bottom: 30rem; */
 		/* min-height: 100vh; */
-		padding: 1em;
+		padding: var(--gap-content);
 		padding-top: 3em;
 
 		border-top: 2px solid brown;
@@ -339,14 +348,12 @@
 			0 32px 64px rgba(0, 0, 0, 0.07);
 	} */
 
-	header .wrapper-controls {
-		/* display: inline; */
+	/* header .wrapper-controls {
 		height: 100%;
 	}
 
 	header button {
 		display: inline-flex;
-		/* gap: 0.5em; */
 		justify-content: center;
 		align-items: center;
 		height: 100%;
@@ -362,11 +369,9 @@
 		font-weight: bold;
 		cursor: pointer;
 		display: inline-flex;
-		/* gap: 0.5em; */
 		justify-content: flex-start;
 		align-items: center;
 		height: 100%;
-		/* background-color: brown; */
 		text-decoration: none;
 	}
 	header button:hover,
@@ -382,7 +387,7 @@
 	header .title {
 		font-weight: bold;
 		padding-left: var(--gap-content);
-	}
+	} */
 
 	.item {
 		padding-bottom: 1em;

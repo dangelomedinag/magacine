@@ -2,10 +2,10 @@
 	import { scale, fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	// import { onMount } from 'svelte';
-	import ProgressLine from './ProgressLine.svelte';
+	import ProgressLine from '../ProgressLine.svelte';
 	// import Spinner from './Spinner.svelte';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
-	import Toast from './toast.svelte';
+	import Toast from '../toast.svelte';
 	// import { onMount } from 'svelte';
 	export let details = true;
 	export let movie;
@@ -14,7 +14,7 @@
 	export let poster = movie.poster !== 'N/A' ? movie.poster : '/assets/image-fallback.jpg';
 	let promiseDetails = details
 		? fetch('/api/' + movie.imdbid).then((r) => r.json())
-		: Promise.reject(false);
+		: Promise.reject();
 
 	// onMount(() => {
 	// 	promiseDetails = getDetails(movie.imdbid);
@@ -57,7 +57,7 @@
 			{:then value}
 				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
 				<div class="rating-wrapper">
-					<span class="rating-label">rating {value.imdbrating}</span>
+					<span class="rating-label">rating {(value.imdbrating / 2).toFixed(1)}</span>
 				</div>
 				<CardRatingStarts rating={value.imdbrating} />
 			{:catch}

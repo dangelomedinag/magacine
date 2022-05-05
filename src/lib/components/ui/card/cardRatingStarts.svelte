@@ -3,8 +3,12 @@
 	const starsLenght = 5;
 	const stars = [1, 2, 3, 4, 5];
 	const percent = Math.floor(rating) * 0.1;
+	console.log(percent);
 	const sc = Math.floor(starsLenght * percent);
+	console.log(sc);
 </script>
+
+<!-- {@debug rating} -->
 
 <div style="display: inline-flex;">
 	{#each stars as ele}

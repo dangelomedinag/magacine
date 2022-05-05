@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 
-	import CardMovie from './cardMovie.svelte';
+	import CardMovie from './card/cardMovie.svelte';
 
 	export let details = true;
 	export let title;
@@ -235,12 +235,15 @@
 	}
 
 	.controls {
+		/* font-size: initial; */
 		display: block;
 		position: absolute;
 		z-index: 15;
 		/* top: 0; */
 		top: 15%;
 		height: 50px;
+		/* padding: 0;
+		margin: 0; */
 		/* height: 100%; */
 		width: 30px;
 		opacity: 0.5;
