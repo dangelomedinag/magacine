@@ -12,8 +12,12 @@
 		<img {src} alt="hero spider man" />
 	{/each}
 	<div class="copy">
-		<h1>Lorem, ipsum dolor.</h1>
-		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, cupiditate!</p>
+		<h1>Your favorite heroes, <span>in one place</span>.</h1>
+		<p>
+			Earth's Mightiest Heroes stand as the planet's first line of defense against the most powerful
+			threats in the universe
+		</p>
+		<a href="/discovery">discovery</a>
 	</div>
 </section>
 
@@ -35,7 +39,7 @@
 		height: 100%;
 		top: 0;
 		left: 0;
-		background-image: linear-gradient(to bottom, transparent -100%, var(--c-main-content) 60%);
+		background-image: linear-gradient(to bottom, transparent -300%, var(--c-main-content) 90%);
 		background-size: 100% 100%;
 		background-position: center;
 		background-repeat: no-repeat;
@@ -57,12 +61,33 @@
 		position: absolute;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+		justify-content: flex-end;
+		/* align-items: center; */
 		width: 100%;
 		height: 100%;
 		top: 0;
 		left: 0;
 		padding: var(--gap-content);
+		text-align: left;
+	}
+
+	h1 {
+		font-weight: bold;
+		font-size: 2rem;
+		margin-bottom: 0;
+	}
+
+	p {
+		opacity: 0.5;
+	}
+
+	span {
+		color: var(--c-front);
+	}
+
+	a {
+		/* background-color: var(--c-front); */
+		color: var(--c-front);
+		font-weight: lighter;
 	}
 </style>

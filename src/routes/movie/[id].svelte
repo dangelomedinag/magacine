@@ -206,7 +206,7 @@
 	{#if movie.imdbrating}
 		<div class="item">
 			<span class="property">rating:</span>
-			<div>{movie.imdbrating}</div>
+			<div>{(movie.imdbrating / 2).toFixed(1)}</div>
 			<CardRatingStarts --icon-fz="1.5rem" rating={movie.imdbrating} />
 		</div>
 	{/if}

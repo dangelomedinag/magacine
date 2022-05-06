@@ -94,6 +94,7 @@
 		margin-right: 1em;
 		/* height: 400px; */
 		/* background-color: var(--c-main); */
+		background-color: var(--c-main);
 		border: 1px solid rgba(128, 128, 128, 0.3);
 		transition: transform 100ms ease-in-out;
 	}
@@ -175,7 +176,7 @@
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
 			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
 			0 32px 64px rgba(0, 0, 0, 0.07);
-		background-color: var(--c-main);
+
 		transform: translateY(-1%);
 	}
 
