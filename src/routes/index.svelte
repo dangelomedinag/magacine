@@ -35,7 +35,6 @@
 <NavbarTop>
 	<button on:click={() => setTab('movies')} class:active={act === 'movies'}>Movies</button>
 	<button on:click={() => setTab('series')} class:active={act === 'series'}>Series</button>
-	<a href="/search">link</a>
 </NavbarTop>
 
 <Hero />

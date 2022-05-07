@@ -15,61 +15,85 @@
 	// 		btn.addEventListener('click', handle);
 	// 	});
 	// });
+
+	export let search = true,
+		bell = false,
+		profile = false;
 </script>
 
 <nav class="navbar-content">
+	<div class="home-wrapper">
+		<a href="/" class="backhome">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="bell-svg"
+				viewBox="0 0 20 20"
+				fill="currentColor"
+			>
+				<path
+					d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+				/>
+			</svg>
+		</a>
+	</div>
 	<div class="items-wrapper">
 		<slot />
 	</div>
 	<div class="tools-wrapper">
-		<a href="/search" class="tool-btn">
-			<svg
-				class="bell-svg"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-				/>
-			</svg>
-		</a>
-		<button class="tool-btn">
-			<svg
-				class="bell-svg"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-				/>
-			</svg>
-		</button>
-		<button class="tool-btn">
-			<svg
-				class="bell-svg"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-				/>
-			</svg>
-		</button>
+		{#if search}
+			<a href="/search" class="tool-btn">
+				<svg
+					class="bell-svg"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+					/>
+				</svg>
+			</a>
+		{/if}
+		{#if bell}
+			<button class="tool-btn">
+				<svg
+					class="bell-svg"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+					/>
+				</svg>
+			</button>
+		{/if}
+		{#if profile}
+			<button class="tool-btn">
+				<svg
+					class="bell-svg"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+					/>
+				</svg>
+			</button>
+		{/if}
 	</div>
 </nav>
 
@@ -103,22 +127,36 @@
 		justify-content: space-between;
 		background-color: var(--c-main);
 		border-bottom: 1px solid rgba(128, 128, 128, 0.1);
-		padding: var(--gap-content);
+		/* padding: var(--gap-content); */
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
 			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
 			0 32px 64px rgba(0, 0, 0, 0.07);
 	}
 
-	.items-wrapper :global(a),
-	.items-wrapper :global(button),
-	.tools-wrapper a,
-	.tools-wrapper button {
+	.home-wrapper {
+		padding-left: var(--gap-content);
+	}
+
+	.backhome {
+		color: var(--c-front) !important;
+		opacity: 1 !important;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.navbar-content :global(a),
+	.navbar-content :global(button),
+	.navbar-content a,
+	.navbar-content button {
+		text-align: center;
 		cursor: pointer;
 		background-color: transparent;
 		/* background-color: var(--c-front); */
 		text-decoration: none;
 		padding-left: var(--navbar-item-gap);
 		padding-right: var(--navbar-item-gap);
+		padding-top: var(--gap-content);
+		padding-bottom: var(--gap-content);
 		margin: 0;
 		border: 1px solid transparent;
 		color: white;
@@ -127,13 +165,13 @@
 		opacity: 0.5;
 	}
 
-	.items-wrapper :global(button:first-child) {
-		/* background-color: greenyellow; */
+	/* .items-wrapper :global(button:first-child) {
 		padding-left: 0;
-	}
+	} */
 
 	.navbar-content :global(.active) {
 		opacity: 1;
+		border-bottom: 1px solid var(--c-front);
 		/* color: var(--c-front) */
 	}
 
@@ -146,6 +184,7 @@
 		opacity: 0.5;
 	} */
 
+	.home-wrapper,
 	.items-wrapper,
 	.tools-wrapper {
 		display: flex;
@@ -154,6 +193,7 @@
 	}
 
 	.tools-wrapper {
+		padding-right: var(--gap-content);
 	}
 
 	.tool-btn {

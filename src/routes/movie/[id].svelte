@@ -76,11 +76,11 @@
 <!-- {#if movie} -->
 
 <NavbarTop>
-	<button
+	<!-- <button
 		on:click={() => {
 			window.history.back();
 		}}>back</button
-	>
+	> -->
 	<a href="#info">info</a>
 	<a href="#suggest">suggest</a>
 </NavbarTop>
@@ -226,7 +226,7 @@
 					--card-w="350px"
 					--card-h="250px"
 					details={false}
-					movies={value.results}
+					movies={value.results.filter((e) => e.poster !== 'N/A')}
 					title="suggest"
 					priority="small"
 				/>

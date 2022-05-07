@@ -4,21 +4,6 @@
 	import { fade, scale, slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
-	// const urlsMovies = [movie01, movie02, movie03, movie04];
-
-	// const urlsAnimations = [
-	// 	'https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
-	// 	'https://m.media-amazon.com/images/M/MV5BZWU2NDkxYjktNWVlMS00MTM4LWJjMDAtOWYxZjJkZWFhYzAxXkEyXkFqcGdeQXVyMTA1NjE5MTAz._V1_SX300.jpg',
-	// 	'https://m.media-amazon.com/images/M/MV5BOGEwMTQyMDktMWUwZC00MzExLTg1MGMtYWJiNWNhMzIyMGU5XkEyXkFqcGdeQXVyOTYyMTY2NzQ@._V1_SX300.jpg',
-	// 	'https://m.media-amazon.com/images/M/MV5BMjA0YjYyZGMtN2U0Ni00YmY4LWJkZTItYTMyMjY3NGYyMTJkXkEyXkFqcGdeQXVyNDg4NjY5OTQ@._V1_SX300.jpg'
-	// ];
-
-	// const urlsSeries = [
-	// 	'https://m.media-amazon.com/images/M/MV5BYTRiNDQwYzAtMzVlZS00NTI5LWJjYjUtMzkwNTUzMWMxZTllXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_SX300.jpg',
-	// 	'https://m.media-amazon.com/images/M/MV5BZTE2YWRlMmYtOGFkYy00MjcxLWJkNmQtNTJmNTZkZjVhZGE1XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg',
-	// 	'https://m.media-amazon.com/images/M/MV5BMTMxOGM0NzItM2E0OS00YWYzLWEzNzUtODUzZTBjM2I4MTZkXkEyXkFqcGdeQXVyMTM1MTE1NDMx._V1_SX300.jpg',
-	// 	'https://m.media-amazon.com/images/M/MV5BODk4ZjU0NDUtYjdlOS00OTljLTgwZTUtYjkyZjk1NzExZGIzXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg'
-	// ];
 	export let words = [
 		{ word: 'Movies', imgs: imgs.movie },
 		{ word: 'Series', imgs: imgs.serie },
@@ -34,7 +19,6 @@
 	let interval;
 
 	function play() {
-		console.log('inter');
 		if (i > words.length) i = 1;
 		else if (i < 2) i += 1;
 
@@ -46,7 +30,6 @@
 
 	onMount(() => {
 		interval = setInterval(play, frequency);
-
 		return () => clearInterval(interval);
 	});
 
@@ -72,9 +55,7 @@
 	<div class="copy">
 		<h1>
 			{#key word}
-				<span transition:slide={{ easing: quintInOut }} class="firstline"
-					>{word}<span class="comma">,</span>
-				</span>
+				<span in:slide out:slide|local class="firstline">{word}<span class="comma">,</span> </span>
 			{/key}
 			<span class="secondline">in one place.</span>
 		</h1>
@@ -114,6 +95,7 @@
 		/* flex-wrap: wrap; */
 		background-color: var(--c-front);
 		margin-bottom: 3em;
+		border-bottom: 2px solid var(--c-front);
 	}
 
 	section > * {

@@ -246,7 +246,7 @@
 		margin: 0; */
 		/* height: 100%; */
 		width: 30px;
-		opacity: 0.5;
+		opacity: 0.1;
 		color: white;
 		background-color: var(--c-front-dark);
 		/* border-radius: 5px; */

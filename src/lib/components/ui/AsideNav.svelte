@@ -22,6 +22,7 @@
 	</nav>
 
 	<div>
+		<MenuItem href="/search" label="Search" on:click />
 		<MenuItem href="/settings" label="Settings" on:click />
 		<MenuItem href="/help" label="Help" on:click />
 		<MenuItem href="/logout" label="Logout" on:click />

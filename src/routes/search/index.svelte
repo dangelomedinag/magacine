@@ -36,7 +36,7 @@
 	let value;
 </script>
 
-<NavbarTop><a href="/">home</a></NavbarTop>
+<NavbarTop search={false} />
 
 <SearchMovies bind:results bind:value>
 	<CarouselMovies movies={results} title={value} priority="small" />
