@@ -79,12 +79,12 @@
 	> -->
 	<button
 		on:click={() => {
-			goto(location + '#info', { replaceState: true });
+			goto('#info', { replaceState: true });
 		}}>info</button
 	>
 	<button
 		on:click={() => {
-			goto(location + '#suggest', { replaceState: true });
+			goto('#suggest', { replaceState: true });
 		}}>suggest</button
 	>
 </NavbarTop>
