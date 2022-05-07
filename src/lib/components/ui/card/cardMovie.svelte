@@ -55,7 +55,7 @@
 			{#await promiseDetails}
 				wait...
 			{:then value}
-				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" />
+				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
 				<div class="rating-wrapper">
 					<span class="rating-label">rating {(value.imdbrating / 2).toFixed(1)}</span>
 				</div>

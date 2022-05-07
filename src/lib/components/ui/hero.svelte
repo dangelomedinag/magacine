@@ -1,52 +1,148 @@
 <script>
-	const urls = [
-		'https://m.media-amazon.com/images/M/MV5BZDEyN2NhMjgtMjdhNi00MmNlLWE5YTgtZGE4MzNjMTRlMGEwXkEyXkFqcGdeQXVyNDUyOTg3Njg@._V1_SX300.jpg',
-		'https://m.media-amazon.com/images/M/MV5BNzY2ZDQ2MTctYzlhOC00MWJhLTgxMmItMDgzNDQwMDdhOWI2XkEyXkFqcGdeQXVyNjc1NTYyMjg@._V1_SX300.jpg',
-		'https://m.media-amazon.com/images/M/MV5BOTY4YjI2N2MtYmFlMC00ZjcyLTg3YjEtMDQyM2ZjYzQ5YWFkXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
-		'https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg'
+	import { imgs } from '$lib/imgs';
+	import { quintInOut, elasticInOut, cubicInOut } from 'svelte/easing';
+	import { fade, scale, slide } from 'svelte/transition';
+	import { onMount } from 'svelte';
+
+	// const urlsMovies = [movie01, movie02, movie03, movie04];
+
+	// const urlsAnimations = [
+	// 	'https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
+	// 	'https://m.media-amazon.com/images/M/MV5BZWU2NDkxYjktNWVlMS00MTM4LWJjMDAtOWYxZjJkZWFhYzAxXkEyXkFqcGdeQXVyMTA1NjE5MTAz._V1_SX300.jpg',
+	// 	'https://m.media-amazon.com/images/M/MV5BOGEwMTQyMDktMWUwZC00MzExLTg1MGMtYWJiNWNhMzIyMGU5XkEyXkFqcGdeQXVyOTYyMTY2NzQ@._V1_SX300.jpg',
+	// 	'https://m.media-amazon.com/images/M/MV5BMjA0YjYyZGMtN2U0Ni00YmY4LWJkZTItYTMyMjY3NGYyMTJkXkEyXkFqcGdeQXVyNDg4NjY5OTQ@._V1_SX300.jpg'
+	// ];
+
+	// const urlsSeries = [
+	// 	'https://m.media-amazon.com/images/M/MV5BYTRiNDQwYzAtMzVlZS00NTI5LWJjYjUtMzkwNTUzMWMxZTllXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_SX300.jpg',
+	// 	'https://m.media-amazon.com/images/M/MV5BZTE2YWRlMmYtOGFkYy00MjcxLWJkNmQtNTJmNTZkZjVhZGE1XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg',
+	// 	'https://m.media-amazon.com/images/M/MV5BMTMxOGM0NzItM2E0OS00YWYzLWEzNzUtODUzZTBjM2I4MTZkXkEyXkFqcGdeQXVyMTM1MTE1NDMx._V1_SX300.jpg',
+	// 	'https://m.media-amazon.com/images/M/MV5BODk4ZjU0NDUtYjdlOS00OTljLTgwZTUtYjkyZjk1NzExZGIzXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg'
+	// ];
+	export let words = [
+		{ word: 'Movies', imgs: imgs.movie },
+		{ word: 'Series', imgs: imgs.serie },
+		{ word: 'Animations', imgs: imgs.anim },
+		{ word: 'All', imgs: imgs.serie }
 	];
+	export let frequency = 3000;
+
+	let urls = words[0].imgs;
+	let word = words[0].word;
+	let currentPage = 1;
+	let i = 1;
+	let interval;
+
+	function play() {
+		console.log('inter');
+		if (i > words.length) i = 1;
+		else if (i < 2) i += 1;
+
+		word = words[i - 1].word;
+		urls = words[i - 1].imgs;
+		currentPage = i;
+		i++;
+	}
+
+	onMount(() => {
+		interval = setInterval(play, frequency);
+
+		return () => clearInterval(interval);
+	});
+
+	function setPage(pag) {
+		console.log(pag);
+		if (interval) clearInterval(interval);
+		i = pag;
+		currentPage = pag;
+		word = words[pag - 1].word;
+		urls = words[pag - 1].imgs;
+
+		interval = setInterval(play, frequency);
+	}
 </script>
 
 <section>
-	{#each urls as src}
-		<img {src} alt="hero spider man" />
-	{/each}
+	<div class="imgs-wrapper">
+		{#each urls as src (src)}
+			<img {src} alt="hero spider man" loading="lazy" />
+		{/each}
+	</div>
+
 	<div class="copy">
-		<h1>Your favorite heroes, <span>in one place</span>.</h1>
+		<h1>
+			{#key word}
+				<span transition:slide={{ easing: quintInOut }} class="firstline"
+					>{word}<span class="comma">,</span>
+				</span>
+			{/key}
+			<span class="secondline">in one place.</span>
+		</h1>
 		<p>
-			Earth's Mightiest Heroes stand as the planet's first line of defense against the most powerful
-			threats in the universe
+			Everything you want to see, without limits or commercials, and more movies and series are
+			added every week!
 		</p>
-		<a href="/discovery">discovery</a>
+		<div class="indicators">
+			{#each words as _, i}
+				{@const index = i + 1}
+				<button class="page" on:click={() => setPage(index)} disabled={currentPage == index} />
+			{/each}
+		</div>
+		<!-- <div class="cta-wrapper">
+			<a href={'#'}
+				>discovery
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M16 17l-4 4m0 0l-4-4m4 4V3" />
+				</svg>
+			</a>
+		</div> -->
 	</div>
 </section>
 
 <style>
 	section {
 		position: relative;
-		display: flex;
+		/* display: flex;
 		justify-content: center;
-		align-items: center;
-		height: 300px;
+		align-items: center; */
 		/* flex-wrap: wrap; */
 		background-color: var(--c-front);
-	}
-
-	section::before {
-		content: '';
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		background-image: linear-gradient(to bottom, transparent -300%, var(--c-main-content) 90%);
-		background-size: 100% 100%;
-		background-position: center;
-		background-repeat: no-repeat;
+		margin-bottom: 3em;
 	}
 
 	section > * {
 		flex-basis: calc(100% / 4);
+	}
+
+	.imgs-wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 300px;
+	}
+
+	.imgs-wrapper > * {
+		flex-basis: calc(100% / 4);
+	}
+	.imgs-wrapper::before {
+		content: '';
+		position: absolute;
+		/* z-index: 10; */
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-image: linear-gradient(to right, var(--c-main) 0, rgba(230, 57, 70, 0.6) 300%);
+		background-size: 100% 100%;
+		background-position: center;
+		background-repeat: no-repeat;
+		/* border-bottom: 1px solid var(--c-front); */
 	}
 
 	img {
@@ -55,6 +151,7 @@
 		height: 100%;
 		/* display: block; */
 		object-fit: cover;
+		object-position: top;
 	}
 
 	.copy {
@@ -71,23 +168,87 @@
 		text-align: left;
 	}
 
+	.page {
+		width: 6px;
+		height: 6px;
+		padding: 0;
+		margin: 0 0.5em;
+		opacity: 0.2;
+		border-radius: 50vh;
+		border: none;
+		/* border: 2px solid transparent; */
+	}
+
+	.page:disabled {
+		width: 12px;
+		opacity: 1;
+		background-color: var(--c-front);
+		cursor: not-allowed;
+	}
+
+	.page:not(:disabled):hover,
+	.page:not(:disabled):focus {
+		/* border: 2px solid var(--c-front); */
+		outline: 3px solid var(--c-front);
+		outline-offset: 3px;
+		cursor: pointer;
+	}
+
 	h1 {
 		font-weight: bold;
 		font-size: 2rem;
 		margin-bottom: 0;
+		overflow: hidden;
 	}
 
 	p {
 		opacity: 0.5;
 	}
 
-	span {
+	.firstline {
+		display: block;
 		color: var(--c-front);
+		/* text-transform: uppercase; */
+	}
+	.comma {
+		color: white;
+	}
+
+	.secondline {
+		/* font-weight: lighter; */
+		display: block;
+	}
+	.cta-wrapper {
+		margin: 0 auto;
 	}
 
 	a {
 		/* background-color: var(--c-front); */
 		color: var(--c-front);
 		font-weight: lighter;
+		padding: 0;
+		text-decoration: none;
+		display: inline-flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.2em 0.8em;
+		border-radius: 50vh;
+	}
+
+	a:hover {
+		/* text-decoration: underline;
+		background-color: var(--c-front); */
+		color: white;
+	}
+
+	svg {
+		width: 1rem;
+		height: 1rem;
+	}
+
+	.indicators {
+		margin: 0 auto;
 	}
 </style>
