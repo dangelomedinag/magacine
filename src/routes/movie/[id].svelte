@@ -16,11 +16,12 @@
 </script>
 
 <script>
+	import { goto } from '$app/navigation';
+
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
 	import Toast from '$lib/components/ui/toast.svelte';
-	import { onMount } from 'svelte';
 
 	// export let id;
 	export let movie;
@@ -70,19 +71,22 @@
 	// });
 </script>
 
-<!-- <svelte:window on:scroll={showHeader} /> -->
-<!-- {@debug movie} -->
-<!-- <div class="content"> -->
-<!-- {#if movie} -->
-
 <NavbarTop>
 	<!-- <button
 		on:click={() => {
 			window.history.back();
 		}}>back</button
 	> -->
-	<a href="#info">info</a>
-	<a href="#suggest">suggest</a>
+	<button
+		on:click={() => {
+			goto(location + '#info', { replaceState: true });
+		}}>info</button
+	>
+	<button
+		on:click={() => {
+			goto(location + '#suggest', { replaceState: true });
+		}}>suggest</button
+	>
 </NavbarTop>
 
 <div class="wrapper">
