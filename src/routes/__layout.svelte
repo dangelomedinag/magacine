@@ -27,7 +27,7 @@
 <script context="module">
 	/** @type {import("@sveltejs/kit").load}*/
 	export const load = async ({ fetch }) => {
-		const url = '/api?s=happy';
+		const url = '/api?s=marvel';
 
 		const req = await fetch(url);
 		if (!req.ok) {

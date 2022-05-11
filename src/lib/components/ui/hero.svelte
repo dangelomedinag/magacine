@@ -47,9 +47,12 @@
 
 <section>
 	<div class="imgs-wrapper">
-		{#each urls as src (src)}
-			<img {src} alt="hero spider man" loading="lazy" />
-		{/each}
+		<!-- {#each urls as src (src)} -->
+		<img src={urls[0]} alt="hero spider man" loading="lazy" />
+		<img src={urls[1]} alt="hero spider man" loading="lazy" />
+		<img src={urls[2]} alt="hero spider man" loading="lazy" />
+		<img src={urls[3]} alt="hero spider man" loading="lazy" />
+		<!-- {/each} -->
 	</div>
 
 	<div class="copy">

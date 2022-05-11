@@ -93,7 +93,7 @@ export async function get({ url }) {
 
 		return {
 			status: data.status,
-			body: { results: json.Search, totalResults: +json.totalResults }
+			body: { results: json.Search, totalResults: +json.totalResults, search: search }
 		};
 	} catch (error) {
 		return {

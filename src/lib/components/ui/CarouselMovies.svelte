@@ -1,12 +1,15 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-
+	// components
 	import CardMovie from './card/cardMovie.svelte';
 
-	export let details = true;
-	export let title;
+	// props
 	export let movies;
+	export let title;
 	export let priority;
+	export let details = true;
+
 	let container;
 	let pageInfo;
 	let offset = 0;
@@ -80,7 +83,7 @@
 	<!-- <button on:click={prevPage} class="next">a</button> -->
 	<header class="carousel-header">
 		<h3 class="header-title">{title ?? ''}</h3>
-		<button class="header-btn"
+		<a href="movies?s={movies.search}" class="header-btn"
 			>See all<span>
 				<svg xmlns="http://www.w3.org/2000/svg" class="svg" viewBox="0 0 20 20" fill="currentColor">
 					<path
@@ -89,11 +92,11 @@
 						clip-rule="evenodd"
 					/>
 				</svg>
-			</span></button
+			</span></a
 		>
 	</header>
 	<main class="items-wrapper" bind:this={container}>
-		{#each movies as movie, i (movie.uuid)}
+		{#each movies.results as movie, i (movie.uuid)}
 			<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
 		{:else}
 			<!-- <slot name="empty">
@@ -103,7 +106,7 @@
 			</slot> -->
 		{/each}
 	</main>
-	{#if movies?.length > 0}
+	{#if movies.results?.length > 0}
 		<div class="movement-action">
 			<button on:click={nextPage} class="prev controls">
 				<svg

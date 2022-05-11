@@ -32,13 +32,14 @@
 
 	import SearchMovies from '$lib/components/ui/searchMovies.svelte';
 	import Toast from '$lib/components/ui/toast.svelte';
-	let results = [];
+	let results;
 	let value;
 </script>
 
 <NavbarTop search={false} />
 
 <SearchMovies bind:results bind:value>
+	<!-- {@const data = results.results = results.results.filter((m) => m.poster !== 'N/A')} -->
 	<CarouselMovies movies={results} title={value} priority="small" />
 
 	<div slot="suggest" class="content">
@@ -48,7 +49,7 @@
 		<div>
 			<CarouselMovies
 				details={false}
-				movies={$page.stuff?.suggest.results}
+				movies={$page.stuff?.suggest}
 				title="sugesst ({$page.stuff.suggest.totalResults})"
 				priority="small"
 			/>

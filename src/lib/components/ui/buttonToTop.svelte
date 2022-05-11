@@ -17,8 +17,8 @@
 		border-radius: 50vh;
 		width: 50px;
 		height: 50px;
-		background-color: var(--c-front-dark);
-		opacity: 0.5;
+		background-color: var(--c-front);
+		/* opacity: 0.5; */
 		color: white;
 		border: none;
 		display: flex;
@@ -30,7 +30,7 @@
 
 	button:hover {
 		opacity: 1;
-		background-color: var(--c-front);
+		background-color: var(--c-front-dark);
 	}
 
 	button:active {

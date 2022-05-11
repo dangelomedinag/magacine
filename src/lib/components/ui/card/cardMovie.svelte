@@ -33,7 +33,7 @@
 >
 	<a
 		class="item-link"
-		href="/movie/{movie.imdbid}"
+		href="/movies/{movie.imdbid}"
 		on:click={() => {
 			// dispatch('setmovie', { movie: details })
 			// currentMovie.set(details);

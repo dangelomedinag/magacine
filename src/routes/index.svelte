@@ -1,18 +1,18 @@
 <script context="module">
 	export async function load({ fetch }) {
-		const data = await fetch('/api?s=got');
-		console.log('index => fetch: ', data.ok, data.status);
-		if (!data.ok) {
-			const json = await data.json();
-			return { status: data.status, error: new Error(json.message) };
+		const req = await fetch('/api?s=got');
+		console.log('index => fetch: ', req.ok, req.status);
+		if (!req.ok) {
+			const res = await req.json();
+			return { status: req.status, error: new Error(res.message) };
 		}
 
-		const json = await data.json();
-		console.log('index => response.json: ', json.results.length);
+		const res = await req.json();
+		console.log('index => response.json: ', res.results.length);
 
 		return {
 			props: {
-				movies: json
+				movies: res
 			}
 		};
 	}
@@ -24,38 +24,32 @@
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 	import Hero from '$lib/components/ui/hero.svelte';
 	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
-	// import Tabs from '$lib/components/ui/tabs.svelte';
 
 	export let movies;
-	let act = 'movies';
+	let act = 'series';
 
 	const setTab = (tab) => (act = tab);
 </script>
 
 <NavbarTop>
-	<button on:click={() => setTab('movies')} class:active={act === 'movies'}>Movies</button>
 	<button on:click={() => setTab('series')} class:active={act === 'series'}>Series</button>
+	<button on:click={() => setTab('movies')} class:active={act === 'movies'}>Movies</button>
 </NavbarTop>
 
 <Hero />
 <div class="content">
 	<!-- tab 1 -->
-	{#if act === 'movies'}
-		<CarouselMovies
-			movies={movies.results}
-			title="Top rated  ({movies.totalResults} results)"
-			priority="small"
-		/>
-	{/if}
-
-	<!-- tab 2 -->
 	{#if act === 'series'}
 		<CarouselMovies
 			details={false}
-			movies={$page.stuff.suggest.results}
+			movies={$page.stuff.suggest}
 			title="Top rated ({$page.stuff.suggest.totalResults} results)"
 			priority="small"
 		/>
+	{/if}
+	<!-- tab 2 -->
+	{#if act === 'movies'}
+		<CarouselMovies {movies} title="Top rated  ({movies.totalResults} results)" priority="small" />
 	{/if}
 </div>
 

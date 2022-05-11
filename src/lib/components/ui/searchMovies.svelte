@@ -49,7 +49,7 @@
 			console.log(json);
 			// if (!json.response) throw new Error(json.error);
 			totalResults = json.totalResults;
-			results = json.results;
+			results = json;
 
 			const url = new URL(location);
 			url.searchParams.set('search', value);
@@ -90,7 +90,7 @@
 	onMount(() => {
 		if ($page.stuff?.search) {
 			value = $page.url.searchParams.get('search');
-			results = $page.stuff.search.results;
+			results = $page.stuff.search;
 			totalResults = $page.stuff.search.totalResults;
 			selected = $page.url.searchParams.has('type')
 				? [$page.url.searchParams.get('type')]
@@ -165,7 +165,7 @@
 		</div>
 	</div>
 
-	{#if results.length > 0}
+	{#if results?.results?.length > 0}
 		<div class="information content">
 			<!-- <h4>Seach: {value}</h4> -->
 			<span>results:</span>

@@ -12,7 +12,7 @@
 		const data = await Promise.all(reqs).catch((err) => {
 			return { status: data.status, error: new Error(err.message) };
 		});
-		console.log(data);
+		// console.log(data);
 
 		// const json = await data.json();
 
@@ -44,12 +44,12 @@
 	{#if act === 'suspense'}
 		<!-- content here -->
 		<CarouselMovies
-			movies={movies[0].results}
+			movies={movies[0]}
 			title="Suspense  ({movies[0].totalResults} results)"
 			priority="small"
 		/>
 		<CarouselMovies
-			movies={movies[1].results}
+			movies={movies[1]}
 			title="Suspense  ({movies[1].totalResults} results)"
 			priority="small"
 		/>
@@ -57,12 +57,12 @@
 	{#if act === 'terror'}
 		<!-- content here -->
 		<CarouselMovies
-			movies={movies[2].results}
+			movies={movies[2]}
 			title="Terror  ({movies[2].totalResults} results)"
 			priority="small"
 		/>
 		<CarouselMovies
-			movies={movies[3].results}
+			movies={movies[3]}
 			title="Terror  ({movies[3].totalResults} results)"
 			priority="small"
 		/>
@@ -70,12 +70,12 @@
 	{#if act === 'comedy'}
 		<!-- content here -->
 		<CarouselMovies
-			movies={movies[4].results}
+			movies={movies[4]}
 			title="Comedy  ({movies[4].totalResults} results)"
 			priority="small"
 		/>
 		<CarouselMovies
-			movies={movies[5].results}
+			movies={movies[5]}
 			title="Comedy  ({movies[5].totalResults} results)"
 			priority="small"
 		/>

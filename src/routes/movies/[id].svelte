@@ -17,19 +17,14 @@
 
 <script>
 	import { goto } from '$app/navigation';
-
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
 	import Toast from '$lib/components/ui/toast.svelte';
 
-	// export let id;
 	export let movie;
-	// export let error;
-	let suggest;
 	let header;
 	let display = 'none';
-	// $: console.log(error);
 
 	// function showHeader() {
 	// 	if (window.scrollY >= header.offsetTop + 60) {
@@ -51,32 +46,16 @@
 		const plotArr = plot.split(' ');
 		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
 		let selected = plotArrFilter[rndInt(plotArrFilter.length - 1)];
-		// if (!selected) {
-		console.log(selected);
-		// }
 
 		const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
 		if (!req.ok) {
 			return Promise.reject(await req.json());
 		}
-		// console.log('/movie/[id].svelte => fetch: ', req.ok, req.status);
-		// const res = req.json();
-		// console.log('/movie/[id].svelte => fetch: ', details);
-		// suggest = res.results;
 		return req.json();
 	}
-
-	// onMount(() => {
-	// 	console.log('hello');
-	// });
 </script>
 
 <NavbarTop>
-	<!-- <button
-		on:click={() => {
-			window.history.back();
-		}}>back</button
-	> -->
 	<button
 		on:click={() => {
 			goto('#info', { replaceState: true });
@@ -224,13 +203,15 @@
 	{#await getSuggest()}
 		<p>cargando sugerencias...</p>
 	{:then value}
+		<!-- {@const data = value?.results.filter((m) => m.poster !== 'N/A')} -->
+		<!-- movies={value.results.filter((e) => e.poster !== 'N/A')} -->
 		{#if Array.isArray(value?.results)}
 			<div class="suggest" id="suggest">
 				<CarouselMovies
 					--card-w="350px"
 					--card-h="250px"
+					movies={value}
 					details={false}
-					movies={value.results.filter((e) => e.poster !== 'N/A')}
 					title="suggest"
 					priority="small"
 				/>
