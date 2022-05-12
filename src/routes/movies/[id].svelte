@@ -1,12 +1,8 @@
 <script context="module">
-	// export const prerender = true;
-
 	/**  @type {import("@sveltejs/kit").Load}*/
 	export const load = async ({ fetch, params }) => {
 		const req = await fetch('/api/' + params.id);
-		console.log('/movie/[id].svelte => fetch: ', req.ok, req.status);
 		const details = await req.json();
-		console.log('/movie/[id].svelte => fetch: ', details);
 		return {
 			props: {
 				movie: details
@@ -41,17 +37,24 @@
 
 	const rndInt = (MAX) => Math.floor(Math.random() * MAX) + 1;
 
-	async function getSuggest() {
-		const { plot } = movie;
-		const plotArr = plot.split(' ');
-		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
-		let selected = plotArrFilter[rndInt(plotArrFilter.length - 1)];
+	// async function getSuggest() {
+	// 	const { plot } = movie;
 
-		const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
-		if (!req.ok) {
-			return Promise.reject(await req.json());
-		}
-		return req.json();
+	// 	const plotArr = plot.split(' ');
+	// 	const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
+	// 	let selected = plotArrFilter[rndInt(plotArrFilter.length - 1)];
+
+	// 	console.log(selected);
+
+	// 	const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
+	// 	if (!req.ok) {
+	// 		return Promise.reject(await req.json());
+	// 	}
+	// 	return req.json();
+	// }
+
+	function getSuggest() {
+		return Promise.reject();
 	}
 </script>
 
@@ -71,9 +74,10 @@
 <div class="wrapper">
 	<div
 		class="poster-wrapper"
-		style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('{movie.poster}') ; background-size: contain;"
+		style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('{movie.poster ??
+			`/assets/image-fallback.jpg`}') ; background-size: contain;"
 	>
-		<img src={movie.poster} alt={movie.title} />
+		<img src={movie.poster ?? '/assets/image-fallback.jpg'} alt={movie.title} />
 		<button>
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 				<path

@@ -1,12 +1,9 @@
 <script>
 	import { scale, fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
-	// import { onMount } from 'svelte';
 	import ProgressLine from '../ProgressLine.svelte';
-	// import Spinner from './Spinner.svelte';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
-	import Toast from '../toast.svelte';
-	// import { onMount } from 'svelte';
+
 	export let details = true;
 	export let movie;
 	export let progress = 0;
@@ -15,14 +12,6 @@
 	let promiseDetails = details
 		? fetch('/api/' + movie.imdbid).then((r) => r.json())
 		: Promise.reject();
-
-	// onMount(() => {
-	// 	promiseDetails = getDetails(movie.imdbid);
-	// });
-
-	// function getDetails(id) {
-	// 	return fetch('/api/' + id).then((r) => r.json());
-	// }
 </script>
 
 <!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg'} -->

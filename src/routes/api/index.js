@@ -4,6 +4,9 @@ const uuid = () => Date.now().toString(36) + Math.random().toString(36).substrin
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get({ url }) {
+	console.log(`===============`);
+	console.log(`[GET] => /api`, 'params:', url.search);
+
 	// get params
 	const params = url.searchParams;
 	const search = params.has('s') ? params.get('s') : false;
@@ -39,43 +42,14 @@ export async function get({ url }) {
 	// create URL object for get resource
 	try {
 		const data = await fetch(API_URL.href);
-		console.log('api/index.js endpoint => fetch: ', data ? true : false);
+		// console.log('api/index.js endpoint => fetch: ', data ? true : false);
 		const json = await data.json();
-		console.log('api/index.js endpoint => response.json: ', json.Search.length);
+		// console.log('api/index.js endpoint => response.json: ', json.Search.length);
 
 		if (json.Response === 'False') {
-			console.log('endpoint => json.Response: ', json.Response);
+			// console.log('endpoint => json.Response: ', json.Response);
 			throw new Error(json.Error);
 		}
-
-		/* const _url = new URL(API_URL.origin);
-		_url.searchParams.set('apikey', API_KEY);
-		json.Search = await Promise.all(
-			json.Search.map(async (e) => {
-				let obj = {};
-
-				_url.searchParams.set('i', e.imdbID);
-				const d = await fetch(_url.href);
-				const j = await d.json();
-
-				for (const key in j) {
-					if (key === 'Year') {
-						if (j[key].endsWith('–')) {
-							obj[key.toLowerCase()] = j[key].slice(0, -1);
-						} else {
-							obj[key.toLowerCase()] = j[key];
-						}
-					} else {
-						obj[key.toLowerCase()] = j[key];
-					}
-				}
-
-				return {
-					...obj,
-					uuid: uuid()
-				};
-			})
-		); */
 
 		json.Search = json.Search.map((m) => {
 			let obj = {};
@@ -89,13 +63,17 @@ export async function get({ url }) {
 			};
 		});
 
-		// console.log('list: ', json.Search);
+		console.log(`res => status:`, data.status);
+		console.log(`{ ...movies }`);
+		console.log(`===============`);
 
 		return {
 			status: data.status,
 			body: { results: json.Search, totalResults: +json.totalResults, search: search }
 		};
 	} catch (error) {
+		console.log(`res => error:`, error.message);
+		console.log(`===============`);
 		return {
 			status: 404,
 			body: { message: error.message }

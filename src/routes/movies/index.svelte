@@ -9,7 +9,7 @@
 		const req = await fetch('api/?' + query.toString());
 		const res = await req.json();
 
-		console.log(res);
+		// console.log(res);
 
 		return {
 			props: {

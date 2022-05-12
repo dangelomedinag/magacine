@@ -1,5 +1,4 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	// components
 	import CardMovie from './card/cardMovie.svelte';
