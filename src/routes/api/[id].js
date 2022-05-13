@@ -1,10 +1,14 @@
 import 'dotenv/config';
 const API_KEY = process.env.OMDB_API_KEY;
 
+function logHours() {
+	const date = new Date();
+	return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+}
+
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get(event) {
-	console.log(`=======[${new Date(Date.now())}]=======`);
-	// console.log(event);
+	console.log(`=======[${logHours()}]=======`);
 	console.log(`[GET] => /api/[id=${event.params.id}]`);
 
 	// get params
@@ -16,13 +20,20 @@ export async function get(event) {
 	API_URL.searchParams.set('apikey', API_KEY);
 
 	try {
-		const data = await fetch(API_URL.href);
-		// console.log('api/[id].js endpoint => fetch: ', data.ok, data.status);
+		const timeout = 8000;
+
+		const controller = new AbortController();
+		const id = setTimeout(() => controller.abort(), timeout);
+
+		const data = await fetch(API_URL.href, {
+			signal: controller.signal
+		});
+
+		clearTimeout(id);
+
 		const json = await data.json();
-		// console.log('api/[id].js endpoint => response.json: ', json);
 
 		if (json.Response === 'False') {
-			// console.log('api/[id].js endpoint => json.Response: ', json.Response);
 			throw new Error(json.Error);
 		}
 

@@ -1,13 +1,20 @@
 <script context="module">
 	/**  @type {import("@sveltejs/kit").Load}*/
 	export const load = async ({ fetch, params }) => {
-		const req = await fetch('/api/' + params.id);
-		const details = await req.json();
-		return {
-			props: {
-				movie: details
-			}
-		};
+		try {
+			const req = await fetch('/api/' + params.id);
+			const details = await req.json();
+			return {
+				props: {
+					movie: details
+				}
+			};
+		} catch (error) {
+			return {
+				status: 304,
+				error: new Error(error.message)
+			};
+		}
 	};
 </script>
 
