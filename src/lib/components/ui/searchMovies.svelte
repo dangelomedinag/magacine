@@ -224,7 +224,7 @@
 		/* margin-bottom: 1rem; */
 		/* height: 200px; */
 		background-image: linear-gradient(to bottom, transparent -100%, var(--c-main-content) 60%),
-			url('/assets/banner-search.jpg');
+			url('/imgs/banner-search.jpg');
 		background-size: 100% 100%, cover;
 		background-position: center, center;
 		background-repeat: no-repeat, no-repeat;

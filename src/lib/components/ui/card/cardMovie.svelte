@@ -8,13 +8,13 @@
 	export let movie;
 	export let progress = 0;
 	export let i;
-	export let poster = movie.poster !== 'N/A' ? movie.poster : '/assets/image-fallback.jpg';
+	export let poster = movie.poster !== 'N/A' ? movie.poster : '/imgs/image-fallback.jpg';
 	let promiseDetails = details
 		? fetch('/api/' + movie.imdbid).then((r) => r.json())
 		: Promise.reject();
 </script>
 
-<!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/assets/image-fallback.jpg'} -->
+<!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/imgs/image-fallback.jpg'} -->
 <figure
 	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
 	out:scale={{ duration: 200, start: 0.95, easing: quintInOut }}
@@ -44,7 +44,7 @@
 			{#await promiseDetails}
 				wait...
 			{:then value}
-				<img class="rating-logo" src="/assets/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
+				<img class="rating-logo" src="/imgs/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
 				<div class="rating-wrapper">
 					<span class="rating-label">rating {(value.imdbrating / 2).toFixed(1)}</span>
 				</div>

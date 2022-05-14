@@ -4,8 +4,11 @@ const uuid = () => Date.now().toString(36) + Math.random().toString(36).substrin
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get({ url }) {
-	console.log(`===============`);
-	console.log(`[GET] => /api`, 'params:', url.search);
+	const logger = false;
+	if (logger) {
+		console.log(`===============`);
+		console.log(`[GET] => /api`, 'params:', url.search);
+	}
 
 	// get params
 	const params = url.searchParams;
@@ -62,18 +65,21 @@ export async function get({ url }) {
 				uuid: uuid()
 			};
 		});
-
-		console.log(`res => status:`, data.status);
-		console.log(`{ ...movies }`);
-		console.log(`===============`);
+		if (logger) {
+			console.log(`res => status:`, data.status);
+			console.log(`{ ...movies }`);
+			console.log(`===============`);
+		}
 
 		return {
 			status: data.status,
 			body: { results: json.Search, totalResults: +json.totalResults, search: search }
 		};
 	} catch (error) {
-		console.log(`res => error:`, error.message);
-		console.log(`===============`);
+		if (logger) {
+			console.log(`res => error:`, error.message);
+			console.log(`===============`);
+		}
 		return {
 			status: 404,
 			body: { message: error.message }

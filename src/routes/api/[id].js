@@ -9,7 +9,8 @@ function logHours() {
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get(event) {
 	console.log(`=======[${logHours()}]=======`);
-	console.log(`[GET] => /api/[id=${event.params.id}]`);
+	// console.log(`[GET] => /api/[id=${event.params.id}]`);
+	console.log(`[id] === ${event.params.id}]`);
 
 	// get params
 	const id = event.params.id;
@@ -75,9 +76,9 @@ export async function get(event) {
 			obj[key.toLowerCase()] = value;
 		}
 
-		console.log(`res => status:`, data.status);
-		console.log(`{ ...movie, response: ${obj.response} }`);
-		console.log(`===============`);
+		// console.log(`res => status:`, data.status);
+		// console.log(`{ ...movie, response: ${obj.response} }`);
+		// console.log(`===============`);
 
 		return {
 			status: data.status,

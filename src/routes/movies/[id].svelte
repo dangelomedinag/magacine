@@ -44,25 +44,25 @@
 
 	const rndInt = (MAX) => Math.floor(Math.random() * MAX) + 1;
 
-	// async function getSuggest() {
-	// 	const { plot } = movie;
+	async function getSuggest() {
+		const { plot } = movie;
 
-	// 	const plotArr = plot.split(' ');
-	// 	const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
-	// 	let selected = plotArrFilter[rndInt(plotArrFilter.length - 1)];
+		const plotArr = plot.split(' ');
+		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
+		let selected = plotArrFilter[rndInt(plotArrFilter.length - 1)];
 
-	// 	console.log(selected);
+		// console.log(selected);
 
-	// 	const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
-	// 	if (!req.ok) {
-	// 		return Promise.reject(await req.json());
-	// 	}
-	// 	return req.json();
-	// }
-
-	function getSuggest() {
-		return Promise.reject();
+		const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
+		if (!req.ok) {
+			return Promise.reject(await req.json());
+		}
+		return req.json();
 	}
+
+	// function getSuggest() {
+	// 	return Promise.reject();
+	// }
 </script>
 
 <NavbarTop>
@@ -82,9 +82,9 @@
 	<div
 		class="poster-wrapper"
 		style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('{movie.poster ??
-			`/assets/image-fallback.jpg`}') ; background-size: contain;"
+			`/imgs/image-fallback.jpg`}') ; background-size: contain;"
 	>
-		<img src={movie.poster ?? '/assets/image-fallback.jpg'} alt={movie.title} />
+		<img src={movie.poster ?? '/imgs/image-fallback.jpg'} alt={movie.title} />
 		<button>
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 				<path
@@ -239,6 +239,10 @@
 
 <!-- </div> -->
 <style>
+	/* :global(html) {
+		scroll-behavior: smooth;
+	} */
+
 	.information svg {
 		width: 1rem;
 		height: 1rem;

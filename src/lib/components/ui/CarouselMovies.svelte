@@ -82,7 +82,7 @@
 	<!-- <button on:click={prevPage} class="next">a</button> -->
 	<header class="carousel-header">
 		<h3 class="header-title">{title ?? ''}</h3>
-		<a href="movies?s={movies.search}" class="header-btn"
+		<a href="/movies?s={movies.search}" class="header-btn"
 			>See all<span>
 				<svg xmlns="http://www.w3.org/2000/svg" class="svg" viewBox="0 0 20 20" fill="currentColor">
 					<path

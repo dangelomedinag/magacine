@@ -1,14 +1,14 @@
 <script context="module">
 	export async function load({ fetch }) {
 		const req = await fetch('/api?s=got');
-		console.log('index => fetch: ', req.ok, req.status);
+		// console.log('index => fetch: ', req.ok, req.status);
 		if (!req.ok) {
 			const res = await req.json();
 			return { status: req.status, error: new Error(res.message) };
 		}
 
 		const res = await req.json();
-		console.log('index => response.json: ', res.results.length);
+		// console.log('index => response.json: ', res.results.length);
 
 		return {
 			props: {
