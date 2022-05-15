@@ -15,8 +15,16 @@ export async function get(event) {
 	API_URL.searchParams.set('apikey', API_KEY);
 
 	try {
-		const data = await fetch(API_URL.href);
+		const timeout = 8000;
+		const controller = new AbortController();
+		const id = setTimeout(() => controller.abort(), timeout);
+
+		const data = await fetch(API_URL.href, {
+			signal: controller.signal
+		});
 		const json = await data.json();
+
+		clearTimeout(id);
 
 		if (json.Response === 'False') {
 			throw new Error(json.Error);
