@@ -1,4 +1,4 @@
-import { API_KEY } from './_env';
+import { API_KEY } from '$lib/_env';
 const uuid = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
 
 /** @type {import('@sveltejs/kit').RequestHandler} */

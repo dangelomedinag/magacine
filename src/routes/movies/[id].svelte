@@ -239,7 +239,7 @@
 
 <!-- </div> -->
 <style>
-	/* :global(html) {
+	/* :global(.smooth) {
 		scroll-behavior: smooth;
 	} */
 

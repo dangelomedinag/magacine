@@ -1,4 +1,4 @@
-import { API_KEY } from './_env';
+import { API_KEY } from '$lib/_env';
 
 function logHours() {
 	const date = new Date();
@@ -19,16 +19,19 @@ export async function get(event) {
 	API_URL.searchParams.set('apikey', API_KEY);
 
 	try {
-		const timeout = 8000;
+		// const timeout = 8000;
 
-		const controller = new AbortController();
-		const id = setTimeout(() => controller.abort(), timeout);
+		// const controller = new AbortController();
+		// const id = setTimeout(() => controller.abort(), timeout);
 
-		const data = await fetch(API_URL.href, {
-			signal: controller.signal
-		});
+		const data = await fetch(
+			API_URL.href
+			// {
+			// signal: controller.signal
+			// }
+		);
 
-		clearTimeout(id);
+		// clearTimeout(id);
 
 		const json = await data.json();
 
