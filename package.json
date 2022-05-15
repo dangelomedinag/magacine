@@ -13,7 +13,6 @@
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "^1.0.0-next.51",
 		"@sveltejs/kit": "^1.0.0-next.326",
-		"dotenv": "^16.0.1",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.1",
@@ -22,5 +21,8 @@
 		"prettier-plugin-svelte": "^2.5.0",
 		"svelte": "^3.47.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"dotenv": "^16.0.1"
+	}
 }
