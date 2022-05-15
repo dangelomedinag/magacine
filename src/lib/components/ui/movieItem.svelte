@@ -2,7 +2,7 @@
 	export let movie;
 </script>
 
-<a href="/movies/{movie.imdbid}">
+<a href="movies/{movie.imdbid}">
 	<img src={movie.poster} alt="poster of movie - {movie.title}" />
 </a>
 

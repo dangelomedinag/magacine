@@ -75,7 +75,7 @@
 		query.set('s', movies.search);
 		query.set('page', offset);
 
-		const req = await fetch('/api?' + query.toString());
+		const req = await fetch('api?' + query.toString());
 		const res = await req.json();
 
 		if (!req.ok) {

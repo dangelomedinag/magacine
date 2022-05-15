@@ -6,8 +6,8 @@
 	<nav>
 		<span class="section">Menu</span>
 
-		<MenuItem href="/" label="Home" notification={3} on:click />
-		<MenuItem href="/discovery" label="Discovery" on:click />
+		<!-- <MenuItem href="/" label="Home" notification={3} on:click /> -->
+		<MenuItem href="/discovery" notification={3} label="Discovery" on:click />
 		<MenuItem href="/community" label="Community" notification="new" on:click />
 		<MenuItem href="/soon" label="Comming soon" on:click />
 
