@@ -1,5 +1,4 @@
-import 'dotenv/config';
-const API_KEY = process.env.OMDB_API_KEY;
+import { API_KEY } from './_env';
 const uuid = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
 
 /** @type {import('@sveltejs/kit').RequestHandler} */

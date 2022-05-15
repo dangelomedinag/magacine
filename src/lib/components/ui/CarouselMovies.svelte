@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	// components
-	import CardMovie from './card/cardMovie.svelte';
+	import CardMovie from '$lib/components/ui/card/cardMovie.svelte';
 
 	// props
 	export let movies;

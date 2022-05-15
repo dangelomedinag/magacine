@@ -1,5 +1,4 @@
-import 'dotenv/config';
-const API_KEY = process.env.OMDB_API_KEY;
+import { API_KEY } from './_env';
 
 function logHours() {
 	const date = new Date();
@@ -9,7 +8,6 @@ function logHours() {
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get(event) {
 	console.log(`=======[${logHours()}]=======`);
-	// console.log(`[GET] => /api/[id=${event.params.id}]`);
 	console.log(`[id] === ${event.params.id}]`);
 
 	// get params

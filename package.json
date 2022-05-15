@@ -22,8 +22,5 @@
 		"prettier-plugin-svelte": "^2.5.0",
 		"svelte": "^3.47.0"
 	},
-	"type": "module",
-	"dependencies": {
-		"html-minifier": "^4.0.0"
-	}
+	"type": "module"
 }

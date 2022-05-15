@@ -1,29 +1,3 @@
-<!-- <script context="module">
-	/** @type {import("@sveltejs/kit").load}*/
-	export const load = async ({ fetch }) => {
-		const urls = [
-			'/api?s=shrek&type=movie',
-			'/api?s=friends&type=series',
-			'/api?s=fast&type=movie'
-		];
-
-		let promises = [];
-
-		urls.forEach((url) => {
-			promises.push(fetch(url).then((res) => res.json()));
-		});
-
-		const movies = await Promise.all(promises).then((values) => values);
-
-		return {
-			stuff: {
-				shrek: movies[0].Search,
-				friends: movies[1].Search,
-				fast: movies[2].Search
-			}
-		};
-	};
-</script> -->
 <script context="module">
 	/** @type {import("@sveltejs/kit").load}*/
 	export const load = async ({ fetch }) => {

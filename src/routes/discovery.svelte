@@ -12,9 +12,6 @@
 		const data = await Promise.all(reqs).catch((err) => {
 			return { status: data.status, error: new Error(err.message) };
 		});
-		// console.log(data);
-
-		// const json = await data.json();
 
 		return {
 			props: {
