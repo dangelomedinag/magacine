@@ -1,9 +1,5 @@
 import { API_KEY } from '$lib/_env';
-
-function logHours() {
-	const date = new Date();
-	return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-}
+import { logHours } from '$lib/helpers/logs';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get(event) {
@@ -19,28 +15,15 @@ export async function get(event) {
 	API_URL.searchParams.set('apikey', API_KEY);
 
 	try {
-		// const timeout = 8000;
-
-		// const controller = new AbortController();
-		// const id = setTimeout(() => controller.abort(), timeout);
-
-		const data = await fetch(
-			API_URL.href
-			// {
-			// signal: controller.signal
-			// }
-		);
-
-		// clearTimeout(id);
-
+		const data = await fetch(API_URL.href);
 		const json = await data.json();
 
 		if (json.Response === 'False') {
 			throw new Error(json.Error);
 		}
 
+		// transform response
 		let obj = {};
-
 		for (const key in json) {
 			let value = json[key];
 
@@ -77,9 +60,9 @@ export async function get(event) {
 			obj[key.toLowerCase()] = value;
 		}
 
-		// console.log(`res => status:`, data.status);
-		// console.log(`{ ...movie, response: ${obj.response} }`);
-		// console.log(`===============`);
+		/* console.log(`res => status:`, data.status);
+		console.log(`{ ...movie, response: ${obj.response} }`);
+		console.log(`===============`); */
 
 		return {
 			status: data.status,
