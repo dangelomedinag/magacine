@@ -46,22 +46,30 @@
 			NProgress.done();
 		}
 	}
+
+	function ExpandAside() {
+		toggle = !toggle;
+
+		if (toggle) {
+			document.body.style.overflowY = 'hidden';
+		} else {
+			document.body.style.overflowY = 'auto';
+		}
+	}
 </script>
 
 {#if dev}
 	<MediaQueries left="50%" />
 {/if}
 <div class="wrapper">
-	<ButtonToTop on:click={() => (toggle = !toggle)} />
+	<ButtonToTop on:click={ExpandAside} />
 	<aside class="sidebar" class:toggle>
-		<AsideNav on:click={() => (toggle = false)} />
+		<AsideNav on:tap={ExpandAside} />
 	</aside>
 	<main
 		class="main"
 		on:click={() => {
-			if (toggle) {
-				toggle = false;
-			}
+			if (toggle) ExpandAside();
 		}}
 	>
 		<div class="container">
@@ -97,7 +105,10 @@
 		content: '';
 		height: 100%;
 		width: 100%;
+		/* opacity: 0.5; */
+		backdrop-filter: blur(3px);
 		background-color: rgba(0, 0, 0, 0.6);
+		/* background-color: var(--c-front); */
 		position: fixed;
 		top: 0;
 		left: 0;

@@ -1,31 +1,48 @@
 <script>
 	import MenuItem from '$lib/components/ui/MenuItem.svelte';
+	import { notiStore } from '$lib/stores/notifications-store';
 </script>
 
 <div id="aside-wrapper">
 	<nav>
 		<span class="section">Menu</span>
 
-		<!-- <MenuItem href="/" label="Home" notification={3} on:click /> -->
-		<MenuItem href="/discovery" notification={3} label="Discovery" on:click />
-		<MenuItem href="/community" label="Community" notification="new" on:click />
-		<MenuItem href="/soon" label="Comming soon" on:click />
+		<!-- <MenuItem href="/" label="Home" notification={3}  /> -->
+		<MenuItem
+			href="/discovery"
+			notification={$notiStore[0].notification}
+			label="Discovery"
+			on:click={() => {
+				$notiStore[0].notification = false;
+			}}
+			on:tap
+		/>
+		<MenuItem
+			href="/community"
+			label="Community"
+			notification={$notiStore[1].notification}
+			on:tap
+			on:click={() => {
+				$notiStore[1].notification = false;
+			}}
+		/>
+		<MenuItem href="/soon" label="Comming soon" on:tap />
 
-		<hr style="display: block; width: 100%; border: 1px solid gray; opacity: 0.2;" on:click />
+		<hr style="display: block; width: 100%; border: 1px solid gray; opacity: 0.2;" />
 
 		<span class="section">Library</span>
 
-		<MenuItem href="/recent" label="Recent" on:click />
-		<MenuItem href="/bookmarked" label="Bookmarked" on:click />
-		<MenuItem href="/rated" label="Top rated" on:click />
-		<MenuItem href="/download" label="Downloaded" on:click />
+		<MenuItem href="/recent" label="Recent" on:tap />
+		<MenuItem href="/bookmarked" label="Bookmarked" on:tap />
+		<MenuItem href="/rated" label="Top Rated" on:tap />
+		<MenuItem href="/download" label="Downloaded" on:tap />
+		<MenuItem href="/search" label="Search" on:tap />
 	</nav>
 
 	<div>
-		<MenuItem href="/search" label="Search" on:click />
-		<MenuItem href="/settings" label="Settings" on:click />
-		<MenuItem href="/help" label="Help" on:click />
-		<MenuItem href="/logout" label="Logout" on:click />
+		<MenuItem href="/settings" label="Settings" on:tap />
+		<MenuItem href="/help" label="Help" on:tap />
+		<MenuItem href="/logout" label="Logout" on:tap />
 	</div>
 </div>
 

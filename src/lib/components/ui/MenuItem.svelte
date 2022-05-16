@@ -1,12 +1,29 @@
 <script>
 	import { page } from '$app/stores';
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
+
 	export let label;
 	export let href;
 	export let notification = false;
+
+	function tap(node) {
+		function sendEvent() {
+			dispatch('tap');
+		}
+
+		node.addEventListener('click', sendEvent);
+
+		return {
+			destroy() {
+				node.removeEventListener('click', sendEvent);
+			}
+		};
+	}
 	$: active = $page.url.pathname === href;
 </script>
 
-<a class="link" class:active {href} on:click>
+<a class="link" class:active {href} on:click use:tap>
 	<div class="wrapper">
 		<div class="icon">
 			{#if label.toLowerCase() === 'home'}

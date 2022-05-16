@@ -12,46 +12,39 @@
 		} catch (error) {
 			return {
 				status: 304,
-				error: new Error(error.message)
+				redirect: '/'
 			};
 		}
 	};
 </script>
 
 <script>
-	import { goto } from '$app/navigation';
+	import { goto, afterNavigate } from '$app/navigation';
 	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
 	import Toast from '$lib/components/ui/toast.svelte';
+	import { randomInt } from '$lib/helpers';
 
 	export let movie;
-	let header;
-	let display = 'none';
-
-	// function showHeader() {
-	// 	if (window.scrollY >= header.offsetTop + 60) {
-	// 		display = 'flex';
-	// 	} else if (window.scrollY < header.offsetTop + 60) {
-	// 		display = 'none';
-	// 	}
-	// }
+	let suggetsPromise = getSuggest;
 
 	function listFormat(array, language = 'en', opts = { style: 'long', type: 'conjunction' }) {
 		const intl = new Intl.ListFormat(language, opts);
 		return intl.format(array);
 	}
 
-	const rndInt = (MAX) => Math.floor(Math.random() * MAX) + 1;
-
 	async function getSuggest() {
-		const { plot } = movie;
+		const { plot, genre } = movie;
+		let selected;
 
-		const plotArr = plot.split(' ');
-		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
-		let selected = plotArrFilter[rndInt(plotArrFilter.length - 1)];
-
-		// console.log(selected);
+		if (genre.length > 0) {
+			selected = genre[randomInt(genre.length - 1)].toLowerCase();
+		} else {
+			const plotArr = plot.split(' ');
+			const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
+			selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
+		}
 
 		const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
 		if (!req.ok) {
@@ -60,9 +53,13 @@
 		return req.json();
 	}
 
-	// function getSuggest() {
-	// 	return Promise.reject();
-	// }
+	afterNavigate(({ from, to }) => {
+		if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
+			if (from.pathname !== to.pathname) {
+				suggetsPromise = getSuggest;
+			}
+		}
+	});
 </script>
 
 <NavbarTop>
@@ -76,6 +73,12 @@
 			goto('#suggest', { replaceState: true });
 		}}>suggest</button
 	>
+	<!-- <a href="#info" on:click="{()=>
+		history.replaceState()
+	}">info</a>
+	<a href="#suggest" on:click="{()=>
+		history.replaceState()
+	}">suggest</a> -->
 </NavbarTop>
 
 <div class="wrapper">
@@ -96,34 +99,8 @@
 		</button>
 	</div>
 </div>
-<!-- <header style:display>
-		<a href="/">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-			</svg>
-			<span>back</span>
-		</a>
-		<span class="title">{movie.title}</span>
-		<div class="wrapper-controls">
-			<button>
-				<span>watch</span>
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-					<path
-						fill-rule="evenodd"
-						d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-						clip-rule="evenodd"
-					/>
-				</svg>
-			</button>
-		</div>
-	</header> -->
-<div class="information" id="info" bind:this={header}>
+
+<div class="information" id="info">
 	<div class="item">
 		<span class="property">title:</span>
 		<h1 class="title">{movie.title}</h1>
@@ -205,17 +182,9 @@
 		</div>
 	{/if}
 
-	<!-- {#if suggest}
-			<div class="suggest" id="suggest">
-				<CarouselMovies movies={suggest} title="suggest" priority="small" />
-			</div>
-			{/if} -->
-
-	{#await getSuggest()}
+	{#await suggetsPromise()}
 		<p>cargando sugerencias...</p>
 	{:then value}
-		<!-- {@const data = value?.results.filter((m) => m.poster !== 'N/A')} -->
-		<!-- movies={value.results.filter((e) => e.poster !== 'N/A')} -->
 		{#if Array.isArray(value?.results)}
 			<div class="suggest" id="suggest">
 				<CarouselMovies

@@ -1,40 +1,23 @@
 <script>
-	import Tabs from '$lib/components/ui/tabs.svelte';
-	let tabs = ['Suspense', 'Terror', 'Comedy'];
+	import { page } from '$app/stores';
+
+	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
+	import Hero from '$lib/components/ui/hero.svelte';
+	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
+
+	export let movies;
+	let act = 'series';
+
+	const setTab = (tab) => (act = tab);
 </script>
 
-<Tabs {tabs}>
-	<svelte:fragment let:active>
-		sdasdlksald
-		<div>
-			{#if active == tabs[0]}
-				<button>click</button>{active}
-			{/if}
-			{#if active == tabs[1]}
-				<button>click</button>{active}
-			{/if}
-			{#if active == tabs[2]}
-				<button>click</button>{active}
-			{/if}
-		</div>
-	</svelte:fragment>
-</Tabs>
-<!-- <Tabs>
-	<TabList>
-		<Tab>one</Tab>
-		<Tab>two</Tab>
-		<Tab>three</Tab>
-	</TabList>
+<NavbarTop />
 
-	<TabPanel>
-		<h2>First panel</h2>
-	</TabPanel>
-
-	<TabPanel>
-		<h2>Second panel</h2>
-	</TabPanel>
-
-	<TabPanel>
-		<h2>Third panel</h2>
-	</TabPanel>
-</Tabs> -->
+<div class="content">
+	<h1>Community</h1>
+	<p>
+		Lorem ipsum dolor sit, amet consectetur adipisicing elit. Incidunt voluptate accusantium
+		expedita fugit ea voluptates vel veritatis modi assumenda facilis, sint necessitatibus quia nam
+		temporibus esse id dicta consequuntur est!
+	</p>
+</div>

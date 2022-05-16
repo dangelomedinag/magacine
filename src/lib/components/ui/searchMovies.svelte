@@ -182,12 +182,33 @@
 		</div>
 	{/if}
 
+	{#if results.length < 1 && !match}
+		<div class="empty">
+			<div class="ann">you haven't done a search yet...</div>
+		</div>
+	{/if}
+
 	{#if match}
 		<slot name="suggest" />
 	{/if}
 </div>
 
 <style>
+	.empty {
+		height: 400px;
+		width: 100%;
+		padding: 2em;
+	}
+
+	.ann {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 1px dashed grey;
+		height: 100%;
+		border-radius: 10px;
+	}
+
 	.search-container {
 		background-color: var(--c-main-content);
 		/* padding-bottom: 1em; */

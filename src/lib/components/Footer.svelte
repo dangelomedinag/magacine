@@ -5,9 +5,9 @@
 		<h2>Contact</h2>
 
 		<address>
-			5534 Somewhere In. The World 22193-10212<br />
-
-			<a class="footer__btn" href="mailto:example@gmail.com">Email Us</a>
+			World Wide & Chile, Santiago
+			<br />
+			<a class="footer__btn" href="mailto:dangelomedinag@gmail.com">Email Us</a>
 		</address>
 	</div>
 
@@ -30,10 +30,10 @@
 			</ul>
 		</li>
 
-		<li class="nav__item nav__item--extra">
+		<li class="nav__item">
 			<h2 class="nav__title">FAQs</h2>
 
-			<ul class="nav__ul nav__ul--extra">
+			<ul class="nav__ul">
 				<li>
 					<a href={'#'}>Hardware Design</a>
 				</li>
@@ -75,7 +75,7 @@
 		<p>&copy; 2019 Magacine Inc. All rights reserved.</p>
 
 		<div class="legal__links">
-			<span>Made with <span class="heart">♥</span> remotely from Anywhere</span>
+			<span>Made with <span class="heart">♥</span> remotely for Dangelo Medina</span>
 		</div>
 	</div>
 </footer>
@@ -84,10 +84,8 @@
 	.footer {
 		display: flex;
 		flex-flow: row wrap;
-		padding: 30px 30px 20px 30px;
-		/* color: #2f2f2f; */
+		padding: var(--gap-content);
 		background-color: var(--c-main);
-
 		border-top: 1px solid rgba(230, 230, 230, 0.2);
 	}
 
@@ -95,19 +93,20 @@
 		flex: 1 100%;
 	}
 
-	.footer__addr {
+	/* .footer__addr {
 		margin-right: 1.25em;
 		margin-bottom: 2em;
-	}
+	} */
 
 	.footer__logo {
 		font-weight: 400;
 		text-transform: lowercase;
 		font-size: 1.5rem;
+		color: var(--c-front);
 	}
 
 	.footer__addr h2 {
-		margin-top: 1.3em;
+		/* margin-top: 1.3em; */
 		font-size: 15px;
 		font-weight: 400;
 	}
@@ -118,23 +117,15 @@
 	}
 
 	.footer address {
-		font-style: normal;
-		color: #999;
 	}
 
 	.footer__btn {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 36px;
 		max-width: max-content;
-		background-color: rgb(33, 33, 33, 0.07);
-		border-radius: 100px;
-		color: #2f2f2f;
-		line-height: 0;
-		margin: 0.6em 0;
-		font-size: 1rem;
-		padding: 0 1.3em;
+		color: var(--c-front);
+		border-left: 1px solid var(--c-front);
 	}
 
 	.footer ul {
@@ -146,7 +137,7 @@
 		line-height: 2em;
 	}
 
-	.footer a {
+	a {
 		text-decoration: none;
 	}
 
@@ -160,14 +151,22 @@
 		margin-right: 1.25em;
 	}
 
-	.nav__ul a {
-		color: #999;
+	a {
+		display: block;
+		color: inherit;
+		opacity: 0.5;
+		border-left: 1px solid transparent;
+	}
+	a:hover {
+		opacity: 1;
+		color: var(--c-front);
+		border-left: 1px solid var(--c-front);
 	}
 
-	.nav__ul--extra {
+	/* .nav__ul--extra {
 		column-count: 2;
 		column-gap: 1.25em;
-	}
+	} */
 
 	.legal {
 		display: flex;
@@ -184,7 +183,7 @@
 		color: #2f2f2f;
 	}
 
-	@media screen and (min-width: 24.375em) {
+	/* @media screen and (min-width: 24.375em) {
 		.legal .legal__links {
 			margin-left: auto;
 		}
@@ -206,5 +205,33 @@
 		.footer__nav {
 			flex: 2 0px;
 		}
+	} */
+
+	@media (min-width: 768px) {
+		.footer__nav > * {
+			flex: 1;
+		}
+		.nav__item--extra {
+			flex-grow: 2;
+		}
+
+		.footer__addr {
+			flex: 1 0px;
+		}
+
+		.footer__nav {
+			flex: 2 0px;
+		}
 	}
+
+	@media screen and (min-width: 992px) {
+		.legal .legal__links {
+			margin-left: auto;
+		}
+	}
+
+	/* @media (min-width: 576px) {} */
+	/* @media (min-width: 768px) {} */
+	/* @media (min-width: 992px) {} */
+	/* @media (min-width: 1200px) {} */
 </style>
