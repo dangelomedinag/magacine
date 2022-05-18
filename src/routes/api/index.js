@@ -44,12 +44,9 @@ export async function get({ url }) {
 	// create URL object for get resource
 	try {
 		const data = await fetch(API_URL.href);
-		// console.log('api/index.js endpoint => fetch: ', data ? true : false);
 		const json = await data.json();
-		// console.log('api/index.js endpoint => response.json: ', json.Search.length);
 
 		if (json.Response === 'False') {
-			// console.log('endpoint => json.Response: ', json.Response);
 			throw new Error(json.Error);
 		}
 
@@ -64,11 +61,6 @@ export async function get({ url }) {
 				uuid: uuid()
 			};
 		});
-		if (logger) {
-			console.log(`res => status:`, data.status);
-			console.log(`{ ...movies }`);
-			console.log(`===============`);
-		}
 
 		return {
 			status: data.status,

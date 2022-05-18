@@ -1,5 +1,6 @@
 import { API_KEY } from '$lib/_env';
 import { logHours } from '$lib/helpers/logs';
+import { transform } from './_transformContract';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get(event) {
@@ -9,7 +10,12 @@ export async function get(event) {
 	// get params
 	const id = event.params.id;
 
-	// create URL object for get resource
+	if (id === 'favicon.png') {
+		return {
+			status: 403
+		};
+	}
+
 	const API_URL = new URL('https://www.omdbapi.com');
 	API_URL.searchParams.set('i', id);
 	API_URL.searchParams.set('apikey', API_KEY);
@@ -31,50 +37,11 @@ export async function get(event) {
 		}
 
 		// transform response
-		let obj = {};
-		for (const key in json) {
-			let value = json[key];
-
-			if (value === 'N/A' || value === '') {
-				value = null;
-			}
-			if (key === 'Response') {
-				value = json[key] === 'True';
-			}
-
-			if (value) {
-				if (key === 'Year') {
-					if (value.trim().endsWith('–')) value = value.slice(0, -1);
-				}
-
-				if (key === 'Genre') {
-					if (value.includes(',')) value = json[key].split(',').map((e) => e.trim());
-					else value = [];
-				}
-
-				if (key === 'Language') {
-					if (value.includes(',')) value = json[key].split(',').map((e) => e.trim());
-					else value = [value];
-				}
-			} else {
-				if (key === 'Genre') {
-					value = [];
-				}
-				if (key === 'Language') {
-					value = [];
-				}
-			}
-
-			obj[key.toLowerCase()] = value;
-		}
-
-		/* console.log(`res => status:`, data.status);
-		console.log(`{ ...movie, response: ${obj.response} }`);
-		console.log(`===============`); */
+		const body = transform(json);
 
 		return {
 			status: data.status,
-			body: obj
+			body
 		};
 	} catch (error) {
 		console.log(`res => error:`, error.message);

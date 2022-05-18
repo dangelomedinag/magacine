@@ -7,7 +7,7 @@
 	<nav>
 		<span class="section">Menu</span>
 
-		<!-- <MenuItem href="/" label="Home" notification={3}  /> -->
+		<MenuItem href="/" label="Home" on:tap />
 		<MenuItem
 			href="/discovery"
 			notification={$notiStore[0].notification}

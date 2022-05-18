@@ -47,14 +47,18 @@
 		}
 	}
 
-	function ExpandAside() {
+	function openAside() {
+		toggle = true;
+	}
+	function closeAside() {
+		toggle = false;
+	}
+	function toggleAside() {
 		toggle = !toggle;
+	}
 
-		if (toggle) {
-			document.body.style.overflowY = 'hidden';
-		} else {
-			document.body.style.overflowY = 'auto';
-		}
+	function matchMobile() {
+		return matchMedia('(min-width: 992px)').matches;
 	}
 </script>
 
@@ -62,14 +66,23 @@
 	<MediaQueries left="50%" />
 {/if}
 <div class="wrapper">
-	<ButtonToTop on:click={ExpandAside} />
+	<ButtonToTop
+		on:click={() => {
+			toggleAside();
+		}}
+	/>
 	<aside class="sidebar" class:toggle>
-		<AsideNav on:tap={ExpandAside} />
+		<AsideNav
+			on:tap={() => {
+				console.log('tap link');
+				if (!matchMobile()) closeAside();
+			}}
+		/>
 	</aside>
 	<main
 		class="main"
 		on:click={() => {
-			if (toggle) ExpandAside();
+			if (!matchMobile()) closeAside();
 		}}
 	>
 		<div class="container">
@@ -105,6 +118,8 @@
 		content: '';
 		height: 100%;
 		width: 100%;
+		user-select: none;
+		cursor: pointer;
 		/* opacity: 0.5; */
 		backdrop-filter: blur(3px);
 		background-color: rgba(0, 0, 0, 0.6);
