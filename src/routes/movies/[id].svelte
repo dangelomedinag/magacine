@@ -28,6 +28,7 @@
 
 	export let movie;
 	let suggetsPromise = getSuggest;
+	let existSuggestions = false;
 
 	function listFormat(array, language = 'en', opts = { style: 'long', type: 'conjunction' }) {
 		const intl = new Intl.ListFormat(language, opts);
@@ -35,22 +36,22 @@
 	}
 
 	async function getSuggest() {
-		const { plot, genre } = movie;
-		let selected;
+		const { plot } = movie;
 
-		if (genre.length > 0) {
-			selected = genre[randomInt(genre.length - 1)].toLowerCase();
-		} else {
-			const plotArr = plot.split(' ');
-			const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
-			selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
-		}
+		const plotArr = plot.split(' ');
+		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
+		let selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
 
-		const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
-		if (!req.ok) {
-			return Promise.reject(await req.json());
+		// console.log(selected);
+		try {
+			const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
+			if (!req.ok) return Promise.reject();
+			existSuggestions = true;
+			return req.json();
+		} catch (error) {
+			existSuggestions = false;
+			return Promise.reject();
 		}
-		return req.json();
 	}
 
 	afterNavigate(({ from, to }) => {
