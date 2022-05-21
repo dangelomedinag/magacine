@@ -15,11 +15,8 @@
 </script>
 
 <!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/imgs/image-fallback.jpg'} -->
-<figure
-	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
-	out:scale={{ duration: 200, start: 0.95, easing: quintInOut }}
-	class="item"
->
+<!-- out:scale={{ duration: 200, start: 0.95, easing: quintInOut }} -->
+<figure in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }} class="item">
 	<a
 		class="item-link"
 		href="/movies/{movie.imdbid}"

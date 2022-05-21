@@ -29,6 +29,7 @@
 	export let movie;
 	let suggetsPromise = getSuggest;
 	let existSuggestions = false;
+	let details = false;
 
 	function listFormat(array, language = 'en', opts = { style: 'long', type: 'conjunction' }) {
 		const intl = new Intl.ListFormat(language, opts);
@@ -45,7 +46,6 @@
 		// console.log(selected);
 		try {
 			const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
-			if (!req.ok) return Promise.reject();
 			existSuggestions = true;
 			return req.json();
 		} catch (error) {
@@ -58,6 +58,7 @@
 		if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
 			if (from.pathname !== to.pathname) {
 				suggetsPromise = getSuggest;
+				existSuggestions = false;
 			}
 		}
 	});
@@ -69,11 +70,13 @@
 			goto('#info', { replaceState: true });
 		}}>info</button
 	>
-	<button
-		on:click={() => {
-			goto('#suggest', { replaceState: true });
-		}}>suggest</button
-	>
+	{#if existSuggestions}
+		<button
+			on:click={() => {
+				goto('#suggest', { replaceState: true });
+			}}>suggest</button
+		>
+	{/if}
 	<!-- <a href="#info" on:click="{()=>
 		history.replaceState()
 	}">info</a>
@@ -181,6 +184,62 @@
 			<div>{(movie.imdbrating / 2).toFixed(1)}</div>
 			<CardRatingStarts --icon-fz="1.5rem" rating={movie.imdbrating} />
 		</div>
+	{/if}
+
+	<button
+		on:click={() => {
+			details = !details;
+		}}
+		class="btn-details">details</button
+	>
+
+	{#if details}
+		{#if movie.released}
+			<div class="item">
+				<span class="property">Released:</span>
+				<div>{movie.released}</div>
+			</div>
+		{/if}
+		{#if movie.director}
+			<div class="item">
+				<span class="property">Director:</span>
+				<div>{movie.director}</div>
+			</div>
+		{/if}
+		{#if movie.writer}
+			<div class="item">
+				<span class="property">Writer:</span>
+				<div>
+					{listFormat(!movie.writer.includes(',') ? [movie.writer] : movie.writer.split(','))}
+				</div>
+			</div>
+		{/if}
+		{#if movie.actors}
+			<div class="item">
+				<span class="property">Actors:</span>
+				<div>
+					{listFormat(!movie.actors.includes(',') ? [movie.actors] : movie.actors.split(','))}
+				</div>
+			</div>
+		{/if}
+		{#if movie.awards}
+			<div class="item">
+				<span class="property">Awares:</span>
+				<div>
+					{movie.awards}
+				</div>
+			</div>
+		{/if}
+		{#if movie.country}
+			<div class="item">
+				<span class="property">Country:</span>
+				<div>
+					{listFormat(!movie.country.includes(',') ? [movie.country] : movie.country.split(','))}
+				</div>
+			</div>
+		{/if}
+
+		<!-- {JSON.stringify(movie, null, '\t')} -->
 	{/if}
 
 	{#await suggetsPromise()}
@@ -396,6 +455,16 @@
 	h1 {
 		margin: 0;
 		font-size: 2rem;
+	}
+
+	.btn-details {
+		display: block;
+		width: 100%;
+		background-color: transparent;
+		color: white;
+		padding: 0.5em;
+		border: 1px solid rgba(128, 128, 128, 0.3);
+		margin-bottom: 1em;
 	}
 
 	/* @media (min-width: 576px) {}
