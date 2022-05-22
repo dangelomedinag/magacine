@@ -5,7 +5,7 @@
 	--c-main-content: hsl(273, 13%, 16%);
 	--c-perl: #f1faee;
 	--c-front: #e63946;
-	--c-front-dark: #d13440;
+	--c-front-dark: hsl(355, 63%, 35%);
 	--gap-content: 1.2em;
 }
 
