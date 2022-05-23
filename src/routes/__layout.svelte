@@ -74,7 +74,6 @@
 	<aside class="sidebar" class:toggle>
 		<AsideNav
 			on:tap={() => {
-				console.log('tap link');
 				if (!matchMobile()) closeAside();
 			}}
 		/>

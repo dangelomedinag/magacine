@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+
 	// components
 	import CardMovie from '$lib/components/ui/card/cardMovie.svelte';
 
@@ -82,17 +83,24 @@
 	<!-- <button on:click={prevPage} class="next">a</button> -->
 	<header class="carousel-header">
 		<h3 class="header-title">{title ?? ''}</h3>
-		<a href="/movies?s={movies.search}" class="header-btn"
-			>See all<span>
-				<svg xmlns="http://www.w3.org/2000/svg" class="svg" viewBox="0 0 20 20" fill="currentColor">
-					<path
-						fill-rule="evenodd"
-						d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-						clip-rule="evenodd"
-					/>
-				</svg>
-			</span></a
-		>
+		{#if movies.totalResults > 1}
+			<a href="/movies?s={movies.search}" class="header-btn"
+				>See all<span>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="svg"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+				</span></a
+			>
+		{/if}
 	</header>
 	<main class="items-wrapper" bind:this={container}>
 		{#each movies.results as movie, i (movie.uuid)}
@@ -105,7 +113,7 @@
 			</slot> -->
 		{/each}
 	</main>
-	{#if movies.results?.length > 0}
+	{#if movies.results?.length > 1}
 		<div class="movement-action">
 			<button on:click={nextPage} class="prev controls">
 				<svg

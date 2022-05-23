@@ -1,10 +1,14 @@
 <script>
+	import { quintInOut } from 'svelte/easing';
+	import { fly } from 'svelte/transition';
+
 	export let success = false,
 		warn = false,
 		danger = false;
 </script>
 
 <div
+	transition:fly|local={{ y: 30, easing: quintInOut }}
 	class="toast"
 	class:toast--warn={warn}
 	class:toast--danger={danger}
@@ -72,6 +76,7 @@
 
 <style>
 	.toast {
+		will-change: transform;
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
@@ -83,6 +88,9 @@
 		border-radius: 5px;
 		background-color: transparent;
 		font-weight: lighter;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
+			0 32px 64px rgba(0, 0, 0, 0.07);
 	}
 
 	.toast--success {
@@ -97,9 +105,9 @@
 	}
 
 	.toast--danger {
-		color: rgb(190, 123, 123);
-		border: 1px solid rgb(70, 0, 0);
-		background-color: rgb(49, 0, 0);
+		color: rgb(255, 137, 137);
+		border: 1px solid rgb(160, 65, 65);
+		background-color: rgb(128, 44, 44);
 	}
 
 	.toast__icon {
