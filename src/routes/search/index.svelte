@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 
@@ -11,12 +11,15 @@
 	import Toast from '$components/ui/toast.svelte';
 
 	let value = '';
+	let currentValue = '';
 	let input;
+	let showSuggest = false;
 	let autocomplete = [];
 	let lastValue = '';
 	let movies;
 	let lastSearch;
 	let timer;
+	let timerErrors;
 	let errors;
 	let loading = false;
 	let selected = ['movie', 'series'];
@@ -25,6 +28,8 @@
 		{ value: 'series', label: 'series' }
 		// { value: 'episode', label: 'episodes' }
 	];
+
+	$: console.log(lastValue, value);
 
 	onMount(async () => {
 		const currURL = new URL(location);
@@ -40,9 +45,20 @@
 			value = search.search;
 			movies = search;
 			lastSearch = search;
-			lastValue = search.search;
+			// lastValue = search.search;
 		}
 	});
+
+	function openSuggestions() {
+		if (lastSearch) {
+			autocomplete = lastSearch;
+		}
+		showSuggest = true;
+	}
+
+	function closeSuggestions() {
+		showSuggest = false;
+	}
 
 	async function submit() {
 		if (timer) clearTimeout(timer);
@@ -50,17 +66,24 @@
 		if (lastValue.toLowerCase() === getInputValue()) {
 			if (lastSearch) {
 				movies = lastSearch;
-				autocomplete = [];
+
+				closeSuggestions();
 			}
 			return;
 		}
 
 		await getMovies();
+		// lastValue = getInputValue();
+		closeSuggestions();
 	}
 
 	function onReset() {
 		if (timer) clearTimeout(timer);
 		value = '';
+		delay(() => {
+			showSuggest = false;
+			// autocomplete = [];
+		}, 10);
 		input.focus();
 	}
 
@@ -68,25 +91,24 @@
 		const searchString = getInputValue();
 		try {
 			let res = await getData(searchString);
-			autocomplete = res;
+			lastSearch = res;
+			currentValue = getInputValue();
+			openSuggestions();
 		} catch (error) {
 			autocomplete = [];
+			showSuggest = false;
 			lastSearch = undefined;
-			// errors = error;
 		}
 	}
 
 	async function getMovies() {
 		const searchString = getInputValue();
 		try {
-			const url = new URL(location);
-			// console.log(location);
 			let res = await getData(searchString);
 			movies = res;
+			lastValue = searchString;
 
-			// const s = ['s', searchString];
-			// const type = ['type', selected[0]];
-
+			const url = new URL(location);
 			url.searchParams.set('s', searchString);
 
 			if (selected.length == 1) url.searchParams.set('type', selected[0]);
@@ -127,8 +149,8 @@
 		}
 
 		const res = await req.json();
-		lastValue = searchString;
-		lastSearch = res;
+		// lastValue = searchString;
+		// lastSearch = res;
 		loading = false;
 
 		return res;
@@ -140,13 +162,18 @@
 
 	function onInput() {
 		if (timer) clearTimeout(timer);
-		errors = undefined;
+		if (timerErrors) clearTimeout(timerErrors);
+		// errors = undefined;
 
-		if (getInputValue().length < 3) {
-			errors = { level: { warn: true }, message: 'your search must contain at least letters' };
-			autocomplete = [];
+		if (getInputValue().length < 3 && getInputValue().length > 0) {
+			timerErrors = delay(() => {
+				errors = { level: { warn: true }, message: 'your search must contain at least 3 letters' };
+			});
+			showSuggest = false;
+			// autocomplete = [];
 			return;
 		}
+		errors = undefined;
 
 		timer = delay(() => {
 			getSuggestion();
@@ -154,26 +181,28 @@
 	}
 
 	function onBlur() {
-		errors = undefined;
-
-		setTimeout(() => {
-			autocomplete = [];
-		}, 100);
+		// setTimeout(() => {
+		// 	closeSuggestions();
+		// }, 500);
+		// tick();
 	}
 
 	function onFocus() {
 		if (lastValue.toLowerCase() === getInputValue()) {
-			if (lastSearch) {
-				autocomplete = lastSearch;
-			}
+			openSuggestions();
 		}
+	}
+
+	function setValue(item) {
+		input.value = item.title.toLowerCase();
+		input.focus();
 	}
 </script>
 
 <NavbarTop search={false}>
-	{#if movies?.results}
+	<!-- {#if movies?.results}
 		<span>{value} - {movies?.totalResults} results</span>
-	{/if}
+	{/if} -->
 </NavbarTop>
 
 <div class="content">
@@ -183,7 +212,7 @@
 			on:reset={onReset}
 			on:submit|preventDefault={submit}
 			class="search-box"
-			class:search-box--open={autocomplete?.results?.length > 0}
+			class:search-box--open={showSuggest}
 		>
 			{#if value.length > 0}
 				<button type="reset" class="btn-clear">
@@ -219,23 +248,16 @@
 			<button type="submit" class="btn-search">search</button>
 		</form>
 
-		<div
-			class="autocomplete-container"
-			class:autocomplete-container--open={autocomplete?.results?.length > 0}
-		>
-			{#each autocomplete.results ?? [] as item, i (item.uuid)}
-				<button
-					in:fly={{ y: 15, delay: 20 * i, duration: 150, easing: quintInOut }}
-					class="item"
-					on:click={() => {
-						input.value = item.title;
-						autocomplete = [];
-						input.focus();
-					}}>{item.title}</button
-				>
-			{:else}
-				<!--  -->
-			{/each}
+		<div class="autocomplete-container" class:autocomplete-container--open={showSuggest}>
+			{#if showSuggest}
+				{#each autocomplete.results as item, i (item.uuid)}
+					<button
+						in:fly={{ y: 15, delay: 20 * i, duration: 150, easing: quintInOut }}
+						class="item"
+						on:click={() => setValue(item)}>{item.title.toLowerCase()}</button
+					>
+				{/each}
+			{/if}
 		</div>
 	</div>
 	<div class="filters">
@@ -263,7 +285,7 @@
 	</div>
 	{#if errors}
 		<div style="padding: 1em 0;">
-			<Toast {...errors.level}>{errors.message}</Toast>
+			<Toast {...errors.level}><span>{errors.message}</span></Toast>
 		</div>
 	{/if}
 	{#if movies}
@@ -397,6 +419,7 @@
 		position: absolute;
 		/* background-color: burlywood; */
 		background-color: var(--c-main-content);
+		opacity: 0.95;
 		display: block;
 		z-index: 50;
 		bottom: 0;
@@ -449,7 +472,8 @@
 		/* padding: 0 0.5em; */
 	}
 
-	.item:hover {
+	.item:hover,
+	.item:focus {
 		background-color: var(--c-front);
 	}
 
