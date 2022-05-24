@@ -5,10 +5,10 @@
 	import { fly } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 
-	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
-	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
-	import Spinner from '$lib/components/ui/Spinner.svelte';
-	import Toast from '$lib/components/ui/toast.svelte';
+	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
+	import NavbarTop from '$components/ui/NavbarTop.svelte';
+	import Spinner from '$components/ui/Spinner.svelte';
+	import Toast from '$components/ui/toast.svelte';
 
 	let value = '';
 	let input;

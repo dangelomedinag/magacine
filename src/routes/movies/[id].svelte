@@ -20,11 +20,11 @@
 
 <script>
 	import { goto, afterNavigate } from '$app/navigation';
-	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
-	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
-	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
-	import Toast from '$lib/components/ui/toast.svelte';
-	import { randomInt } from '$lib/helpers';
+	import CardRatingStarts from '$components/ui/card/cardRatingStarts.svelte';
+	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
+	import NavbarTop from '$components/ui/NavbarTop.svelte';
+	import Toast from '$components/ui/toast.svelte';
+	import { randomInt } from '$helpers';
 
 	export let movie;
 	let suggetsPromise = getSuggest;

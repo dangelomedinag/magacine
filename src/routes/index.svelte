@@ -19,9 +19,9 @@
 <script>
 	import { page } from '$app/stores';
 
-	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
-	import Hero from '$lib/components/ui/hero.svelte';
-	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
+	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
+	import Hero from '$components/ui/hero.svelte';
+	import NavbarTop from '$components/ui/NavbarTop.svelte';
 
 	export let movies;
 	let act = 'series';

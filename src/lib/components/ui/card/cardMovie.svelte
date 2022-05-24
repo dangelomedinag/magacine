@@ -2,7 +2,7 @@
 	import { scale, fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import ProgressLine from '../ProgressLine.svelte';
-	import CardRatingStarts from '$lib/components/ui/card/cardRatingStarts.svelte';
+	import CardRatingStarts from '$components/ui/card/cardRatingStarts.svelte';
 
 	export let details = true;
 	export let movie;

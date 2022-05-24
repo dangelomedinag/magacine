@@ -22,11 +22,11 @@
 </script>
 
 <script>
-	import Footer from '$lib/components/Footer.svelte';
-	import AsideNav from '$lib/components/ui/AsideNav.svelte';
+	import Footer from '$components/Footer.svelte';
+	import AsideNav from '$components/ui/AsideNav.svelte';
 	import NProgress from 'nprogress';
-	import ButtonToTop from '$lib/components/ui/buttonToTop.svelte';
-	import MediaQueries from '$lib/components/mediaQueries.svelte';
+	import ButtonToTop from '$components/ui/buttonToTop.svelte';
+	import MediaQueries from '$components/mediaQueries.svelte';
 	import { dev } from '$app/env';
 	import { navigating } from '$app/stores';
 	import 'nprogress/nprogress.css';

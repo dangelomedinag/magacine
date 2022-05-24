@@ -1,5 +1,5 @@
 import { API_KEY } from '$lib/_env';
-import { logHours } from '$lib/helpers/logs';
+import { logHours } from '$helpers/logs';
 import { transform } from './_transformContract';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */

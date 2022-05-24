@@ -1,5 +1,5 @@
 <script>
-	import MenuItem from '$lib/components/ui/MenuItem.svelte';
+	import MenuItem from '$components/ui/MenuItem.svelte';
 	import { notiStore } from '$lib/stores/notifications-store';
 </script>
 

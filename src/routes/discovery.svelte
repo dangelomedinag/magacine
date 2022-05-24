@@ -22,9 +22,9 @@
 </script>
 
 <script>
-	import CarouselMovies from '$lib/components/ui/CarouselMovies.svelte';
+	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 
-	import NavbarTop from '$lib/components/ui/NavbarTop.svelte';
+	import NavbarTop from '$components/ui/NavbarTop.svelte';
 	export let movies;
 	let act = 'suspense';
 
