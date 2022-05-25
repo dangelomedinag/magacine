@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 
@@ -22,6 +22,8 @@
 	let timerErrors;
 	let errors;
 	let loading = false;
+
+	// filters
 	let selected = ['movie', 'series'];
 	let options = [
 		{ value: 'movie', label: 'movies' },
@@ -50,13 +52,14 @@
 	});
 
 	function openSuggestions() {
-		if (lastSearch) {
-			autocomplete = lastSearch;
+		if (!lastSearch) {
+			return;
 		}
+		autocomplete = lastSearch;
 		showSuggest = true;
 	}
 
-	function closeSuggestions() {
+	async function closeSuggestions() {
 		showSuggest = false;
 	}
 
@@ -81,7 +84,7 @@
 		if (timer) clearTimeout(timer);
 		value = '';
 		delay(() => {
-			showSuggest = false;
+			closeSuggestions();
 			// autocomplete = [];
 		}, 10);
 		input.focus();
@@ -92,6 +95,7 @@
 		try {
 			let res = await getData(searchString);
 			lastSearch = res;
+			lastValue = searchString;
 			currentValue = getInputValue();
 			openSuggestions();
 		} catch (error) {
@@ -181,20 +185,22 @@
 	}
 
 	function onBlur() {
-		// setTimeout(() => {
+		// delay(() => {
+		// 	if (!showSuggest) return;
 		// 	closeSuggestions();
-		// }, 500);
-		// tick();
+		// }, 50);
+		// closeSuggestions();
 	}
 
 	function onFocus() {
-		if (lastValue.toLowerCase() === getInputValue()) {
+		if (lastValue.toLowerCase() === getInputValue() && getInputValue().length > 0) {
 			openSuggestions();
 		}
 	}
 
 	function setValue(item) {
 		input.value = item.title.toLowerCase();
+		closeSuggestions();
 		input.focus();
 	}
 </script>
@@ -214,7 +220,26 @@
 			class="search-box"
 			class:search-box--open={showSuggest}
 		>
-			{#if value.length > 0}
+			{#if showSuggest}
+				<button
+					type="button"
+					on:click={() => {
+						closeSuggestions();
+					}}
+					class="btn-clear"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						style="width: 1rem; height: 1rem;"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+					</svg>
+				</button>
+			{:else}
 				<button type="reset" class="btn-clear">
 					{#if loading}
 						<Spinner size="5" />
@@ -232,17 +257,20 @@
 					{/if}
 				</button>
 			{/if}
+			<!-- {#if showSuggest}
+			{/if} -->
 			<input
 				bind:this={input}
 				bind:value
 				type="search"
 				name="mysearch"
 				id="mysearch"
+				class="input-search"
 				on:focus={onFocus}
-				on:blur={onBlur}
 				on:input={onInput}
+				on:blur={onBlur}
 				required
-				placeholder="ej. batman"
+				placeholder="ej. spider-man"
 				autocomplete="off"
 			/>
 			<button type="submit" class="btn-search">search</button>
