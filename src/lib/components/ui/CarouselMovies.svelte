@@ -10,6 +10,8 @@
 	export let priority;
 	export let details = true;
 
+	$: console.log(movies);
+
 	let container;
 	let pageInfo;
 	let offset = 0;
@@ -84,7 +86,7 @@
 	<header class="carousel-header">
 		<h3 class="header-title">{title ?? ''}</h3>
 		{#if movies.totalResults > 1}
-			<a href="/movies?s={movies.search}" class="header-btn"
+			<a href="/movies?{movies.query}" class="header-btn"
 				>See all<span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
