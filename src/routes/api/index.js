@@ -14,6 +14,7 @@ export async function get({ url }) {
 	const search = params.has('s') ? params.get('s') : false;
 	const page = params.has('page') ? params.get('page') : false;
 	const type = params.has('type') ? params.get('type') : false;
+	const year = params.has('year') ? params.get('year') : false;
 
 	// create URL object for get resource
 	const API_URL = new URL('https://www.omdbapi.com');
@@ -25,6 +26,12 @@ export async function get({ url }) {
 			const n = +page;
 			if (!isNaN(n) || n > 0) API_URL.searchParams.set('page', n);
 			else throw new Error("'page' param must be an integer positive >= 1");
+		}
+		if (year) {
+			let currentYear = new Date().getFullYear();
+			const n = +year;
+			if (!isNaN(n) || n <= currentYear) API_URL.searchParams.set('y', n);
+			else throw new Error("'year' param must be an integer positive <= " + currentYear);
 		}
 
 		if (type) {
@@ -64,7 +71,12 @@ export async function get({ url }) {
 
 		return {
 			status: data.status,
-			body: { results: json.Search, totalResults: +json.totalResults, search: search }
+			body: {
+				results: json.Search,
+				totalResults: +json.totalResults,
+				search: search,
+				query: url.searchParams.toString()
+			}
 		};
 	} catch (error) {
 		if (logger) {
