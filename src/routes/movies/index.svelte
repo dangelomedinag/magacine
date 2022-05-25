@@ -1,10 +1,10 @@
 <script context="module">
 	/** @type {import('@sveltejs/kit').Load}*/
 	export async function load({ url, fetch }) {
-		const param = url.searchParams.get('s');
+		// const param = url.searchParams.get('s');
 
-		const query = new URLSearchParams();
-		query.set('s', param);
+		const query = new URLSearchParams(url.search);
+		// query.set('s', param);
 
 		const req = await fetch('/api?' + query.toString());
 		const res = await req.json();
