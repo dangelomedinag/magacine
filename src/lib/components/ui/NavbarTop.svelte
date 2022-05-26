@@ -1,4 +1,8 @@
 <script>
+	import { page, session } from '$app/stores';
+	import { quintOut } from 'svelte/easing';
+	import { fly } from 'svelte/transition';
+
 	// import { onMount, createEventDispatcher, onDestroy } from 'svelte';
 	// const dispatch = createEventDispatcher();
 	// let tabsBox;
@@ -18,7 +22,13 @@
 
 	export let search = true,
 		bell = false,
-		profile = false;
+		profile = true;
+
+	let showPopup = false;
+
+	function tooglePopup() {
+		showPopup = !showPopup;
+	}
 </script>
 
 <nav class="navbar-content">
@@ -76,8 +86,8 @@
 				</svg>
 			</button>
 		{/if}
-		{#if profile}
-			<button class="tool-btn">
+		{#if $session.user}
+			<button class="tool-btn" on:click={tooglePopup}>
 				<svg
 					class="bell-svg"
 					xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +103,86 @@
 					/>
 				</svg>
 			</button>
+			{#if showPopup}
+				<div class="popup" in:fly={{ y: 20, easing: quintOut }}>
+					<div style="display: flex; justify-content: center ;align-items: center;">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="bell-svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+							/>
+						</svg>
+						<span>
+							{$session.user.name}
+						</span>
+					</div>
+					<hr />
+
+					<ul class="list-actions">
+						<li>
+							<a href="/profile">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="bell-svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+									/>
+								</svg>
+								<span>Profile</span></a
+							>
+						</li>
+						<li>
+							<a href="/settings">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="bell-svg"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+										fill-rule="evenodd"
+										d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+										clip-rule="evenodd"
+									/>
+								</svg>
+								<span>Settings</span></a
+							>
+						</li>
+						<li>
+							<a href="/auth/logout">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="bell-svg"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+										fill-rule="evenodd"
+										d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+										clip-rule="evenodd"
+									/>
+								</svg>
+								<span>logout</span></a
+							>
+						</li>
+					</ul>
+				</div>
+			{/if}
 		{/if}
 	</div>
 </nav>
@@ -162,7 +252,7 @@
 		color: white;
 		font-size: 0.9em;
 		/* font-weight: bold; */
-		opacity: 0.5;
+		/* opacity: 0.5; */
 	}
 
 	/* .items-wrapper :global(button:first-child) {
@@ -193,7 +283,50 @@
 	}
 
 	.tools-wrapper {
+		position: relative;
 		padding-right: var(--gap-content);
+	}
+
+	.popup {
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		position: absolute;
+		right: 30px;
+		top: 75px;
+		width: 200px;
+		/* height: 250px; */
+		background-color: var(--c-main-content);
+		border-radius: 10px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
+			0 32px 64px rgba(0, 0, 0, 0.07);
+		padding: 1em;
+	}
+
+	.list-actions {
+		list-style: none;
+		padding: 0;
+		text-align: left;
+	}
+
+	.list-actions li {
+		padding: 0.4em 0;
+		margin: 0;
+	}
+	.list-actions li:hover a {
+		color: var(--c-front);
+	}
+
+	.list-actions li a {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		padding: 0;
+		margin: 0;
+	}
+
+	.list-actions span {
+		padding-left: 0.5em;
+		margin: 0;
 	}
 
 	.tool-btn {
@@ -206,5 +339,9 @@
 	.bell-svg {
 		height: 1.2rem;
 		width: 1.2rem;
+	}
+
+	hr {
+		border: 1px solid rgba(255, 255, 255, 0.1);
 	}
 </style>
