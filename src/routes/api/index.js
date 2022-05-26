@@ -1,91 +1,87 @@
-import { API_KEY } from '$lib/_env';
-const uuid = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
+import { API_KEY, API_URL } from '$lib/_env';
+import { uuid } from '$lib/helpers';
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get({ url }) {
-	const logger = false;
-	if (logger) {
-		console.log(`===============`);
-		console.log(`[GET] => /api`, 'params:', url.search);
-	}
-
+async function getResource({ url }) {
 	// get params
 	const params = url.searchParams;
 	const search = params.has('s') ? params.get('s') : false;
+	if (!search) throw { message: 'Query must contain an <s> query param.' };
+
 	const page = params.has('page') ? params.get('page') : false;
 	const type = params.has('type') ? params.get('type') : false;
 	const year = params.has('year') ? params.get('year') : false;
 
-	// create URL object for get resource
-	const API_URL = new URL('https://www.omdbapi.com');
-	try {
-		if (search) API_URL.searchParams.set('s', search);
-		else throw new Error("Query must contain an 's' query param.");
+	// create URL object of resource
+	const api = new URL(API_URL);
 
-		if (page) {
-			const n = +page;
-			if (!isNaN(n) || n > 0) API_URL.searchParams.set('page', n);
-			else throw new Error("'page' param must be an integer positive >= 1");
-		}
-		if (year) {
-			let currentYear = new Date().getFullYear();
-			const n = +year;
-			if (!isNaN(n) || n <= currentYear) API_URL.searchParams.set('y', n);
-			else throw new Error("'year' param must be an integer positive <= " + currentYear);
-		}
+	if (search.length < 3) throw { message: 'Too namy results' };
+	else api.searchParams.set('s', search);
 
-		if (type) {
-			if (type === 'movie' || type === 'series' || type === 'episode')
-				API_URL.searchParams.set('type', type);
-			else throw new Error("'type' param only accept { 'movie'|'series'|'episode' } value.");
-		}
-	} catch (error) {
-		return {
-			status: 404,
-			body: { message: error.message }
-		};
+	if (page) {
+		const n = +page;
+		if (!isNaN(n) && n > 0) api.searchParams.set('page', n);
+		else throw { message: '<page> param must be an integer positive >= 1' };
+	}
+	if (year) {
+		let currentYear = new Date().getFullYear();
+		const n = +year;
+		if (!isNaN(n) && n <= currentYear) api.searchParams.set('y', n);
+		else throw { message: '<year> param must be an integer positive <= ' + currentYear };
 	}
 
-	API_URL.searchParams.set('apikey', API_KEY);
+	if (type) {
+		if (type === 'movie' || type === 'series' || type === 'episode')
+			api.searchParams.set('type', type);
+		else throw { message: "<type> param only accept { 'movie'|'series'|'episode' } value." };
+	}
 
-	// create URL object for get resource
-	try {
-		const data = await fetch(API_URL.href);
-		const json = await data.json();
+	api.searchParams.set('apikey', API_KEY);
 
-		if (json.Response === 'False') {
-			throw new Error(json.Error);
+	const data = await fetch(api.href);
+	const json = await data.json();
+
+	if (!json) throw { message: 'Movies or Series not found.' };
+	if (json.Response === 'False') throw { message: json.Error };
+
+	json.Search = json.Search.filter((m) => m.Poster !== 'N/A');
+	if (json.Search.length < 1) throw { message: `${type ? type : 'Movie o Series'} not found.` };
+
+	const rest = +json.totalResults <= 10 ? +json.totalResults - json.Search.length : false;
+
+	json.Search = json.Search.map((m) => {
+		let obj = {};
+		for (const key in m) {
+			if (key === 'Year' && m[key].endsWith('–')) obj[key.toLowerCase()] = m[key].slice(0, -1);
+			else obj[key.toLowerCase()] = m[key];
 		}
-
-		json.Search = json.Search.map((m) => {
-			let obj = {};
-			for (const key in m) {
-				if (key === 'Year' && m[key].endsWith('–')) obj[key.toLowerCase()] = m[key].slice(0, -1);
-				else obj[key.toLowerCase()] = m[key];
-			}
-			return {
-				...obj,
-				uuid: uuid()
-			};
-		});
-
 		return {
-			status: data.status,
-			body: {
-				results: json.Search,
-				totalResults: +json.totalResults,
-				search: search,
-				query: url.searchParams.toString()
-			}
+			...obj,
+			uuid: uuid()
 		};
-	} catch (error) {
-		if (logger) {
-			console.log(`res => error:`, error.message);
-			console.log(`===============`);
+	});
+
+	return {
+		status: data.status,
+		body: {
+			results: json.Search,
+			totalResults: !rest ? +json.totalResults : +json.totalResults - rest,
+			search: search,
+			query: url.searchParams.toString()
 		}
+	};
+}
+
+/** @type {import('@sveltejs/kit').RequestHandler} */
+export async function get(event) {
+	try {
+		const response = await getResource(event);
+		return response;
+	} catch (error) {
+		const params = event.url.searchParams;
+		const search = params.has('s') ? params.get('s') : false;
 		return {
 			status: 404,
-			body: { message: error.message }
+			body: { ...error, search, query: params.toString() }
 		};
 	}
 }

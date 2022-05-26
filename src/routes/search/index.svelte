@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
+	import { CODE } from './_ERRORS_CODE';
 
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$components/ui/NavbarTop.svelte';
@@ -38,17 +39,20 @@
 
 		if (notSearch) return;
 
+		loading = true;
+		value = currURL.searchParams.get('s');
 		const data = await fetch('/api' + currURL.search);
 		const search = await data.json();
 
 		if (search) {
-			value = search.search;
 			movies = search;
 			lastSearch = search;
+			lastValue = value;
+			loading = false;
 			// lastValue = search.search;
 		}
 
-		input.focus();
+		// input.focus();
 	});
 
 	function openSuggestions() {
@@ -70,7 +74,7 @@
 			if (lastSearch) {
 				movies = lastSearch;
 				let searchString = getInputValue();
-				await updateUrlSearchParam(searchString);
+				updateUrlSearchParam(searchString);
 				closeSuggestions();
 			}
 			return;
@@ -125,7 +129,7 @@
 
 			await updateUrlSearchParam(searchString);
 		} catch (error) {
-			movies = undefined;
+			if (!error.level.warn) movies = undefined;
 			lastSearch = undefined;
 			errors = error;
 		}
@@ -133,20 +137,16 @@
 
 	async function getData(searchString) {
 		if (searchString.length < 3) {
-			throw { level: { warn: true }, message: 'your search must contain at least letters' };
+			throw { level: { warn: true }, message: CODE.too_short };
 		}
 
 		loading = true;
 
 		const Params = new URLSearchParams('');
-
-		const s = ['s', searchString];
-		const type = ['type', selected[0]];
-
-		Params.set(s[0], s[1]);
+		Params.set('s', searchString);
 
 		if (selected.length == 1) {
-			Params.set(type[0], type[1]);
+			Params.set('type', selected[0]);
 		}
 
 		const req = await fetch('/api?' + Params.toString());
@@ -158,8 +158,6 @@
 		}
 
 		const res = await req.json();
-		// lastValue = searchString;
-		// lastSearch = res;
 		loading = false;
 
 		return res;
@@ -172,14 +170,12 @@
 	function onInput() {
 		if (timer) clearTimeout(timer);
 		if (timerErrors) clearTimeout(timerErrors);
-		// errors = undefined;
 
 		if (getInputValue().length < 3 && getInputValue().length > 0) {
 			timerErrors = delay(() => {
-				errors = { level: { warn: true }, message: 'your search must contain at least 3 letters' };
+				errors = { level: { warn: true }, message: CODE.too_short };
 			});
 			showSuggest = false;
-			// autocomplete = [];
 			return;
 		}
 		errors = undefined;
@@ -273,7 +269,6 @@
 				class="input-search"
 				on:focus={onFocus}
 				on:input={onInput}
-				on:blur={onBlur}
 				required
 				placeholder="ej. spider-man"
 				autocomplete="off"

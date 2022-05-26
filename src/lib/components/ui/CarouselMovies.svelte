@@ -118,7 +118,7 @@
 			<CardMovieSeeAll
 				query={movies.query}
 				totalResults={movies.totalResults}
-				posters={movies.results.filter((m) => m.poster !== 'N/A').map((m) => m.poster)}
+				posters={movies.results.map((m) => m.poster)}
 			/>
 		{/if}
 	</main>

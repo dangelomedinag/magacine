@@ -1,4 +1,4 @@
-import { API_KEY } from '$lib/_env';
+import { API_KEY, API_URL } from '$lib/_env';
 import { logHours } from '$helpers/logs';
 import { transform } from './_transformContract';
 
@@ -16,16 +16,16 @@ export async function get(event) {
 		};
 	}
 
-	const API_URL = new URL('https://www.omdbapi.com');
-	API_URL.searchParams.set('i', id);
-	API_URL.searchParams.set('apikey', API_KEY);
+	const api = new URL(API_URL);
+	api.searchParams.set('i', id);
+	api.searchParams.set('apikey', API_KEY);
 
 	try {
 		const timeout = 8000;
 		const controller = new AbortController();
 		const id = setTimeout(() => controller.abort(), timeout);
 
-		const data = await fetch(API_URL.href, {
+		const data = await fetch(api.href, {
 			signal: controller.signal
 		});
 		const json = await data.json();
