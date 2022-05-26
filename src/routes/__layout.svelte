@@ -1,6 +1,13 @@
 <script context="module">
-	/** @type {import("@sveltejs/kit").load}*/
-	export const load = async ({ fetch }) => {
+	/** @type {import("@sveltejs/kit").LoadEvent}*/
+	export const load = async ({ fetch, session }) => {
+		if (!session.user) {
+			return {
+				status: 303,
+				redirect: '/login'
+			};
+		}
+
 		const url = '/api?s=marvel';
 
 		const req = await fetch(url);
@@ -27,6 +34,7 @@
 	import NProgress from 'nprogress';
 	import ButtonToTop from '$components/ui/buttonToTop.svelte';
 	import MediaQueries from '$components/mediaQueries.svelte';
+
 	import { dev } from '$app/env';
 	import { navigating } from '$app/stores';
 	import 'nprogress/nprogress.css';
@@ -40,7 +48,10 @@
 
 	$: {
 		if ($navigating) {
-			NProgress.start();
+			// console.log($navigating.from.pathname, $navigating.to.pathname);
+			if ($navigating.from.pathname !== $navigating.to.pathname) {
+				NProgress.start();
+			}
 		}
 		if (!$navigating) {
 			NProgress.done();
