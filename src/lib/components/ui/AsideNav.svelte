@@ -17,6 +17,7 @@
 			}}
 			on:tap
 		/>
+		<MenuItem href="/soon" label="Comming soon" on:tap />
 		<MenuItem
 			href="/community"
 			label="Community"
@@ -26,7 +27,6 @@
 				$notiStore[1].notification = false;
 			}}
 		/>
-		<MenuItem href="/soon" label="Comming soon" on:tap />
 
 		<hr style="display: block; width: 100%; border: 1px solid gray; opacity: 0.2;" />
 
@@ -36,13 +36,13 @@
 		<MenuItem href="/bookmarked" label="Bookmarked" on:tap />
 		<MenuItem href="/rated" label="Top Rated" on:tap />
 		<MenuItem href="/download" label="Downloaded" on:tap />
-		<MenuItem href="/search" label="Search" on:tap />
+		<MenuItem href="/search?s=" label="Search" on:tap />
 	</nav>
 
 	<div>
 		<MenuItem href="/settings" label="Settings" on:tap />
 		<MenuItem href="/help" label="Help" on:tap />
-		<MenuItem href="/logout" label="Logout" on:tap />
+		<MenuItem href="/auth/logout" label="Logout" on:tap />
 	</div>
 </div>
 

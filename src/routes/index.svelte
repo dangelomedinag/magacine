@@ -1,5 +1,15 @@
 <script context="module">
+	/** @type {import("@sveltejs/kit").LoadEvent} */
 	export async function load({ fetch }) {
+		// console.log(session.user);
+
+		// if (!session.user) {
+		// 	return {
+		// 		status: 303,
+		// 		redirect: '/login'
+		// 	};
+		// }
+
 		const req = await fetch('/api?s=got');
 		if (!req.ok) {
 			const res = await req.json();
@@ -17,7 +27,7 @@
 </script>
 
 <script>
-	import { page } from '$app/stores';
+	import { page, session } from '$app/stores';
 
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 	import Hero from '$components/ui/hero.svelte';
@@ -27,7 +37,13 @@
 	let act = 'series';
 
 	const setTab = (tab) => (act = tab);
+
+	// $: console.log($session);
 </script>
+
+<svelte:head>
+	<title>Magacine - home</title>
+</svelte:head>
 
 <NavbarTop>
 	<button on:click={() => setTab('series')} class:active={act === 'series'}>Series</button>
@@ -36,6 +52,10 @@
 
 <Hero />
 <div class="content">
+	{#if $session.user}
+		<h1>¡Welcome again, <span>{$session.user.name}</span>!</h1>
+	{/if}
+
 	<!-- tab 1 -->
 	{#if act === 'series'}
 		<CarouselMovies
@@ -59,5 +79,15 @@
 
 	.content {
 		padding-top: 1em;
+	}
+
+	h1 {
+		font-size: 2rem;
+		margin-top: 0;
+		font-weight: lighter;
+	}
+
+	span {
+		font-weight: normal;
 	}
 </style>

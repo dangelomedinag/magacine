@@ -46,25 +46,21 @@
 				throw new Error(message);
 			}
 			const json = await data.json();
-			console.log(json);
 			// if (!json.response) throw new Error(json.error);
 			totalResults = json.totalResults;
 			results = json;
 
 			const url = new URL(location);
 			url.searchParams.set('search', value);
-			// console.log(url.searchParams.toString());
 			if (!Boolean(selected.length) || selected.length > 1) {
 				url.searchParams.delete('type');
 			} else {
 				url.searchParams.set('type', selected[0]);
 			}
-			// console.log(url);
 			await goto(url.href, { replaceState: true });
 		} catch (error) {
 			console.warn(error.message);
 			match = true;
-			// console.log(match);
 			results = [];
 		}
 		loading = false;

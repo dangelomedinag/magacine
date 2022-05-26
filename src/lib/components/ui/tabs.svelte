@@ -5,13 +5,6 @@
 
 	export let tabs;
 	$: active = tabs[0];
-
-	// if ($page.url.searchParams.has('tab')) {
-	// 	const tabParam = $page.url.searchParams.get('tab');
-	// 	if (tabs.includes(tabParam)) active = tabParam;
-	// }
-
-	// $: console.log(active);
 </script>
 
 <NavbarTop>

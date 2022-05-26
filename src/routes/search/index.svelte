@@ -31,11 +31,9 @@
 		// { value: 'episode', label: 'episodes' }
 	];
 
-	$: console.log(lastValue, value);
-
 	onMount(async () => {
+		console.log('mounted!');
 		const currURL = new URL(location);
-		console.log(currURL.searchParams.has('s'));
 		const notSearch = !currURL.searchParams.has('s') || currURL.searchParams.get('s').length < 3;
 
 		if (notSearch) return;
@@ -49,6 +47,8 @@
 			lastSearch = search;
 			// lastValue = search.search;
 		}
+
+		input.focus();
 	});
 
 	function openSuggestions() {
@@ -69,7 +69,8 @@
 		if (lastValue.toLowerCase() === getInputValue()) {
 			if (lastSearch) {
 				movies = lastSearch;
-
+				let searchString = getInputValue();
+				await updateUrlSearchParam(searchString);
 				closeSuggestions();
 			}
 			return;
@@ -105,6 +106,16 @@
 		}
 	}
 
+	async function updateUrlSearchParam(searchString) {
+		const url = new URL(location);
+		url.searchParams.set('s', searchString);
+
+		if (selected.length == 1) url.searchParams.set('type', selected[0]);
+		else if (url.searchParams.has('type')) url.searchParams.delete('type');
+
+		await goto(url.href, { replaceState: true });
+	}
+
 	async function getMovies() {
 		const searchString = getInputValue();
 		try {
@@ -112,13 +123,7 @@
 			movies = res;
 			lastValue = searchString;
 
-			const url = new URL(location);
-			url.searchParams.set('s', searchString);
-
-			if (selected.length == 1) url.searchParams.set('type', selected[0]);
-			else if (url.searchParams.has('type')) url.searchParams.delete('type');
-
-			await goto(url.href, { replaceState: true });
+			await updateUrlSearchParam(searchString);
 		} catch (error) {
 			movies = undefined;
 			lastSearch = undefined;

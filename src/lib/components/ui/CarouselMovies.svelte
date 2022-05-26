@@ -3,14 +3,13 @@
 
 	// components
 	import CardMovie from '$components/ui/card/cardMovie.svelte';
+	import CardMovieSeeAll from './card/cardMovieSeeAll.svelte';
 
 	// props
 	export let movies;
 	export let title;
 	export let priority;
 	export let details = true;
-
-	$: console.log(movies);
 
 	let container;
 	let pageInfo;
@@ -114,6 +113,14 @@
 				</div>
 			</slot> -->
 		{/each}
+		{#if movies.totalResults > 10}
+			<!-- content here -->
+			<CardMovieSeeAll
+				query={movies.query}
+				totalResults={movies.totalResults}
+				posters={movies.results.filter((m) => m.poster !== 'N/A').map((m) => m.poster)}
+			/>
+		{/if}
 	</main>
 	{#if movies.results?.length > 1}
 		<div class="movement-action">

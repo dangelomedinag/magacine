@@ -43,7 +43,6 @@
 		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
 		let selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
 
-		// console.log(selected);
 		try {
 			const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
 			existSuggestions = true;

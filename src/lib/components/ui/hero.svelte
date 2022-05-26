@@ -34,7 +34,6 @@
 	});
 
 	function setPage(pag) {
-		console.log(pag);
 		if (interval) clearInterval(interval);
 		i = pag;
 		currentPage = pag;

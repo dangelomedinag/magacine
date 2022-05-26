@@ -9,8 +9,6 @@
 		const req = await fetch('/api?' + query.toString());
 		const res = await req.json();
 
-		// console.log(res);
-
 		return {
 			props: {
 				movies: res
@@ -95,10 +93,7 @@
 <NavbarTop>
 	<button
 		on:click={() => {
-			// let newData = [...rawMovies.results];
-			// console.log('before', rawMovies);
 			movies.results = rawMovies.results.filter((m) => m.type === 'movie');
-			// console.log('after', rawMovies);
 		}}>movies</button
 	>
 	<button
