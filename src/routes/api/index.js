@@ -14,8 +14,8 @@ async function getResource({ url }) {
 	// create URL object of resource
 	const api = new URL(API_URL);
 
-	if (search.length < 3) throw { message: 'Too namy results' };
-	else api.searchParams.set('s', search);
+	if (search.length > 2) api.searchParams.set('s', search);
+	else throw { message: 'Too namy results' };
 
 	if (page) {
 		const n = +page;

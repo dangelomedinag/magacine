@@ -13,6 +13,21 @@ export function transform(json) {
 			value = json[key] === 'True';
 		}
 
+		if (key === 'Ratings' && Array.isArray(json[key]) && json[key].length > 0) {
+			let newArray = [];
+
+			newArray = json[key].map((e) => {
+				let newRatings = {};
+
+				for (const k in e) {
+					newRatings[k.toLowerCase()] = e[k];
+				}
+				return { ...newRatings };
+			});
+
+			value = newArray;
+		}
+
 		if (value) {
 			if (key === 'Year') {
 				if (value.trim().endsWith('–')) value = value.slice(0, -1);
