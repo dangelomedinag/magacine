@@ -182,14 +182,83 @@
 			<span class="property">rating:</span>
 			<div>{(movie.imdbrating / 2).toFixed(1)}</div>
 			<CardRatingStarts --icon-fz="1.5rem" rating={movie.imdbrating} />
+
+			{#if movie.ratings?.length > 0}
+				{#each movie.ratings as item}
+					<div>
+						<span class="property">{item.source}:</span>
+						<span>{item.value}</span>
+					</div>
+				{/each}
+			{/if}
 		</div>
+	{/if}
+
+	{#if details}
+		<div class="foreground" />
+		<section class="more" class:active={details}>
+			<div>
+				{#if movie.released}
+					<div class="item">
+						<span class="property">Released:</span>
+						<div>{movie.released}</div>
+					</div>
+				{/if}
+				{#if movie.director}
+					<div class="item">
+						<span class="property">Director:</span>
+						<div>{movie.director}</div>
+					</div>
+				{/if}
+				{#if movie.writer}
+					<div class="item">
+						<span class="property">Writer:</span>
+						<div>
+							{listFormat(!movie.writer.includes(',') ? [movie.writer] : movie.writer.split(','))}
+						</div>
+					</div>
+				{/if}
+				{#if movie.actors}
+					<div class="item">
+						<span class="property">Actors:</span>
+						<div>
+							{listFormat(!movie.actors.includes(',') ? [movie.actors] : movie.actors.split(','))}
+						</div>
+					</div>
+				{/if}
+				{#if movie.awards}
+					<div class="item">
+						<span class="property">Awares:</span>
+						<div>
+							{movie.awards}
+						</div>
+					</div>
+				{/if}
+				{#if movie.country}
+					<div class="item">
+						<span class="property">Country:</span>
+						<div>
+							{listFormat(
+								!movie.country.includes(',') ? [movie.country] : movie.country.split(',')
+							)}
+						</div>
+					</div>
+				{/if}
+			</div>
+			<button
+				on:click={() => {
+					details = !details;
+				}}
+				class="btn-details">more details</button
+			>
+		</section>
 	{/if}
 
 	<button
 		on:click={() => {
 			details = !details;
 		}}
-		class="btn-details">details</button
+		class="btn-details">more details</button
 	>
 
 	{#if details}
@@ -270,6 +339,32 @@
 	/* :global(.smooth) {
 		scroll-behavior: smooth;
 	} */
+
+	.more {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		background-color: var(--c-main);
+		z-index: 100;
+		width: 100%;
+		padding: 1em;
+		transform: translateY(100%);
+		transition: all 0.5s ease-in-out;
+	}
+
+	.active {
+		transform: translateY(0);
+	}
+
+	.foreground {
+		background-color: rgba(0, 0, 0, 0.4);
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 100;
+	}
 
 	.information svg {
 		width: 1rem;
@@ -459,11 +554,20 @@
 	.btn-details {
 		display: block;
 		width: 100%;
-		background-color: transparent;
 		color: white;
 		padding: 0.5em;
 		border: 1px solid rgba(128, 128, 128, 0.3);
+		background-color: var(--c-main);
 		margin-bottom: 1em;
+		border-radius: 5px;
+	}
+
+	.btn-details:hover {
+		background-color: transparent;
+		cursor: pointer;
+	}
+	.btn-details:active {
+		transform: translateY(3%);
 	}
 
 	/* @media (min-width: 576px) {}

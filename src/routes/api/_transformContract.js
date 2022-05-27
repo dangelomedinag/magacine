@@ -19,8 +19,10 @@ export function transform(json) {
 			newArray = json[key].map((e) => {
 				let newRatings = {};
 
-				for (const k in e) {
-					newRatings[k.toLowerCase()] = e[k];
+				if (!Array.isArray(e) && typeof e === 'object') {
+					for (const k in e) {
+						newRatings[k.toLowerCase()] = e[k];
+					}
 				}
 				return { ...newRatings };
 			});
