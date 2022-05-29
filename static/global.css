@@ -6,7 +6,7 @@
 	--c-perl: #f1faee;
 	--c-front: #e63946;
 	--c-front-dark: hsl(355, 63%, 35%);
-	--gap-content: 1.2em;
+	--gap-content: 0.5em;
 }
 
 *,
@@ -62,6 +62,12 @@ a {
 } */
 
 .content {
-	padding-left: 1.2em;
-	padding-right: 1.2em;
+	padding-left: var(--gap-content);
+	padding-right: var(--gap-content);
+}
+
+@media (min-width: 576px) {
+	.content {
+		--gap-content: 2em;
+	}
 }

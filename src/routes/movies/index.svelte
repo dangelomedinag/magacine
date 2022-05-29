@@ -32,6 +32,8 @@
 	let stop = false;
 	let element;
 
+	$: total = movies.results.length + 1;
+
 	const delay = (fn, ms) => setTimeout(fn, ms);
 
 	onMount(() => {
@@ -82,7 +84,7 @@
 			return;
 		}
 
-		movies.results = [...movies.results, ...res.results.filter((m) => m.poster !== 'N/A')];
+		movies.results = [...movies.results, ...res.results];
 		loading = false;
 		// movies.totalResults = movies.totalResults + res.totalResults;
 
@@ -109,7 +111,7 @@
 </NavbarTop>
 
 <div class="content">
-	<h1>{movies.search} - {movies.totalResults} results</h1>
+	<h1>{movies.search} - all results</h1>
 	<!-- <hr /> -->
 	<!-- <CarouselMovies {movies} /> -->
 	<div class="grid-movies">
@@ -122,7 +124,8 @@
 			<Spinner position="relative" top={'30%'}>loading more...</Spinner>
 		{:else if stop}
 			<Toast>
-				there are <span>no more</span> movies/series to show
+				<span>{movies.results.length} results</span> | there are <span>no more</span> movies/series to
+				show
 			</Toast>
 		{/if}
 	</div>
@@ -133,6 +136,8 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 0.5em;
+		max-width: 1000px;
+		margin: 0 auto;
 	}
 
 	.loading {

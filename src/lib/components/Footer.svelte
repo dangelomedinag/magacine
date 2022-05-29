@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer class="footer content">
 	<div class="footer__addr">
 		<h1 class="footer__logo">magacine</h1>
 
@@ -84,7 +84,6 @@
 	.footer {
 		display: flex;
 		flex-flow: row wrap;
-		padding: var(--gap-content);
 		background-color: var(--c-main);
 		border-top: 1px solid rgba(230, 230, 230, 0.2);
 	}

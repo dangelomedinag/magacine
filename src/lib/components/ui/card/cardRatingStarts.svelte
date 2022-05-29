@@ -1,5 +1,6 @@
 <script>
 	export let rating;
+	export let block;
 	const starsLenght = 5;
 	const stars = [1, 2, 3, 4, 5];
 	const percent = Math.floor(rating) * 0.1;
@@ -8,7 +9,7 @@
 
 <!-- {@debug rating} -->
 
-<div style="display: inline-flex;">
+<div style:display={block ? 'flex' : 'inline-flex'}>
 	{#each stars as ele}
 		{@const fill = ele > sc}
 

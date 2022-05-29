@@ -3,10 +3,13 @@
 	export const load = async ({ fetch, params }) => {
 		try {
 			const req = await fetch('/api/' + params.id);
-			const details = await req.json();
+			if (!req.ok) throw Error((await req.json()).message);
+			const movie = await req.json();
+			console.log(movie);
+
 			return {
 				props: {
-					movie: details
+					movie: movie
 				}
 			};
 		} catch (error) {
@@ -19,6 +22,9 @@
 </script>
 
 <script>
+	import { onDestroy } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import { goto, afterNavigate } from '$app/navigation';
 	import CardRatingStarts from '$components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
@@ -27,6 +33,7 @@
 	import { randomInt } from '$helpers';
 
 	export let movie;
+	$: console.log(movie.title);
 	let suggetsPromise = getSuggest;
 	let existSuggestions = false;
 	let details = false;
@@ -45,6 +52,9 @@
 
 		try {
 			const req = await fetch('/api?s=' + selected.replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, ''));
+			if (!req.ok) {
+				throw Error('bad request');
+			}
 			existSuggestions = true;
 			return req.json();
 		} catch (error) {
@@ -54,6 +64,10 @@
 	}
 
 	afterNavigate(({ from, to }) => {
+		if (details) {
+			toogleDetails();
+		}
+
 		if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
 			if (from.pathname !== to.pathname) {
 				suggetsPromise = getSuggest;
@@ -61,7 +75,31 @@
 			}
 		}
 	});
+
+	function blockScroll() {
+		if (document.body) {
+			if (details) document.body.style.overflow = 'hidden';
+			else document.body.style.overflow = 'auto';
+		}
+	}
+
+	function toogleDetails() {
+		details = !details;
+		blockScroll();
+	}
+
+	onDestroy(() => {
+		if (details) {
+			toogleDetails();
+		}
+	});
 </script>
+
+<svelte:head>
+	<title
+		>{movie?.title.length > 14 ? `${movie.title.slice(0, 13)}...` : movie.title} - {movie.type}</title
+	>
+</svelte:head>
 
 <NavbarTop>
 	<button
@@ -76,34 +114,26 @@
 			}}>suggest</button
 		>
 	{/if}
-	<!-- <a href="#info" on:click="{()=>
-		history.replaceState()
-	}">info</a>
-	<a href="#suggest" on:click="{()=>
-		history.replaceState()
-	}">suggest</a> -->
 </NavbarTop>
 
-<div class="wrapper">
-	<div
-		class="poster-wrapper"
-		style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('{movie.poster ??
-			`/imgs/image-fallback.jpg`}') ; background-size: contain;"
-	>
-		<img src={movie.poster ?? '/imgs/image-fallback.jpg'} alt={movie.title} />
-		<button>
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-				<path
-					fill-rule="evenodd"
-					d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-					clip-rule="evenodd"
-				/>
-			</svg>
-		</button>
-	</div>
+<div
+	class="poster-wrapper"
+	style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('{movie.poster ??
+		`/imgs/image-fallback.jpg`}') ; background-size: contain;"
+>
+	<img src={movie.poster ?? '/imgs/image-fallback.jpg'} alt={movie.title} />
+	<button>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+			<path
+				fill-rule="evenodd"
+				d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+				clip-rule="evenodd"
+			/>
+		</svg>
+	</button>
 </div>
 
-<div class="information" id="info">
+<div class="information content" id="info">
 	<div class="item">
 		<span class="property">title:</span>
 		<h1 class="title">{movie.title}</h1>
@@ -168,7 +198,7 @@
 		{/each}
 	</div>
 
-	{#if movie.language}
+	{#if movie.language && movie.language.length > 0}
 		<div class="item">
 			<span class="property">language:</span>
 			<span>
@@ -179,135 +209,135 @@
 
 	{#if movie.imdbrating}
 		<div class="item">
+			<CardRatingStarts --icon-fz="2rem" rating={movie.imdbrating} block />
 			<span class="property">rating:</span>
-			<div>{(movie.imdbrating / 2).toFixed(1)}</div>
-			<CardRatingStarts --icon-fz="1.5rem" rating={movie.imdbrating} />
+			<div>imdb: {(movie.imdbrating / 2).toFixed(1)}</div>
 
 			{#if movie.ratings?.length > 0}
 				{#each movie.ratings as item}
 					<div>
-						<span class="property">{item.source}:</span>
-						<span>{item.value}</span>
+						<!-- <span class="property">{item.source}:</span> -->
+						<span>{item.source}: {item.value}</span>
 					</div>
 				{/each}
 			{/if}
 		</div>
 	{/if}
 
+	<button on:click={toogleDetails} class="btn-details">more details</button>
+
+	<!--{#if details}
+			{#if movie.released}
+				<div class="item">
+					<span class="property">Released:</span>
+					<div>{movie.released}</div>
+				</div>
+			{/if}
+			{#if movie.director}
+				<div class="item">
+					<span class="property">Director:</span>
+					<div>{movie.director}</div>
+				</div>
+			{/if}
+			{#if movie.writer}
+				<div class="item">
+					<span class="property">Writer:</span>
+					<div>
+						{listFormat(!movie.writer.includes(',') ? [movie.writer] : movie.writer.split(','))}
+					</div>
+				</div>
+			{/if}
+			{#if movie.actors}
+				<div class="item">
+					<span class="property">Actors:</span>
+					<div>
+						{listFormat(!movie.actors.includes(',') ? [movie.actors] : movie.actors.split(','))}
+					</div>
+				</div>
+			{/if}
+			{#if movie.awards}
+				<div class="item">
+					<span class="property">Awares:</span>
+					<div>
+						{movie.awards}
+					</div>
+				</div>
+			{/if}
+			{#if movie.country}
+				<div class="item">
+					<span class="property">Country:</span>
+					<div>
+						{listFormat(!movie.country.includes(',') ? [movie.country] : movie.country.split(','))}
+					</div>
+				</div>
+			{/if}
+	
+		{/if} -->
 	{#if details}
-		<div class="foreground" />
-		<section class="more" class:active={details}>
-			<div>
-				{#if movie.released}
-					<div class="item">
-						<span class="property">Released:</span>
-						<div>{movie.released}</div>
-					</div>
-				{/if}
-				{#if movie.director}
-					<div class="item">
-						<span class="property">Director:</span>
-						<div>{movie.director}</div>
-					</div>
-				{/if}
-				{#if movie.writer}
-					<div class="item">
-						<span class="property">Writer:</span>
-						<div>
-							{listFormat(!movie.writer.includes(',') ? [movie.writer] : movie.writer.split(','))}
+		<div
+			class="xx content"
+			on:click={(e) => {
+				// console.log(e.target.contains(e.currentTarget));
+				if (e.target.contains(e.currentTarget)) toogleDetails();
+			}}
+		>
+			<!-- <div class="foreground" on:click={toogleDetails} /> -->
+			<section in:fly={{ y: 100, duration: 300, easing: quintOut }} class="more">
+				<div class="more-wraper">
+					{#if movie.released}
+						<div class="item">
+							<span class="property">Released:</span>
+							<div>{movie.released}</div>
 						</div>
-					</div>
-				{/if}
-				{#if movie.actors}
-					<div class="item">
-						<span class="property">Actors:</span>
-						<div>
-							{listFormat(!movie.actors.includes(',') ? [movie.actors] : movie.actors.split(','))}
+					{/if}
+					{#if movie.director}
+						<div class="item">
+							<span class="property">Director:</span>
+							<div>{movie.director}</div>
 						</div>
-					</div>
-				{/if}
-				{#if movie.awards}
-					<div class="item">
-						<span class="property">Awares:</span>
-						<div>
-							{movie.awards}
+					{/if}
+					{#if movie.writer}
+						<div class="item">
+							<span class="property">Writer:</span>
+							<div>
+								{listFormat(!movie.writer.includes(',') ? [movie.writer] : movie.writer.split(','))}
+							</div>
 						</div>
-					</div>
-				{/if}
-				{#if movie.country}
-					<div class="item">
-						<span class="property">Country:</span>
-						<div>
-							{listFormat(
-								!movie.country.includes(',') ? [movie.country] : movie.country.split(',')
-							)}
+					{/if}
+					{#if movie.actors}
+						<div class="item">
+							<span class="property">Actors:</span>
+							<div>
+								{listFormat(!movie.actors.includes(',') ? [movie.actors] : movie.actors.split(','))}
+							</div>
 						</div>
-					</div>
-				{/if}
-			</div>
-			<button
-				on:click={() => {
-					details = !details;
-				}}
-				class="btn-details">more details</button
-			>
-		</section>
-	{/if}
-
-	<button
-		on:click={() => {
-			details = !details;
-		}}
-		class="btn-details">more details</button
-	>
-
-	{#if details}
-		{#if movie.released}
-			<div class="item">
-				<span class="property">Released:</span>
-				<div>{movie.released}</div>
-			</div>
-		{/if}
-		{#if movie.director}
-			<div class="item">
-				<span class="property">Director:</span>
-				<div>{movie.director}</div>
-			</div>
-		{/if}
-		{#if movie.writer}
-			<div class="item">
-				<span class="property">Writer:</span>
-				<div>
-					{listFormat(!movie.writer.includes(',') ? [movie.writer] : movie.writer.split(','))}
+					{/if}
+					{#if movie.awards}
+						<div class="item">
+							<span class="property">Awares:</span>
+							<div>
+								{movie.awards}
+							</div>
+						</div>
+					{/if}
+					{#if movie.country}
+						<div class="item">
+							<span class="property">Country:</span>
+							<div>
+								{listFormat(
+									!movie.country.includes(',') ? [movie.country] : movie.country.split(',')
+								)}
+							</div>
+						</div>
+					{/if}
 				</div>
-			</div>
-		{/if}
-		{#if movie.actors}
-			<div class="item">
-				<span class="property">Actors:</span>
-				<div>
-					{listFormat(!movie.actors.includes(',') ? [movie.actors] : movie.actors.split(','))}
-				</div>
-			</div>
-		{/if}
-		{#if movie.awards}
-			<div class="item">
-				<span class="property">Awares:</span>
-				<div>
-					{movie.awards}
-				</div>
-			</div>
-		{/if}
-		{#if movie.country}
-			<div class="item">
-				<span class="property">Country:</span>
-				<div>
-					{listFormat(!movie.country.includes(',') ? [movie.country] : movie.country.split(','))}
-				</div>
-			</div>
-		{/if}
-
-		<!-- {JSON.stringify(movie, null, '\t')} -->
+				<button
+					on:click={toogleDetails}
+					style="background-color: var(--c-front);"
+					class="btn-details">close</button
+				>
+			</section>
+		</div>
 	{/if}
 
 	{#await suggetsPromise()}
@@ -315,20 +345,15 @@
 	{:then value}
 		{#if Array.isArray(value?.results)}
 			<div class="suggest" id="suggest">
-				<CarouselMovies
-					--card-w="350px"
-					--card-h="250px"
-					movies={value}
-					details={false}
-					title="suggest"
-					priority="small"
-				/>
+				<CarouselMovies movies={value} details={false} title="Suggestions" priority="small" />
 			</div>
 		{/if}
 	{:catch}
-		<Toast>
-			for now we do <span>not have related movies or series</span>
-		</Toast>
+		<div style="padding: var(--gap-content) 0;">
+			<Toast warn>
+				For now we do <span>not have related movies or series</span>
+			</Toast>
+		</div>
 	{/await}
 </div>
 
@@ -340,30 +365,52 @@
 		scroll-behavior: smooth;
 	} */
 
-	.more {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		background-color: var(--c-main);
-		z-index: 100;
-		width: 100%;
-		padding: 1em;
-		transform: translateY(100%);
-		transition: all 0.5s ease-in-out;
-	}
-
-	.active {
-		transform: translateY(0);
-	}
-
-	.foreground {
-		background-color: rgba(0, 0, 0, 0.4);
-		position: fixed;
-		top: 0;
-		left: 0;
+	.xx {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		width: 100%;
 		height: 100%;
-		z-index: 100;
+		position: fixed;
+		background-color: rgba(0, 0, 0, 0.8);
+		top: 0;
+		left: 0;
+		z-index: 95;
+		margin: 0 auto;
+	}
+
+	.more {
+		/* bottom: var(--gap-content); */
+		background-color: var(--c-main-content);
+		padding: 1em;
+		width: 100%;
+		max-width: 700px;
+		border-radius: 10px;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
+			0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
+			0 32px 32px rgba(0, 0, 0, 0.11);
+	}
+
+	.more-wraper {
+		max-height: 50vh;
+		overflow-y: auto;
+		width: 100%;
+	}
+
+	/* .active {
+		transform: translateY(0);
+	} */
+
+	.foreground {
+		/* backdrop-filter: blur(1.5px); */
+		/* position: fixed; */
+		/* top: 0;
+		left: 0; */
+		width: 100%;
+		height: 100%;
+		/* z-index: 94; */
+		cursor: pointer;
 	}
 
 	.information svg {
@@ -450,10 +497,10 @@
 		background-color: var(--c-main-content);
 		/* padding-bottom: 30rem; */
 		/* min-height: 100vh; */
-		padding: var(--gap-content);
+		/* padding: var(--gap-content); */
 		padding-top: 3em;
 
-		border-top: 2px solid brown;
+		border-top: 2px solid var(--c-front);
 	}
 
 	/* header {
@@ -558,7 +605,7 @@
 		padding: 0.5em;
 		border: 1px solid rgba(128, 128, 128, 0.3);
 		background-color: var(--c-main);
-		margin-bottom: 1em;
+		/* margin-bottom: 1em; */
 		border-radius: 5px;
 	}
 

@@ -73,6 +73,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Magacine - movies, series & all, in one place</title>
+</svelte:head>
+
 {#if dev}
 	<MediaQueries left="50%" />
 {/if}

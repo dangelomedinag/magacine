@@ -1,5 +1,6 @@
 <script>
 	import { page, session } from '$app/stores';
+	import { onDestroy } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -28,7 +29,21 @@
 
 	function tooglePopup() {
 		showPopup = !showPopup;
+		blockScroll();
 	}
+
+	function blockScroll() {
+		if (document.body) {
+			if (showPopup) document.body.style.overflow = 'hidden';
+			else document.body.style.overflow = 'auto';
+		}
+	}
+
+	onDestroy(() => {
+		if (showPopup) {
+			tooglePopup();
+		}
+	});
 </script>
 
 <nav class="navbar-content">
@@ -104,22 +119,9 @@
 				</svg>
 			</button>
 			{#if showPopup}
+				<div class="foreground" on:click={tooglePopup} />
 				<div class="popup" in:fly={{ y: 20, easing: quintOut }}>
 					<div style="display: flex; justify-content: center ;align-items: center;">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="bell-svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							stroke-width="2"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-							/>
-						</svg>
 						<span>
 							{$session.user.name}
 						</span>
@@ -290,8 +292,9 @@
 	.popup {
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		position: absolute;
-		right: 30px;
-		top: 75px;
+		z-index: 95;
+		right: var(--gap-content);
+		top: 100%;
 		width: 200px;
 		/* height: 250px; */
 		background-color: var(--c-main-content);
@@ -300,6 +303,18 @@
 			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
 			0 32px 64px rgba(0, 0, 0, 0.07);
 		padding: 1em;
+	}
+
+	.foreground {
+		background-color: rgba(0, 0, 0, 0.6);
+		backdrop-filter: blur(1.5px);
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 94;
+		cursor: pointer;
 	}
 
 	.list-actions {

@@ -31,6 +31,10 @@
 	const setTab = (tab) => (act = tab);
 </script>
 
+<svelte:head>
+	<title>Magacine - Discovery</title>
+</svelte:head>
+
 <NavbarTop>
 	<button on:click={() => setTab('suspense')} class:active={act === 'suspense'}>Suspense</button>
 	<button on:click={() => setTab('terror')} class:active={act === 'terror'}>Terror</button>

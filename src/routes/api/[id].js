@@ -4,7 +4,7 @@ import { transform } from './_transformContract';
 
 async function getResource({ params }) {
 	const id = params.id;
-	if (!id || !id.startsWith('tt') || id.length > 9) throw { message: 'Not valid id request' };
+	if (!id || !id.startsWith('tt') || id.length < 5) throw { message: 'Not valid id request' };
 
 	const api = new URL(API_URL);
 	api.searchParams.set('i', id);

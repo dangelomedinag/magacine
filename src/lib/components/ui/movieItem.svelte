@@ -10,10 +10,17 @@
 	a {
 		display: block;
 		width: 100%;
-		height: 220px;
+		/* height: 220px; */
 		border-radius: 5px;
 		overflow: hidden;
 		padding: 0;
+		/* transform: translateY(0); */
+		transition: transform 0.2s ease-out;
+	}
+
+	a:hover {
+		opacity: 0.5;
+		transform: translateY(-3%);
 	}
 
 	img {

@@ -206,6 +206,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Magacine - Search</title>
+</svelte:head>
+
 <NavbarTop search={false}>
 	<!-- {#if movies?.results}
 		<span>{value} - {movies?.totalResults} results</span>
