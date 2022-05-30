@@ -30,18 +30,13 @@
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$components/ui/NavbarTop.svelte';
 	import Toast from '$components/ui/toast.svelte';
-	import { randomInt } from '$helpers';
+	import { randomInt, listFormat } from '$helpers';
+	import Modal from '$lib/components/ui/movie/modal.svelte';
 
 	export let movie;
-	$: console.log(movie.title);
+	let modal;
 	let suggetsPromise = getSuggest;
 	let existSuggestions = false;
-	let details = false;
-
-	function listFormat(array, language = 'en', opts = { style: 'long', type: 'conjunction' }) {
-		const intl = new Intl.ListFormat(language, opts);
-		return intl.format(array);
-	}
 
 	async function getSuggest() {
 		const { plot } = movie;
@@ -64,35 +59,18 @@
 	}
 
 	afterNavigate(({ from, to }) => {
-		if (details) {
-			toogleDetails();
-		}
-
 		if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
 			if (from.pathname !== to.pathname) {
 				suggetsPromise = getSuggest;
 				existSuggestions = false;
 			}
+			modal.close();
 		}
 	});
 
-	function blockScroll() {
-		if (document.body) {
-			if (details) document.body.style.overflow = 'hidden';
-			else document.body.style.overflow = 'auto';
-		}
-	}
-
-	function toogleDetails() {
-		details = !details;
-		blockScroll();
-	}
-
-	onDestroy(() => {
-		if (details) {
-			toogleDetails();
-		}
-	});
+	// onDestroy(() => {
+	// 	modal.close();
+	// });
 </script>
 
 <svelte:head>
@@ -121,7 +99,7 @@
 	style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('{movie.poster ??
 		`/imgs/image-fallback.jpg`}') ; background-size: contain;"
 >
-	<img src={movie.poster ?? '/imgs/image-fallback.jpg'} alt={movie.title} />
+	<img src={movie.poster} alt={movie.title} />
 	<button>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 			<path
@@ -198,7 +176,7 @@
 		{/each}
 	</div>
 
-	{#if movie.language && movie.language.length > 0}
+	{#if movie.language?.length > 0}
 		<div class="item">
 			<span class="property">language:</span>
 			<span>
@@ -224,66 +202,63 @@
 		</div>
 	{/if}
 
-	<button on:click={toogleDetails} class="btn-details">more details</button>
+	<button on:click={modal.open} class="btn-details">more details</button>
 
-	<!--{#if details}
-			{#if movie.released}
-				<div class="item">
-					<span class="property">Released:</span>
-					<div>{movie.released}</div>
+	<Modal bind:this={modal}>
+		{#if movie.released}
+			<div class="item">
+				<span class="property">Released:</span>
+				<div>{movie.released}</div>
+			</div>
+		{/if}
+		{#if movie.director}
+			<div class="item">
+				<span class="property">Director:</span>
+				<div>{movie.director}</div>
+			</div>
+		{/if}
+		{#if movie.writer}
+			<div class="item">
+				<span class="property">Writer:</span>
+				<div>
+					{listFormat(!movie.writer.includes(',') ? [movie.writer] : movie.writer.split(','))}
 				</div>
-			{/if}
-			{#if movie.director}
-				<div class="item">
-					<span class="property">Director:</span>
-					<div>{movie.director}</div>
+			</div>
+		{/if}
+		{#if movie.actors}
+			<div class="item">
+				<span class="property">Actors:</span>
+				<div>
+					{listFormat(!movie.actors.includes(',') ? [movie.actors] : movie.actors.split(','))}
 				</div>
-			{/if}
-			{#if movie.writer}
-				<div class="item">
-					<span class="property">Writer:</span>
-					<div>
-						{listFormat(!movie.writer.includes(',') ? [movie.writer] : movie.writer.split(','))}
-					</div>
+			</div>
+		{/if}
+		{#if movie.awards}
+			<div class="item">
+				<span class="property">Awares:</span>
+				<div>
+					{movie.awards}
 				</div>
-			{/if}
-			{#if movie.actors}
-				<div class="item">
-					<span class="property">Actors:</span>
-					<div>
-						{listFormat(!movie.actors.includes(',') ? [movie.actors] : movie.actors.split(','))}
-					</div>
+			</div>
+		{/if}
+		{#if movie.country}
+			<div class="item">
+				<span class="property">Country:</span>
+				<div>
+					{listFormat(!movie.country.includes(',') ? [movie.country] : movie.country.split(','))}
 				</div>
-			{/if}
-			{#if movie.awards}
-				<div class="item">
-					<span class="property">Awares:</span>
-					<div>
-						{movie.awards}
-					</div>
-				</div>
-			{/if}
-			{#if movie.country}
-				<div class="item">
-					<span class="property">Country:</span>
-					<div>
-						{listFormat(!movie.country.includes(',') ? [movie.country] : movie.country.split(','))}
-					</div>
-				</div>
-			{/if}
-	
-		{/if} -->
-	{#if details}
+			</div>
+		{/if}
+	</Modal>
+	<!-- {#if details}
 		<div
-			class="xx content"
+			class="foreground content"
 			on:click={(e) => {
-				// console.log(e.target.contains(e.currentTarget));
 				if (e.target.contains(e.currentTarget)) toogleDetails();
 			}}
 		>
-			<!-- <div class="foreground" on:click={toogleDetails} /> -->
-			<section in:fly={{ y: 100, duration: 300, easing: quintOut }} class="more">
-				<div class="more-wraper">
+			<section in:fly={{ y: 100, duration: 300, easing: quintOut }} class="modal">
+				<div class="modal__container">
 					{#if movie.released}
 						<div class="item">
 							<span class="property">Released:</span>
@@ -334,11 +309,11 @@
 				<button
 					on:click={toogleDetails}
 					style="background-color: var(--c-front);"
-					class="btn-details">close</button
+					class="modal__button__close">close</button
 				>
 			</section>
 		</div>
-	{/if}
+	{/if} -->
 
 	{#await suggetsPromise()}
 		<p>cargando sugerencias...</p>
@@ -357,62 +332,7 @@
 	{/await}
 </div>
 
-<!-- {/if} -->
-
-<!-- </div> -->
 <style>
-	/* :global(.smooth) {
-		scroll-behavior: smooth;
-	} */
-
-	.xx {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		height: 100%;
-		position: fixed;
-		background-color: rgba(0, 0, 0, 0.8);
-		top: 0;
-		left: 0;
-		z-index: 95;
-		margin: 0 auto;
-	}
-
-	.more {
-		/* bottom: var(--gap-content); */
-		background-color: var(--c-main-content);
-		padding: 1em;
-		width: 100%;
-		max-width: 700px;
-		border-radius: 10px;
-		border: 1px solid rgba(255, 255, 255, 0.3);
-		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
-			0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
-			0 32px 32px rgba(0, 0, 0, 0.11);
-	}
-
-	.more-wraper {
-		max-height: 50vh;
-		overflow-y: auto;
-		width: 100%;
-	}
-
-	/* .active {
-		transform: translateY(0);
-	} */
-
-	.foreground {
-		/* backdrop-filter: blur(1.5px); */
-		/* position: fixed; */
-		/* top: 0;
-		left: 0; */
-		width: 100%;
-		height: 100%;
-		/* z-index: 94; */
-		cursor: pointer;
-	}
-
 	.information svg {
 		width: 1rem;
 		height: 1rem;
@@ -420,10 +340,6 @@
 	}
 
 	.poster-wrapper {
-		/* position: sticky;
-		top: 0;
-		z-index: 0; */
-		/* display: block; */
 		position: relative;
 		height: 100%;
 		width: 100%;
@@ -432,10 +348,7 @@
 	.poster-wrapper img {
 		display: block;
 		margin: 0 auto;
-		/* width: 100%;
-		min-height: 200px;
-		height: auto; */
-		/* max-height: 60vh; */
+		max-width: 100%;
 		object-fit: cover;
 	}
 
@@ -596,25 +509,6 @@
 	h1 {
 		margin: 0;
 		font-size: 2rem;
-	}
-
-	.btn-details {
-		display: block;
-		width: 100%;
-		color: white;
-		padding: 0.5em;
-		border: 1px solid rgba(128, 128, 128, 0.3);
-		background-color: var(--c-main);
-		/* margin-bottom: 1em; */
-		border-radius: 5px;
-	}
-
-	.btn-details:hover {
-		background-color: transparent;
-		cursor: pointer;
-	}
-	.btn-details:active {
-		transform: translateY(3%);
 	}
 
 	/* @media (min-width: 576px) {}
