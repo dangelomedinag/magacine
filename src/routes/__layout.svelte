@@ -78,7 +78,7 @@
 </svelte:head>
 
 {#if dev}
-	<MediaQueries left="50%" />
+	<MediaQueries bottom="50%" />
 {/if}
 <div class="wrapper">
 	<ButtonToTop

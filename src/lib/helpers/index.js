@@ -8,3 +8,17 @@ export const listFormat = (
 	const intl = new Intl.ListFormat(language, opts);
 	return intl.format(array);
 };
+
+export const setBodyScroll = (state) => {
+	import('$app/env').then(({ browser }) => {
+		if (browser) {
+			// let val = fn();
+
+			const body = document.body;
+			const prop = body.style.overflow;
+
+			if (state && prop !== 'hidden') body.style.overflow = 'hidden';
+			else body.style.overflow = 'auto';
+		}
+	});
+};

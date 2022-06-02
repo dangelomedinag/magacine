@@ -8,7 +8,7 @@ async function getResource({ params }) {
 
 	const api = new URL(API_URL);
 	api.searchParams.set('i', id);
-	api.searchParams.set('plot', 'full');
+	api.searchParams.set('plot', 'short');
 	api.searchParams.set('apikey', API_KEY);
 
 	const timeout = 8000;

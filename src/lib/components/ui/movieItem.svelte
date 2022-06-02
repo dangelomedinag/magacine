@@ -3,7 +3,7 @@
 </script>
 
 <a href="movies/{movie.imdbid}">
-	<img src={movie.poster} alt="poster of movie - {movie.title}" />
+	<img src={movie.poster} alt="poster of movie - {movie.title}" loading="lazy" />
 </a>
 
 <style>
