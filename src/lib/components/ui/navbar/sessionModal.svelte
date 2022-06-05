@@ -25,30 +25,40 @@
 	<header>
 		{$session.user.name}
 	</header>
-	<main>
-		<ul class="list-actions">
-			<li>
-				<a href="/profile">
-					<Icon icon="user-circle" />
-					<span>Profile</span></a
-				>
-			</li>
-			<li>
-				<a href="/settings">
-					<Icon icon="cog" />
-					<span>Settings</span></a
-				>
-			</li>
-			<li>
-				<a href="/auth/logout">
-					<Icon icon="logout" />
-					<span>logout</span></a
-				>
-			</li>
-		</ul>
-	</main>
+	<!-- <div>
+		<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, sunt.</p>
+		<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, sunt.</p>
+		<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, sunt.</p>
+	</div> -->
+	<ul class="list">
+		<li class="list__item list__item--block">
+			<a class="list__link" href="/profile">
+				<Icon icon="user-circle" />
+				<span class="list__label">Profile</span></a
+			>
+		</li>
+		<li class="list__item">
+			<a class="list__link" href="/settings">
+				<Icon icon="cog" />
+				<span class="list__label">Settings</span></a
+			>
+		</li>
+		<li class="list__item">
+			<a class="list__link" href="/help">
+				<Icon icon="help" />
+				<span class="list__label">help</span></a
+			>
+		</li>
+		<!-- <li class="list__item">
+			<a class="list__link" href="/auth/logout">
+				<Icon icon="logout" />
+				<span class="list__label">logout</span></a
+			>
+		</li> -->
+	</ul>
 	<svelte:fragment slot="action">
-		<a href="/auth/logout">logout <Icon icon="logout" /></a>
+		<a class="list__logout" sveltekit:reload href="/auth/logout">logout <Icon icon="logout" /></a>
+		<button href="/auth/logout" on:click={modal.close} class="cta">close</button>
 	</svelte:fragment>
 </Modal>
 
@@ -57,43 +67,56 @@
 		text-align: center;
 	}
 
-	.popup {
-		/* border: 1px solid rgba(255, 255, 255, 0.1); */
-		/* position: absolute;
-		z-index: 95; */
-		/* right: var(--gap-content);
-		top: 100%; */
-		/* width: 200px; */
-		/* height: 250px; */
-		/* background-color: var(--c-main-content); */
-		/* border-radius: 10px; */
-		/* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
-			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
-			0 32px 64px rgba(0, 0, 0, 0.07);
-		padding: 1em; */
-	}
-
-	/* .foreground {
-		background-color: rgba(0, 0, 0, 0.6);
-		backdrop-filter: blur(1.5px);
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 94;
-		cursor: pointer;
-	} */
-
-	ul {
+	.list {
 		list-style: none;
-		padding: 0;
+		padding: 1em 0;
 		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.2em;
 	}
 
-	li {
+	.list__item {
+		flex-basis: 33%;
+		flex-grow: 1;
+		flex-shrink: 1;
+		/* max-width: 300px; */
 		text-decoration: none;
-		padding: 0;
-		margin: 0;
+		/* margin: 0.2em 0; */
+		font-weight: bold;
+		border-color: rgba(255 255 255 / 7%);
+		border-width: 1px;
+		border-style: solid;
+		border-radius: 5px;
+		/* background-color: var(--c-front); */
+	}
+	.list__item:hover {
+		border-color: rgba(255 255 255 / 15%);
+	}
+	.list__item:hover .list__link {
+		color: var(--c-front);
+	}
+
+	.list__item--block {
+		flex-basis: 100%;
+	}
+
+	.list__link {
+		padding: 0.5em;
+		display: flex;
+		align-items: center;
+		color: white;
+		text-decoration: none;
+	}
+
+	.list__label {
+		padding-left: 0.5em;
+	}
+
+	.list__logout {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5em;
 	}
 </style>

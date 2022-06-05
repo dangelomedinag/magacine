@@ -102,7 +102,7 @@
 <!-- <div> -->
 <div class="container ">
 	<!-- content here -->
-	<div class=" content" class:movie={showPlayer} class:poster={!showPlayer}>
+	<div class:movie={showPlayer} class:poster={!showPlayer}>
 		{#if !showPlayer}
 			<img class="image" src={movie.poster} alt={movie.title} />
 			{#if movie.year}
@@ -165,7 +165,7 @@
 			<!-- </div> -->
 		{/if}
 	</div>
-	<div class="info content">
+	<div class="info content" id="info">
 		<div class="item">
 			<!-- <span class="property">title:</span> -->
 			<h1 class="title">{movie.title}</h1>
@@ -312,10 +312,10 @@
 	.container {
 		/* background-color: rgba(245, 245, 220, 0.1); */
 		display: flex;
-		/* flex-direction: column; */
-		flex-wrap: wrap;
 		justify-content: center;
 		align-items: center;
+		flex-direction: column;
+		/* flex-wrap: wrap; */
 		/* padding-top: 1em;
 		padding-bottom: 1em; */
 	}
@@ -325,17 +325,18 @@
 	} */
 	.poster,
 	.info {
-		padding-top: 1em;
+		/* padding-top: 1em; */
 	}
 
 	.poster {
 		/* padding-bottom: 1em; */
+		background: linear-gradient(to top, var(--c-main-content) 20%, var(--c-front) 200%);
 		position: relative;
 		text-align: center;
-		background: linear-gradient(to top, var(--c-main-content) 20%, var(--c-front) 200%);
 		width: 100%;
 		height: 100%;
-		/* padding: 1em; */
+
+		padding-top: 2em;
 		/* width: 50%; */
 	}
 	.movie {
@@ -389,6 +390,11 @@
 	}
 
 	@media (min-width: 768px) {
+		.container {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+
 		.movie {
 			width: 100%;
 		}
@@ -420,6 +426,22 @@
 	.property {
 		opacity: 0.5;
 		text-transform: capitalize;
+		font-weight: lighter;
+	}
+
+	.btn-details {
+		display: block;
+		width: 100%;
+		border: 1px solid rgb(255 255 255 / 7%);
+		background-color: transparent;
+		color: inherit;
+		padding: 0.5em 0.2em;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	.btn-details:hover {
+		background-color: var(--c-main);
 	}
 
 	.tag {

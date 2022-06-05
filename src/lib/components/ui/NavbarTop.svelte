@@ -48,76 +48,26 @@
 	});
 </script>
 
-<nav class="navbar-content">
-	<!-- <div class="home-wrapper">
-		<a href="/" class="backhome">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="bell-svg"
-				viewBox="0 0 20 20"
-				fill="currentColor"
-			>
-				<path
-					d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
-				/>
-			</svg>
-		</a>
-	</div>
-	<div class="items-wrapper">
-		<slot />
-	</div>
-	<div class="tools-wrapper">
-		{#if search}
-			<a href="/search" class="tool-btn">
-				<svg
-					class="bell-svg"
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-					/>
-				</svg>
+<nav class="navbar">
+	<div class="content navbar-wrapper">
+		<div class="left">
+			<a href="/">
+				<Icon icon="home" />
 			</a>
-		{/if}
-		{#if bell}
-			<button class="tool-btn">
-				<svg
-					class="bell-svg"
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-					/>
-				</svg>
-			</button>
-		{/if}
-	</div> -->
-
-	<div class="left">
-		<button>
-			<Icon icon="search" />
-		</button>
-		<button>
-			<Icon icon="search2" />
-		</button>
-	</div>
-	<div class="center">
-		<button>xx</button>
-	</div>
-	<div class="right">
-		<SessionModal />
+		</div>
+		<div class="center">
+			<slot />
+		</div>
+		<div class="right">
+			{#if search}
+				<a href="/search">
+					<Icon icon="search" />
+				</a>
+			{/if}
+			{#if profile}
+				<SessionModal />
+			{/if}
+		</div>
 	</div>
 </nav>
 
@@ -142,33 +92,66 @@
 		--navbar-item-gap: 0.5em;
 	}
 
-	.navbar-content {
-		/* font-size: 1.5rem; */
+	.navbar {
+		--icon-size: 1.2rem;
 
 		position: sticky;
 		top: 0;
 		z-index: 51;
 		width: 100%;
-		/* height: 50px; */
-		display: flex;
-		justify-content: space-between;
-		background-color: var(--c-main);
+		background-color: var(--c-main-content);
 		border-bottom: 1px solid rgba(128, 128, 128, 0.1);
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
 			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
 			0 32px 64px rgba(0, 0, 0, 0.07);
 	}
 
+	.navbar-wrapper {
+		display: flex;
+		justify-content: space-between;
+	}
+
 	.left > :global(button),
 	.right > :global(button),
-	.center > :global(button) {
-		background-color: brown;
-		height: 100%;
+	.center > :global(button),
+	.left > :global(a),
+	.right > :global(a),
+	.center > :global(a) {
+		background-color: transparent;
+		color: inherit;
+		border: 1px solid transparent;
+		/* background-color: brown; */
+		opacity: 0.5;
+		max-height: 100%;
 		padding: 0;
 		margin: 0;
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
+		padding: 0.7em 0.5em;
+		line-height: 1em;
+		text-decoration: none;
+		cursor: pointer;
 		/* font-size: 2rem; */
+	}
+
+	.left > :global(button:hover),
+	.right > :global(button:hover),
+	.center > :global(button:hover),
+	.left > :global(a:hover),
+	.right > :global(a:hover),
+	.center > :global(a:hover),
+	.center > :global(button.active),
+	.center > :global(a.active) {
+		background-color: rgba(255 255 255 / 7%);
+		border-bottom: 1px solid var(--c-front);
+		opacity: 1;
+	}
+
+	.center {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
 	}
 </style>

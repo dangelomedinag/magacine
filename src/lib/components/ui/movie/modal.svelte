@@ -128,7 +128,7 @@
 	}
 
 	.modal__container {
-		/* max-height: 70vh; */
+		max-height: 70vh;
 		height: 100%;
 		overflow-y: auto;
 		width: 100%;

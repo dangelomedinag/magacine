@@ -7,47 +7,51 @@
 	<nav>
 		<span class="section">Menu</span>
 
-		<MenuItem href="/" label="Home" on:tap />
+		<MenuItem href="/" icon="home" on:tap>Home</MenuItem>
 		<MenuItem
 			href="/discovery"
 			notification={$notiStore[0].notification}
-			label="Discovery"
+			icon="view-grid-add"
 			on:click={() => {
 				$notiStore[0].notification = false;
 			}}
-			on:tap
-		/>
-		<MenuItem href="/soon" label="Comming soon" on:tap />
+			on:tap>Discovery</MenuItem
+		>
+
+		<MenuItem href="/soon" Comming icon="inbox-in" on:tap>soon</MenuItem>
 		<MenuItem
 			href="/community"
-			label="Community"
+			icon="user-group"
 			notification={$notiStore[1].notification}
-			on:tap
 			on:click={() => {
 				$notiStore[1].notification = false;
 			}}
-		/>
+			on:tap
+			>Community
+		</MenuItem>
 
 		<hr style="display: block; width: 100%; border: 1px solid gray; opacity: 0.2;" />
 
 		<span class="section">Library</span>
 
-		<MenuItem href="/recent" label="Recent" on:tap />
-		<MenuItem href="/bookmarked" label="Bookmarked" on:tap />
-		<MenuItem href="/rated" label="Top Rated" on:tap />
-		<MenuItem href="/download" label="Downloaded" on:tap />
-		<MenuItem href="/search?s=" label="Search" on:tap />
+		<MenuItem href="/recent" icon="save" on:tap>Recent</MenuItem>
+		<MenuItem href="/bookmarked" icon="bookmark" on:tap>Bookmarked</MenuItem>
+		<MenuItem href="/rated" icon="star" on:tap>Top Rated</MenuItem>
+		<MenuItem href="/download" icon="download" on:tap>Downloaded</MenuItem>
+		<MenuItem href="/search?s=" icon="search" on:tap>Search</MenuItem>
 	</nav>
 
 	<div>
-		<MenuItem href="/settings" label="Settings" on:tap />
-		<MenuItem href="/help" label="Help" on:tap />
-		<MenuItem href="/auth/logout" label="Logout" on:tap />
+		<MenuItem href="/settings" icon="cog" on:tap>Settings</MenuItem>
+		<MenuItem href="/help" icon="information-circle" on:tap>Help</MenuItem>
+		<MenuItem href="/auth/logout" icon="logout" on:tap>Logout</MenuItem>
 	</div>
 </div>
 
 <style>
 	#aside-wrapper {
+		--icon-size: 1.5rem;
+
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;

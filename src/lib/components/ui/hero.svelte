@@ -54,7 +54,7 @@
 		<!-- {/each} -->
 	</div>
 
-	<div class="copy">
+	<div class="copy content">
 		<h1>
 			{#key word}
 				<span in:slide out:slide|local class="firstline">{word}<span class="comma">,</span> </span>
@@ -148,7 +148,7 @@
 		height: 100%;
 		top: 0;
 		left: 0;
-		padding: var(--gap-content);
+		/* padding: var(--gap-content); */
 		text-align: left;
 	}
 

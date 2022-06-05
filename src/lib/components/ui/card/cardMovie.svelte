@@ -1,22 +1,63 @@
 <script>
-	import { scale, fade } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import ProgressLine from '../ProgressLine.svelte';
 	import CardRatingStarts from '$components/ui/card/cardRatingStarts.svelte';
+	import { onMount } from 'svelte';
 
+	let element;
 	export let details = true;
 	export let movie;
 	export let progress = 0;
 	export let i;
-	export let poster = movie.poster !== 'N/A' ? movie.poster : '/imgs/image-fallback.jpg';
-	let promiseDetails = details
-		? fetch('/api/' + movie.imdbid).then((r) => r.json())
-		: Promise.reject();
+	let promiseDetails = new Promise((res, rej) => {});
+
+	let options = {
+		rootMargin: '0px',
+		threshold: 0
+	};
+
+	const callback = (entries, observer) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				loadDetails()
+					.then((r) => {
+						promiseDetails = r;
+					})
+					.catch(() => {
+						promiseDetails = Promise.reject();
+					})
+					.finally(() => {
+						observer.disconnect();
+					});
+			}
+		});
+	};
+	onMount(() => {
+		if (!details) {
+			promiseDetails = Promise.reject();
+			return;
+		}
+
+		let observer = new IntersectionObserver(callback, options);
+		observer.observe(element);
+
+		return () => observer?.disconnect();
+	});
+
+	async function loadDetails() {
+		const req = await fetch('/api/' + movie.imdbid);
+		if (!req.ok) throw req;
+		const res = await req.json();
+		return res;
+	}
 </script>
 
-<!-- {@const poster = movie.Poster !== 'N/A' ? movie.Poster : '/imgs/image-fallback.jpg'} -->
-<!-- out:scale={{ duration: 200, start: 0.95, easing: quintInOut }} -->
-<figure in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }} class="item">
+<figure
+	bind:this={element}
+	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
+	class="item"
+>
 	<a
 		class="item-link"
 		href="/movies/{movie.imdbid}"
@@ -25,7 +66,7 @@
 			// currentMovie.set(details);
 		}}
 	>
-		<img class="item-poster" src={poster} alt={movie.title} loading="lazy" />
+		<img class="item-poster" src={movie.poster} alt={movie.title} loading="lazy" />
 	</a>
 
 	{#if progress}

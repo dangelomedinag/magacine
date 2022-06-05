@@ -1,6 +1,6 @@
 <script>
 	export let rating;
-	export let block;
+	export let block = false;
 	const starsLenght = 5;
 	const stars = [1, 2, 3, 4, 5];
 	const percent = Math.floor(rating) * 0.1;
