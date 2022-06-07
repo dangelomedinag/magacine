@@ -1,20 +1,34 @@
 <script>
+	import { quintInOut } from 'svelte/easing';
+
+	import { scale } from 'svelte/transition';
+
 	/* script here */
 </script>
 
 <div class="video">
 	<div class="video__container">
-		<video class="video__player" src="/video/countdown.mp4" controls>
+		<video
+			in:scale={{ easing: quintInOut }}
+			class="video__player"
+			src="/video/countdown.mp4"
+			controls
+		>
 			<track kind="captions" />
 		</video>
 	</div>
 </div>
 
 <style>
+	.video {
+		background-color: black;
+	}
+
 	.video__container {
 		max-width: 800px;
 		width: 100%;
 		margin: 0 auto;
+		padding: 2em 0;
 	}
 
 	.video__player {

@@ -4,7 +4,7 @@
 	import Icon from '$components/ui/icons/icon.svelte';
 	const dispatch = createEventDispatcher();
 
-	export let label;
+	// export let label;
 	export let href;
 	export let icon;
 	export let notification = false;
@@ -28,7 +28,7 @@
 <a class="link" class:active {href} on:click use:tap>
 	<div class="wrapper">
 		<div class="icon">
-			<Icon {icon} />
+			<Icon name={icon} type="solid" />
 		</div>
 		<div class="label">
 			<slot />

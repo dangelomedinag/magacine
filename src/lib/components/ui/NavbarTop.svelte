@@ -52,7 +52,7 @@
 	<div class="content navbar-wrapper">
 		<div class="left">
 			<a href="/">
-				<Icon icon="home" />
+				<Icon name="home" type="solid" />
 			</a>
 		</div>
 		<div class="center">
@@ -61,7 +61,7 @@
 		<div class="right">
 			{#if search}
 				<a href="/search">
-					<Icon icon="search" />
+					<Icon name="search" type="solid" />
 				</a>
 			{/if}
 			{#if profile}
@@ -109,6 +109,7 @@
 	.navbar-wrapper {
 		display: flex;
 		justify-content: space-between;
+		flex-wrap: wrap;
 	}
 
 	.left > :global(button),
@@ -132,7 +133,6 @@
 		line-height: 1em;
 		text-decoration: none;
 		cursor: pointer;
-		/* font-size: 2rem; */
 	}
 
 	.left > :global(button:hover),
@@ -149,9 +149,38 @@
 	}
 
 	.center {
-		position: absolute;
+		order: 3;
+		/* position: absolute;
 		left: 50%;
 		top: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate(-50%, -50%); */
+		/* display: none; */
+		width: 100%;
+		/* max-width: 15%; */
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.center > :global(button) {
+		/* font-size: 0.9rem; */
+		flex: 1 1 100%;
+		/* width: 100%; */
+		/* width: 70px; */
+	}
+
+	@media (min-width: 576px) {
+		.navbar-wrapper {
+			flex-wrap: nowrap;
+		}
+		.center {
+			order: initial;
+			width: auto;
+		}
+
+		.center > :global(button) {
+			/* font-size: 0.9rem; */
+			flex: 0 1 auto;
+			/* width: 70px; */
+		}
 	}
 </style>

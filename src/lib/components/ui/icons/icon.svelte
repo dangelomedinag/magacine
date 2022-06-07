@@ -1,98 +1,44 @@
 <script>
-	export let icon = false;
-	export let style = 'fill';
+	import { onMount } from 'svelte';
+
+	export let name;
+	export let type = 'outline';
+	export let x = undefined;
+	export let y = undefined;
+	export let deg = undefined;
+	export let style;
+	export let shadow = false;
+	let Svg;
+	// export let style = 'fill';
+	// export let ajust = '';
+
+	onMount(async () => {
+		Svg = await import(`./${type}/${name}.svelte`);
+
+		// console.log(Svg.default);
+	});
 </script>
 
-<!-- {#if icon === 'user-circle'}
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		fill="none"
-		viewBox="0 0 24 24"
-		stroke="currentColor"
-		stroke-width="2"
+{#if Svg}
+	<div
+		class:shadow
+		{style}
+		style:transform={x
+			? `translateX(${x})`
+			: '' + y
+			? `translateY(${y})`
+			: '' + deg
+			? `rotate(${deg})`
+			: ''}
 	>
-		<path
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-		/>
-	</svg>
+		<Svg.default />
+	</div>
 {/if}
-
-{#if icon === 'cog'}
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		fill="none"
-		viewBox="0 0 24 24"
-		stroke="currentColor"
-		stroke-width="2"
-	>
-		<path
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-		/>
-		<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-	</svg>
-{/if}
-
-{#if icon === 'logout'}
-	<svg xmlns="http://www.w3.org/2000/svg" class="sm" viewBox="0 0 20 20" fill="currentColor">
-		<path
-			fill-rule="evenodd"
-			d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-			clip-rule="evenodd"
-		/>
-	</svg>
-{/if}
-
-{#if icon === 'search'}
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		fill="none"
-		viewBox="0 0 24 24"
-		stroke="currentColor"
-		stroke-width="2"
-	>
-		<path
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-		/>
-	</svg>
-{/if}
-{#if icon === 'search2'}
-	<svg xmlns="http://www.w3.org/2000/svg" class="sm" viewBox="0 0 20 20" fill="currentColor">
-		<path
-			fill-rule="evenodd"
-			d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-			clip-rule="evenodd"
-		/>
-	</svg>
-{/if}
-
-{#if icon === 'help'}
-	<svg xmlns="http://www.w3.org/2000/svg" class="sm" viewBox="0 0 20 20" fill="currentColor">
-		<path
-			fill-rule="evenodd"
-			d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-			clip-rule="evenodd"
-		/>
-	</svg>
-{/if}
-
-{#if icon === 'home'}
-	<svg xmlns="http://www.w3.org/2000/svg" class="sm" viewBox="0 0 20 20" fill="currentColor">
-		<path
-			d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
-		/>
-	</svg>
-{/if} -->
 
 <!-- ss -->
-{#if style === 'line'}
+<!-- {#if style === 'line'}
 	{#if icon === 'academic-cap'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path d="M12 14l9-5-9-5-9 5 9 5z" />
 			<path
 				d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
@@ -105,7 +51,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'adjustments'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -114,7 +60,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'annotation'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -123,7 +69,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'archive'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -132,7 +78,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'arrow-circle-down'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -141,7 +87,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'arrow-circle-left'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -150,7 +96,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'arrow-circle-right'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -159,7 +105,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'arrow-circle-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -168,67 +114,67 @@
 		</svg>
 	{/if}
 	{#if icon === 'arrow-down'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-left'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-narrow-down'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M16 17l-4 4m0 0l-4-4m4 4V3" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-narrow-left'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-narrow-right'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-narrow-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M8 7l4-4m0 0l4 4m-4-4v18" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-right'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-sm-down'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-sm-left'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-sm-right'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-sm-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
 		</svg>
 	{/if}
 	{#if icon === 'arrow-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
 		</svg>
 	{/if}
 	{#if icon === 'arrows-expand'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -237,7 +183,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'at-symbol'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -246,7 +192,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'backspace'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -255,7 +201,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'badge-check'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -264,7 +210,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'ban'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -273,7 +219,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'beaker'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -282,7 +228,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'bell'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -291,7 +237,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'book-open'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -300,7 +246,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'bookmark-alt'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -309,7 +255,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'bookmark'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -318,7 +264,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'briefcase'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -327,7 +273,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cake'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -336,7 +282,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'calculator'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -345,7 +291,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'calendar'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -354,7 +300,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'camera'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -364,7 +310,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cash'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -373,7 +319,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'chart-bar'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -382,7 +328,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'chart-pie'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -396,7 +342,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'chart-square-bar'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -405,7 +351,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'chat-alt-2'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -414,7 +360,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'chat-alt'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -423,7 +369,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'chat'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -432,7 +378,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'check-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -441,52 +387,52 @@
 		</svg>
 	{/if}
 	{#if icon === 'check'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
 		</svg>
 	{/if}
 	{#if icon === 'chevron-double-down'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
 		</svg>
 	{/if}
 	{#if icon === 'chevron-double-left'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
 		</svg>
 	{/if}
 	{#if icon === 'chevron-double-right'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
 		</svg>
 	{/if}
 	{#if icon === 'chevron-double-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M5 11l7-7 7 7M5 19l7-7 7 7" />
 		</svg>
 	{/if}
 	{#if icon === 'chevron-down'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
 		</svg>
 	{/if}
 	{#if icon === 'chevron-left'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
 		</svg>
 	{/if}
 	{#if icon === 'chevron-right'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
 		</svg>
 	{/if}
 	{#if icon === 'chevron-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
 		</svg>
 	{/if}
 	{#if icon === 'chip'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -495,7 +441,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'clipboard-check'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -504,7 +450,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'clipboard-copy'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -513,7 +459,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'clipboard-list'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -522,7 +468,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'clipboard'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -531,7 +477,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'clock'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -540,7 +486,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cloud-download'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -549,7 +495,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cloud-upload'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -558,7 +504,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cloud'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -567,7 +513,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'code'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -576,7 +522,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cog'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -586,7 +532,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'collection'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -595,7 +541,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'color-swatch'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -604,7 +550,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'credit-card'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -613,7 +559,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cube-transparent'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -622,7 +568,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cube'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -631,7 +577,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'currency-bangladeshi'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -640,7 +586,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'currency-dollar'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -649,7 +595,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'currency-euro'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -658,7 +604,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'currency-pound'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -667,7 +613,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'currency-rupee'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -676,7 +622,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'currency-yen'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -685,7 +631,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'cursor-click'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -694,7 +640,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'database'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -703,7 +649,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'desktop-computer'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -712,7 +658,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'device-mobile'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -721,7 +667,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'device-tablet'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -730,7 +676,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'document-add'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -739,7 +685,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'document-download'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -748,7 +694,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'document-duplicate'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -757,7 +703,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'document-remove'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -766,7 +712,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'document-report'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -775,7 +721,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'document-search'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -784,7 +730,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'document-text'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -793,7 +739,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'document'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -802,7 +748,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'dots-circle-horizontal'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -811,7 +757,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'dots-horizontal'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -820,7 +766,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'dots-vertical'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -829,7 +775,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'download'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -838,7 +784,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'duplicate'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -847,7 +793,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'emoji-happy'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -856,7 +802,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'emoji-sad'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -865,7 +811,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'exclamation-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -874,7 +820,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'exclamation'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -883,7 +829,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'external-link'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -892,7 +838,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'eye-off'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -901,7 +847,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'eye'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 			<path
 				stroke-linecap="round"
@@ -911,7 +857,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'fast-forward'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -920,7 +866,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'film'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -929,7 +875,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'filter'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -938,7 +884,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'finger-print'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -947,7 +893,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'fire'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -961,7 +907,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'flag'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -970,7 +916,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'folder-add'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -979,7 +925,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'folder-download'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -988,7 +934,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'folder-open'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -997,7 +943,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'folder-remove'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1006,7 +952,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'folder'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1015,7 +961,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'gift'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1024,7 +970,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'globe-alt'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1033,7 +979,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'globe'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1042,7 +988,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'hand'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1051,7 +997,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'hashtag'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1060,7 +1006,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'heart'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1069,7 +1015,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'home'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1078,7 +1024,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'identification'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1087,7 +1033,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'inbox-in'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1096,7 +1042,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'inbox'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1105,7 +1051,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'information-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1114,7 +1060,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'key'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1123,7 +1069,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'library'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1132,7 +1078,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'light-bulb'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1141,12 +1087,12 @@
 		</svg>
 	{/if}
 	{#if icon === 'lightning-bolt'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
 		</svg>
 	{/if}
 	{#if icon === 'link'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1155,7 +1101,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'location-marker'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1165,7 +1111,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'lock-closed'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1174,7 +1120,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'lock-open'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1183,7 +1129,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'login'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1192,7 +1138,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'logout'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1201,7 +1147,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'mail-open'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1210,7 +1156,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'mail'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1219,7 +1165,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'map'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1228,32 +1174,32 @@
 		</svg>
 	{/if}
 	{#if icon === 'menu-alt-1'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h8m-8 6h16" />
 		</svg>
 	{/if}
 	{#if icon === 'menu-alt-2'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
 		</svg>
 	{/if}
 	{#if icon === 'menu-alt-3'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
 		</svg>
 	{/if}
 	{#if icon === 'menu-alt-4'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
 		</svg>
 	{/if}
 	{#if icon === 'menu'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
 		</svg>
 	{/if}
 	{#if icon === 'microphone'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1262,7 +1208,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'minus-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1271,17 +1217,17 @@
 		</svg>
 	{/if}
 	{#if icon === 'minus-sm'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
 		</svg>
 	{/if}
 	{#if icon === 'minus'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
 		</svg>
 	{/if}
 	{#if icon === 'moon'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1290,7 +1236,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'music-note'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1299,7 +1245,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'newspaper'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1308,7 +1254,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'office-building'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1317,12 +1263,12 @@
 		</svg>
 	{/if}
 	{#if icon === 'paper-airplane'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
 		</svg>
 	{/if}
 	{#if icon === 'paper-clip'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1331,7 +1277,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'pause'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1340,7 +1286,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'pencil-alt'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1349,7 +1295,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'pencil'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1358,7 +1304,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'phone-incoming'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1367,7 +1313,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'phone-missed-call'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1376,7 +1322,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'phone-outgoing'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1385,7 +1331,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'phone'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1394,7 +1340,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'photograph'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1403,7 +1349,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'play'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1413,7 +1359,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'plus-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1422,7 +1368,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'plus-sm'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
 		</svg>
 	{/if}
@@ -1432,12 +1378,12 @@
 			><span class="sr-only">(</span>New<span class="sr-only">)</span></small
 		>
 
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
 		</svg>
 	{/if}
 	{#if icon === 'presentation-chart-bar'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1446,7 +1392,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'presentation-chart-line'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1455,7 +1401,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'printer'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1464,7 +1410,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'puzzle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1473,7 +1419,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'qrcode'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1482,7 +1428,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'question-mark-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1491,7 +1437,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'receipt-refund'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1500,7 +1446,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'receipt-tax'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1509,7 +1455,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'refresh'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1518,7 +1464,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'reply'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1527,7 +1473,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'rewind'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1536,7 +1482,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'rss'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1545,7 +1491,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'save-as'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1554,7 +1500,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'save'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1563,7 +1509,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'scale'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1572,7 +1518,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'scissors'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1581,7 +1527,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'search-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1590,7 +1536,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'search'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1599,12 +1545,12 @@
 		</svg>
 	{/if}
 	{#if icon === 'selector'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 		</svg>
 	{/if}
 	{#if icon === 'server'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1613,7 +1559,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'share'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1622,7 +1568,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'shield-check'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1631,7 +1577,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'shield-exclamation'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1640,7 +1586,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'shopping-bag'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1649,7 +1595,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'shopping-cart'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1658,7 +1604,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'sort-ascending'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1667,7 +1613,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'sort-descending'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1676,7 +1622,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'sparkles'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1685,7 +1631,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'speakerphone'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1694,7 +1640,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'star'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1703,7 +1649,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'status-offline'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1712,7 +1658,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'status-online'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1721,7 +1667,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'stop'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 			<path
 				stroke-linecap="round"
@@ -1731,7 +1677,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'sun'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1740,7 +1686,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'support'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1749,7 +1695,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'switch-horizontal'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1758,7 +1704,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'switch-vertical'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1767,7 +1713,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'table'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1776,7 +1722,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'tag'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1785,7 +1731,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'template'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1794,7 +1740,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'terminal'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1803,7 +1749,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'thumb-down'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1812,7 +1758,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'thumb-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1821,7 +1767,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'ticket'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1830,7 +1776,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'translate'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1839,7 +1785,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'trash'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1848,17 +1794,17 @@
 		</svg>
 	{/if}
 	{#if icon === 'trending-down'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
 		</svg>
 	{/if}
 	{#if icon === 'trending-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
 		</svg>
 	{/if}
 	{#if icon === 'truck'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
 			<path
 				stroke-linecap="round"
@@ -1868,7 +1814,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'upload'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1877,7 +1823,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'user-add'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1886,7 +1832,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'user-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1895,7 +1841,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'user-group'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1904,7 +1850,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'user-remove'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1913,7 +1859,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'user'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1922,7 +1868,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'users'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1931,7 +1877,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'variable'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1940,7 +1886,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'video-camera'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1949,7 +1895,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'view-boards'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1958,7 +1904,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'view-grid-add'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1967,7 +1913,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'view-grid'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1976,12 +1922,12 @@
 		</svg>
 	{/if}
 	{#if icon === 'view-list'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
 		</svg>
 	{/if}
 	{#if icon === 'volume-off'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -1996,7 +1942,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'volume-up'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -2005,7 +1951,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'wifi'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -2014,7 +1960,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'x-circle'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -2023,12 +1969,12 @@
 		</svg>
 	{/if}
 	{#if icon === 'x'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 		</svg>
 	{/if}
 	{#if icon === 'zoom-in'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -2037,7 +1983,7 @@
 		</svg>
 	{/if}
 	{#if icon === 'zoom-out'}
-		<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<svg style:transform={ajust} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -2045,11 +1991,12 @@
 			/>
 		</svg>
 	{/if}
-{/if}
+{/if} -->
 <!-- otros -->
-{#if style === 'fill'}
+
+<!-- {#if style === 'fill'}
 	{#if icon === 'academic-cap'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"
 			/>
@@ -2057,7 +2004,7 @@
 	{/if}
 
 	{#if icon === 'adjustments'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"
 			/>
@@ -2065,7 +2012,7 @@
 	{/if}
 
 	{#if icon === 'annotation'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
@@ -2075,7 +2022,7 @@
 	{/if}
 
 	{#if icon === 'archive'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
 			<path
 				fill-rule="evenodd"
@@ -2086,7 +2033,7 @@
 	{/if}
 
 	{#if icon === 'arrow-circle-down'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
@@ -2096,7 +2043,7 @@
 	{/if}
 
 	{#if icon === 'arrow-circle-left'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
@@ -2106,7 +2053,7 @@
 	{/if}
 
 	{#if icon === 'arrow-circle-right'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
@@ -2116,7 +2063,7 @@
 	{/if}
 
 	{#if icon === 'arrow-circle-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
@@ -2126,7 +2073,7 @@
 	{/if}
 
 	{#if icon === 'arrow-down'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
@@ -2136,7 +2083,7 @@
 	{/if}
 
 	{#if icon === 'arrow-left'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
@@ -2146,7 +2093,7 @@
 	{/if}
 
 	{#if icon === 'arrow-narrow-down'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z"
@@ -2156,7 +2103,7 @@
 	{/if}
 
 	{#if icon === 'arrow-narrow-left'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
@@ -2166,7 +2113,7 @@
 	{/if}
 
 	{#if icon === 'arrow-narrow-right'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
@@ -2176,7 +2123,7 @@
 	{/if}
 
 	{#if icon === 'arrow-narrow-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
@@ -2186,7 +2133,7 @@
 	{/if}
 
 	{#if icon === 'arrow-right'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
@@ -2196,7 +2143,7 @@
 	{/if}
 
 	{#if icon === 'arrow-sm-down'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
@@ -2206,7 +2153,7 @@
 	{/if}
 
 	{#if icon === 'arrow-sm-left'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
@@ -2216,7 +2163,7 @@
 	{/if}
 
 	{#if icon === 'arrow-sm-right'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
@@ -2226,7 +2173,7 @@
 	{/if}
 
 	{#if icon === 'arrow-sm-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
@@ -2236,7 +2183,7 @@
 	{/if}
 
 	{#if icon === 'arrow-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
@@ -2246,7 +2193,7 @@
 	{/if}
 
 	{#if icon === 'arrows-expand'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 110-2h4a1 1 0 011 1v4a1 1 0 11-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 112 0v1.586l2.293-2.293a1 1 0 011.414 1.414L6.414 15H8a1 1 0 110 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 110-2h1.586l-2.293-2.293a1 1 0 011.414-1.414L15 13.586V12a1 1 0 011-1z"
@@ -2256,7 +2203,7 @@
 	{/if}
 
 	{#if icon === 'at-symbol'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z"
@@ -2266,7 +2213,7 @@
 	{/if}
 
 	{#if icon === 'backspace'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z"
@@ -2276,7 +2223,7 @@
 	{/if}
 
 	{#if icon === 'badge-check'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -2286,7 +2233,7 @@
 	{/if}
 
 	{#if icon === 'ban'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
@@ -2296,7 +2243,7 @@
 	{/if}
 
 	{#if icon === 'beaker'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673 0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53 0l-.563-.187a1.993 1.993 0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z"
@@ -2306,7 +2253,7 @@
 	{/if}
 
 	{#if icon === 'bell'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
 			/>
@@ -2314,7 +2261,7 @@
 	{/if}
 
 	{#if icon === 'book-open'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
 			/>
@@ -2322,7 +2269,7 @@
 	{/if}
 
 	{#if icon === 'bookmark-alt'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm11 1H6v8l4-2 4 2V6z"
@@ -2332,13 +2279,13 @@
 	{/if}
 
 	{#if icon === 'bookmark'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
 		</svg>
 	{/if}
 
 	{#if icon === 'briefcase'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
@@ -2351,7 +2298,7 @@
 	{/if}
 
 	{#if icon === 'cake'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 3a1 1 0 011-1h.01a1 1 0 010 2H7a1 1 0 01-1-1zm2 3a1 1 0 00-2 0v1a2 2 0 00-2 2v1a2 2 0 00-2 2v.683a3.7 3.7 0 011.055.485 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0A3.7 3.7 0 0118 12.683V12a2 2 0 00-2-2V9a2 2 0 00-2-2V6a1 1 0 10-2 0v1h-1V6a1 1 0 10-2 0v1H8V6zm10 8.868a3.704 3.704 0 01-4.055-.036 1.704 1.704 0 00-1.89 0 3.704 3.704 0 01-4.11 0 1.704 1.704 0 00-1.89 0A3.704 3.704 0 012 14.868V17a1 1 0 001 1h14a1 1 0 001-1v-2.132zM9 3a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm3 0a1 1 0 011-1h.01a1 1 0 110 2H13a1 1 0 01-1-1z"
@@ -2361,7 +2308,7 @@
 	{/if}
 
 	{#if icon === 'calculator'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 1a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm4-4a1 1 0 100 2h.01a1 1 0 100-2H13zM9 9a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM7 8a1 1 0 000 2h.01a1 1 0 000-2H7z"
@@ -2371,7 +2318,7 @@
 	{/if}
 
 	{#if icon === 'calendar'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
@@ -2381,7 +2328,7 @@
 	{/if}
 
 	{#if icon === 'camera'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
@@ -2391,7 +2338,7 @@
 	{/if}
 
 	{#if icon === 'cash'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
@@ -2401,7 +2348,7 @@
 	{/if}
 
 	{#if icon === 'chart-bar'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
 			/>
@@ -2409,14 +2356,14 @@
 	{/if}
 
 	{#if icon === 'chart-pie'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
 			<path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
 		</svg>
 	{/if}
 
 	{#if icon === 'chart-square-bar'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm9 4a1 1 0 10-2 0v6a1 1 0 102 0V7zm-3 2a1 1 0 10-2 0v4a1 1 0 102 0V9zm-3 3a1 1 0 10-2 0v1a1 1 0 102 0v-1z"
@@ -2426,7 +2373,7 @@
 	{/if}
 
 	{#if icon === 'chat-alt-2'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
 			<path
 				d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"
@@ -2435,7 +2382,7 @@
 	{/if}
 
 	{#if icon === 'chat-alt'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
@@ -2445,7 +2392,7 @@
 	{/if}
 
 	{#if icon === 'chat'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
@@ -2455,7 +2402,7 @@
 	{/if}
 
 	{#if icon === 'check-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -2465,7 +2412,7 @@
 	{/if}
 
 	{#if icon === 'check'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -2475,7 +2422,7 @@
 	{/if}
 
 	{#if icon === 'chevron-double-down'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M15.707 4.293a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 8.586l4.293-4.293a1 1 0 011.414 0zm0 6a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 14.586l4.293-4.293a1 1 0 011.414 0z"
@@ -2485,7 +2432,7 @@
 	{/if}
 
 	{#if icon === 'chevron-double-left'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z"
@@ -2495,7 +2442,7 @@
 	{/if}
 
 	{#if icon === 'chevron-double-right'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
@@ -2510,7 +2457,7 @@
 	{/if}
 
 	{#if icon === 'chevron-double-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4.293 15.707a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 0zm0-6a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707a1 1 0 01-1.414 0z"
@@ -2520,7 +2467,7 @@
 	{/if}
 
 	{#if icon === 'chevron-down'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -2530,7 +2477,7 @@
 	{/if}
 
 	{#if icon === 'chevron-left'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -2540,7 +2487,7 @@
 	{/if}
 
 	{#if icon === 'chevron-right'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -2550,7 +2497,7 @@
 	{/if}
 
 	{#if icon === 'chevron-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
@@ -2560,7 +2507,7 @@
 	{/if}
 
 	{#if icon === 'chip'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M13 7H7v6h6V7z" />
 			<path
 				fill-rule="evenodd"
@@ -2571,7 +2518,7 @@
 	{/if}
 
 	{#if icon === 'clipboard-check'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
 			<path
 				fill-rule="evenodd"
@@ -2582,7 +2529,7 @@
 	{/if}
 
 	{#if icon === 'clipboard-copy'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
 			<path
 				d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z"
@@ -2591,7 +2538,7 @@
 	{/if}
 
 	{#if icon === 'clipboard-list'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
 			<path
 				fill-rule="evenodd"
@@ -2602,7 +2549,7 @@
 	{/if}
 
 	{#if icon === 'clipboard'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
 			<path
 				d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"
@@ -2611,7 +2558,7 @@
 	{/if}
 
 	{#if icon === 'clock'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
@@ -2621,7 +2568,7 @@
 	{/if}
 
 	{#if icon === 'cloud-download'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M2 9.5A3.5 3.5 0 005.5 13H9v2.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 15.586V13h2.5a4.5 4.5 0 10-.616-8.958 4.002 4.002 0 10-7.753 1.977A3.5 3.5 0 002 9.5zm9 3.5H9V8a1 1 0 012 0v5z"
@@ -2631,7 +2578,7 @@
 	{/if}
 
 	{#if icon === 'cloud-upload'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"
 			/>
@@ -2640,13 +2587,13 @@
 	{/if}
 
 	{#if icon === 'cloud'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z" />
 		</svg>
 	{/if}
 
 	{#if icon === 'code'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
@@ -2656,7 +2603,7 @@
 	{/if}
 
 	{#if icon === 'cog'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
@@ -2666,7 +2613,7 @@
 	{/if}
 
 	{#if icon === 'collection'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"
 			/>
@@ -2674,7 +2621,7 @@
 	{/if}
 
 	{#if icon === 'color-swatch'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z"
@@ -2684,7 +2631,7 @@
 	{/if}
 
 	{#if icon === 'credit-card'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
 			<path
 				fill-rule="evenodd"
@@ -2695,7 +2642,7 @@
 	{/if}
 
 	{#if icon === 'cube-transparent'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M9.504 1.132a1 1 0 01.992 0l1.75 1a1 1 0 11-.992 1.736L10 3.152l-1.254.716a1 1 0 11-.992-1.736l1.75-1zM5.618 4.504a1 1 0 01-.372 1.364L5.016 6l.23.132a1 1 0 11-.992 1.736L4 7.723V8a1 1 0 01-2 0V6a.996.996 0 01.52-.878l1.734-.99a1 1 0 011.364.372zm8.764 0a1 1 0 011.364-.372l1.733.99A1.002 1.002 0 0118 6v2a1 1 0 11-2 0v-.277l-.254.145a1 1 0 11-.992-1.736l.23-.132-.23-.132a1 1 0 01-.372-1.364zm-7 4a1 1 0 011.364-.372L10 8.848l1.254-.716a1 1 0 11.992 1.736L11 10.58V12a1 1 0 11-2 0v-1.42l-1.246-.712a1 1 0 01-.372-1.364zM3 11a1 1 0 011 1v1.42l1.246.712a1 1 0 11-.992 1.736l-1.75-1A1 1 0 012 14v-2a1 1 0 011-1zm14 0a1 1 0 011 1v2a1 1 0 01-.504.868l-1.75 1a1 1 0 11-.992-1.736L16 13.42V12a1 1 0 011-1zm-9.618 5.504a1 1 0 011.364-.372l.254.145V16a1 1 0 112 0v.277l.254-.145a1 1 0 11.992 1.736l-1.735.992a.995.995 0 01-1.022 0l-1.735-.992a1 1 0 01-.372-1.364z"
@@ -2705,7 +2652,7 @@
 	{/if}
 
 	{#if icon === 'cube'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"
 			/>
@@ -2713,7 +2660,7 @@
 	{/if}
 
 	{#if icon === 'currency-bangladeshi'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 4a1 1 0 000 2 1 1 0 011 1v1H7a1 1 0 000 2h1v3a3 3 0 106 0v-1a1 1 0 10-2 0v1a1 1 0 11-2 0v-3h3a1 1 0 100-2h-3V7a3 3 0 00-3-3z"
@@ -2723,7 +2670,7 @@
 	{/if}
 
 	{#if icon === 'currency-dollar'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"
 			/>
@@ -2736,7 +2683,7 @@
 	{/if}
 
 	{#if icon === 'currency-euro'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.736 6.979C9.208 6.193 9.696 6 10 6c.304 0 .792.193 1.264.979a1 1 0 001.715-1.029C12.279 4.784 11.232 4 10 4s-2.279.784-2.979 1.95c-.285.475-.507 1-.67 1.55H6a1 1 0 000 2h.013a9.358 9.358 0 000 1H6a1 1 0 100 2h.351c.163.55.385 1.075.67 1.55C7.721 15.216 8.768 16 10 16s2.279-.784 2.979-1.95a1 1 0 10-1.715-1.029c-.472.786-.96.979-1.264.979-.304 0-.792-.193-1.264-.979a4.265 4.265 0 01-.264-.521H10a1 1 0 100-2H8.017a7.36 7.36 0 010-1H10a1 1 0 100-2H8.472c.08-.185.167-.36.264-.521z"
@@ -2746,7 +2693,7 @@
 	{/if}
 
 	{#if icon === 'currency-pound'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-14a3 3 0 00-3 3v2H7a1 1 0 000 2h1v1a1 1 0 01-1 1 1 1 0 100 2h6a1 1 0 100-2H9.83c.11-.313.17-.65.17-1v-1h1a1 1 0 100-2h-1V7a1 1 0 112 0 1 1 0 102 0 3 3 0 00-3-3z"
@@ -2756,7 +2703,7 @@
 	{/if}
 
 	{#if icon === 'currency-rupee'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 5a1 1 0 100 2h1a2 2 0 011.732 1H7a1 1 0 100 2h2.732A2 2 0 018 11H7a1 1 0 00-.707 1.707l3 3a1 1 0 001.414-1.414l-1.483-1.484A4.008 4.008 0 0011.874 10H13a1 1 0 100-2h-1.126a3.976 3.976 0 00-.41-1H13a1 1 0 100-2H7z"
@@ -2766,7 +2713,7 @@
 	{/if}
 
 	{#if icon === 'currency-yen'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM7.858 5.485a1 1 0 00-1.715 1.03L7.633 9H7a1 1 0 100 2h1.834l.166.277V12H7a1 1 0 100 2h2v1a1 1 0 102 0v-1h2a1 1 0 100-2h-2v-.723l.166-.277H13a1 1 0 100-2h-.634l1.492-2.486a1 1 0 10-1.716-1.029L10.034 9h-.068L7.858 5.485z"
@@ -2776,7 +2723,7 @@
 	{/if}
 
 	{#if icon === 'cursor-click'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z"
@@ -2786,7 +2733,7 @@
 	{/if}
 
 	{#if icon === 'database'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z" />
 			<path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z" />
 			<path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z" />
@@ -2794,7 +2741,7 @@
 	{/if}
 
 	{#if icon === 'desktop-computer'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z"
@@ -2804,7 +2751,7 @@
 	{/if}
 
 	{#if icon === 'device-mobile'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"
@@ -2814,7 +2761,7 @@
 	{/if}
 
 	{#if icon === 'device-tablet'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm4 14a1 1 0 100-2 1 1 0 000 2z"
@@ -2824,7 +2771,7 @@
 	{/if}
 
 	{#if icon === 'document-add'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z"
@@ -2834,7 +2781,7 @@
 	{/if}
 
 	{#if icon === 'document-download'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z"
@@ -2844,7 +2791,7 @@
 	{/if}
 
 	{#if icon === 'document-duplicate'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"
 			/>
@@ -2853,7 +2800,7 @@
 	{/if}
 
 	{#if icon === 'document-remove'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm1 8a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -2863,7 +2810,7 @@
 	{/if}
 
 	{#if icon === 'document-report'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z"
@@ -2873,7 +2820,7 @@
 	{/if}
 
 	{#if icon === 'document-search'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2h-1.528A6 6 0 004 9.528V4z"
 			/>
@@ -2886,7 +2833,7 @@
 	{/if}
 
 	{#if icon === 'document-text'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -2896,7 +2843,7 @@
 	{/if}
 
 	{#if icon === 'document'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
@@ -2906,7 +2853,7 @@
 	{/if}
 
 	{#if icon === 'dots-circle-horizontal'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
@@ -2916,7 +2863,7 @@
 	{/if}
 
 	{#if icon === 'dots-horizontal'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
 			/>
@@ -2924,7 +2871,7 @@
 	{/if}
 
 	{#if icon === 'dots-vertical'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
 			/>
@@ -2932,7 +2879,7 @@
 	{/if}
 
 	{#if icon === 'download'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
@@ -2942,14 +2889,14 @@
 	{/if}
 
 	{#if icon === 'duplicate'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
 			<path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
 		</svg>
 	{/if}
 
 	{#if icon === 'emoji-happy'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z"
@@ -2959,7 +2906,7 @@
 	{/if}
 
 	{#if icon === 'emoji-sad'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.536 5.879a1 1 0 001.415 0 3 3 0 014.242 0 1 1 0 001.415-1.415 5 5 0 00-7.072 0 1 1 0 000 1.415z"
@@ -2969,7 +2916,7 @@
 	{/if}
 
 	{#if icon === 'exclamation-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
@@ -2979,7 +2926,7 @@
 	{/if}
 
 	{#if icon === 'exclamation'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
@@ -2989,7 +2936,7 @@
 	{/if}
 
 	{#if icon === 'external-link'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
 			/>
@@ -3000,7 +2947,7 @@
 	{/if}
 
 	{#if icon === 'eye-off'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
@@ -3013,7 +2960,7 @@
 	{/if}
 
 	{#if icon === 'eye'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
 			<path
 				fill-rule="evenodd"
@@ -3024,7 +2971,7 @@
 	{/if}
 
 	{#if icon === 'fast-forward'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z"
 			/>
@@ -3032,7 +2979,7 @@
 	{/if}
 
 	{#if icon === 'film'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm3 2h6v4H7V5zm8 8v2h1v-2h-1zm-2-2H7v4h6v-4zm2 0h1V9h-1v2zm1-4V5h-1v2h1zM5 5v2H4V5h1zm0 4H4v2h1V9zm-1 4h1v2H4v-2z"
@@ -3042,7 +2989,7 @@
 	{/if}
 
 	{#if icon === 'filter'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
@@ -3052,7 +2999,7 @@
 	{/if}
 
 	{#if icon === 'finger-print'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M6.625 2.655A9 9 0 0119 11a1 1 0 11-2 0 7 7 0 00-9.625-6.492 1 1 0 11-.75-1.853zM4.662 4.959A1 1 0 014.75 6.37 6.97 6.97 0 003 11a1 1 0 11-2 0 8.97 8.97 0 012.25-5.953 1 1 0 011.412-.088z"
@@ -3072,7 +3019,7 @@
 	{/if}
 
 	{#if icon === 'fire'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"
@@ -3082,7 +3029,7 @@
 	{/if}
 
 	{#if icon === 'flag'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"
@@ -3092,7 +3039,7 @@
 	{/if}
 
 	{#if icon === 'folder-add'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm7 5a1 1 0 10-2 0v1H8a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V9z"
@@ -3101,7 +3048,7 @@
 	{/if}
 
 	{#if icon === 'folder-download'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm7 5a1 1 0 10-2 0v1.586l-.293-.293a1 1 0 10-1.414 1.414l2 2 .002.002a.997.997 0 001.41 0l.002-.002 2-2a1 1 0 00-1.414-1.414l-.293.293V9z"
@@ -3110,7 +3057,7 @@
 	{/if}
 
 	{#if icon === 'folder-open'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z"
@@ -3121,7 +3068,7 @@
 	{/if}
 
 	{#if icon === 'folder-remove'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm4 6a1 1 0 100 2h4a1 1 0 100-2H8z"
@@ -3130,13 +3077,13 @@
 	{/if}
 
 	{#if icon === 'folder'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
 		</svg>
 	{/if}
 
 	{#if icon === 'gift'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z"
@@ -3147,7 +3094,7 @@
 	{/if}
 
 	{#if icon === 'globe-alt'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z"
@@ -3157,7 +3104,7 @@
 	{/if}
 
 	{#if icon === 'globe'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z"
@@ -3167,7 +3114,7 @@
 	{/if}
 
 	{#if icon === 'hand'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M9 3a1 1 0 012 0v5.5a.5.5 0 001 0V4a1 1 0 112 0v4.5a.5.5 0 001 0V6a1 1 0 112 0v5a7 7 0 11-14 0V9a1 1 0 012 0v2.5a.5.5 0 001 0V4a1 1 0 012 0v4.5a.5.5 0 001 0V3z"
@@ -3177,7 +3124,7 @@
 	{/if}
 
 	{#if icon === 'hashtag'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.53 6H17a1 1 0 110 2h-2.97l-1 4H15a1 1 0 110 2h-2.47l-.56 2.242a1 1 0 11-1.94-.485L10.47 14H7.53l-.56 2.242a1 1 0 11-1.94-.485L5.47 14H3a1 1 0 110-2h2.97l1-4H5a1 1 0 110-2h2.47l.56-2.243a1 1 0 011.213-.727zM9.03 8l-1 4h2.938l1-4H9.031z"
@@ -3187,7 +3134,7 @@
 	{/if}
 
 	{#if icon === 'heart'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
@@ -3197,7 +3144,7 @@
 	{/if}
 
 	{#if icon === 'home'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
 			/>
@@ -3205,7 +3152,7 @@
 	{/if}
 
 	{#if icon === 'identification'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z"
@@ -3215,7 +3162,7 @@
 	{/if}
 
 	{#if icon === 'inbox-in'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"
 			/>
@@ -3226,7 +3173,7 @@
 	{/if}
 
 	{#if icon === 'inbox'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z"
@@ -3236,7 +3183,7 @@
 	{/if}
 
 	{#if icon === 'information-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -3246,7 +3193,7 @@
 	{/if}
 
 	{#if icon === 'key'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z"
@@ -3256,7 +3203,7 @@
 	{/if}
 
 	{#if icon === 'library'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 003 8v7a1 1 0 100 2h14a1 1 0 100-2V8a1 1 0 00.496-1.868l-7-4zM6 9a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1zm3 1a1 1 0 012 0v3a1 1 0 11-2 0v-3zm5-1a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1z"
@@ -3266,7 +3213,7 @@
 	{/if}
 
 	{#if icon === 'light-bulb'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"
 			/>
@@ -3274,7 +3221,7 @@
 	{/if}
 
 	{#if icon === 'lightning-bolt'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
@@ -3284,7 +3231,7 @@
 	{/if}
 
 	{#if icon === 'link'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
@@ -3294,7 +3241,7 @@
 	{/if}
 
 	{#if icon === 'location-marker'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
@@ -3304,7 +3251,7 @@
 	{/if}
 
 	{#if icon === 'lock-closed'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
@@ -3314,7 +3261,7 @@
 	{/if}
 
 	{#if icon === 'lock-open'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z"
 			/>
@@ -3322,7 +3269,7 @@
 	{/if}
 
 	{#if icon === 'login'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
@@ -3332,7 +3279,7 @@
 	{/if}
 
 	{#if icon === 'logout'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
@@ -3342,7 +3289,7 @@
 	{/if}
 
 	{#if icon === 'mail-open'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M2.94 6.412A2 2 0 002 8.108V16a2 2 0 002 2h12a2 2 0 002-2V8.108a2 2 0 00-.94-1.696l-6-3.75a2 2 0 00-2.12 0l-6 3.75zm2.615 2.423a1 1 0 10-1.11 1.664l5 3.333a1 1 0 001.11 0l5-3.333a1 1 0 00-1.11-1.664L10 11.798 5.555 8.835z"
@@ -3352,14 +3299,14 @@
 	{/if}
 
 	{#if icon === 'mail'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
 			<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
 		</svg>
 	{/if}
 
 	{#if icon === 'map'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z"
@@ -3369,7 +3316,7 @@
 	{/if}
 
 	{#if icon === 'menu-alt-1'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -3379,7 +3326,7 @@
 	{/if}
 
 	{#if icon === 'menu-alt-2'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -3389,7 +3336,7 @@
 	{/if}
 
 	{#if icon === 'menu-alt-3'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
@@ -3399,7 +3346,7 @@
 	{/if}
 
 	{#if icon === 'menu-alt-4'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 13a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -3409,7 +3356,7 @@
 	{/if}
 
 	{#if icon === 'menu'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -3419,7 +3366,7 @@
 	{/if}
 
 	{#if icon === 'microphone'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
@@ -3429,7 +3376,7 @@
 	{/if}
 
 	{#if icon === 'minus-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
@@ -3439,7 +3386,7 @@
 	{/if}
 
 	{#if icon === 'minus-sm'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
@@ -3449,7 +3396,7 @@
 	{/if}
 
 	{#if icon === 'minus'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -3459,13 +3406,13 @@
 	{/if}
 
 	{#if icon === 'moon'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
 		</svg>
 	{/if}
 
 	{#if icon === 'music-note'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"
 			/>
@@ -3473,7 +3420,7 @@
 	{/if}
 
 	{#if icon === 'newspaper'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
@@ -3484,7 +3431,7 @@
 	{/if}
 
 	{#if icon === 'office-building'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
@@ -3494,7 +3441,7 @@
 	{/if}
 
 	{#if icon === 'paper-airplane'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
 			/>
@@ -3502,7 +3449,7 @@
 	{/if}
 
 	{#if icon === 'paper-clip'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
@@ -3512,7 +3459,7 @@
 	{/if}
 
 	{#if icon === 'pause'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
@@ -3522,7 +3469,7 @@
 	{/if}
 
 	{#if icon === 'pencil-alt'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
 			<path
 				fill-rule="evenodd"
@@ -3533,7 +3480,7 @@
 	{/if}
 
 	{#if icon === 'pencil'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
 			/>
@@ -3541,7 +3488,7 @@
 	{/if}
 
 	{#if icon === 'phone-incoming'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M14.414 7l3.293-3.293a1 1 0 00-1.414-1.414L13 5.586V4a1 1 0 10-2 0v4.003a.996.996 0 00.617.921A.997.997 0 0012 9h4a1 1 0 100-2h-1.586z"
 			/>
@@ -3552,7 +3499,7 @@
 	{/if}
 
 	{#if icon === 'phone-missed-call'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
 			/>
@@ -3563,7 +3510,7 @@
 	{/if}
 
 	{#if icon === 'phone-outgoing'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M17.924 2.617a.997.997 0 00-.215-.322l-.004-.004A.997.997 0 0017 2h-4a1 1 0 100 2h1.586l-3.293 3.293a1 1 0 001.414 1.414L16 5.414V7a1 1 0 102 0V3a.997.997 0 00-.076-.383z"
 			/>
@@ -3574,7 +3521,7 @@
 	{/if}
 
 	{#if icon === 'phone'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
 			/>
@@ -3582,7 +3529,7 @@
 	{/if}
 
 	{#if icon === 'photograph'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
@@ -3592,7 +3539,7 @@
 	{/if}
 
 	{#if icon === 'play'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
@@ -3602,7 +3549,7 @@
 	{/if}
 
 	{#if icon === 'plus-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
@@ -3612,7 +3559,7 @@
 	{/if}
 
 	{#if icon === 'plus-sm'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
@@ -3627,7 +3574,7 @@
 			><span class="sr-only">(</span>New<span class="sr-only">)</span></small
 		>
 
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
@@ -3637,7 +3584,7 @@
 	{/if}
 
 	{#if icon === 'presentation-chart-bar'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
@@ -3647,7 +3594,7 @@
 	{/if}
 
 	{#if icon === 'presentation-chart-line'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
@@ -3657,7 +3604,7 @@
 	{/if}
 
 	{#if icon === 'printer'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
@@ -3667,7 +3614,7 @@
 	{/if}
 
 	{#if icon === 'puzzle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"
 			/>
@@ -3675,7 +3622,7 @@
 	{/if}
 
 	{#if icon === 'qrcode'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z"
@@ -3688,7 +3635,7 @@
 	{/if}
 
 	{#if icon === 'question-mark-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
@@ -3698,7 +3645,7 @@
 	{/if}
 
 	{#if icon === 'receipt-refund'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm4.707 3.707a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L8.414 9H10a3 3 0 013 3v1a1 1 0 102 0v-1a5 5 0 00-5-5H8.414l1.293-1.293z"
@@ -3708,7 +3655,7 @@
 	{/if}
 
 	{#if icon === 'receipt-tax'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
@@ -3718,7 +3665,7 @@
 	{/if}
 
 	{#if icon === 'refresh'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
@@ -3728,7 +3675,7 @@
 	{/if}
 
 	{#if icon === 'reply'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -3738,7 +3685,7 @@
 	{/if}
 
 	{#if icon === 'rewind'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"
 			/>
@@ -3746,7 +3693,7 @@
 	{/if}
 
 	{#if icon === 'rss'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z" />
 			<path
 				d="M4 9a1 1 0 011-1 7 7 0 017 7 1 1 0 11-2 0 5 5 0 00-5-5 1 1 0 01-1-1zM3 15a2 2 0 114 0 2 2 0 01-4 0z"
@@ -3755,7 +3702,7 @@
 	{/if}
 
 	{#if icon === 'save-as'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M9.707 7.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L13 8.586V5h3a2 2 0 012 2v5a2 2 0 01-2 2H8a2 2 0 01-2-2V7a2 2 0 012-2h3v3.586L9.707 7.293zM11 3a1 1 0 112 0v2h-2V3z"
 			/>
@@ -3764,7 +3711,7 @@
 	{/if}
 
 	{#if icon === 'save'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"
 			/>
@@ -3772,7 +3719,7 @@
 	{/if}
 
 	{#if icon === 'scale'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1zm-5 8.274l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L5 10.274zm10 0l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L15 10.274z"
@@ -3782,7 +3729,7 @@
 	{/if}
 
 	{#if icon === 'scissors'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5.5 2a3.5 3.5 0 101.665 6.58L8.585 10l-1.42 1.42a3.5 3.5 0 101.414 1.414l8.128-8.127a1 1 0 00-1.414-1.414L10 8.586l-1.42-1.42A3.5 3.5 0 005.5 2zM4 5.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 9a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
@@ -3793,7 +3740,7 @@
 	{/if}
 
 	{#if icon === 'search-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
 			<path
 				fill-rule="evenodd"
@@ -3804,7 +3751,7 @@
 	{/if}
 
 	{#if icon === 'search'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -3814,7 +3761,7 @@
 	{/if}
 
 	{#if icon === 'selector'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
@@ -3824,7 +3771,7 @@
 	{/if}
 
 	{#if icon === 'server'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M2 5a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm14 1a1 1 0 11-2 0 1 1 0 012 0zM2 13a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2zm14 1a1 1 0 11-2 0 1 1 0 012 0z"
@@ -3834,7 +3781,7 @@
 	{/if}
 
 	{#if icon === 'share'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"
 			/>
@@ -3842,7 +3789,7 @@
 	{/if}
 
 	{#if icon === 'shield-check'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -3852,7 +3799,7 @@
 	{/if}
 
 	{#if icon === 'shield-exclamation'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z"
@@ -3862,7 +3809,7 @@
 	{/if}
 
 	{#if icon === 'shopping-bag'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
@@ -3872,7 +3819,7 @@
 	{/if}
 
 	{#if icon === 'shopping-cart'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
 			/>
@@ -3880,7 +3827,7 @@
 	{/if}
 
 	{#if icon === 'sort-ascending'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z"
 			/>
@@ -3888,7 +3835,7 @@
 	{/if}
 
 	{#if icon === 'sort-descending'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"
 			/>
@@ -3896,7 +3843,7 @@
 	{/if}
 
 	{#if icon === 'sparkles'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z"
@@ -3906,7 +3853,7 @@
 	{/if}
 
 	{#if icon === 'speakerphone'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z"
@@ -3916,7 +3863,7 @@
 	{/if}
 
 	{#if icon === 'star'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
 			/>
@@ -3924,7 +3871,7 @@
 	{/if}
 
 	{#if icon === 'status-offline'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M3.707 2.293a1 1 0 00-1.414 1.414l6.921 6.922c.05.062.105.118.168.167l6.91 6.911a1 1 0 001.415-1.414l-.675-.675a9.001 9.001 0 00-.668-11.982A1 1 0 1014.95 5.05a7.002 7.002 0 01.657 9.143l-1.435-1.435a5.002 5.002 0 00-.636-6.294A1 1 0 0012.12 7.88c.924.923 1.12 2.3.587 3.415l-1.992-1.992a.922.922 0 00-.018-.018l-6.99-6.991zM3.238 8.187a1 1 0 00-1.933-.516c-.8 3-.025 6.336 2.331 8.693a1 1 0 001.414-1.415 6.997 6.997 0 01-1.812-6.762zM7.4 11.5a1 1 0 10-1.73 1c.214.371.48.72.795 1.035a1 1 0 001.414-1.414c-.191-.191-.35-.4-.478-.622z"
 			/>
@@ -3932,7 +3879,7 @@
 	{/if}
 
 	{#if icon === 'status-online'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5.05 3.636a1 1 0 010 1.414 7 7 0 000 9.9 1 1 0 11-1.414 1.414 9 9 0 010-12.728 1 1 0 011.414 0zm9.9 0a1 1 0 011.414 0 9 9 0 010 12.728 1 1 0 11-1.414-1.414 7 7 0 000-9.9 1 1 0 010-1.414zM7.879 6.464a1 1 0 010 1.414 3 3 0 000 4.243 1 1 0 11-1.415 1.414 5 5 0 010-7.07 1 1 0 011.415 0zm4.242 0a1 1 0 011.415 0 5 5 0 010 7.072 1 1 0 01-1.415-1.415 3 3 0 000-4.242 1 1 0 010-1.415zM10 9a1 1 0 011 1v.01a1 1 0 11-2 0V10a1 1 0 011-1z"
@@ -3942,7 +3889,7 @@
 	{/if}
 
 	{#if icon === 'stop'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"
@@ -3952,7 +3899,7 @@
 	{/if}
 
 	{#if icon === 'sun'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
@@ -3962,7 +3909,7 @@
 	{/if}
 
 	{#if icon === 'support'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z"
@@ -3972,7 +3919,7 @@
 	{/if}
 
 	{#if icon === 'switch-horizontal'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"
 			/>
@@ -3980,7 +3927,7 @@
 	{/if}
 
 	{#if icon === 'switch-vertical'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"
 			/>
@@ -3988,7 +3935,7 @@
 	{/if}
 
 	{#if icon === 'table'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
@@ -3998,7 +3945,7 @@
 	{/if}
 
 	{#if icon === 'tag'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
@@ -4008,7 +3955,7 @@
 	{/if}
 
 	{#if icon === 'template'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
 			/>
@@ -4016,7 +3963,7 @@
 	{/if}
 
 	{#if icon === 'terminal'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z"
@@ -4026,7 +3973,7 @@
 	{/if}
 
 	{#if icon === 'thumb-down'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"
 			/>
@@ -4034,7 +3981,7 @@
 	{/if}
 
 	{#if icon === 'thumb-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"
 			/>
@@ -4042,7 +3989,7 @@
 	{/if}
 
 	{#if icon === 'ticket'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M2 6a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 100 4v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 100-4V6z"
 			/>
@@ -4050,7 +3997,7 @@
 	{/if}
 
 	{#if icon === 'translate'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 11.236 11.618 14z"
@@ -4060,7 +4007,7 @@
 	{/if}
 
 	{#if icon === 'trash'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
@@ -4070,7 +4017,7 @@
 	{/if}
 
 	{#if icon === 'trending-down'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M12 13a1 1 0 100 2h5a1 1 0 001-1V9a1 1 0 10-2 0v2.586l-4.293-4.293a1 1 0 00-1.414 0L8 9.586 3.707 5.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0L11 9.414 14.586 13H12z"
@@ -4080,7 +4027,7 @@
 	{/if}
 
 	{#if icon === 'trending-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
@@ -4090,7 +4037,7 @@
 	{/if}
 
 	{#if icon === 'truck'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
 			/>
@@ -4101,7 +4048,7 @@
 	{/if}
 
 	{#if icon === 'upload'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
@@ -4111,7 +4058,7 @@
 	{/if}
 
 	{#if icon === 'user-add'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
 			/>
@@ -4119,7 +4066,7 @@
 	{/if}
 
 	{#if icon === 'user-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
@@ -4129,7 +4076,7 @@
 	{/if}
 
 	{#if icon === 'user-group'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
 			/>
@@ -4137,7 +4084,7 @@
 	{/if}
 
 	{#if icon === 'user-remove'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z"
 			/>
@@ -4145,7 +4092,7 @@
 	{/if}
 
 	{#if icon === 'user'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -4155,7 +4102,7 @@
 	{/if}
 
 	{#if icon === 'users'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"
 			/>
@@ -4163,7 +4110,7 @@
 	{/if}
 
 	{#if icon === 'variable'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4.649 3.084A1 1 0 015.163 4.4 13.95 13.95 0 004 10c0 1.993.416 3.886 1.164 5.6a1 1 0 01-1.832.8A15.95 15.95 0 012 10c0-2.274.475-4.44 1.332-6.4a1 1 0 011.317-.516zM12.96 7a3 3 0 00-2.342 1.126l-.328.41-.111-.279A2 2 0 008.323 7H8a1 1 0 000 2h.323l.532 1.33-1.035 1.295a1 1 0 01-.781.375H7a1 1 0 100 2h.039a3 3 0 002.342-1.126l.328-.41.111.279A2 2 0 0011.677 14H12a1 1 0 100-2h-.323l-.532-1.33 1.035-1.295A1 1 0 0112.961 9H13a1 1 0 100-2h-.039zm1.874-2.6a1 1 0 011.833-.8A15.95 15.95 0 0118 10c0 2.274-.475 4.44-1.332 6.4a1 1 0 11-1.832-.8A13.949 13.949 0 0016 10c0-1.993-.416-3.886-1.165-5.6z"
@@ -4173,7 +4120,7 @@
 	{/if}
 
 	{#if icon === 'video-camera'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"
 			/>
@@ -4181,7 +4128,7 @@
 	{/if}
 
 	{#if icon === 'view-boards'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM8 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H9a1 1 0 01-1-1V4zM15 3a1 1 0 00-1 1v12a1 1 0 001 1h2a1 1 0 001-1V4a1 1 0 00-1-1h-2z"
 			/>
@@ -4189,7 +4136,7 @@
 	{/if}
 
 	{#if icon === 'view-grid-add'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"
 			/>
@@ -4197,7 +4144,7 @@
 	{/if}
 
 	{#if icon === 'view-grid'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
 			/>
@@ -4205,7 +4152,7 @@
 	{/if}
 
 	{#if icon === 'view-list'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -4215,7 +4162,7 @@
 	{/if}
 
 	{#if icon === 'volume-off'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z"
@@ -4225,7 +4172,7 @@
 	{/if}
 
 	{#if icon === 'volume-up'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
@@ -4235,7 +4182,7 @@
 	{/if}
 
 	{#if icon === 'wifi'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M17.778 8.222c-4.296-4.296-11.26-4.296-15.556 0A1 1 0 01.808 6.808c5.076-5.077 13.308-5.077 18.384 0a1 1 0 01-1.414 1.414zM14.95 11.05a7 7 0 00-9.9 0 1 1 0 01-1.414-1.414 9 9 0 0112.728 0 1 1 0 01-1.414 1.414zM12.12 13.88a3 3 0 00-4.242 0 1 1 0 01-1.415-1.415 5 5 0 017.072 0 1 1 0 01-1.415 1.415zM9 16a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
@@ -4245,7 +4192,7 @@
 	{/if}
 
 	{#if icon === 'x-circle'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -4255,7 +4202,7 @@
 	{/if}
 
 	{#if icon === 'x'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -4265,7 +4212,7 @@
 	{/if}
 
 	{#if icon === 'zoom-in'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				d="M5 8a1 1 0 011-1h1V6a1 1 0 012 0v1h1a1 1 0 110 2H9v1a1 1 0 11-2 0V9H6a1 1 0 01-1-1z"
 			/>
@@ -4278,7 +4225,7 @@
 	{/if}
 
 	{#if icon === 'zoom-out'}
-		<svg viewBox="0 0 20 20" fill="currentColor">
+		<svg style:transform={ajust} viewBox="0 0 20 20" fill="currentColor">
 			<path
 				fill-rule="evenodd"
 				d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -4294,11 +4241,12 @@
 {/if}
 
 <style>
-	:root {
-		--icon-size: 1rem;
-	}
+	
 
 	svg {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
 		height: var(--icon-size);
 		width: var(--icon-size);
 		color: inherit;
@@ -4308,5 +4256,28 @@
 		--icon-size: 1.05rem;
 		height: var(--icon-size);
 		width: var(--icon-size);
+	}
+</style> -->
+<style>
+	:root {
+		--icon-size: 1rem;
+	}
+
+	div {
+		display: inline-flex;
+	}
+
+	:global(svg[aria-hidden='true']) {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		height: var(--icon-size);
+		width: var(--icon-size);
+		color: inherit;
+	}
+
+	.shadow {
+		box-shadow: 0 1px 2px rgb(0 0 0 / 7%), 0 2px 4px rgb(0 0 0 / 7%), 0 4px 8px rgb(0 0 0 / 7%),
+			0 8px 16px rgb(0 0 0 / 7%), 0 16px 32px rgb(0 0 0 / 7%), 0 32px 64px rgb(0 0 0 / 7%);
 	}
 </style>

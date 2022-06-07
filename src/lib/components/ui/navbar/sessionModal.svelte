@@ -17,7 +17,7 @@
 
 {#if $session.user}
 	<button on:click={modal.open}>
-		<Icon icon="user-circle" />
+		<Icon name="user-circle" type="solid" />
 	</button>
 {/if}
 
@@ -33,31 +33,31 @@
 	<ul class="list">
 		<li class="list__item list__item--block">
 			<a class="list__link" href="/profile">
-				<Icon icon="user-circle" />
+				<Icon name="user-circle" />
 				<span class="list__label">Profile</span></a
 			>
 		</li>
 		<li class="list__item">
 			<a class="list__link" href="/settings">
-				<Icon icon="cog" />
+				<Icon name="cog" />
 				<span class="list__label">Settings</span></a
 			>
 		</li>
 		<li class="list__item">
 			<a class="list__link" href="/help">
-				<Icon icon="help" />
+				<Icon name="help" />
 				<span class="list__label">help</span></a
 			>
 		</li>
 		<!-- <li class="list__item">
 			<a class="list__link" href="/auth/logout">
-				<Icon icon="logout" />
+				<Icon name="logout" />
 				<span class="list__label">logout</span></a
 			>
 		</li> -->
 	</ul>
 	<svelte:fragment slot="action">
-		<a class="list__logout" sveltekit:reload href="/auth/logout">logout <Icon icon="logout" /></a>
+		<a class="list__logout" sveltekit:reload href="/auth/logout">logout <Icon name="logout" /></a>
 		<button href="/auth/logout" on:click={modal.close} class="cta">close</button>
 	</svelte:fragment>
 </Modal>

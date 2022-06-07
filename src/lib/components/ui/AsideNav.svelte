@@ -18,7 +18,7 @@
 			on:tap>Discovery</MenuItem
 		>
 
-		<MenuItem href="/soon" Comming icon="inbox-in" on:tap>soon</MenuItem>
+		<MenuItem href="/soon" icon="inbox-in" on:tap>Comming soon</MenuItem>
 		<MenuItem
 			href="/community"
 			icon="user-group"
