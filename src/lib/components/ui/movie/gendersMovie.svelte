@@ -1,10 +1,12 @@
 <script>
+	import Icon from '$components/ui/icons/icon.svelte';
+
 	export let value;
 </script>
 
 {#if value}
 	<div class="info__item">
-		<span class="info__property">genders:</span>
+		<span class="info__property"><Icon name="color-swatch" /> genders:</span>
 		{#each value as item}
 			<span class="tag">{item}</span>
 		{:else}

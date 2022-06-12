@@ -207,4 +207,25 @@
 		height: 1.5rem;
 		width: 1.5rem;
 	}
+
+	/* scrollbar */
+	.modal__container::-webkit-scrollbar {
+		width: 5px;
+		border-radius: 10px;
+	}
+
+	.modal__container::-webkit-scrollbar-track {
+		background: rgba(128, 128, 128, 0.05);
+		margin: 10px;
+		border-radius: 10px;
+		overflow: hidden;
+	}
+
+	.modal__container::-webkit-scrollbar-thumb {
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	.modal__container::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
 </style>

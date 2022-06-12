@@ -29,7 +29,6 @@
 	} = movie;
 
 	let modal;
-	console.log(movie);
 </script>
 
 <TitleMovie value={title} />
@@ -59,6 +58,7 @@
 		padding: 0.5em 0.2em;
 		border-radius: 5px;
 		cursor: pointer;
+		margin-top: 1em;
 	}
 
 	.btn-details:hover {

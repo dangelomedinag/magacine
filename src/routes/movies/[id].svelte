@@ -93,30 +93,21 @@
 	<button
 		on:click={() => {
 			goto('#info', { replaceState: true });
-			// document.getElementById('info').scrollTo({ behavior: 'smooth' });
 		}}>info</button
 	>
 	{#if existSuggestions}
 		<button
 			on:click={() => {
 				goto('#suggest', { replaceState: true });
-				// document.getElementById('suggest').scrollIntoView();
 			}}>suggest</button
 		>
 	{/if}
 </NavbarTop>
-<!-- <div class="content"> -->
-<!-- <div> -->
+
 <div class="container ">
-	<!-- content here -->
 	<div class:movie={showPlayer} class:poster={!showPlayer}>
 		{#if !showPlayer}
 			<img class="image" src={movie.poster} alt={movie.title} />
-			<div class="info__item">
-				<YearMovie value={movie.year} />
-				<RuntimeMovie value={movie.runtime} />
-			</div>
-
 			<button class="btn-play" on:click={() => (showPlayer = !showPlayer)}>
 				<Icon
 					name="play"
@@ -125,6 +116,10 @@
 					shadow
 				/>
 			</button>
+			<div class="info__item">
+				<YearMovie value={movie.year} />
+				<RuntimeMovie value={movie.runtime} />
+			</div>
 		{:else}
 			<VideoPlayer />
 		{/if}
@@ -152,36 +147,8 @@
 		</div>
 	{/await}
 </div>
-<!-- </div> -->
-<!-- </div> -->
 
-<!-- <div class="poster-wrapper" style="display: flex;">
-		<div style="width: 50%;">
-			<img src={movie.poster} alt={movie.title} />
-			<button on:click={() => (showPlayer = !showPlayer)}>
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-					<path
-						fill-rule="evenodd"
-						d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-						clip-rule="evenodd"
-					/>
-				</svg>
-			</button>
-		</div>
-		<div style="width: 50%;">
-			<button>1</button>
-			<button>2</button>
-			<button>3</button>
-		</div>
-	</div> -->
-
-<!-- <VideoPlayer /> -->
 <style>
-	/* svg {
-		width: 1rem;
-		height: 1rem;
-	} */
-
 	.container {
 		display: flex;
 		flex-direction: column;
@@ -199,6 +166,7 @@
 		width: 100%;
 		height: 100%;
 	}
+
 	.movie {
 		width: 100%;
 	}
@@ -215,6 +183,7 @@
 		box-shadow: 0 1px 2px rgb(0 0 0 / 7%), 0 2px 4px rgb(0 0 0 / 7%), 0 4px 8px rgb(0 0 0 / 7%),
 			0 8px 16px rgb(0 0 0 / 7%), 0 16px 32px rgb(0 0 0 / 7%), 0 32px 64px rgb(0 0 0 / 7%);
 		border-radius: 10px;
+		border: 1px solid rgb(255 255 255 / 7%);
 		overflow: hidden;
 	}
 
@@ -226,13 +195,14 @@
 		align-items: center;
 		position: absolute;
 		top: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate(-50%, -50%) rotate(0deg);
 		border: none;
 		color: var(--c-front);
 		padding: 0;
 		margin: 0;
 		background-color: transparent;
 		cursor: pointer;
+		transform-origin: center;
 	}
 
 	@media (min-width: 768px) {
@@ -266,8 +236,11 @@
 	:global(.info__item) {
 		padding-bottom: 1em;
 	}
+	:global(.info__item:last-of-type) {
+		padding-bottom: 0;
+	}
 
-	:global(.info__item svg) {
+	.info__item :global(svg) {
 		color: var(--c-front);
 	}
 

@@ -67,7 +67,12 @@
 	{/if}
 	<!-- tab 2 -->
 	{#if act === 'movies'}
-		<CarouselMovies {movies} title="Top rated  ({movies.totalResults} results)" priority="small" />
+		<CarouselMovies
+			details={false}
+			{movies}
+			title="Top rated  ({movies.totalResults} results)"
+			priority="small"
+		/>
 	{/if}
 </div>
 

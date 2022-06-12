@@ -41,15 +41,21 @@
 
 		loading = true;
 		value = currURL.searchParams.get('s');
-		const data = await fetch('/api' + currURL.search);
-		const search = await data.json();
 
-		if (search) {
-			movies = search;
-			lastSearch = search;
-			lastValue = value;
-			loading = false;
-			// lastValue = search.search;
+		try {
+			const data = await fetch('/api' + currURL.search);
+			if (!data.ok) throw data;
+
+			const search = await data.json();
+
+			if (search) {
+				movies = search;
+				lastSearch = search;
+				lastValue = value;
+				loading = false;
+			}
+		} catch (error) {
+			await getMovies();
 		}
 
 		// input.focus();

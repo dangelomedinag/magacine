@@ -5,8 +5,8 @@
 </script>
 
 {#if value}
-	<div class="item">
-		<span class="property">actors:</span>
+	<div class="info__item">
+		<span class="info__property">actors:</span>
 		<div>
 			{listFormat(!value.includes(',') ? [value] : value.split(','))}
 		</div>

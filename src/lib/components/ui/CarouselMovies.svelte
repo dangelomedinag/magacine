@@ -4,6 +4,7 @@
 	// components
 	import CardMovie from '$components/ui/card/cardMovie.svelte';
 	import CardMovieSeeAll from './card/cardMovieSeeAll.svelte';
+	import Icon from '$components/ui/icons/icon.svelte';
 
 	// props
 	export let movies;
@@ -87,18 +88,7 @@
 		{#if movies.totalResults > 1}
 			<a href="/movies?{movies.query}" class="header-btn"
 				>See all<span>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="svg"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-							clip-rule="evenodd"
-						/>
-					</svg>
+					<Icon name="chevron-right" y="10%" />
 				</span></a
 			>
 		{/if}
@@ -106,47 +96,18 @@
 	<main class="items-wrapper" bind:this={container}>
 		{#each movies.results as movie, i (movie.uuid)}
 			<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
-		{:else}
-			<!-- <slot name="empty">
-				<div class="empty-wrapper">
-					<Spinner />
-				</div>
-			</slot> -->
 		{/each}
 		{#if movies.totalResults > 10}
-			<!-- content here -->
-			<CardMovieSeeAll
-				query={movies.query}
-				totalResults={movies.totalResults}
-				posters={movies.results.map((m) => m.poster)}
-			/>
+			<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
 		{/if}
 	</main>
 	{#if movies.results?.length > 1}
 		<div class="movement-action">
 			<button on:click={nextPage} class="prev controls">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-6 w-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-				</svg>
+				<Icon name="arrow-sm-right" />
 			</button>
 			<button class="next controls" on:click={prevPage}>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-6 w-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-				</svg>
+				<Icon name="arrow-sm-left" />
 			</button>
 		</div>
 	{/if}
@@ -212,6 +173,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		text-decoration: none;
 	}
 
 	.header-btn:hover {
@@ -219,10 +181,10 @@
 		cursor: pointer;
 	}
 
-	.header-btn svg {
+	/* .header-btn svg {
 		width: 20px;
 		height: 20px;
-	}
+	} */
 
 	.items-wrapper {
 		display: flex;
@@ -254,21 +216,15 @@
 	}
 
 	.controls {
-		/* font-size: initial; */
 		display: block;
 		position: absolute;
 		z-index: 15;
-		/* top: 0; */
 		top: 15%;
 		height: 50px;
-		/* padding: 0;
-		margin: 0; */
-		/* height: 100%; */
 		width: 30px;
 		opacity: 0.1;
 		color: white;
 		background-color: var(--c-front-dark);
-		/* border-radius: 5px; */
 		border: none;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
 			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),

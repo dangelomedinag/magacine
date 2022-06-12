@@ -6,13 +6,6 @@
 	import Icon from '$components/ui/icons/icon.svelte';
 
 	let modal;
-	let isOpen = false;
-	// function open() {
-	// 	modal = true;
-	// }
-	// function close() {
-	// 	modal = false;
-	// }
 </script>
 
 {#if $session.user}
@@ -45,7 +38,7 @@
 		</li>
 		<li class="list__item">
 			<a class="list__link" href="/help">
-				<Icon name="help" />
+				<Icon name="information-circle" />
 				<span class="list__label">help</span></a
 			>
 		</li>

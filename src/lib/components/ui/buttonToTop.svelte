@@ -1,15 +1,20 @@
-<button on:click
-	><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-		<path
-			fill-rule="evenodd"
-			d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-			clip-rule="evenodd"
-		/>
-	</svg></button
->
+<script>
+	import Icon from '$components/ui/icons/icon.svelte';
+	export let active = false;
+</script>
+
+<button on:click>
+	{#if !active}
+		<Icon name="menu-alt-2" />
+	{:else}
+		<Icon name="x" />
+	{/if}
+</button>
 
 <style>
 	button {
+		--icon-size: 1.5rem;
+
 		position: fixed;
 		bottom: 5%;
 		right: 5%;
@@ -37,8 +42,8 @@
 		transform: translateY(5%);
 	}
 
-	button svg {
+	/* button svg {
 		height: 25px;
 		width: 25px;
-	}
+	} */
 </style>

@@ -1,51 +1,14 @@
 <script>
-	// import { page, session } from '$app/stores';
-	import { onDestroy } from 'svelte';
-	// import { quintOut } from 'svelte/easing';
-	// import { fly } from 'svelte/transition';
+	// import { onDestroy } from 'svelte';
 	import SessionModal from '$components/ui/navbar/sessionModal.svelte';
 	import Icon from '$components/ui/icons/icon.svelte';
-
-	// import { onMount, createEventDispatcher, onDestroy } from 'svelte';
-	// const dispatch = createEventDispatcher();
-	// let tabsBox;
-	// let items;
-
-	// function handle(e) {
-	// 	dispatch('tab', e.target.dataset.tab);
-	// }
-
-	// onMount(() => {
-	// 	items = tabsBox.querySelectorAll('button');
-
-	// 	items.forEach((btn) => {
-	// 		btn.addEventListener('click', handle);
-	// 	});
-	// });
+	import { goto } from '$app/navigation';
 
 	export let search = true,
-		bell = false,
+		bell = true,
 		profile = true;
 
-	let showPopup = false;
-
-	function tooglePopup() {
-		showPopup = !showPopup;
-		blockScroll();
-	}
-
-	function blockScroll() {
-		if (document.body) {
-			if (showPopup) document.body.style.overflow = 'hidden';
-			else document.body.style.overflow = 'auto';
-		}
-	}
-
-	onDestroy(() => {
-		if (showPopup) {
-			tooglePopup();
-		}
-	});
+	let searchInput = false;
 </script>
 
 <nav class="navbar">
@@ -56,13 +19,36 @@
 			</a>
 		</div>
 		<div class="center">
-			<slot />
+			{#if searchInput}
+				<form
+					on:submit|preventDefault={(e) => {
+						console.log(location);
+						const u = new URL(location.origin + '/search');
+						console.log(u);
+						u.searchParams.set('s', e.target.query.value);
+						goto(u.href);
+					}}
+				>
+					<input type="search" id="searchig" name="query" />
+				</form>
+			{:else}
+				<slot />
+			{/if}
 		</div>
 		<div class="right">
+			{#if bell}
+				<button
+					on:click={() => {
+						console.log('click');
+					}}
+				>
+					<Icon name="bell" />
+				</button>
+			{/if}
 			{#if search}
-				<a href="/search">
+				<button on:click={() => (searchInput = !searchInput)}>
 					<Icon name="search" type="solid" />
-				</a>
+				</button>
 			{/if}
 			{#if profile}
 				<SessionModal />
@@ -98,6 +84,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 51;
+		/* position: relative; */
 		width: 100%;
 		background-color: var(--c-main-content);
 		border-bottom: 1px solid rgba(128, 128, 128, 0.1);
@@ -123,14 +110,15 @@
 		border: 1px solid transparent;
 		/* background-color: brown; */
 		opacity: 0.5;
-		max-height: 100%;
+		/* max-height: 100%; */
 		padding: 0;
 		margin: 0;
+		/* display: block; */
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
 		padding: 0.7em 0.5em;
-		line-height: 1em;
+		/* line-height: 1em; */
 		text-decoration: none;
 		cursor: pointer;
 	}
@@ -143,44 +131,38 @@
 	.center > :global(a:hover),
 	.center > :global(button.active),
 	.center > :global(a.active) {
-		background-color: rgba(255 255 255 / 7%);
+		/* background-color: rgba(255 255 255 / 7%); */
 		border-bottom: 1px solid var(--c-front);
 		opacity: 1;
 	}
 
 	.center {
-		order: 3;
-		/* position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%); */
-		/* display: none; */
-		width: 100%;
-		/* max-width: 15%; */
+		/* order: 3; */
+		/* width: 100%; */
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-	.center > :global(button) {
-		/* font-size: 0.9rem; */
-		flex: 1 1 100%;
-		/* width: 100%; */
-		/* width: 70px; */
+		margin: 0 auto;
 	}
 
-	@media (min-width: 576px) {
+	.center > :global(button) {
+		flex: 1 1 100%;
+	}
+
+	@media (min-width: 400px) {
 		.navbar-wrapper {
 			flex-wrap: nowrap;
 		}
 		.center {
-			order: initial;
 			width: auto;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
 		}
 
 		.center > :global(button) {
-			/* font-size: 0.9rem; */
 			flex: 0 1 auto;
-			/* width: 70px; */
 		}
 	}
 </style>

@@ -23,7 +23,7 @@
 		else if (i < 2) i += 1;
 
 		word = words[i - 1].word;
-		urls = words[i - 1].imgs;
+		// urls = words[i - 1].imgs;
 		currentPage = i;
 		i++;
 	}
@@ -38,7 +38,7 @@
 		i = pag;
 		currentPage = pag;
 		word = words[pag - 1].word;
-		urls = words[pag - 1].imgs;
+		// urls = words[pag - 1].imgs;
 
 		interval = setInterval(play, frequency);
 	}

@@ -82,6 +82,7 @@
 {/if}
 <div class="wrapper">
 	<ButtonToTop
+		active={toggle}
 		on:click={() => {
 			toggleAside();
 		}}

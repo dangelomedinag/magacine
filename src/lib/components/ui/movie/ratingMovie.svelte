@@ -9,7 +9,7 @@
 
 {#if value}
 	<div class="info__item">
-		<CardRatingStarts --icon-fz="2rem" rating={value} block />
+		<CardRatingStarts rating={value} block />
 		<span class="info__property">rating:</span>
 		<div>imdb: {(value / 2).toFixed(1)}</div>
 
@@ -22,3 +22,9 @@
 		{/if}
 	</div>
 {/if}
+
+<style>
+	.info__item {
+		--icon-size: 2rem;
+	}
+</style>
