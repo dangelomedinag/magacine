@@ -137,19 +137,20 @@
 	}
 
 	.center {
-		/* order: 3; */
-		/* width: 100%; */
-		display: flex;
+		order: 3;
+		width: 100%;
+		/* background-color: var(--c-main); */
+		/* display: flex;
 		justify-content: center;
 		align-items: center;
-		margin: 0 auto;
+		margin: 0 auto; */
 	}
 
 	.center > :global(button) {
 		flex: 1 1 100%;
 	}
 
-	@media (min-width: 400px) {
+	@media (min-width: 576px) {
 		.navbar-wrapper {
 			flex-wrap: nowrap;
 		}

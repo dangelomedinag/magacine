@@ -6,9 +6,11 @@
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import { setBodyScroll } from '$helpers';
+	import Icon from '$components/ui/icons/icon.svelte';
 
 	let modal = false;
 	export let Zindex = '0';
+	export let btnClose = true;
 
 	// const getVal = () => modal;
 
@@ -71,18 +73,9 @@
 			<div class="modal__actions">
 				<slot name="action" />
 			</div>
-			<button on:click={close} class="modal__close">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="modal__close__svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-				</svg></button
-			>
+			{#if btnClose}
+				<button on:click={close} class="modal__close"> <Icon name="x" /></button>
+			{/if}
 		</section>
 	</div>
 {/if}
@@ -145,11 +138,11 @@
 		flex: 1 1 100%;
 		text-align: center;
 		background-color: transparent;
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		/* border: 1px solid rgba(255, 255, 255, 0.1); */
+		border: 1px solid transparent;
 		color: inherit;
 		padding: 0.5em 0;
 		cursor: pointer;
-		background-color: transparent;
 		border-radius: 5px;
 		text-decoration: none;
 	}
@@ -171,6 +164,8 @@
 	}
 
 	.modal__close {
+		--icon-size: 1.2rem;
+
 		cursor: pointer;
 		position: absolute;
 		right: 0;
@@ -178,34 +173,21 @@
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
-		/* display: block; */
-		/* width: 100%; */
+
 		width: 2.5em;
 		height: 2.5em;
-		/* transform: translate(0, -50%); */
 		color: white;
 		padding: 0;
 		border: 1px solid transparent;
-		/* background-color: var(--c-main); */
 		background-color: var(--c-main-content);
-		/* margin-bottom: 1em; */
-		/* border-radius: 50vh; */
 	}
 
 	.modal__close:hover {
 		background-color: var(--c-main);
-		/* background-color: transparent; */
-		/* cursor: pointer; */
 	}
 
 	.modal__close:active {
 		background-color: var(--c-front);
-		/* transform: translateY(3%); */
-	}
-
-	.modal__close__svg {
-		height: 1.5rem;
-		width: 1.5rem;
 	}
 
 	/* scrollbar */

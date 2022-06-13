@@ -5,7 +5,7 @@
 
 {#if value}
 	<div class="info__item">
-		<span class="info__property"><Icon name="globe" /> title:</span>
+		<span class="info__property"><!-- <Icon name="globe" y="10%" /> -->title:</span>
 		<h1 class="title">{value}</h1>
 	</div>
 {/if}

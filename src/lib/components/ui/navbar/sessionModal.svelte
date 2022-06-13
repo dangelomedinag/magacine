@@ -14,7 +14,7 @@
 	</button>
 {/if}
 
-<Modal bind:this={modal} Zindex="49">
+<Modal bind:this={modal} Zindex="49" btnClose={false}>
 	<header>
 		{$session.user.name}
 	</header>

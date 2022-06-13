@@ -8,7 +8,7 @@
 
 {#if value?.length > 0}
 	<div class="info__item">
-		<span class="info__property"><Icon name="translate" />language:</span>
+		<span class="info__property"><Icon name="translate" y="10%" /> language:</span>
 		<span>
 			{listFormat(value)}
 		</span>

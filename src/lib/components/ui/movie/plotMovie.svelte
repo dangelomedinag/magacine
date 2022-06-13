@@ -3,7 +3,7 @@
 	export let value;
 	let valueLength = value.length > 250;
 
-	function toggleExpand() {
+	function toggleExpand(e) {
 		valueLength = !valueLength;
 	}
 </script>
@@ -11,14 +11,14 @@
 {#if value}
 	<div class="info__item">
 		<span class="info__property">synopsis:</span>
-		<p>
+		<p on:click={toggleExpand}>
 			{#if valueLength}
 				{@html value.slice(0, 150)}...
-				<button on:click={toggleExpand}>show more <Icon name="chevron-down" y="10%" /></button>
+				<button>show more <Icon name="chevron-down" y="10%" /></button>
 			{:else}
 				{@html value}
 				{#if value?.length > 250}
-					<button on:click={toggleExpand}>show less <Icon name="chevron-up" y="10%" /></button>
+					<button>show less <Icon name="chevron-up" y="10%" /></button>
 				{/if}
 			{/if}
 		</p>
@@ -34,6 +34,7 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+		gap: 0.2em;
 		padding-left: 0;
 		opacity: 0.5;
 		color: var(--c-front);
@@ -42,7 +43,7 @@
 		cursor: pointer;
 		font-style: oblique;
 	}
-	button:hover {
+	p:hover > button {
 		opacity: 0.8;
 	}
 </style>
