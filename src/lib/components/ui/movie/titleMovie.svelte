@@ -14,5 +14,7 @@
 	h1 {
 		margin: 0;
 		font-size: 2rem;
+		font-weight: 800;
+		/* color: var(--c-front); */
 	}
 </style>

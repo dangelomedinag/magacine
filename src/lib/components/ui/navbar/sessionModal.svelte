@@ -98,7 +98,7 @@
 		padding: 0.5em;
 		display: flex;
 		align-items: center;
-		color: white;
+		color: var(--c-text-base);
 		text-decoration: none;
 	}
 

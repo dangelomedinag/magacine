@@ -84,7 +84,7 @@
 	.footer {
 		display: flex;
 		flex-flow: row wrap;
-		background-color: var(--c-main);
+		background-color: var(--c-main-content);
 		border-top: 1px solid rgba(230, 230, 230, 0.2);
 	}
 

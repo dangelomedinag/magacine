@@ -39,9 +39,9 @@
 			</svg>
 		{/if} -->
 		{#if fill}
-			<Icon name="star" type="solid" class="outline" shadow />
+			<Icon name="star" type="solid" class="outline" />
 		{:else}
-			<Icon name="star" type="solid" class="solid" shadow />
+			<Icon name="star" type="solid" class="solid" />
 		{/if}
 	{/each}
 </div>
@@ -55,14 +55,24 @@
 		width: var(--icon-fz);
 	} */
 
-	div {
-		/* --icon-size: 2rem; */
+	/* div { */
+	/* --icon-size: 2rem; */
+	/* } */
+
+	:root {
+		--rating-stars-fill: #e9cd50;
+		--rating-stars: rgba(233, 205, 80, 0.1);
+	}
+
+	:global(body[data-theme='light']) {
+		--rating-stars-fill: #e9cd50;
+		--rating-stars: rgba(107, 104, 90, 0.4);
 	}
 
 	div :global(.outline) {
-		color: #38382f;
+		color: var(--rating-stars);
 	}
 	div :global(.solid) {
-		color: #e9cd50;
+		color: var(--rating-stars-fill);
 	}
 </style>

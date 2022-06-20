@@ -95,7 +95,7 @@
 		justify-content: center;
 		align-items: center; */
 		/* flex-wrap: wrap; */
-		background-color: var(--c-front);
+		/* background-color: var(--c-front); */
 		margin-bottom: 3em;
 		border-bottom: 2px solid var(--c-front);
 	}
@@ -122,7 +122,7 @@
 		height: 100%;
 		top: 0;
 		left: 0;
-		background-image: linear-gradient(to right, var(--c-main) 0, rgba(230, 57, 70, 0.6) 300%);
+		background-image: linear-gradient(to right, var(--c-main) 0, rgba(230, 57, 70, 0.6) 100%);
 		background-size: 100% 100%;
 		background-position: center;
 		background-repeat: no-repeat;

@@ -41,14 +41,17 @@
 
 <style>
 	.link {
-		font-size: 1rem;
+		font-size: 0.9rem;
+		font-weight: 700;
 		width: 100%;
 		display: block;
-		color: white;
-		opacity: 0.3;
+		/* color: inherit; */
+		color: var(--aside-link);
+		opacity: var(--aside-link-opacity);
 		text-decoration: none;
 		padding: 0.5em 0.2em;
 		position: relative;
+		line-height: 1rem;
 	}
 	.link:hover {
 		opacity: 1;
@@ -61,7 +64,8 @@
 		display: inline-block;
 		top: -50%;
 		right: -10px;
-		background-color: var(--c-front);
+		background-color: var(--aside-link-bubble-bg);
+		color: var(--aside-link-bubble);
 		padding: 0 7px;
 		/* padding-left: 5px;
 		padding-right: 5px; */
@@ -87,6 +91,7 @@
 		justify-content: center;
 		align-items: center;
 		position: relative;
+		color: var(--aside-link-icon);
 	}
 
 	.label {
@@ -96,6 +101,8 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		border: 1px solid transparent;
+		/* color: var(--aside-link-label); */
 		/* position: relative; */
 	}
 
@@ -143,17 +150,19 @@
 			top: 0;
 			width: auto;
 			left: 40px;
-			background-color: white;
+			background-color: var(--aside-link-label-bg);
 			border-radius: 50vh;
-			color: var(--c-main);
-			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
-				0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
-				0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
+			border-color: var(--c-divider);
+			padding-top: 0.2em;
+			padding-bottom: 0.2em;
+
+			color: var(--aside-link-label);
+			box-shadow: var(--shadow-long);
 		}
 		:global(aside:not(.toggle)) .link:hover .notification {
-			background-color: var(--c-front);
+			/* background-color: var(--c-front); */
 			border-radius: 50vh;
-			color: white;
+
 			/* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
 				0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
 				0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07); */

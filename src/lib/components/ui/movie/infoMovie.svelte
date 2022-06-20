@@ -52,8 +52,8 @@
 	.btn-details {
 		display: block;
 		width: 100%;
-		border: 1px solid rgb(255 255 255 / 7%);
-		background-color: transparent;
+		border: 1px solid var(--c-divider);
+		background-color: var(--c-main-content);
 		color: inherit;
 		padding: 0.5em 0.2em;
 		border-radius: 5px;
@@ -62,6 +62,7 @@
 	}
 
 	.btn-details:hover {
-		background-color: var(--c-main);
+		/* background-color: var(--c-main); */
+		color: var(--c-front);
 	}
 </style>

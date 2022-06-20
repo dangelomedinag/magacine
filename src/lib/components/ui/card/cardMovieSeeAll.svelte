@@ -74,7 +74,7 @@
 		overflow: hidden;
 		margin: 0;
 		padding: 0;
-		color: white;
+		color: var(--c-text-base);
 		text-decoration: none;
 	}
 

@@ -1,5 +1,7 @@
 <script>
-	import { onMount } from 'svelte';
+	import { browser } from '$app/env';
+
+	// import { onMount } from 'svelte';
 
 	export let name;
 	export let type = 'outline';
@@ -12,10 +14,17 @@
 	export { Class as class };
 	let Svg;
 
-	onMount(async () => {
-		Svg = await import(`./${type}/${name}.svelte`);
-		// console.log(Svg);
-	});
+	if (browser) {
+		// Svg = import(`./${type}/${name}.svelte`).then(({ default: d }) => d);
+		import(`./${type}/${name}.svelte`).then((d) => {
+			// console.log(d);
+			Svg = d.default;
+		});
+	}
+
+	// onMount(async () => {
+	// 	Svg = await import(`./${type}/${name}.svelte`);
+	// });
 </script>
 
 {#if Svg}
@@ -31,7 +40,7 @@
 			? `rotate(${deg})`
 			: ''}
 	>
-		<Svg.default />
+		<Svg />
 	</div>
 {/if}
 
@@ -54,6 +63,6 @@
 	}
 
 	.shadow :global(svg[aria-hidden='true']) {
-		filter: drop-shadow(0px 1px 2px rgb(0 0 0 / 7%));
+		filter: drop-shadow(0px 1px 2px rgb(0 0 0 / 50%));
 	}
 </style>

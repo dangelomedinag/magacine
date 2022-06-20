@@ -8,6 +8,18 @@ export const listFormat = (
 	const intl = new Intl.ListFormat(language, opts);
 	return intl.format(array);
 };
+export const listFormat2 = (
+	array,
+	language = 'en',
+	opts = { style: 'long', type: 'conjunction' }
+) => {
+	let intl = Intl;
+	let lf = new intl.ListFormat(language, opts);
+	return {
+		intl: intl,
+		render: lf.format(array)
+	};
+};
 
 export const setBodyScroll = (state) => {
 	import('$app/env').then(({ browser }) => {

@@ -4,6 +4,7 @@
 	import ProgressLine from '../ProgressLine.svelte';
 	import CardRatingStarts from '$components/ui/card/cardRatingStarts.svelte';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/env';
 
 	let element;
 	export let details = true;
@@ -16,6 +17,10 @@
 		rootMargin: '0px',
 		threshold: 0
 	};
+
+	if (!details) {
+		promiseDetails = Promise.reject();
+	}
 
 	const callback = (entries, observer) => {
 		entries.forEach((entry) => {
@@ -33,17 +38,30 @@
 			}
 		});
 	};
-	onMount(() => {
+	function showDetails(node) {
 		if (!details) {
-			promiseDetails = Promise.reject();
 			return;
 		}
-
 		let observer = new IntersectionObserver(callback, options);
-		observer.observe(element);
+		observer.observe(node);
 
-		return () => observer?.disconnect();
-	});
+		return {
+			destroy() {
+				observer?.disconnect();
+			}
+		};
+	}
+	// onMount(() => {
+	// 	if (!details) {
+	// 		promiseDetails = Promise.reject();
+	// 		return;
+	// 	}
+
+	// 	let observer = new IntersectionObserver(callback, options);
+	// 	observer.observe(element);
+
+	// 	return () => observer?.disconnect();
+	// });
 
 	async function loadDetails() {
 		const req = await fetch('/api/' + movie.imdbid);
@@ -53,11 +71,7 @@
 	}
 </script>
 
-<figure
-	bind:this={element}
-	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
-	class="item"
->
+<figure use:showDetails in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }} class="item">
 	<a
 		class="item-link"
 		href="/movies/{movie.imdbid}"
@@ -121,7 +135,7 @@
 		margin-right: 1em;
 		/* height: 400px; */
 		/* background-color: var(--c-main); */
-		background-color: var(--c-main);
+		background-color: var(--c-main-content);
 		border: 1px solid rgba(128, 128, 128, 0.3);
 		transition: transform 100ms ease-in-out;
 	}
@@ -200,9 +214,7 @@
 
 	.item:hover {
 		/* cursor: pointer; */
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
-			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
-			0 32px 64px rgba(0, 0, 0, 0.07);
+		box-shadow: var(--shadow-short);
 
 		transform: translateY(-1%);
 	}

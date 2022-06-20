@@ -38,7 +38,7 @@
 	}
 
 	function handleEsc(e) {
-		console.log('scape');
+		// console.log('scape');
 		if (e.key === 'Escape') {
 			e.preventDefault();
 			close();
@@ -81,6 +81,18 @@
 {/if}
 
 <style>
+	:root {
+		/* modal */
+		--modal-foreground: rgba(0, 0, 0, 0.8);
+		--modal-bg: var(--c-main);
+	}
+
+	:global(body[data-theme='light']) {
+		/* modal */
+		--modal-foreground: rgba(0, 0, 0, 0.5);
+		--modal-bg: var(--c-main);
+	}
+
 	.foreground {
 		cursor: pointer;
 		display: flex;
@@ -90,10 +102,11 @@
 		max-width: 1400px;
 		height: 100%;
 		position: fixed;
-		background-color: rgba(0, 0, 0, 0.8);
+		background-color: var(--modal-foreground);
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
+		/* user-select: none; */
 		/* z-index: 95; */
 		/* margin: 0 auto; */
 	}
@@ -108,11 +121,11 @@
 		position: relative;
 		/* margin-top: 2.5em; */
 		cursor: initial;
-		background-color: var(--c-main-content);
+		background-color: var(--modal-bg);
 		width: 100%;
 		max-width: 700px;
 		border-radius: 10px;
-		border: 1px solid rgba(255, 255, 255, 0.3);
+		border: 2px solid var(--c-divider);
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
 			0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
 			0 32px 32px rgba(0, 0, 0, 0.11);
@@ -176,7 +189,7 @@
 
 		width: 2.5em;
 		height: 2.5em;
-		color: white;
+		color: var(--c-text-base);
 		padding: 0;
 		border: 1px solid transparent;
 		background-color: var(--c-main-content);

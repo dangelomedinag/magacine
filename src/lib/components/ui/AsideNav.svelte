@@ -30,7 +30,7 @@
 			>Community
 		</MenuItem>
 
-		<hr style="display: block; width: 100%; border: 1px solid gray; opacity: 0.2;" />
+		<hr />
 
 		<span class="section">Library</span>
 
@@ -57,7 +57,16 @@
 		justify-content: space-between;
 		height: 100%;
 		padding: 1em 1em 6em 1em;
+		background-color: var(--aside-bg);
+		color: var(--c-text-base);
 		/* overflow-y: auto; */
+	}
+
+	hr {
+		display: block;
+		width: 100%;
+		border: 1px solid var(--c-divider);
+		/* opacity: 0.2; */
 	}
 
 	@media (max-height: 500px) {
@@ -88,9 +97,9 @@
 	.section {
 		display: none;
 		/* font-size: 1.5rem; */
-		letter-spacing: 1px;
+		/* letter-spacing: 1px; */
 		font-weight: 300;
-		opacity: 0.3;
+		opacity: 0.7;
 	}
 
 	@media (min-width: 992px) {

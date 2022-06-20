@@ -108,6 +108,70 @@
 </div>
 
 <style>
+	:root {
+		/* colors */
+		--c-main: #1f1c23;
+		--c-main-content: hsl(273, 13%, 16%);
+		--c-perl: #f1faee;
+		--c-text-base: #f1faee;
+		--c-front: #e63946;
+		--c-front-dark: hsl(355, 63%, 35%);
+		--gap-content: 1em;
+		--c-divider: rgba(255, 255, 255, 0.1);
+
+		/* utilities */
+		--shadow-long: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
+			0 32px 64px rgba(0, 0, 0, 0.07);
+		--shadow-short: 0 1px 20px rgba(0, 0, 0, 0.2);
+
+		/* aside */
+		--aside-bg: var(--c-main-content);
+		--aside-link: var(--c-text-base);
+		--aside-link-opacity: 0.3;
+		--aside-link-active: green;
+		--aside-link-hover: yellow;
+		--aside-link-icon: white;
+		--aside-link-label: black;
+		--aside-link-label-bg: white;
+		--aside-link-bubble: white;
+		--aside-link-bubble-bg: var(--c-front);
+
+		/* navbar */
+		--navbar-bg: var(--c-main-content);
+		--navbar-item-opacity: 0.5;
+		--navbar-item-hover: inherit;
+	}
+
+	:global(body[data-theme='light']) {
+		--c-main: #ffffff;
+		--c-main-content: hsl(0, 0%, 90%);
+		--c-perl: #f1faee;
+		--c-text-base: #161616;
+		/* --c-front: #e63946; */
+		/* --c-front-dark: hsl(302, 63%, 35%); */
+		/* --gap-content: 0.5em; */
+		--c-divider: rgba(0, 0, 0, 0.1);
+
+		/* aside */
+		--aside-bg: var(--c-main-content);
+		--aside-link: var(--c-text-base);
+		--aside-link-opacity: 0.6;
+		--aside-link-active: green;
+		--aside-link-hover: yellow;
+		--aside-link-icon: black;
+		--aside-link-label: black;
+		--aside-link-label-bg: white;
+		--aside-link-bubble: white;
+		--aside-link-bubble-bg: var(--c-front);
+
+		/* navbar */
+		--navbar-bg: var(--c-main-content);
+		/* --navbar-item: var(--c-main-content); */
+		--navbar-item-opacity: 1;
+		--navbar-item-hover: var(--c-front);
+	}
+
 	:global(#nprogress .bar) {
 		background-color: var(--c-front);
 	}
@@ -127,7 +191,7 @@
 	.main {
 		width: 100%;
 		height: 100%;
-		background-color: var(--c-main-content);
+		background-color: var(--c-main);
 	}
 	.toggle + .main::after {
 		content: '';
@@ -153,11 +217,11 @@
 		left: 0;
 		z-index: 100;
 		/* backdrop-filter: blur(20px); */
-		background-color: var(--c-main);
+		background-color: var(--c-main-content);
 		/* background-color: #1a171e; */
 		transition: transform 0.4s cubic-bezier(0.83, 0, 0.25, 0.99);
 		transform: translateX(-100%);
-		border-right: 1px solid rgba(255, 255, 255, 0.1);
+		border-right: 1px solid var(--c-divider);
 	}
 	.toggle {
 		transform: translateX(0);

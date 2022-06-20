@@ -1,13 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700;800&display=swap');
 
-:root {
+/* :root {
 	--c-main: #1f1c23;
 	--c-main-content: hsl(273, 13%, 16%);
 	--c-perl: #f1faee;
+	--c-text-base: #f1faee;
 	--c-front: #e63946;
 	--c-front-dark: hsl(355, 63%, 35%);
 	--gap-content: 0.5em;
 }
+
+body[data-theme='light'] {
+	--c-main: #ffffff;
+	--c-main-content: #ececec;
+	--c-perl: #f1faee;
+	--c-text-base: #252525;
+	--c-front: #e63946;
+	--c-front-dark: hsl(302, 63%, 35%);
+	--gap-content: 0.5em;
+} */
 
 *,
 *::before,
@@ -29,8 +40,8 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	margin: 0;
 	padding: 0;
-	background-color: var(--c-main);
-	color: white;
+	background-color: var(--c-main-content);
+	color: var(--c-text-base);
 }
 
 h1,

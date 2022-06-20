@@ -5,19 +5,21 @@
 	import CardMovie from '$components/ui/card/cardMovie.svelte';
 	import CardMovieSeeAll from './card/cardMovieSeeAll.svelte';
 	import Icon from '$components/ui/icons/icon.svelte';
+	import Spinner from '$components/ui/Spinner.svelte';
 
 	// props
 	export let movies;
 	export let title;
-	export let priority;
+	// export let priority;
 	export let details = true;
+	export let position = 'relative';
 
 	let container;
 	let pageInfo;
 	let offset = 0;
 
 	onMount(() => {
-		pageInfo = pages();
+		// pageInfo = pages();
 	});
 
 	function prevPage(e) {
@@ -81,12 +83,11 @@
 	}
 </script>
 
-<div class="carousel-wrapper priority-{priority}">
-	<!-- <button on:click={prevPage} class="next">a</button> -->
+<div class="carousel-wrapper" style:position>
 	<header class="carousel-header">
 		<h3 class="header-title">{title ?? ''}</h3>
-		{#if movies.totalResults > 1}
-			<a href="/movies?{movies.query}" class="header-btn"
+		{#if movies?.totalResults > 10}
+			<a href="/movies?{movies?.query}" class="header-btn"
 				>See all<span>
 					<Icon name="chevron-right" y="10%" />
 				</span></a
@@ -94,14 +95,44 @@
 		{/if}
 	</header>
 	<main class="items-wrapper" bind:this={container}>
-		{#each movies.results as movie, i (movie.uuid)}
-			<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
-		{/each}
-		{#if movies.totalResults > 10}
-			<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
+		{#if !movies}
+			<Spinner />
+		{:else if movies?.results?.length > 0}
+			{#each movies.results as movie, i (movie.uuid)}
+				<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
+			{/each}
+			{#if movies?.totalResults > 10}
+				<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
+			{/if}
 		{/if}
 	</main>
-	{#if movies.results?.length > 1}
+	{#if movies instanceof Error}
+		<slot name="error" message={movies.message} />
+	{/if}
+</div>
+
+<!-- <div class="carousel-wrapper priority-{priority}" style:position>
+	<header class="carousel-header">
+		<h3 class="header-title">{title ?? ''}</h3>
+		{#if movies?.totalResults > 10}
+			<a href="/movies?{movies?.query}" class="header-btn"
+				>See all<span>
+					<Icon name="chevron-right" y="10%" />
+				</span></a
+			>
+		{/if}
+	</header>
+	<main class="items-wrapper" bind:this={container}>
+		{#each movies?.results ?? [] as movie, i (movie.uuid)}
+			<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
+		{:else}
+			<Spinner />
+		{/each}
+		{#if movies?.totalResults > 10}
+			<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
+		{/if}
+	</main> -->
+<!-- {#if movies.results?.length > 1}
 		<div class="movement-action">
 			<button on:click={nextPage} class="prev controls">
 				<Icon name="arrow-sm-right" />
@@ -110,9 +141,9 @@
 				<Icon name="arrow-sm-left" />
 			</button>
 		</div>
-	{/if}
-</div>
+	{/if} -->
 
+<!-- </div> -->
 <style>
 	/* @media (min-width: 576px) {} */
 	/* @media (min-width: 768px) {} */
@@ -137,22 +168,22 @@
 		min-width: 250px;
 	} */
 
-	@media (min-width: 768px) {
-		.priority-small :global(.item) {
-			--w-card: 200px;
-			max-height: 450px;
-			/* min-width: 200px; */
-		}
-		.priority-medium :global(.item) {
-			--w-card: 250px;
-			max-height: 550px;
-			/* min-width: 250px; */
-		}
-		.priority-large :global(.item) {
-			--w-card: 300px;
-			/* min-width: 350px; */
-		}
-	}
+	/* @media (min-width: 768px) { */
+	/* .priority-small :global(.item) { */
+	/* --w-card: 200px; */
+	/* max-height: 450px; */
+	/* min-width: 200px; */
+	/* } */
+	/* .priority-medium :global(.item) { */
+	/* --w-card: 250px; */
+	/* max-height: 550px; */
+	/* min-width: 250px; */
+	/* } */
+	/* .priority-large :global(.item) { */
+	/* --w-card: 300px; */
+	/* min-width: 350px; */
+	/* } */
+	/* } */
 
 	.carousel-header {
 		display: flex;

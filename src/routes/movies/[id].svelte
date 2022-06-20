@@ -38,35 +38,50 @@
 	export let movie;
 	// let modal;
 	let showPlayer = false;
-	let suggetsPromise = getSuggest;
+	let xxx;
+	let suggetsPromise = getSuggest();
 	let existSuggestions = false;
 
 	async function getSuggest() {
+		xxx = null;
+
 		const { genre, plot } = movie;
 		let selected;
-		if (genre.length > 0) {
-			selected = genre[randomInt(genre.length - 1)];
+		if (plot) {
+			const plotArr = plot.split(' ');
+			const plotArrFilter = plotArr.filter((word) => word.length > 7 && !word.includes('-'));
+			selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
 		} else {
-			if (plot) {
-				const plotArr = plot.split(' ');
-				const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
-				selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
+			if (genre.length > 0) {
+				selected = genre[randomInt(genre.length - 1)];
 			}
 		}
 
+		// try {
+		// 	if (!selected) throw Error('no content');
+		// 	const req = await fetch(
+		// 		'/api?s=' + selected.toLowerCase().replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, '')
+		// 	);
+		// 	if (!req.ok) {
+		// 		throw Error('bad request');
+		// 	}
+		// 	existSuggestions = true;
+		// 	return req.json();
+		// } catch (error) {
+		// 	existSuggestions = false;
+		// 	return Promise.reject();
+		// }
 		try {
-			if (!selected) throw Error('no content');
+			if (!selected) throw Error('no content for now');
+
 			const req = await fetch(
 				'/api?s=' + selected.toLowerCase().replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, '')
 			);
-			if (!req.ok) {
-				throw Error('bad request');
-			}
-			existSuggestions = true;
-			return req.json();
+			if (!req.ok) throw Error('bad request');
+
+			xxx = await req.json();
 		} catch (error) {
-			existSuggestions = false;
-			return Promise.reject();
+			xxx = Error(error.message);
 		}
 	}
 
@@ -74,9 +89,8 @@
 		if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
 			if (from.pathname !== to.pathname) {
 				// movie = movie;
-				suggetsPromise = getSuggest;
+				suggetsPromise = getSuggest();
 				showPlayer = false;
-				existSuggestions = false;
 			}
 			// modal.close();
 		}
@@ -95,7 +109,7 @@
 			goto('#info', { replaceState: true });
 		}}>info</button
 	>
-	{#if existSuggestions}
+	{#if xxx && !(xxx instanceof Error)}
 		<button
 			on:click={() => {
 				goto('#suggest', { replaceState: true });
@@ -131,7 +145,7 @@
 	</div>
 </div>
 <div class="content">
-	{#await suggetsPromise()}
+	<!-- {#await suggetsPromise()}
 		<p>cargando sugerencias...</p>
 	{:then value}
 		{#if Array.isArray(value?.results)}
@@ -145,10 +159,29 @@
 				For now we do <span>not have related movies or series</span>
 			</Toast>
 		</div>
-	{/await}
+	{/await} -->
+	<div class="suggest" id="suggest">
+		<CarouselMovies movies={xxx} details={false} title="Suggestions" priority="small">
+			<div slot="error" style="width: 100%;">
+				<Toast warn>
+					For now we do <span>not have related movies or series</span>
+				</Toast>
+			</div>
+		</CarouselMovies>
+	</div>
 </div>
 
 <style>
+	:root {
+		/* modal */
+		--movie-info-item-opacity: 0.5;
+	}
+
+	:global(body[data-theme='light']) {
+		/* modal */
+		--movie-info-item-opacity: 1;
+	}
+
 	.container {
 		display: flex;
 		flex-direction: column;
@@ -160,7 +193,7 @@
 	}
 
 	.poster {
-		background: linear-gradient(to top, var(--c-main-content) 20%, var(--c-front) 200%);
+		background: linear-gradient(to top, var(--c-main) 20%, var(--c-front) 200%);
 		position: relative;
 		text-align: center;
 		width: 100%;
@@ -245,9 +278,9 @@
 	}
 
 	:global(.info__property) {
-		opacity: 0.5;
+		opacity: var(--movie-info-item-opacity);
 		text-transform: capitalize;
-		font-weight: lighter;
+		font-weight: bold;
 	}
 
 	/* @media (min-width: 576px) {}

@@ -348,7 +348,7 @@
 	.content {
 		/* margin-top: 1em; */
 		/* height: 600px; */
-		background-image: linear-gradient(var(--c-front) -80%, transparent 20%);
+		/* background-image: linear-gradient(var(--c-front) -80%, transparent 20%); */
 		/* background-size: 100% 100%;
 		background-position: center;
 		background-repeat: no-repeat; */
@@ -365,7 +365,7 @@
 
 	.search-box {
 		display: flex;
-		color: white;
+		color: var(--c-text-base);
 		border: 1px solid rgba(128, 128, 128, 0.3);
 		overflow: hidden;
 		border-radius: 50vh;
@@ -399,7 +399,7 @@
 	#mysearch:hover,
 	#mysearch:focus,
 	.btn-clear:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: var(--c-divider);
 	}
 
 	.btn-search:hover {
@@ -417,7 +417,7 @@
 
 	.btn-search {
 		cursor: pointer;
-		color: inherit;
+		color: white;
 		background-color: var(--c-front);
 		border: none;
 		padding-left: 1em;
@@ -474,7 +474,7 @@
 
 	.autocomplete-container--open {
 		/* padding: 1em; */
-		border: 1px solid rgba(128, 128, 128, 0.3);
+		border: 1px solid var(--c-divider);
 	}
 
 	.autocomplete-container::-webkit-scrollbar {
@@ -504,7 +504,7 @@
 		/* outline: 1px solid red;	 */
 		display: block;
 		border: none;
-		color: white;
+		color: inherit;
 		padding: 0.5em 1em;
 		cursor: pointer;
 		/* padding: 0 0.5em; */
@@ -513,6 +513,7 @@
 	.item:hover,
 	.item:focus {
 		background-color: var(--c-front);
+		color: white;
 	}
 
 	.filters {

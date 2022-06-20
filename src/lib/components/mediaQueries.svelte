@@ -5,7 +5,18 @@
 	export let bottom = 'initial';
 </script>
 
-<div style:top style:left style:right style:bottom />
+<div
+	on:click={() => {
+		console.log(document.body.dataset.theme);
+		if (document.body.dataset.theme === 'light') document.body.dataset.theme = 'dark';
+		else document.body.dataset.theme = 'light';
+		// if (document.body.dataset.theme === 'dark') document.body.dataset.theme = 'light';
+	}}
+	style:top
+	style:left
+	style:right
+	style:bottom
+/>
 
 <style>
 	div {
