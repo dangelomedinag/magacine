@@ -1,4 +1,5 @@
-<script context="module">
+<!-- <script context="module">
+	export const prerender = true;
 	export async function load({ fetch }) {
 		const reqs = [
 			fetch('/api?s=saw').then((r) => {
@@ -30,51 +31,50 @@
 			}
 		};
 	}
-</script>
-
+</script> -->
 <script>
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 
 	import NavbarTop from '$components/ui/NavbarTop.svelte';
 	import Toast from '$lib/components/ui/toast.svelte';
-	// import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
-	export let movies = [];
-	// onMount(async () => {
-	// 	const reqs = [
-	// 		fetch('/api?s=saw').then((r) => {
-	// 			// if (!r.ok) throw r;
-	// 			return r.json();
-	// 		}),
-	// 		fetch('/api?s=blood').then((r) => {
-	// 			// if (!r.ok) throw r;
-	// 			return r.json();
-	// 		}),
-	// 		fetch('/api?s=horror').then((r) => {
-	// 			// if (!r.ok) throw r;
-	// 			return r.json();
-	// 		}),
-	// 		fetch('/api?s=horror&page=2').then((r) => {
-	// 			// if (!r.ok) throw r;
-	// 			return r.json();
-	// 		}),
-	// 		fetch('/api?s=comedy').then((r) => {
-	// 			// if (!r.ok) throw r;
-	// 			return r.json();
-	// 		}),
-	// 		fetch('/api?s=comedy&page=2').then((r) => {
-	// 			// if (!r.ok) throw r;
-	// 			return r.json();
-	// 		})
-	// 	];
+	let movies = [];
+	onMount(async () => {
+		const reqs = [
+			fetch('/api?s=saw').then((r) => {
+				// if (!r.ok) throw r;
+				return r.json();
+			}),
+			fetch('/api?s=blood').then((r) => {
+				// if (!r.ok) throw r;
+				return r.json();
+			}),
+			fetch('/api?s=horror').then((r) => {
+				// if (!r.ok) throw r;
+				return r.json();
+			}),
+			fetch('/api?s=horror&page=2').then((r) => {
+				// if (!r.ok) throw r;
+				return r.json();
+			}),
+			fetch('/api?s=comedy').then((r) => {
+				// if (!r.ok) throw r;
+				return r.json();
+			}),
+			fetch('/api?s=comedy&page=2').then((r) => {
+				// if (!r.ok) throw r;
+				return r.json();
+			})
+		];
 
-	// 	const res = await Promise.all(reqs);
-	// 	const data = res.map((e) => (e.message ? new Error(e.message) : e));
+		const res = await Promise.all(reqs);
+		const data = res.map((e) => (e.message ? new Error(e.message) : e));
 
-	// 	console.log(data);
+		console.log(data);
 
-	// 	movies = data;
-	// });
+		movies = data;
+	});
 	// export let movies;
 	let act = 'suspense';
 
