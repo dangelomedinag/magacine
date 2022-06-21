@@ -1,6 +1,4 @@
 <script context="module">
-	export const prerender = true;
-
 	/** @type {import("@sveltejs/kit").LoadEvent} */
 	export async function load({ fetch }) {
 		const req = await fetch('/api?s=got');
