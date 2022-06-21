@@ -14,15 +14,11 @@
 	</button>
 {/if}
 
-<Modal bind:this={modal} Zindex="49" btnClose={false}>
+<!-- <Modal bind:this={modal} Zindex="49" btnClose={false}>
 	<header>
 		{$session.user.name}
 	</header>
-	<!-- <div>
-		<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, sunt.</p>
-		<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, sunt.</p>
-		<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, sunt.</p>
-	</div> -->
+	
 	<ul class="list">
 		<li class="list__item list__item--block">
 			<a class="list__link" href="/profile">
@@ -42,19 +38,13 @@
 				<span class="list__label">help</span></a
 			>
 		</li>
-		<!-- <li class="list__item">
-			<a class="list__link" href="/auth/logout">
-				<Icon name="logout" />
-				<span class="list__label">logout</span></a
-			>
-		</li> -->
+		
 	</ul>
 	<svelte:fragment slot="action">
 		<a class="list__logout" sveltekit:reload href="/auth/logout">logout <Icon name="logout" /></a>
 		<button href="/auth/logout" on:click={modal.close} class="cta">close</button>
 	</svelte:fragment>
-</Modal>
-
+</Modal> -->
 <style>
 	header {
 		text-align: center;

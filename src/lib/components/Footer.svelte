@@ -82,6 +82,8 @@
 
 <style>
 	.footer {
+		/* padding-top: 0em; */
+		padding-bottom: 2em;
 		display: flex;
 		flex-flow: row wrap;
 		background-color: var(--c-main-content);

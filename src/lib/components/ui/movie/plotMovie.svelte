@@ -68,10 +68,7 @@
 	}
 	summary {
 		display: inline-flex;
-	}
-
-	details span {
-		display: inline-flex;
+		line-height: 1.6rem;
 	}
 
 	.indicator:hover {

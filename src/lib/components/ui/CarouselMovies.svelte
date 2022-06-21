@@ -84,28 +84,28 @@
 </script>
 
 <div class="carousel-wrapper" style:position>
-	<header class="carousel-header">
-		<h3 class="header-title">{title ?? ''}</h3>
-		{#if movies?.totalResults > 10}
-			<a href="/movies?{movies?.query}" class="header-btn"
-				>See all<span>
-					<Icon name="chevron-right" y="10%" />
-				</span></a
-			>
-		{/if}
-	</header>
-	<main class="items-wrapper" bind:this={container}>
-		{#if !movies}
-			<Spinner />
-		{:else if movies?.results?.length > 0}
+	{#if !movies}
+		<Spinner />
+	{:else if movies?.results?.length > 0}
+		<header class="carousel-header">
+			<h3 class="header-title">{title ?? ''}</h3>
+			{#if movies?.totalResults > 10}
+				<a href="/movies?{movies?.query}" class="header-btn"
+					>See all<span>
+						<Icon name="chevron-right" y="10%" />
+					</span></a
+				>
+			{/if}
+		</header>
+		<main class="items-wrapper" bind:this={container}>
 			{#each movies.results as movie, i (movie.uuid)}
 				<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
 			{/each}
 			{#if movies?.totalResults > 10}
 				<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
 			{/if}
-		{/if}
-	</main>
+		</main>
+	{/if}
 	{#if movies instanceof Error}
 		<slot name="error" message={movies.message} />
 	{/if}

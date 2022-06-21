@@ -179,7 +179,7 @@
 
 	:global(body[data-theme='light']) {
 		/* modal */
-		--movie-info-item-opacity: 1;
+		--movie-info-item-opacity: 0.8;
 	}
 
 	.container {
@@ -193,7 +193,7 @@
 	}
 
 	.poster {
-		background: linear-gradient(to top, var(--c-main) 20%, var(--c-front) 200%);
+		background: linear-gradient(to top, var(--c-main) 10%, var(--c-front) 150%);
 		position: relative;
 		text-align: center;
 		width: 100%;
@@ -281,6 +281,7 @@
 		opacity: var(--movie-info-item-opacity);
 		text-transform: capitalize;
 		font-weight: bold;
+		line-height: 2rem;
 	}
 
 	/* @media (min-width: 576px) {}

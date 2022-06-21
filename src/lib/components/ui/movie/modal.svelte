@@ -153,7 +153,7 @@
 		background-color: transparent;
 		/* border: 1px solid rgba(255, 255, 255, 0.1); */
 		border: 1px solid transparent;
-		color: inherit;
+		color: var(--c-text-base);
 		padding: 0.5em 0;
 		cursor: pointer;
 		border-radius: 5px;
@@ -161,7 +161,7 @@
 	}
 	.modal__actions > :global(button:hover),
 	.modal__actions > :global(a:hover) {
-		background-color: var(--c-main);
+		background-color: var(--c-divider);
 	}
 	.modal__actions > :global(a:hover) {
 		text-decoration: underline;
@@ -170,6 +170,7 @@
 	.modal__actions > :global(button.cta),
 	.modal__actions > :global(a.cta) {
 		background-color: var(--c-front);
+		color: white;
 	}
 	.modal__actions > :global(button.cta:hover),
 	.modal__actions > :global(a.cta:hover) {

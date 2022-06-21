@@ -1,15 +1,8 @@
 <script context="module">
+	export const prerender = true;
+
 	/** @type {import("@sveltejs/kit").LoadEvent} */
 	export async function load({ fetch }) {
-		// console.log(session.user);
-
-		// if (!session.user) {
-		// 	return {
-		// 		status: 303,
-		// 		redirect: '/login'
-		// 	};
-		// }
-
 		const req = await fetch('/api?s=got');
 		if (!req.ok) {
 			const res = await req.json();

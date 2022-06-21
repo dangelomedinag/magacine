@@ -1,57 +1,23 @@
-<!-- <script context="module">
+<script context="module">
+	export const prerender = true;
 	export async function load({ fetch }) {
 		const reqs = [
-			fetch('/api?s=saw').then((r) => r.json()),
-			fetch('/api?s=blood').then((r) => r.json()),
-			fetch('/api?s=horror').then((r) => r.json()),
-			fetch('/api?s=horror&page=2').then((r) => r.json()),
-			fetch('/api?s=comedy').then((r) => r.json()),
-			fetch('/api?s=comedy&page=2').then((r) => r.json())
-		];
-
-		const data = await Promise.all(reqs).catch((err) => {
-			return { status: data.status, error: new Error(err.message) };
-		});
-
-		return {
-			props: {
-				movies: data
-			}
-		};
-	}
-</script> -->
-<script>
-	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
-
-	import NavbarTop from '$components/ui/NavbarTop.svelte';
-	import Toast from '$lib/components/ui/toast.svelte';
-	import { onMount } from 'svelte';
-
-	let movies = [];
-	onMount(async () => {
-		const reqs = [
 			fetch('/api?s=saw').then((r) => {
-				// if (!r.ok) throw r;
 				return r.json();
 			}),
 			fetch('/api?s=blood').then((r) => {
-				// if (!r.ok) throw r;
 				return r.json();
 			}),
 			fetch('/api?s=horror').then((r) => {
-				// if (!r.ok) throw r;
 				return r.json();
 			}),
 			fetch('/api?s=horror&page=2').then((r) => {
-				// if (!r.ok) throw r;
 				return r.json();
 			}),
 			fetch('/api?s=comedy').then((r) => {
-				// if (!r.ok) throw r;
 				return r.json();
 			}),
 			fetch('/api?s=comedy&page=2').then((r) => {
-				// if (!r.ok) throw r;
 				return r.json();
 			})
 		];
@@ -59,10 +25,57 @@
 		const res = await Promise.all(reqs);
 		const data = res.map((e) => (e.message ? new Error(e.message) : e));
 
-		console.log(data);
+		return {
+			props: {
+				movies: data
+			}
+		};
+	}
+</script>
 
-		movies = data;
-	});
+<script>
+	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
+
+	import NavbarTop from '$components/ui/NavbarTop.svelte';
+	import Toast from '$lib/components/ui/toast.svelte';
+	// import { onMount } from 'svelte';
+
+	export let movies = [];
+	// onMount(async () => {
+	// 	const reqs = [
+	// 		fetch('/api?s=saw').then((r) => {
+	// 			// if (!r.ok) throw r;
+	// 			return r.json();
+	// 		}),
+	// 		fetch('/api?s=blood').then((r) => {
+	// 			// if (!r.ok) throw r;
+	// 			return r.json();
+	// 		}),
+	// 		fetch('/api?s=horror').then((r) => {
+	// 			// if (!r.ok) throw r;
+	// 			return r.json();
+	// 		}),
+	// 		fetch('/api?s=horror&page=2').then((r) => {
+	// 			// if (!r.ok) throw r;
+	// 			return r.json();
+	// 		}),
+	// 		fetch('/api?s=comedy').then((r) => {
+	// 			// if (!r.ok) throw r;
+	// 			return r.json();
+	// 		}),
+	// 		fetch('/api?s=comedy&page=2').then((r) => {
+	// 			// if (!r.ok) throw r;
+	// 			return r.json();
+	// 		})
+	// 	];
+
+	// 	const res = await Promise.all(reqs);
+	// 	const data = res.map((e) => (e.message ? new Error(e.message) : e));
+
+	// 	console.log(data);
+
+	// 	movies = data;
+	// });
 	// export let movies;
 	let act = 'suspense';
 
@@ -84,12 +97,12 @@
 		<!-- content here -->
 		<CarouselMovies
 			movies={movies[0]}
-			title="Suspense  ({movies[0]?.totalResults} results)"
+			title="Suspense  {movies[0]?.totalResults ?? 'loading'} results)"
 			priority="small"
 		/>
 		<CarouselMovies
 			movies={movies[1]}
-			title="Suspense  ({movies[1]?.totalResults} results)"
+			title="Suspense  {movies[1]?.totalResults ?? 'loading'} results)"
 			priority="small"
 		/>
 	{/if}
@@ -97,12 +110,12 @@
 		<!-- content here -->
 		<CarouselMovies
 			movies={movies[2]}
-			title="Terror  ({movies[2]?.totalResults} results)"
+			title="Terror  {movies[2]?.totalResults ?? 'loading'} results)"
 			priority="small"
 		/>
 		<CarouselMovies
 			movies={movies[3]}
-			title="Terror  ({movies[3]?.totalResults} results)"
+			title="Terror  {movies[3]?.totalResults ?? 'loading'} results)"
 			priority="small"
 		>
 			<div slot="error" let:message>
@@ -116,12 +129,12 @@
 		<!-- content here -->
 		<CarouselMovies
 			movies={movies[4]}
-			title="Comedy  ({movies[4]?.totalResults} results)"
+			title="Comedy  {movies[4]?.totalResults ?? 'loading'} results)"
 			priority="small"
 		/>
 		<CarouselMovies
 			movies={movies[5]}
-			title="Comedy  ({movies[5]?.totalResults} results)"
+			title="Comedy  {movies[5]?.totalResults ?? 'loading'} results)"
 			priority="small"
 		/>
 	{/if}

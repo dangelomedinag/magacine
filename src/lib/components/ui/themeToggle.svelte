@@ -2,28 +2,21 @@
 	import { browser } from '$app/env';
 
 	import Icon from '$components/ui/icons/icon.svelte';
-	import {
-		quintInOut,
-		bounceInOut,
-		bounceIn,
-		bounceOut,
-		elasticIn,
-		elasticOut,
-		quintIn,
-		quintOut
-	} from 'svelte/easing';
-	import { scale, slide, fly } from 'svelte/transition';
+	import { onMount } from 'svelte';
+	import { quintIn, quintOut } from 'svelte/easing';
+	import { fly } from 'svelte/transition';
 	let theme;
+	let button;
+	let active = false;
 
-	if (browser) {
+	onMount(() => {
 		theme = document.body.dataset.theme;
-	}
+	});
 </script>
 
-{#key theme}
+{#if theme}
 	<button
-		in:fly|local={{ duration: 1000, y: 6, delay: 300, easing: quintOut }}
-		out:fly|local={{ duration: 300, y: -6, easing: quintIn }}
+		bind:this={button}
 		on:click={() => {
 			if (document.body.dataset.theme === 'light') {
 				document.body.dataset.theme = 'dark';
@@ -33,21 +26,56 @@
 				theme = document.body.dataset.theme;
 			}
 		}}
+		disabled={active}
 	>
-		{#if theme === 'light'}
-			<Icon name="moon" type="solid" style="color:purple;" />
-		{:else}
-			<Icon name="sun" type="solid" style="color:yellow;" shadow />
-		{/if}
+		{#key theme}
+			<div
+				in:fly|local={{ duration: 1000, y: 6, delay: 300, easing: quintOut }}
+				out:fly|local={{ duration: 300, y: -6, easing: quintIn }}
+				on:outrostart={(e) => {
+					active = true;
+				}}
+				on:introend={(e) => {
+					active = false;
+				}}
+			>
+				{#if theme === 'light'}
+					<Icon name="sun" type="solid" style="color: #ffae17;" />
+				{:else}
+					<Icon name="moon" type="solid" style="color: darkslateblue;" />
+				{/if}
+				<!-- {theme === 'light' ? 'dark' : 'light'} -->
+				{theme}
+			</div>
+		{/key}
 	</button>
-{/key}
+{/if}
 
 <style>
 	button {
-		font-size: 1rem;
-		width: 60px;
+		/* font-size: 1rem; */
+		/* background-color: var(--c-front) !important; */
+		opacity: 1 !important;
+
+		/* width: 60px; */
+	}
+	button:disabled {
+		opacity: 0.5 !important;
 	}
 
-	span {
+	div {
+		display: flex;
+		font-size: 0.9rem;
+		justify-content: center;
+		align-items: center;
+		background-color: var(--c-main);
+		border: 1px solid var(--c-divider);
+		/* box-shadow: var(--shadow-short); */
+		/* color: #ffae17;
+		color: darkslateblue; */
+		color: var(--c-text-base);
+		/* color: black; */
+		border-radius: 50vh;
+		padding: 0 0.5em;
 	}
 </style>
