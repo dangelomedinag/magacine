@@ -268,7 +268,13 @@
 
 	:global(.info__item) {
 		padding-bottom: 1em;
+		/* border-top: 1px solid var(--c-divider); */
 	}
+	:global(.info__item + .info__item) {
+		padding-top: 1em;
+		border-top: 1px solid var(--c-divider);
+	}
+
 	:global(.info__item:last-of-type) {
 		padding-bottom: 0;
 	}

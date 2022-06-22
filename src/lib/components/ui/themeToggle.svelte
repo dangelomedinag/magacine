@@ -1,60 +1,53 @@
 <script>
-	import { browser } from '$app/env';
-
 	import Icon from '$components/ui/icons/icon.svelte';
 	import { onMount } from 'svelte';
 	import { quintIn, quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
-	let theme;
-	let button;
+	import { themeStore } from '$lib/stores/theme-store';
+	// let theme;
 	let active = false;
 
-	onMount(() => {
-		theme = document.body.dataset.theme;
-	});
+	// onMount(() => {});
+
+	function toogleTheme() {
+		console.log('before', $themeStore);
+
+		themeStore.toogleTheme();
+
+		console.log('after', $themeStore);
+	}
 </script>
 
-{#if theme}
-	<button
-		bind:this={button}
-		on:click={() => {
-			if (document.body.dataset.theme === 'light') {
-				document.body.dataset.theme = 'dark';
-				theme = document.body.dataset.theme;
-			} else {
-				document.body.dataset.theme = 'light';
-				theme = document.body.dataset.theme;
-			}
-		}}
-		disabled={active}
-	>
-		{#key theme}
+{#if $themeStore}
+	<button on:click={themeStore.toogleTheme} disabled={active}>
+		{#key $themeStore}
 			<div
-				in:fly|local={{ duration: 1000, y: 6, delay: 300, easing: quintOut }}
-				out:fly|local={{ duration: 300, y: -6, easing: quintIn }}
-				on:outrostart={(e) => {
+				in:fly|local={{ duration: 1000, x: 6, delay: 300, easing: quintOut }}
+				out:fly|local={{ duration: 300, x: -6, easing: quintIn }}
+				on:outrostart={() => {
 					active = true;
 				}}
-				on:introend={(e) => {
+				on:introend={() => {
 					active = false;
 				}}
 			>
-				{#if theme === 'light'}
+				{#if $themeStore === 'light'}
 					<Icon name="sun" type="solid" style="color: #ffae17;" />
 				{:else}
 					<Icon name="moon" type="solid" style="color: darkslateblue;" />
 				{/if}
-				<!-- {theme === 'light' ? 'dark' : 'light'} -->
-				{theme}
+				{$themeStore}
 			</div>
 		{/key}
 	</button>
 {/if}
 
+<!-- <button on:click={toogleTheme}>x</button> -->
 <style>
 	button {
 		/* font-size: 1rem; */
-		/* background-color: var(--c-front) !important; */
+		background-color: transparent !important;
+		border: none;
 		opacity: 1 !important;
 
 		/* width: 60px; */

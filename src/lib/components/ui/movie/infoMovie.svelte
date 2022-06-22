@@ -39,7 +39,7 @@
 
 <button on:click={modal.open} class="btn-details">more details</button>
 
-<Modal bind:this={modal} Zindex="50">
+<Modal bind:this={modal} Zindex="110">
 	<ReleasedMovie value={released} />
 	<DirectorMovie value={director} />
 	<WriterMovie value={writer} />

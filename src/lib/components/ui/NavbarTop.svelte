@@ -7,6 +7,7 @@
 	import CarouselMovies from './CarouselMovies.svelte';
 	// import { page } from '$app/stores';
 	import ThemeToggle from '$components/ui/themeToggle.svelte';
+
 	import HeaderSticky from './headerSticky.svelte';
 	import { browser } from '$app/env';
 	import { onMount } from 'svelte';
@@ -25,6 +26,7 @@
 		result = null;
 		modal.open();
 		e.target.x.blur();
+
 		let query = e.target.x.value.trim();
 		console.log(query);
 		let url = new URL(location);
@@ -62,16 +64,26 @@
 	let up = false;
 
 	onMount(() => {
+		const navbar = document.querySelector('nav.navbar');
+		let leftContainer;
+
 		function alternatedNavbar(e) {
 			let currentScroll = window.pageYOffset;
 
+			if (!leftContainer) leftContainer = document.querySelector('div.left').offsetHeight;
+
 			if (window.scrollY > 150) {
 				if (currentScroll - lastScroll > 0) {
+					console.log(leftContainer);
+					navbar.style.transform = `translateY(-${leftContainer + 2}px)`;
 					down = true;
 					up = false;
+					document.querySelector('div.center').classList.add('block');
 				} else {
+					navbar.style.transform = `translateY(0px)`;
 					down = false;
 					up = true;
+					document.querySelector('div.center').classList.remove('block');
 				}
 			}
 
@@ -90,9 +102,10 @@
 	}
 </script>
 
-<nav class="navbar" class:scroll-down={down} class:scroll-up={up}>
+<!-- <nav class="navbar" class:scroll-down={down} class:scroll-up={up}> -->
+<nav class="navbar">
 	<div class="content navbar-wrapper">
-		<div class="left">
+		<div class="left dos">
 			<a href="/">
 				<Icon name="home" type="solid" />
 			</a>
@@ -127,9 +140,30 @@
 				</form>
 			{:else}
 				<slot />
+				{#if search}
+					<button
+						class="search-second"
+						style="margin-left: auto;"
+						on:click={() => {
+							searchInput = !searchInput;
+						}}
+					>
+						<Icon name="search" type="solid" />
+					</button>
+				{/if}
 			{/if}
 		</div>
 		<div class="right">
+			{#if search}
+				<button
+					class="search-first"
+					on:click={() => {
+						searchInput = !searchInput;
+					}}
+				>
+					<Icon name="search" type="solid" />
+				</button>
+			{/if}
 			{#if bell}
 				<button
 					on:click={() => {
@@ -137,15 +171,6 @@
 					}}
 				>
 					<Icon name="bell" />
-				</button>
-			{/if}
-			{#if search}
-				<button
-					on:click={() => {
-						searchInput = !searchInput;
-					}}
-				>
-					<Icon name="search" type="solid" />
 				</button>
 			{/if}
 			{#if profile}
@@ -159,7 +184,7 @@
 	</div>
 </nav>
 
-<Modal bind:this={modalSession} Zindex="51" btnClose={false}>
+<Modal bind:this={modalSession} Zindex="110" btnClose={false}>
 	<header class="modal-header">
 		{$session.user.name}
 	</header>
@@ -190,13 +215,16 @@
 	</svelte:fragment>
 </Modal>
 
-<Modal bind:this={modal} Zindex="49" btnClose={false}>
+<Modal bind:this={modal} Zindex="110" btnClose={false}>
+	<header class="modal-header">
+		search: {result?.search ?? ''}
+	</header>
 	{#if result}
 		<ul class="list">
 			{#each result.results as movie}
 				<li
-					class="list__item list__item--block"
-					style="display: flex; justify-content: space-between; align-items: center;"
+					class=" list__item--block"
+					style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--c-divider);"
 				>
 					<span style="padding-left: 1em;">
 						<div
@@ -206,9 +234,16 @@
 						</div>
 						<div style="font-weight: lighter;">{movie.type}</div>
 					</span>
-					<img src={movie.poster} alt={movie.title} style="max-height: 70px; display: block;" />
+					<img
+						src={movie.poster}
+						alt={movie.title}
+						style="max-height: 70px; display: block; width: 50px; object-fit: cover;"
+					/>
 				</li>
 			{/each}
+			<li class=" list__item--block" style="text-align: center; padding-top: 0.5em;">
+				{result.totalResults} total results
+			</li>
 		</ul>
 	{/if}
 	<!-- <CarouselMovies position="static" movies={result} title={result?.search}>
@@ -219,7 +254,12 @@
 		{#if result}
 			<a href="/search?{result.query}" class="cta">show all</a>
 		{/if}
-		<button on:click={modal.close}>close</button>
+		<button
+			on:click={() => {
+				modal.close();
+				searchInput = false;
+			}}>close</button
+		>
 	</svelte:fragment>
 </Modal>
 
@@ -253,7 +293,7 @@
 		/* left: 0; */
 		width: 100%;
 		transition: transform 300ms ease;
-		/* transform: translateY(0); */
+		transform: translateY(0);
 		/* z-index: 10; */
 		position: sticky;
 		top: 0;
@@ -274,13 +314,17 @@
 	}
 
 	.left,
-	/* .center, */
+	.center,
 	.right {
 		display: flex;
 		/* justify-content: flex-start; */
 		/* justify-content: stretch; */
 		/* align-items: center; */
 		/* height: 100%; */
+	}
+
+	.center {
+		/* height: 50px; */
 	}
 
 	/* .navbar-wrapper :global(button),
@@ -338,9 +382,13 @@
 	}
 
 	.center > :global(button) {
-		flex: 1 1 100%;
+		/* flex: 0 1 100%; */
+		/* height: 50px; */
 		font-weight: bold;
 	}
+	/* .search-first {
+		display: none;
+	} */
 
 	@media (min-width: 576px) {
 		.navbar-wrapper {
@@ -357,19 +405,31 @@
 		.center > :global(button) {
 			flex: 0 1 auto;
 		}
+		.search-first {
+			display: inline-flex;
+		}
+		.search-second {
+			display: none !important;
+		}
+	}
+
+	.search-second {
+		display: none;
+	}
+
+	:global(.center.block) > :global(button + .search-second) {
+		display: inline-flex;
 	}
 
 	/* search box */
 
 	form {
-		padding: 0;
+		padding: 0.7em;
 		margin: 0;
 		display: flex;
 		flex-wrap: nowrap;
 
-		/* width: 100%; */
-		/* height: 100%; */
-		/* background-color: red; */
+		width: 100%;
 	}
 
 	.searchBox {
@@ -381,7 +441,7 @@
 		width: 100%;
 		color: var(--c-text-base);
 		background-color: transparent;
-		border: 2px solid var(--c-divider);
+		border: 1px solid var(--c-divider);
 		border-radius: 50vh;
 		text-align: center;
 		outline: none;

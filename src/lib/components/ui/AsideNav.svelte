@@ -1,6 +1,10 @@
 <script>
 	import MenuItem from '$components/ui/MenuItem.svelte';
+	import ThemeToggle from '$components/ui/themeToggle.svelte';
 	import { notiStore } from '$lib/stores/notifications-store';
+	import { themeStore } from '$lib/stores/theme-store';
+
+	$: theme = $themeStore;
 </script>
 
 <div id="aside-wrapper">
@@ -45,7 +49,12 @@
 		<MenuItem href="/settings" icon="cog" on:tap>Settings</MenuItem>
 		<MenuItem href="/help" icon="information-circle" on:tap>Help</MenuItem>
 		<MenuItem href="/auth/logout" icon="logout" on:tap>Logout</MenuItem>
+
+		<MenuItem icon={$themeStore === 'dark' ? 'sun' : 'moon'} on:click={themeStore.toogleTheme}>
+			{$themeStore === 'dark' ? 'light' : 'dark'} theme
+		</MenuItem>
 	</div>
+	<!-- <ThemeToggle /> -->
 </div>
 
 <style>

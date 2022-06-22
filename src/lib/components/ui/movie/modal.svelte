@@ -9,6 +9,7 @@
 	import Icon from '$components/ui/icons/icon.svelte';
 
 	let modal = false;
+	// let paddingTop = $$slots.action ? "1em" : false;
 	export let Zindex = '0';
 	export let btnClose = true;
 
@@ -34,7 +35,8 @@
 	}
 
 	function clickForeground(e) {
-		if (e.target.contains(e.currentTarget)) close();
+		// if (e.target.contains(e.currentTarget)) close();
+		close();
 	}
 
 	function handleEsc(e) {
@@ -65,26 +67,29 @@
 </script>
 
 {#if modal}
-	<div style:z-index={Zindex} class="foreground content" on:click={clickForeground}>
-		<section in:fly={{ y: 100, duration: 300, easing: quintOut }} class="modal">
-			<div class="modal__container">
-				<slot />
-			</div>
-			<div class="modal__actions">
-				<slot name="action" />
-			</div>
-			{#if btnClose}
-				<button on:click={close} class="modal__close"> <Icon name="x" /></button>
-			{/if}
-		</section>
-	</div>
+	<div style:z-index={Zindex} class="foreground content" on:click|self={clickForeground} />
+	<section
+		style:z-index={Zindex}
+		in:fly={{ y: 100, duration: 300, easing: quintOut }}
+		class="modal"
+	>
+		<div class="modal__container">
+			<slot />
+		</div>
+		<div class="modal__actions" class:paddingTop={$$slots.action}>
+			<slot name="action" />
+		</div>
+		{#if btnClose}
+			<button on:click={close} class="modal__close"> <Icon name="x" /></button>
+		{/if}
+	</section>
 {/if}
 
 <style>
 	:root {
 		/* modal */
 		--modal-foreground: rgba(0, 0, 0, 0.8);
-		--modal-bg: var(--c-main);
+		--modal-bg: var(--c-main-content);
 	}
 
 	:global(body[data-theme='light']) {
@@ -94,36 +99,38 @@
 	}
 
 	.foreground {
-		cursor: pointer;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		max-width: 1400px;
-		height: 100%;
 		position: fixed;
+		width: 100%;
+		height: 100%;
+		inset: 0;
+
+		/* max-width: 1400px; */
 		background-color: var(--modal-foreground);
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
+
+		cursor: pointer;
 		/* user-select: none; */
 		/* z-index: 95; */
 		/* margin: 0 auto; */
 	}
 
-	@media (min-width: 992px) {
+	/* @media (min-width: 992px) {
 		:global(.sidebar.toggle + main) .modal {
-			margin-left: 20%;
+			transform: translate(-30%, -50%);
 		}
-	}
+	} */
 
 	.modal {
-		position: relative;
-		/* margin-top: 2.5em; */
-		cursor: initial;
-		background-color: var(--modal-bg);
-		width: 100%;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		width: 95%;
 		max-width: 700px;
+		max-height: 90%;
+
+		display: flex;
+		flex-direction: column;
+		background-color: var(--modal-bg);
 		border-radius: 10px;
 		border: 2px solid var(--c-divider);
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
@@ -134,16 +141,16 @@
 	}
 
 	.modal__container {
-		max-height: 70vh;
-		height: 100%;
 		overflow-y: auto;
-		width: 100%;
 	}
 
 	.modal__actions {
 		display: flex;
 		gap: 0.5em;
-		/* padding-bottom: 1em; */
+	}
+
+	.paddingTop {
+		padding-top: 1em;
 	}
 
 	.modal__actions > :global(button),

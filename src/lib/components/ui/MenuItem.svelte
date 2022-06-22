@@ -25,10 +25,12 @@
 	$: active = $page.url.pathname === href;
 </script>
 
-<a class="link" class:active {href} on:click use:tap>
+<svelte:element this={href ? 'a' : 'button'} class="link" class:active {href} on:click use:tap>
 	<div class="wrapper">
 		<div class="icon">
-			<Icon name={icon} type="solid" />
+			{#key icon}
+				<Icon name={icon} type="solid" />
+			{/key}
 		</div>
 		<div class="label">
 			<slot />
@@ -37,7 +39,7 @@
 			{/if}
 		</div>
 	</div>
-</a>
+</svelte:element>
 
 <style>
 	.link {
@@ -47,14 +49,26 @@
 		display: block;
 		/* color: inherit; */
 		color: var(--aside-link);
-		opacity: var(--aside-link-opacity);
+		/* opacity: var(--aside-link-opacity); */
+		opacity: 1;
 		text-decoration: none;
 		padding: 0.5em 0.2em;
 		position: relative;
 		line-height: 1rem;
+		background-color: transparent;
+		border: none;
+		text-align: left;
+		cursor: pointer;
+		transition: transform 0.2s ease-out;
 	}
 	.link:hover {
 		opacity: 1;
+		/* background-color: var(--c-divider); */
+		/* color: var(--c-front); */
+	}
+
+	.link:active {
+		transform: translateX(3%);
 	}
 
 	.notification {
@@ -124,6 +138,10 @@
 	}
 	/* Large devices (desktops, 992px and up) */
 	@media (min-width: 992px) {
+		.link {
+			opacity: var(--aside-link-opacity);
+		}
+
 		.label {
 			display: none;
 		}

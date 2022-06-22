@@ -80,13 +80,9 @@
 {#if dev}
 	<MediaQueries bottom="50%" />
 {/if}
+
 <div class="wrapper">
-	<ButtonToTop
-		active={toggle}
-		on:click={() => {
-			toggleAside();
-		}}
-	/>
+	<ButtonToTop active={toggle} on:click={toggleAside} />
 	<aside class="sidebar" class:toggle>
 		<AsideNav
 			on:tap={() => {

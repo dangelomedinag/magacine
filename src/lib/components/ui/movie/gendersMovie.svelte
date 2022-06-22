@@ -21,6 +21,10 @@
 				class:tag--thriller={item.toLowerCase() === 'thriller'}
 				class:tag--documentary={item.toLowerCase() === 'documentary'}
 				class:tag--crime={item.toLowerCase() === 'crime'}
+				class:tag--animation={item.toLowerCase() === 'animation'}
+				class:tag--romance={item.toLowerCase() === 'romance'}
+				class:tag--musical={item.toLowerCase() === 'musical'}
+				class:tag--fantasy={item.toLowerCase() === 'fantasy'}
 				class:tag--drama={item.toLowerCase() === 'drama'}>#{item.toLowerCase()}</span
 			>
 		{:else}
@@ -32,96 +36,102 @@
 <style>
 	.tag {
 		display: inline-block;
-		/* border: 1px solid rgba(21, 196, 123, 0.3); */
 		padding-left: 0.5em;
 		padding-right: 0.5em;
 		margin-top: 0.3rem;
 		margin-left: 0.175em;
 		margin-right: 0.175em;
-		/* font-weight: 800; */
-		/* background-color: rgb(18, 54, 42);
-		color: rgb(21, 196, 123); */
 		background-color: rgb(24, 147, 96);
 		color: rgb(255, 255, 255);
 		border-radius: 50vh;
+		color: white;
+		font-weight: 700;
 	}
 
 	.tag--unknown {
-		border: 1px solid rgba(196, 21, 56, 0.3);
-		background-color: rgb(64, 35, 38);
 		color: rgb(185, 63, 88);
+		border: 1px solid rgba(185, 63, 88, 0.1);
+		background-color: rgba(185, 63, 88, 0.1);
 	}
 
 	.tag--action {
-		border: 1px solid rgba(21, 88, 196, 1);
-		background-color: rgba(56, 132, 255, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(21, 88, 196);
+		border: 1px solid rgba(21, 88, 196, 0.1);
+		background-color: rgba(21, 88, 196, 0.1);
 	}
 	.tag--adventure {
-		border: 1px solid rgb(196, 155, 21);
-		background-color: rgba(225, 255, 56, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(196, 155, 21);
+		border: 1px solid rgba(196, 155, 21, 0.1);
+		background-color: rgba(196, 155, 21, 0.1);
 	}
 	.tag--mystery {
-		border: 1px solid rgb(196, 155, 21);
-		background-color: rgba(225, 255, 56, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(196, 155, 21);
+		border: 1px solid rgba(196, 155, 21, 0.1);
+		background-color: rgba(196, 155, 21, 0.1);
 	}
 	.tag--scifi {
-		border: 1px solid rgb(135, 21, 196);
-		background-color: rgba(235, 56, 255, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(135, 21, 196);
+		border: 1px solid rgba(135, 21, 196, 0.1);
+		background-color: rgba(135, 21, 196, 0.1);
 	}
 	.tag--horror {
-		border: 1px solid rgb(135, 21, 196);
-		background-color: rgba(235, 56, 255, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(135, 21, 196);
+		border: 1px solid rgba(135, 21, 196, 0.1);
+		background-color: rgba(135, 21, 196, 0.1);
 	}
 	.tag--short {
-		border: 1px solid rgb(74, 21, 196);
-		background-color: rgba(56, 192, 255, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(99, 61, 189);
+		border: 1px solid rgba(99, 61, 189, 0.1);
+		background-color: rgba(99, 61, 189, 0.1);
 	}
 	.tag--family {
-		border: 1px solid rgb(196, 21, 41);
-		background-color: rgba(255, 56, 132, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(196, 21, 41);
+		border: 1px solid rgba(196, 21, 41, 0.1);
+		background-color: rgba(196, 21, 41, 0.1);
 	}
 	.tag--comedy {
-		border: 1px solid rgb(196, 106, 21);
-		background-color: rgba(255, 228, 56, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(196, 106, 21);
+		border: 1px solid rgba(196, 106, 21, 0.1);
+		background-color: rgba(196, 106, 21, 0.1);
 	}
 	.tag--thriller {
-		border: 1px solid rgb(196, 106, 21);
-		background-color: rgba(255, 228, 56, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(196, 106, 21);
+		border: 1px solid rgba(196, 106, 21, 0.1);
+		background-color: rgba(196, 106, 21, 0.1);
 	}
 	.tag--documentary {
-		border: 1px solid rgb(109, 21, 196);
-		background-color: rgba(255, 228, 56, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(135, 21, 196);
+		border: 1px solid rgba(135, 21, 196, 0.1);
+		background-color: rgba(135, 21, 196, 0.1);
+	}
+	.tag--musical {
+		color: rgb(135, 21, 196);
+		border: 1px solid rgba(135, 21, 196, 0.1);
+		background-color: rgba(135, 21, 196, 0.1);
 	}
 	.tag--crime {
-		border: 1px solid rgb(21, 149, 196);
-		background-color: rgba(172, 56, 255, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(21, 149, 196);
+		border: 1px solid rgba(21, 149, 196, 0.1);
+		background-color: rgba(21, 149, 196, 0.1);
 	}
 	.tag--drama {
-		border: 1px solid rgb(21, 149, 196);
-		background-color: rgba(172, 56, 255, 0.1);
-		/* background-color: transparent; */
-		color: var(--c-text-base);
+		color: rgb(126, 149, 0);
+		border: 1px solid rgba(126, 149, 0, 0.1);
+		background-color: rgba(126, 149, 0, 0.1);
+	}
+	.tag--animation {
+		color: rgb(46, 162, 112);
+		border: 1px solid rgba(46, 162, 112, 0.2);
+		background-color: rgba(46, 162, 112, 0.2);
+	}
+	.tag--romance {
+		color: rgb(185, 63, 88);
+		border: 1px solid rgba(185, 63, 88, 0.1);
+		background-color: rgba(185, 63, 88, 0.1);
+	}
+	.tag--fantasy {
+		color: rgb(21, 149, 196);
+		border: 1px solid rgba(21, 149, 196, 0.1);
+		background-color: rgba(21, 149, 196, 0.1);
 	}
 </style>

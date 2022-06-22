@@ -72,12 +72,11 @@
 	}
 
 	.indicator:hover {
-		background-color: rgba(255, 255, 255, 0.05);
+		background-color: var(--c-divider);
 		border-radius: 10px;
 	}
 
 	button {
-		width: 100%;
 	}
 
 	p {
@@ -85,6 +84,7 @@
 	}
 
 	button {
+		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -92,13 +92,16 @@
 		padding-left: 0;
 		opacity: 0.5;
 		color: var(--c-front);
+		/* background-color: var(--c-divider); */
 		background-color: transparent;
 		border: none;
 		cursor: pointer;
 		font-style: oblique;
+		font-weight: bold;
+		/* margin-bottom: 1em; */
 	}
 	button:hover {
 		opacity: 0.8;
-		background-color: var(--c-main);
+		/* background-color: var(--c-main); */
 	}
 </style>

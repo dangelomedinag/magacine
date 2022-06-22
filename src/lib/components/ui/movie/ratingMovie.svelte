@@ -9,8 +9,8 @@
 
 {#if value}
 	<div class="info__item">
-		<CardRatingStarts rating={value} block />
 		<span class="info__property">rating:</span>
+		<CardRatingStarts rating={value} block />
 		<div>imdb: {(value / 2).toFixed(1)}</div>
 
 		{#if ratings?.length > 0}
