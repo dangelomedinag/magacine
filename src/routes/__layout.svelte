@@ -38,6 +38,7 @@
 	import { dev } from '$app/env';
 	import { navigating } from '$app/stores';
 	import 'nprogress/nprogress.css';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	let toggle = false;
 
 	// NProgress css
@@ -71,6 +72,16 @@
 	function matchMobile() {
 		return matchMedia('(min-width: 992px)').matches;
 	}
+
+	afterNavigate(({ from, to }) => {
+		document.documentElement.style.scrollBehavior = 'auto';
+	});
+
+	beforeNavigate(({ from, to }) => {
+		if (to.hash !== '') {
+			document.documentElement.style.scrollBehavior = 'smooth';
+		}
+	});
 </script>
 
 <svelte:head>

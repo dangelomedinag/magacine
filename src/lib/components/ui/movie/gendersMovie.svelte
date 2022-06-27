@@ -4,29 +4,33 @@
 	export let value;
 </script>
 
+<!-- 
+class:tag--action={tag === 'action'}
+class:tag--adventure={tag === 'adventure'}
+class:tag--scifi={tag === 'sci-fi'}
+class:tag--short={tag === 'short'}
+class:tag--family={tag === 'family'}
+class:tag--comedy={tag === 'comedy'}
+class:tag--horror={tag === 'horror'}
+class:tag--mystery={tag === 'mystery'}
+class:tag--thriller={tag === 'thriller'}
+class:tag--documentary={tag === 'documentary'}
+class:tag--crime={tag === 'crime'}
+class:tag--animation={tag === 'animation'}
+class:tag--romance={tag === 'romance'}
+class:tag--musical={tag === 'musical'}
+class:tag--fantasy={tag === 'fantasy'}
+class:tag--western={tag === 'western'}
+class:tag--history={tag === 'history'} 
+class:tag--drama={tag === 'drama'}
+-->
+
 {#if value}
 	<div class="info__item">
 		<span class="info__property"><Icon name="color-swatch" /> genders:</span>
 		{#each value as item}
-			<span
-				class="tag"
-				class:tag--action={item.toLowerCase() === 'action'}
-				class:tag--adventure={item.toLowerCase() === 'adventure'}
-				class:tag--scifi={item.toLowerCase() === 'sci-fi'}
-				class:tag--short={item.toLowerCase() === 'short'}
-				class:tag--family={item.toLowerCase() === 'family'}
-				class:tag--comedy={item.toLowerCase() === 'comedy'}
-				class:tag--horror={item.toLowerCase() === 'horror'}
-				class:tag--mystery={item.toLowerCase() === 'mystery'}
-				class:tag--thriller={item.toLowerCase() === 'thriller'}
-				class:tag--documentary={item.toLowerCase() === 'documentary'}
-				class:tag--crime={item.toLowerCase() === 'crime'}
-				class:tag--animation={item.toLowerCase() === 'animation'}
-				class:tag--romance={item.toLowerCase() === 'romance'}
-				class:tag--musical={item.toLowerCase() === 'musical'}
-				class:tag--fantasy={item.toLowerCase() === 'fantasy'}
-				class:tag--drama={item.toLowerCase() === 'drama'}>#{item.toLowerCase()}</span
-			>
+			{@const tag = item.toLowerCase()}
+			<span class="tag tag--{tag}">#{tag}</span>
 		{:else}
 			<span class="tag tag--unknown">unknown</span>
 		{/each}
@@ -55,9 +59,9 @@
 	}
 
 	.tag--action {
-		color: rgb(21, 88, 196);
-		border: 1px solid rgba(21, 88, 196, 0.1);
-		background-color: rgba(21, 88, 196, 0.1);
+		color: rgb(28, 115, 255);
+		border: 1px solid rgba(28, 115, 255, 0.1);
+		background-color: rgba(28, 115, 255, 0.1);
 	}
 	.tag--adventure {
 		color: rgb(196, 155, 21);
@@ -69,10 +73,10 @@
 		border: 1px solid rgba(196, 155, 21, 0.1);
 		background-color: rgba(196, 155, 21, 0.1);
 	}
-	.tag--scifi {
-		color: rgb(135, 21, 196);
-		border: 1px solid rgba(135, 21, 196, 0.1);
-		background-color: rgba(135, 21, 196, 0.1);
+	.tag--sci-fi {
+		color: rgb(166, 0, 255);
+		border: 1px solid rgba(166, 0, 255, 0.1);
+		background-color: rgba(166, 0, 255, 0.1);
 	}
 	.tag--horror {
 		color: rgb(135, 21, 196);
@@ -133,5 +137,15 @@
 		color: rgb(21, 149, 196);
 		border: 1px solid rgba(21, 149, 196, 0.1);
 		background-color: rgba(21, 149, 196, 0.1);
+	}
+	.tag--western {
+		color: rgb(135, 21, 196);
+		border: 1px solid rgba(135, 21, 196, 0.1);
+		background-color: rgba(135, 21, 196, 0.1);
+	}
+	.tag--history {
+		color: rgb(126, 149, 0);
+		border: 1px solid rgba(126, 149, 0, 0.1);
+		background-color: rgba(126, 149, 0, 0.1);
 	}
 </style>

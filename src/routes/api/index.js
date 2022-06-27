@@ -10,6 +10,7 @@ async function getResource({ url }) {
 	const page = params.has('page') ? params.get('page') : false;
 	const type = params.has('type') ? params.get('type') : false;
 	const year = params.has('year') ? params.get('year') : false;
+	const limit = params.has('limit') ? params.get('limit') : false;
 
 	// create URL object of resource
 	const api = new URL(API_URL);
@@ -22,6 +23,7 @@ async function getResource({ url }) {
 		if (!isNaN(n) && n > 0) api.searchParams.set('page', n);
 		else throw { message: '<page> param must be an integer positive >= 1' };
 	}
+
 	if (year) {
 		let currentYear = new Date().getFullYear();
 		const n = +year;
@@ -59,6 +61,11 @@ async function getResource({ url }) {
 			uuid: uuid()
 		};
 	});
+
+	if (limit) {
+		const n = +limit;
+		if (!isNaN(n) && n > 0 && json.Search.length > n) json.Search.length = n;
+	}
 
 	return {
 		status: data.status,

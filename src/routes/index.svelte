@@ -1,4 +1,4 @@
-<script context="module">
+<!-- <script context="module">
 	/** @type {import("@sveltejs/kit").LoadEvent} */
 	export async function load({ fetch }) {
 		const req = await fetch('/api?s=got');
@@ -15,21 +15,38 @@
 			}
 		};
 	}
+</script> -->
+<script context="module">
+	export const prerender = true;
 </script>
 
 <script>
+	import { goto } from '$app/navigation';
 	import { page, session } from '$app/stores';
 
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 	import Hero from '$components/ui/hero.svelte';
 	import NavbarTop from '$components/ui/NavbarTop.svelte';
+	import { onMount } from 'svelte';
 
-	export let movies;
+	let movies;
+
+	onMount(async () => {
+		const req = await fetch('/api?s=got');
+		if (!req.ok) {
+			const res = await req.json();
+			return { status: req.status, error: new Error(res.message) };
+		}
+
+		movies = await req.json();
+	});
+
 	let act = 'series';
 
-	const setTab = (tab) => (act = tab);
-
-	// $: console.log($session);
+	const setTab = (tab) => {
+		goto('#index-movies');
+		act = tab;
+	};
 </script>
 
 <svelte:head>
@@ -47,24 +64,26 @@
 		<h1>¡Welcome again, <span>{$session.user.name}</span>!</h1>
 	{/if}
 
-	<!-- tab 1 -->
-	{#if act === 'series'}
-		<CarouselMovies
-			details={false}
-			movies={$page.stuff.suggest}
-			title="Top rated ({$page.stuff.suggest.totalResults} results)"
-			priority="small"
-		/>
-	{/if}
-	<!-- tab 2 -->
-	{#if act === 'movies'}
-		<CarouselMovies
-			details={false}
-			{movies}
-			title="Top rated  ({movies.totalResults} results)"
-			priority="small"
-		/>
-	{/if}
+	<div id={'index-movies'}>
+		<!-- tab 1 -->
+		{#if act === 'series'}
+			<CarouselMovies
+				details={false}
+				movies={$page.stuff.suggest}
+				title="Top rated ({$page.stuff.suggest.totalResults} results)"
+				priority="small"
+			/>
+		{/if}
+		<!-- tab 2 -->
+		{#if act === 'movies'}
+			<CarouselMovies
+				details={false}
+				{movies}
+				title="Top rated  ({movies.totalResults} results)"
+				priority="small"
+			/>
+		{/if}
+	</div>
 </div>
 
 <style>

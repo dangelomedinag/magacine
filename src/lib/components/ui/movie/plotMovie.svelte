@@ -77,13 +77,6 @@
 	}
 
 	button {
-	}
-
-	p {
-		margin-top: 0;
-	}
-
-	button {
 		width: 100%;
 		display: flex;
 		align-items: center;

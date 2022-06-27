@@ -10,7 +10,7 @@
 	export let deg = undefined;
 	export let style = undefined;
 	export let shadow = false;
-	let Class;
+	let Class = '';
 	export { Class as class };
 	let Svg;
 
@@ -40,7 +40,7 @@
 			? `rotate(${deg})`
 			: ''}
 	>
-		<Svg />
+		<svelte:component this={Svg} />
 	</div>
 {/if}
 

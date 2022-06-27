@@ -22,7 +22,7 @@
 </script>
 
 <script>
-	import { goto, afterNavigate } from '$app/navigation';
+	import { goto, afterNavigate, beforeNavigate } from '$app/navigation';
 	// import CardRatingStarts from '$components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$components/ui/NavbarTop.svelte';
@@ -34,6 +34,7 @@
 	import InfoMovie from '$lib/components/ui/movie/infoMovie.svelte';
 	import { randomInt } from '$helpers';
 	import Icon from '$components/ui/icons/icon.svelte';
+	import { onMount } from 'svelte';
 
 	export let movie;
 	// let modal;
@@ -49,7 +50,7 @@
 		let selected;
 		if (plot) {
 			const plotArr = plot.split(' ');
-			const plotArrFilter = plotArr.filter((word) => word.length > 7 && !word.includes('-'));
+			const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
 			selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
 		} else {
 			if (genre.length > 0) {
@@ -92,9 +93,19 @@
 				suggetsPromise = getSuggest();
 				showPlayer = false;
 			}
-			// modal.close();
+
+			// document.documentElement.style.scrollBehavior = 'auto';
 		}
 	});
+
+	// beforeNavigate(({ from, to }) => {
+	// 	if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
+	// 		if (from.hash !== to.hash) {
+	// 			document.documentElement.style.scrollBehavior = 'smooth';
+	// 			console.log('scrolling smooth');
+	// 		}
+	// 	}
+	// });
 </script>
 
 <svelte:head>

@@ -73,6 +73,7 @@
 
 <figure use:showDetails in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }} class="item">
 	<a
+		sveltekit:prefetch
 		class="item-link"
 		href="/movies/{movie.imdbid}"
 		on:click={() => {
