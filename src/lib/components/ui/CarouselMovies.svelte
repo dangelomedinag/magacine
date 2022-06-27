@@ -228,25 +228,25 @@
 		scroll-behavior: smooth;
 	}
 
-	.empty-wrapper {
+	/* .empty-wrapper {
 		border: 1px solid rgba(128, 128, 128, 0.3);
 		padding: 2em;
 		width: 100%;
 		text-align: center;
-	}
+	} */
 
-	.hidden {
+	/* .hidden {
 		display: none;
-	}
+	} */
 
 	/* sssssssss */
 
-	.controls:hover {
+	/* .controls:hover {
 		opacity: 1;
 		cursor: pointer;
-	}
+	} */
 
-	.controls {
+	/* .controls {
 		display: block;
 		position: absolute;
 		z-index: 15;
@@ -260,9 +260,9 @@
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
 			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
 			0 32px 64px rgba(0, 0, 0, 0.07);
-	}
+	} */
 
-	.controls:disabled {
+	/* .controls:disabled {
 		background-color: aqua;
 	}
 
@@ -277,7 +277,7 @@
 
 	.carousel-wrapper:hover .controls {
 		opacity: 1;
-	}
+	} */
 
 	/* .track:hover .prev,
 	.track:hover .next {

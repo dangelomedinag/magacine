@@ -186,11 +186,6 @@
 		overflow: hidden;
 	}
 
-	p {
-		/* opacity: 0.5; */
-		/* background-color: var(--c-front); */
-	}
-
 	.firstline {
 		display: block;
 		color: var(--c-front);
@@ -203,9 +198,9 @@
 		font-weight: lighter;
 		display: block;
 	}
-	.cta-wrapper {
+	/* .cta-wrapper {
 		margin: 0 auto;
-	}
+	} */
 
 	/* a {
 		color: var(--c-front);

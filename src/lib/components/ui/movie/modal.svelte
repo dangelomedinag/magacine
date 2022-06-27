@@ -142,6 +142,7 @@
 
 	.modal__container {
 		overflow-y: auto;
+		overflow-x: hidden;
 	}
 
 	.modal__actions {
@@ -162,7 +163,7 @@
 		border: 1px solid transparent;
 		color: var(--c-text-base);
 		padding: 0.5em 0;
-		cursor: pointer;
+		/* cursor: pointer; */
 		border-radius: 5px;
 		text-decoration: none;
 	}
@@ -172,6 +173,8 @@
 	}
 	.modal__actions > :global(a:hover) {
 		text-decoration: underline;
+		text-underline-offset: 2px;
+		text-decoration-style: dotted;
 	}
 
 	.modal__actions > :global(button.cta),

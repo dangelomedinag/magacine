@@ -36,6 +36,8 @@
 	a {
 		color: var(--c-text-base);
 		padding-left: 0;
+		text-underline-offset: 2px;
+		text-decoration-style: dotted;
 	}
 
 	a:hover {

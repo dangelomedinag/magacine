@@ -22,10 +22,19 @@
 			}
 		};
 	}
+
 	$: active = $page.url.pathname === href;
 </script>
 
-<svelte:element this={href ? 'a' : 'button'} class="link" class:active {href} on:click use:tap>
+<svelte:element
+	this={href ? 'a' : 'button'}
+	class="link {active ? 'active' : ''}"
+	class:active
+	{href}
+	on:click
+	use:tap
+	tabindex="0"
+>
 	<div class="wrapper">
 		<div class="icon">
 			{#key icon}
@@ -60,6 +69,7 @@
 		text-align: left;
 		cursor: pointer;
 		transition: transform 0.2s ease-out;
+		border-radius: 50vh;
 	}
 	.link:hover {
 		opacity: 1;
@@ -87,7 +97,8 @@
 	}
 
 	.active {
-		opacity: 1;
+		opacity: 1 !important;
+		background-color: var(--c-divider);
 	}
 	.active :global(svg) {
 		color: var(--c-front);

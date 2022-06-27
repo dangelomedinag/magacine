@@ -3,39 +3,6 @@
 	import Icon from '$components/ui/icons/icon.svelte';
 	const dispatch = createEventDispatcher();
 
-	let result;
-
-	function submit(e) {
-		result = null;
-		modal.open();
-		e.target.x.blur();
-
-		let query = e.target.x.value.trim();
-		console.log(query);
-		let url = new URL(location);
-		console.log(url);
-
-		fetch(url.origin + '/api/?s=' + query)
-			.then((r) => {
-				if (!r.ok) {
-					loading = false;
-					throw ok;
-				}
-				return r.json();
-			})
-			.then((j) => {
-				console.log(j);
-				if (j.results.length > 3) {
-					j.results.length = 3;
-				}
-				result = j;
-			})
-			.catch((error) => {
-				result = Error('sdads');
-				console.log('fallllaaaaaa');
-			});
-	}
-
 	function focus(node) {
 		node.focus();
 	}

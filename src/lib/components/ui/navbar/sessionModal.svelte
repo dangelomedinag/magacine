@@ -1,50 +1,33 @@
 <script>
 	import { session } from '$app/stores';
-	import { quintOut } from 'svelte/easing';
-	import { fly } from 'svelte/transition';
-	import Modal from '$components/ui/movie/modal.svelte';
 	import Icon from '$components/ui/icons/icon.svelte';
-
-	let modal;
 </script>
 
-{#if $session.user}
-	<button on:click={modal.open}>
-		<Icon name="user-circle" type="solid" />
-	</button>
-{/if}
+<header class="modal-header">
+	{$session.user.name}
+</header>
 
-<!-- <Modal bind:this={modal} Zindex="49" btnClose={false}>
-	<header>
-		{$session.user.name}
-	</header>
-	
-	<ul class="list">
-		<li class="list__item list__item--block">
-			<a class="list__link" href="/profile">
-				<Icon name="user-circle" />
-				<span class="list__label">Profile</span></a
-			>
-		</li>
-		<li class="list__item">
-			<a class="list__link" href="/settings">
-				<Icon name="cog" />
-				<span class="list__label">Settings</span></a
-			>
-		</li>
-		<li class="list__item">
-			<a class="list__link" href="/help">
-				<Icon name="information-circle" />
-				<span class="list__label">help</span></a
-			>
-		</li>
-		
-	</ul>
-	<svelte:fragment slot="action">
-		<a class="list__logout" sveltekit:reload href="/auth/logout">logout <Icon name="logout" /></a>
-		<button href="/auth/logout" on:click={modal.close} class="cta">close</button>
-	</svelte:fragment>
-</Modal> -->
+<ul class="list">
+	<li class="list__item list__item--block">
+		<a class="list__link" href="/profile">
+			<Icon name="user-circle" />
+			<span class="list__label">Profile</span></a
+		>
+	</li>
+	<li class="list__item">
+		<a class="list__link" href="/settings">
+			<Icon name="cog" />
+			<span class="list__label">Settings</span></a
+		>
+	</li>
+	<li class="list__item">
+		<a class="list__link" href="/help">
+			<Icon name="information-circle" />
+			<span class="list__label">help</span></a
+		>
+	</li>
+</ul>
+
 <style>
 	header {
 		text-align: center;
@@ -94,12 +77,5 @@
 
 	.list__label {
 		padding-left: 0.5em;
-	}
-
-	.list__logout {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 0.5em;
 	}
 </style>

@@ -151,6 +151,10 @@
 		/* height: 200px; */
 	}
 
+	/* .item-link:focus {
+		box-shadow: 10px 0px 1px 0px red inset;
+	} */
+
 	.item-poster {
 		display: block;
 		width: 100%;

@@ -212,9 +212,9 @@
 		.footer__nav > * {
 			flex: 1;
 		}
-		.nav__item--extra {
+		/* .nav__item--extra {
 			flex-grow: 2;
-		}
+		} */
 
 		.footer__addr {
 			flex: 1 0px;

@@ -73,12 +73,12 @@
 		return matchMedia('(min-width: 992px)').matches;
 	}
 
-	afterNavigate(({ from, to }) => {
+	afterNavigate(() => {
 		document.documentElement.style.scrollBehavior = 'auto';
 	});
 
 	beforeNavigate(({ from, to }) => {
-		if (to.hash !== '') {
+		if (to?.hash !== '') {
 			document.documentElement.style.scrollBehavior = 'smooth';
 		}
 	});

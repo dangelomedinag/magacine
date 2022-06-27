@@ -7,32 +7,26 @@
 	import CarouselMovies from './CarouselMovies.svelte';
 	// import { page } from '$app/stores';
 	import ThemeToggle from '$components/ui/themeToggle.svelte';
-	import NavbarSearchForm from '$components/ui/navbar-search-form.svelte';
-
 	import HeaderSticky from './headerSticky.svelte';
 	import { browser } from '$app/env';
 	import { onMount } from 'svelte';
 	import { session } from '$app/stores';
-	import Toast from './toast.svelte';
-
+	import NavbarSearchForm from '$components/ui/navbar-search-form.svelte';
+	import NavbarSearchResults from '$components/ui/navbar-search-results.svelte';
 	export let search = true,
 		bell = true,
 		profile = true;
-
 	let modal;
 	let modalSession;
 	let searchInput = false;
-	let result;
-
+	let results;
 	function submit(e) {
-		// result = null;
-		// modal.open();
 		e.target.x.blur();
 
 		let query = e.target.x.value.trim();
 		let url = new URL(location);
 
-		result = fetch(url.origin + '/api/?limit=3&s=' + query).then(async (r) => {
+		results = fetch(url.origin + '/api/?limit=3&s=' + query).then(async (r) => {
 			if (!r.ok) {
 				const error = await r.json();
 				throw error;
@@ -43,64 +37,55 @@
 
 		modal.open();
 	}
-
-	afterNavigate(({ from, to }) => {
-		if (from?.href !== to?.href) {
-			modal.close();
-		}
+	afterNavigate(() => {
+		document.querySelector('nav.navbar').style.transform = `translateY(0px)`;
 	});
-
 	let lastScroll = 0;
-
-	let navbar;
-
+	// let currentScroll = 0;
+	let down = false;
+	let up = false;
 	onMount(() => {
+		const navbar = document.querySelector('nav.navbar');
 		let leftContainer;
-
 		function alternatedNavbar(e) {
 			let currentScroll = window.pageYOffset;
-
 			if (!leftContainer) leftContainer = document.querySelector('div.left').offsetHeight;
-
-			if (window.scrollY > 10) {
+			if (window.scrollY > 150) {
 				if (currentScroll - lastScroll > 0) {
 					console.log(leftContainer);
 					navbar.style.transform = `translateY(-${leftContainer + 2}px)`;
-
+					down = true;
+					up = false;
 					document.querySelector('div.center').classList.add('block');
 				} else {
 					navbar.style.transform = `translateY(0px)`;
-
+					down = false;
+					up = true;
 					document.querySelector('div.center').classList.remove('block');
 				}
 			}
-
 			lastScroll = currentScroll;
 		}
-
+		// const body = document.body;
 		if (!matchMedia('(min-width: 576px)').matches) {
+			console.log('aqui');
 			window.addEventListener('scroll', alternatedNavbar);
 		}
-
 		return () => window.removeEventListener('scroll', alternatedNavbar);
 	});
-
-	afterNavigate(() => {
-		navbar.style.transform = `translateY(0px)`;
-	});
-
-	function toggleRenderSearchBox() {
-		searchInput = !searchInput;
-	}
 </script>
 
 <!-- <nav class="navbar" class:scroll-down={down} class:scroll-up={up}> -->
-<nav class="navbar" bind:this={navbar}>
+<nav class="navbar">
 	<div class="content navbar-wrapper">
-		<div class="left">
-			<!-- <a href="/">
+		<div class="left dos">
+			<a href="/">
 				<Icon name="home" type="solid" />
-			</a> -->
+			</a>
+			<!-- <button>
+				<Icon name="moon" type="solid" />dasdas
+			</button> -->
+			<!-- <button>dasdas</button> -->
 			<ThemeToggle />
 		</div>
 		<div class="center">
@@ -108,14 +93,40 @@
 				<NavbarSearchForm
 					on:submit={submit}
 					on:close={() => {
-						toggleRenderSearchBox();
+						searchInput = !searchInput;
 						modal.close();
 					}}
 				/>
+				<!-- <form on:submit|preventDefault={submit}>
+					<input
+						use:focus
+						class="searchBox"
+						type="search"
+						name="x"
+						id="x"
+						autocomplete="off"
+						value="suspense"
+					/>
+					<button
+						type="button"
+						on:click={() => {
+							searchInput = !searchInput;
+							modal.close();
+						}}
+						style="display: inline-flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: var(--c-text-base)"
+					>
+						<Icon name="x" type="solid" />
+					</button>
+				</form> -->
 			{:else}
 				<slot />
 				{#if search}
-					<button class="search-second" style="margin-left: auto;" on:click={toggleRenderSearchBox}>
+					<button
+						class="search-second"
+						on:click={() => {
+							searchInput = !searchInput;
+						}}
+					>
 						<Icon name="search" type="solid" />
 					</button>
 				{/if}
@@ -123,7 +134,12 @@
 		</div>
 		<div class="right">
 			{#if search}
-				<button class="search-first" on:click={toggleRenderSearchBox}>
+				<button
+					class="search-first"
+					on:click={() => {
+						searchInput = !searchInput;
+					}}
+				>
 					<Icon name="search" type="solid" />
 				</button>
 			{/if}
@@ -148,30 +164,7 @@
 </nav>
 
 <Modal bind:this={modalSession} Zindex="110" btnClose={false}>
-	<header class="modal-header">
-		{$session.user.name}
-	</header>
-
-	<ul class="list">
-		<li class="list__item list__item--block">
-			<a class="list__link" href="/profile">
-				<Icon name="user-circle" />
-				<span class="list__label">Profile</span></a
-			>
-		</li>
-		<li class="list__item">
-			<a class="list__link" href="/settings">
-				<Icon name="cog" />
-				<span class="list__label">Settings</span></a
-			>
-		</li>
-		<li class="list__item">
-			<a class="list__link" href="/help">
-				<Icon name="information-circle" />
-				<span class="list__label">help</span></a
-			>
-		</li>
-	</ul>
+	<SessionModal />
 	<svelte:fragment slot="action">
 		<a class="list__logout" href="/auth/logout">logout <Icon name="logout" /></a>
 		<button href="/auth/logout" on:click={modalSession.close} class="cta">close</button>
@@ -179,49 +172,10 @@
 </Modal>
 
 <Modal bind:this={modal} Zindex="110" btnClose={false}>
-	<header class="modal-header">
-		search: {result?.search ?? ''}
-	</header>
-
-	{#await result}
-		<p>loading...</p>
-	{:then response}
-		<ul class="list">
-			{#each response.results as movie}
-				<li
-					class=" list__item--block"
-					style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--c-divider);"
-				>
-					<span style="padding-left: 1em;">
-						<div
-							style="width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-						>
-							{movie.title} - {movie.year}
-						</div>
-						<div style="font-weight: lighter;">{movie.type}</div>
-					</span>
-					<img
-						src={movie.poster}
-						alt={movie.title}
-						style="max-height: 70px; display: block; width: 50px; object-fit: cover;"
-					/>
-				</li>
-			{/each}
-			<li class=" list__item--block" style="text-align: center; padding-top: 0.5em;">
-				{response.totalResults} total results
-			</li>
-		</ul>
-	{:catch error}
-		<p>Opps! error:</p>
-		<Toast danger>
-			<span>
-				{error.message}
-			</span>
-		</Toast>
-	{/await}
+	<NavbarSearchResults {results} />
 
 	<svelte:fragment slot="action">
-		{#await result then response}
+		{#await results then response}
 			<a href="/search?s={response.search}" class="cta">show all</a>
 		{/await}
 		<button
@@ -231,56 +185,26 @@
 			}}>close</button
 		>
 	</svelte:fragment>
-
-	<!-- {#if result}
-		<ul class="list">
-			{#each result.results as movie}
-				<li
-					class=" list__item--block"
-					style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--c-divider);"
-				>
-					<span style="padding-left: 1em;">
-						<div
-							style="width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-						>
-							{movie.title} - {movie.year}
-						</div>
-						<div style="font-weight: lighter;">{movie.type}</div>
-					</span>
-					<img
-						src={movie.poster}
-						alt={movie.title}
-						style="max-height: 70px; display: block; width: 50px; object-fit: cover;"
-					/>
-				</li>
-			{/each}
-			<li class=" list__item--block" style="text-align: center; padding-top: 0.5em;">
-				{result.totalResults} total results
-			</li>
-		</ul>
-	{/if} -->
-	<!-- <CarouselMovies position="static" movies={result} title={result?.search}>
-		<svelte:fragment slot="error">nothing result</svelte:fragment>
-	</CarouselMovies> -->
-
-	<!-- <svelte:fragment slot="action">
-		{#if result}
-			<a href="/search?{result.query}" class="cta">show all</a>
-		{/if}
-		<button
-			on:click={() => {
-				modal.close();
-				searchInput = false;
-			}}>close</button
-		>
-	</svelte:fragment> -->
 </Modal>
 
 <style>
+	.scroll-up {
+		transform: translateY(0);
+	}
+	.scroll-down {
+		transform: translateY(-50%);
+	}
+	@media (min-width: 576px) {
+		.scroll-up {
+			transform: translateY(0);
+		}
+		.scroll-down {
+			transform: translateY(0);
+		}
+	}
 	:root {
 		--navbar-item-gap: 0.5em;
 	}
-
 	.navbar {
 		--icon-size: 1.2rem;
 		/* position: fixed; */
@@ -300,14 +224,12 @@
 		border-bottom: 1px solid var(--c-divider);
 		box-shadow: var(--shadow-short);
 	}
-
 	.navbar-wrapper {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		flex-wrap: wrap;
 	}
-
 	.left,
 	.center,
 	.right {
@@ -317,11 +239,11 @@
 		/* align-items: center; */
 		/* height: 100%; */
 	}
-
-	/* .center { */
-	/* height: 50px; */
-	/* } */
-
+	.center {
+		/* height: 50px; */
+	}
+	/* .navbar-wrapper :global(button),
+	.navbar-wrapper :global(a) ,*/
 	.left > :global(button),
 	.right > :global(button),
 	.center > :global(button),
@@ -332,9 +254,13 @@
 		color: inherit;
 		border: 2px solid transparent;
 		border: none;
+		/* outline: 1px solid var(--c-text-base); */
+		/* background-color: brown; */
 		opacity: var(--navbar-item-opacity);
+		/* max-height: 100%; */
 		padding: 0;
 		margin: 0;
+		/* display: block; */
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
@@ -343,7 +269,6 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
-
 	.left > :global(button:hover),
 	.right > :global(button:hover),
 	.center > :global(button:hover),
@@ -352,21 +277,30 @@
 	.center > :global(a:hover),
 	.center > :global(button.active),
 	.center > :global(a.active) {
+		/* background-color: rgba(255 255 255 / 7%); */
 		opacity: 1;
 		color: var(--navbar-item-hover);
 	}
 	.center > :global(button.active) {
 		border-bottom: 2px solid var(--c-front);
 	}
-
 	.center {
 		order: 3;
 		width: 100%;
+		/* background-color: var(--c-main); */
+		/* display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0 auto; */
 	}
-
 	.center > :global(button) {
+		/* flex: 0 1 100%; */
+		/* height: 50px; */
 		font-weight: bold;
 	}
+	/* .search-first {
+		display: none;
+	} */
 
 	@media (min-width: 576px) {
 		.navbar-wrapper {
@@ -379,7 +313,6 @@
 			left: 50%;
 			transform: translate(-50%, -50%);
 		}
-
 		.center > :global(button) {
 			flex: 0 1 auto;
 		}
@@ -387,68 +320,15 @@
 			display: inline-flex;
 		}
 		.search-second {
-			display: none !important;
+			/* display: none !important; */
 		}
 	}
-
 	.search-second {
-		display: none;
+		display: none !important;
+		margin-left: auto !important;
 	}
-
 	:global(.center.block) > :global(button + .search-second) {
-		display: inline-flex;
-	}
-
-	/* modal session */
-	.modal-header {
-		text-align: center;
-	}
-
-	.list {
-		list-style: none;
-		padding: 1em 0;
-		margin: 0;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.2em;
-	}
-
-	.list__item {
-		flex-basis: 33%;
-		flex-grow: 1;
-		flex-shrink: 1;
-		/* max-width: 300px; */
-		text-decoration: none;
-		/* margin: 0.2em 0; */
-		font-weight: bold;
-		border-color: var(--c-divider);
-		border-width: 1px;
-		border-style: solid;
-		border-radius: 5px;
-		/* background-color: var(--c-front); */
-	}
-	.list__item:hover {
-		/* border-color: rgba(255 255 255 / 15%); */
-		background-color: var(--c-divider);
-	}
-	.list__item:hover .list__link {
-		color: var(--c-front);
-	}
-
-	.list__item--block {
-		flex-basis: 100%;
-	}
-
-	.list__link {
-		padding: 0.5em;
-		display: flex;
-		align-items: center;
-		color: var(--c-text-base);
-		text-decoration: none;
-	}
-
-	.list__label {
-		padding-left: 0.5em;
+		display: inline-flex !important;
 	}
 
 	.list__logout {

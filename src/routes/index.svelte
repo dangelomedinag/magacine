@@ -16,10 +16,6 @@
 		};
 	}
 </script> -->
-<script context="module">
-	export const prerender = true;
-</script>
-
 <script>
 	import { goto } from '$app/navigation';
 	import { page, session } from '$app/stores';
@@ -41,7 +37,7 @@
 		movies = await req.json();
 	});
 
-	let act = 'series';
+	let act = 'movies';
 
 	const setTab = (tab) => {
 		goto('#index-movies');
@@ -54,8 +50,8 @@
 </svelte:head>
 
 <NavbarTop>
-	<button on:click={() => setTab('series')} class:active={act === 'series'}>Series</button>
 	<button on:click={() => setTab('movies')} class:active={act === 'movies'}>Movies</button>
+	<button on:click={() => setTab('series')} class:active={act === 'series'}>Series</button>
 </NavbarTop>
 
 <Hero />
@@ -65,21 +61,15 @@
 	{/if}
 
 	<div id={'index-movies'}>
-		<!-- tab 1 -->
+		{#if act === 'movies'}
+			<CarouselMovies details={false} {movies} title="Top rated" priority="small" />
+		{/if}
+
 		{#if act === 'series'}
 			<CarouselMovies
 				details={false}
 				movies={$page.stuff.suggest}
 				title="Top rated ({$page.stuff.suggest.totalResults} results)"
-				priority="small"
-			/>
-		{/if}
-		<!-- tab 2 -->
-		{#if act === 'movies'}
-			<CarouselMovies
-				details={false}
-				{movies}
-				title="Top rated  ({movies.totalResults} results)"
 				priority="small"
 			/>
 		{/if}

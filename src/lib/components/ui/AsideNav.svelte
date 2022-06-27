@@ -1,10 +1,7 @@
 <script>
 	import MenuItem from '$components/ui/MenuItem.svelte';
-	import ThemeToggle from '$components/ui/themeToggle.svelte';
 	import { notiStore } from '$lib/stores/notifications-store';
 	import { themeStore } from '$lib/stores/theme-store';
-
-	$: theme = $themeStore;
 </script>
 
 <div id="aside-wrapper">
@@ -65,7 +62,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		height: 100%;
-		padding: 1em 1em 6em 1em;
+		padding: 1em 0.4em 6em 0.4em;
 		background-color: var(--aside-bg);
 		color: var(--c-text-base);
 		/* overflow-y: auto; */
