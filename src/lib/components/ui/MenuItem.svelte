@@ -5,7 +5,7 @@
 	const dispatch = createEventDispatcher();
 
 	// export let label;
-	export let href;
+	export let href = false;
 	export let icon;
 	export let notification = false;
 

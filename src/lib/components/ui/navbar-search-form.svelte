@@ -1,6 +1,8 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import Icon from '$components/ui/icons/icon.svelte';
+	import { quintOut } from 'svelte/easing';
+	import { scale, slide } from 'svelte/transition';
 	const dispatch = createEventDispatcher();
 	let value = '';
 	function handleEsc(e) {
@@ -41,7 +43,7 @@
 	}
 </script>
 
-<form on:submit|preventDefault on:reset={reset}>
+<form on:submit|preventDefault on:reset={reset} in:scale={{ easing: quintOut }}>
 	{#if value?.length > 0}
 		<button class="btn" type="reset">
 			<Icon name="x" type="solid" />

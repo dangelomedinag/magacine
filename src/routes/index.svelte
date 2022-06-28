@@ -62,7 +62,7 @@
 
 	<div id={'index-movies'}>
 		{#if act === 'movies'}
-			<CarouselMovies details={false} {movies} title="Top rated" priority="small" />
+			<CarouselMovies details={false} {movies} title="Top rated" />
 		{/if}
 
 		{#if act === 'series'}
@@ -70,7 +70,6 @@
 				details={false}
 				movies={$page.stuff.suggest}
 				title="Top rated ({$page.stuff.suggest.totalResults} results)"
-				priority="small"
 			/>
 		{/if}
 	</div>

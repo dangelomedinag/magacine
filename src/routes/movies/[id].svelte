@@ -185,7 +185,7 @@
 	{:then value}
 		{#if Array.isArray(value?.results)}
 			<div class="suggest" id="suggest">
-				<CarouselMovies movies={value} details={false} title="Suggestions" priority="small" />
+				<CarouselMovies movies={value} details={false} title="Suggestions"  />
 			</div>
 		{/if}
 	{:catch}
@@ -196,7 +196,7 @@
 		</div>
 	{/await} -->
 	<div class="suggest" id="suggest">
-		<CarouselMovies movies={xxx} details={false} title="Suggestions" priority="small">
+		<CarouselMovies movies={xxx} details={false} title="Suggestions">
 			<div slot="error" style="width: 100%;">
 				<Toast warn>
 					For now we do <span>not have related movies or series</span>

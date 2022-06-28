@@ -82,10 +82,6 @@
 			<a href="/">
 				<Icon name="home" type="solid" />
 			</a>
-			<!-- <button>
-				<Icon name="moon" type="solid" />dasdas
-			</button> -->
-			<!-- <button>dasdas</button> -->
 			<ThemeToggle />
 		</div>
 		<div class="center">
@@ -143,7 +139,11 @@
 						searchInput = !searchInput;
 					}}
 				>
-					<Icon name="search" type="solid" />
+					{#if searchInput}
+						<Icon name="x" type="solid" />
+					{:else}
+						<Icon name="search" type="solid" />
+					{/if}
 				</button>
 			{/if}
 			{#if bell}
@@ -187,37 +187,17 @@
 </Modal>
 
 <style>
-	.scroll-up {
-		transform: translateY(0);
-	}
-	.scroll-down {
-		transform: translateY(-50%);
-	}
-	@media (min-width: 576px) {
-		.scroll-up {
-			transform: translateY(0);
-		}
-		.scroll-down {
-			transform: translateY(0);
-		}
-	}
 	:root {
 		--navbar-item-gap: 0.5em;
 	}
 	.navbar {
 		--icon-size: 1.2rem;
-		/* position: fixed; */
-		/* top: 0; */
-		/* left: 0; */
 		width: 100%;
 		transition: transform 300ms ease;
 		transform: translateY(0);
-		/* z-index: 10; */
 		position: sticky;
 		top: 0;
 		z-index: 51;
-		/* position: relative; */
-		/* width: 100%; */
 		overflow: hidden;
 		background-color: var(--navbar-bg);
 		border-bottom: 1px solid var(--c-divider);
@@ -233,16 +213,8 @@
 	.center,
 	.right {
 		display: flex;
-		/* justify-content: flex-start; */
-		/* justify-content: stretch; */
-		/* align-items: center; */
-		/* height: 100%; */
 	}
-	.center {
-		/* height: 50px; */
-	}
-	/* .navbar-wrapper :global(button),
-	.navbar-wrapper :global(a) ,*/
+
 	.left > :global(button),
 	.right > :global(button),
 	.center > :global(button),
@@ -253,13 +225,9 @@
 		color: inherit;
 		border: 2px solid transparent;
 		border: none;
-		/* outline: 1px solid var(--c-text-base); */
-		/* background-color: brown; */
 		opacity: var(--navbar-item-opacity);
-		/* max-height: 100%; */
 		padding: 0;
 		margin: 0;
-		/* display: block; */
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
@@ -276,7 +244,6 @@
 	.center > :global(a:hover),
 	.center > :global(button.active),
 	.center > :global(a.active) {
-		/* background-color: rgba(255 255 255 / 7%); */
 		opacity: 1;
 		color: var(--navbar-item-hover);
 	}
@@ -286,21 +253,11 @@
 	.center {
 		order: 3;
 		width: 100%;
-		/* background-color: var(--c-main); */
-		/* display: flex;
-		justify-content: center;
-		align-items: center;
-		margin: 0 auto; */
 	}
 	.center > :global(button),
 	.center > :global(a) {
-		/* flex: 0 1 100%; */
-		/* height: 50px; */
 		font-weight: bold;
 	}
-	/* .search-first {
-		display: none;
-	} */
 
 	@media (min-width: 576px) {
 		.navbar-wrapper {
@@ -318,9 +275,6 @@
 		}
 		.search-first {
 			display: inline-flex;
-		}
-		.search-second {
-			/* display: none !important; */
 		}
 	}
 	.search-second {

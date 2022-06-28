@@ -5,7 +5,14 @@ const themeStoreCustom = () => {
 	const { subscribe, set } = writable(null);
 
 	if (browser) {
-		set(document.body.dataset.theme);
+		const themePrefers = localStorage.getItem('user-theme');
+		if (!themePrefers) {
+			localStorage.setItem('user-theme', document.body.dataset.theme);
+			set(document.body.dataset.theme);
+		} else {
+			set(themePrefers);
+			document.body.dataset.theme = themePrefers;
+		}
 	}
 
 	return {
@@ -14,6 +21,7 @@ const themeStoreCustom = () => {
 			if (browser) {
 				let dataTheme = document.body.dataset.theme;
 				document.body.dataset.theme = dataTheme === 'dark' ? 'light' : 'dark';
+				localStorage.setItem('user-theme', document.body.dataset.theme);
 				return set(document.body.dataset.theme);
 			}
 		}

@@ -97,12 +97,10 @@
 		<CarouselMovies
 			movies={movies[0]}
 			title="Suspense  {movies[0]?.totalResults ?? 'loading'} results)"
-			priority="small"
 		/>
 		<CarouselMovies
 			movies={movies[1]}
 			title="Suspense  {movies[1]?.totalResults ?? 'loading'} results)"
-			priority="small"
 		/>
 	{/if}
 	{#if act === 'terror'}
@@ -110,12 +108,10 @@
 		<CarouselMovies
 			movies={movies[2]}
 			title="Terror  {movies[2]?.totalResults ?? 'loading'} results)"
-			priority="small"
 		/>
 		<CarouselMovies
 			movies={movies[3]}
 			title="Terror  {movies[3]?.totalResults ?? 'loading'} results)"
-			priority="small"
 		>
 			<div slot="error" let:message>
 				<Toast danger>
@@ -129,15 +125,13 @@
 		<CarouselMovies
 			movies={movies[4]}
 			title="Comedy  {movies[4]?.totalResults ?? 'loading'} results)"
-			priority="small"
 		/>
 		<CarouselMovies
 			movies={movies[5]}
 			title="Comedy  {movies[5]?.totalResults ?? 'loading'} results)"
-			priority="small"
 		/>
 	{/if}
-	<!-- <CarouselMovies movies={stuff.fast} title="top releases" priority="small" /> -->
+	<!-- <CarouselMovies movies={stuff.fast} title="top releases"  /> -->
 </div>
 
 <style>

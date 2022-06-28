@@ -33,7 +33,6 @@
 	];
 
 	onMount(async () => {
-		console.log('mounted!');
 		const currURL = new URL(location);
 		const notSearch = !currURL.searchParams.has('s') || currURL.searchParams.get('s').length < 3;
 
@@ -327,20 +326,10 @@
 		</div>
 	{/if}
 	{#if movies}
-		<CarouselMovies
-			details={false}
-			{movies}
-			title="{movies.totalResults} results"
-			priority="small"
-		/>
+		<CarouselMovies details={false} {movies} title="{movies.totalResults} results" />
 	{:else if errors?.level?.danger}
 		<!-- content here -->
-		<CarouselMovies
-			details={false}
-			movies={$page.stuff?.suggest}
-			title="suggestions"
-			priority="small"
-		/>
+		<CarouselMovies details={false} movies={$page.stuff?.suggest} title="suggestions" />
 	{/if}
 </div>
 

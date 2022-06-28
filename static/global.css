@@ -43,6 +43,7 @@ body {
 	padding: 0;
 	background-color: var(--c-main-content);
 	color: var(--c-text-base);
+	transition: background-color 0.3s linear;
 }
 
 h1,
