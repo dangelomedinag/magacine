@@ -34,7 +34,7 @@
 	import InfoMovie from '$lib/components/ui/movie/infoMovie.svelte';
 	import { randomInt } from '$helpers';
 	import Icon from '$components/ui/icons/icon.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	export let movie;
 	// let modal;
@@ -89,23 +89,45 @@
 	afterNavigate(({ from, to }) => {
 		if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
 			if (from.pathname !== to.pathname) {
-				// movie = movie;
 				suggetsPromise = getSuggest();
 				showPlayer = false;
 			}
-
-			// document.documentElement.style.scrollBehavior = 'auto';
 		}
 	});
 
-	// beforeNavigate(({ from, to }) => {
-	// 	if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
-	// 		if (from.hash !== to.hash) {
-	// 			document.documentElement.style.scrollBehavior = 'smooth';
-	// 			console.log('scrolling smooth');
-	// 		}
-	// 	}
-	// });
+	function smoothScroll(node) {
+		async function scrollToPosition(e) {
+			e.preventDefault();
+			const ele = document.getElementById(url.hash.substring(1));
+			if (ele) {
+				const navbar = document.querySelector('nav.navbar');
+				const isExpand = document.querySelector('div.block');
+				const navbarHeight = navbar.clientHeight;
+
+				try {
+					let n = ele.offsetTop - navbarHeight;
+					if (!isExpand) n = n + 52;
+					scrollTo({ behavior: 'smooth', top: n });
+				} catch (error) {
+					// console.log(error.message);
+				}
+			}
+		}
+
+		const url = new URL(node.href);
+
+		if (url.host === location.host && url.pathname === location.pathname) {
+			if (url.hash.length > 1) {
+				node.addEventListener('click', scrollToPosition);
+			}
+		}
+
+		return {
+			destroy() {
+				node.removeEventListener('click', scrollToPosition);
+			}
+		};
+	}
 </script>
 
 <svelte:head>
@@ -115,17 +137,19 @@
 </svelte:head>
 
 <NavbarTop>
-	<button
+	<!-- <button
 		on:click={() => {
 			goto('#info', { replaceState: true });
 		}}>info</button
-	>
+	> -->
+	<a href="#info" use:smoothScroll>info</a>
 	{#if xxx && !(xxx instanceof Error)}
-		<button
+		<a href="#suggest" use:smoothScroll>suggest</a>
+		<!-- <button
 			on:click={() => {
 				goto('#suggest', { replaceState: true });
 			}}>suggest</button
-		>
+		> -->
 	{/if}
 </NavbarTop>
 

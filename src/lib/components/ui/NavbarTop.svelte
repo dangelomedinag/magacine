@@ -20,6 +20,7 @@
 	let modalSession;
 	let searchInput = false;
 	let results;
+
 	function submit(e) {
 		e.target.x.blur();
 
@@ -35,6 +36,7 @@
 			return r.json();
 		});
 
+		e.target.x.focus();
 		modal.open();
 	}
 	afterNavigate(() => {
@@ -52,7 +54,6 @@
 			if (!leftContainer) leftContainer = document.querySelector('div.left').offsetHeight;
 			if (window.scrollY > 150) {
 				if (currentScroll - lastScroll > 0) {
-					console.log(leftContainer);
 					navbar.style.transform = `translateY(-${leftContainer + 2}px)`;
 					down = true;
 					up = false;
@@ -68,7 +69,6 @@
 		}
 		// const body = document.body;
 		if (!matchMedia('(min-width: 576px)').matches) {
-			console.log('aqui');
 			window.addEventListener('scroll', alternatedNavbar);
 		}
 		return () => window.removeEventListener('scroll', alternatedNavbar);
@@ -91,6 +91,9 @@
 		<div class="center">
 			{#if searchInput}
 				<NavbarSearchForm
+					on:esc={() => {
+						searchInput = !searchInput;
+					}}
 					on:submit={submit}
 					on:close={() => {
 						searchInput = !searchInput;
@@ -144,11 +147,7 @@
 				</button>
 			{/if}
 			{#if bell}
-				<button
-					on:click={() => {
-						console.log('click');
-					}}
-				>
+				<button>
 					<Icon name="bell" />
 				</button>
 			{/if}
@@ -293,7 +292,8 @@
 		align-items: center;
 		margin: 0 auto; */
 	}
-	.center > :global(button) {
+	.center > :global(button),
+	.center > :global(a) {
 		/* flex: 0 1 100%; */
 		/* height: 50px; */
 		font-weight: bold;
@@ -327,7 +327,8 @@
 		display: none !important;
 		margin-left: auto !important;
 	}
-	:global(.center.block) > :global(button + .search-second) {
+	:global(.center.block) > :global(button + .search-second),
+	:global(.center.block) > :global(a + .search-second) {
 		display: inline-flex !important;
 	}
 

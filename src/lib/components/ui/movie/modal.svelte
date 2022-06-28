@@ -9,6 +9,7 @@
 	import Icon from '$components/ui/icons/icon.svelte';
 
 	let modal = false;
+	let currentElementFocus = null;
 	// let paddingTop = $$slots.action ? "1em" : false;
 	export let Zindex = '0';
 	export let btnClose = true;
@@ -16,6 +17,11 @@
 	// const getVal = () => modal;
 
 	export function open() {
+		if (currentElementFocus) {
+			currentElementFocus = document.activeElement;
+			currentElementFocus.blur();
+		}
+
 		modal = true;
 		setBodyScroll(modal);
 
@@ -26,6 +32,7 @@
 	export function close() {
 		modal = false;
 		setBodyScroll(modal);
+		if (currentElementFocus) currentElementFocus.focus();
 
 		window.removeEventListener('keydown', handleEsc);
 	}

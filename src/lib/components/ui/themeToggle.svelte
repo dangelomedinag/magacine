@@ -1,21 +1,9 @@
 <script>
 	import Icon from '$components/ui/icons/icon.svelte';
-	import { onMount } from 'svelte';
 	import { quintIn, quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import { themeStore } from '$lib/stores/theme-store';
-	// let theme;
 	let active = false;
-
-	// onMount(() => {});
-
-	function toogleTheme() {
-		console.log('before', $themeStore);
-
-		themeStore.toogleTheme();
-
-		console.log('after', $themeStore);
-	}
 </script>
 
 {#if $themeStore}

@@ -113,6 +113,11 @@ class:tag--drama={tag === 'drama'}
 		border: 1px solid rgba(135, 21, 196, 0.1);
 		background-color: rgba(135, 21, 196, 0.1);
 	}
+	.tag--music {
+		color: rgb(178, 76, 232);
+		border: 1px solid rgba(178, 76, 232, 0.1);
+		background-color: rgba(178, 76, 232, 0.1);
+	}
 	.tag--crime {
 		color: rgb(21, 149, 196);
 		border: 1px solid rgba(21, 149, 196, 0.1);
@@ -147,5 +152,10 @@ class:tag--drama={tag === 'drama'}
 		color: rgb(126, 149, 0);
 		border: 1px solid rgba(126, 149, 0, 0.1);
 		background-color: rgba(126, 149, 0, 0.1);
+	}
+	.tag--sport {
+		color: rgb(196, 106, 21);
+		border: 1px solid rgba(196, 106, 21, 0.1);
+		background-color: rgba(196, 106, 21, 0.1);
 	}
 </style>

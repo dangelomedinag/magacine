@@ -73,15 +73,15 @@
 		return matchMedia('(min-width: 992px)').matches;
 	}
 
-	afterNavigate(() => {
-		document.documentElement.style.scrollBehavior = 'auto';
-	});
+	// afterNavigate(() => {
+	// 	document.documentElement.style.scrollBehavior = 'auto';
+	// });
 
-	beforeNavigate(({ from, to }) => {
-		if (to?.hash !== '') {
-			document.documentElement.style.scrollBehavior = 'smooth';
-		}
-	});
+	// beforeNavigate(({ from, to }) => {
+	// 	if (to?.hash !== '') {
+	// 		document.documentElement.style.scrollBehavior = 'smooth';
+	// 	}
+	// });
 </script>
 
 <svelte:head>

@@ -2,24 +2,69 @@
 	import { createEventDispatcher } from 'svelte';
 	import Icon from '$components/ui/icons/icon.svelte';
 	const dispatch = createEventDispatcher();
+	let value = '';
+	function handleEsc(e) {
+		if (e.key === 'Escape') {
+			e.preventDefault();
+			console.log('escape');
+			dispatch('esc');
+		}
+	}
+
+	function removeKeyListener() {
+		window.removeEventListener('keydown', handleEsc);
+	}
+
+	function keydownScape() {
+		window.addEventListener('keydown', handleEsc);
+	}
 
 	function focus(node) {
+		window.addEventListener('keydown', handleEsc);
+		node.addEventListener('focus', keydownScape);
+		node.addEventListener('blur', removeKeyListener);
+
 		node.focus();
+
+		return {
+			destroy() {
+				window.removeEventListener('keydown', handleEsc);
+				node.removeEventListener('focus', keydownScape);
+				node.removeEventListener('blur', removeKeyListener);
+			}
+		};
+	}
+
+	function reset(e) {
+		e.target.x.focus();
+		value = '';
 	}
 </script>
 
-<form on:submit|preventDefault>
+<form on:submit|preventDefault on:reset={reset}>
+	{#if value?.length > 0}
+		<button class="btn" type="reset">
+			<Icon name="x" type="solid" />
+		</button>
+	{:else}
+		<button class="btn" type="reset" on:click={() => dispatch('close')}>
+			<Icon name="arrow-narrow-up" type="solid" />
+		</button>
+	{/if}
 	<input
+		bind:value
 		use:focus
 		class="searchBox"
-		type="search"
+		type="text"
 		name="x"
 		id="x"
 		autocomplete="off"
-		value="suspense"
+		placeholder="search"
+		minlength="3"
+		required
 	/>
-	<button type="button" class="btn-close" on:click={() => dispatch('close')} style="">
-		<Icon name="x" type="solid" />
+	<button class="btn btn-submit">
+		<Icon name="search" type="solid" />
 	</button>
 </form>
 
@@ -27,12 +72,14 @@
 	/* search box */
 
 	form {
+		/* position: relative; */
 		padding: 0.7em;
 		margin: 0;
 		display: flex;
 		flex-wrap: nowrap;
 
 		width: 100%;
+		gap: 1em;
 	}
 
 	.searchBox {
@@ -58,12 +105,20 @@
 		/* outline: 2px solid var(--c-divider); */
 	}
 
-	.btn-close {
+	.btn {
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
 		background-color: transparent;
 		border: none;
 		color: var(--c-text-base);
+	}
+	.btn-submit {
+		background-color: var(--c-divider);
+		border-radius: 50vh;
+	}
+
+	.btn-submit:hover {
+		background-color: var(--c-front);
 	}
 </style>
