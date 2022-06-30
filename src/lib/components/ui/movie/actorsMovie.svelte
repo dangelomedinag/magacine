@@ -1,6 +1,6 @@
 <script>
 	import { listFormat } from '$lib/helpers';
-	import Icon from '$components/ui/icons/icon.svelte';
+	import Icon from '$icons/icon.svelte';
 	import { set } from 'nprogress';
 
 	export let value;
@@ -36,11 +36,13 @@
 	a {
 		color: var(--c-text-base);
 		padding-left: 0;
-		text-underline-offset: 2px;
+		text-underline-offset: 3px;
 		text-decoration-style: dotted;
+		text-decoration-color: var(--divider, #878787);
 	}
 
 	a:hover {
 		color: deepskyblue;
+		text-decoration-color: var(--divider, deepskyblue);
 	}
 </style>

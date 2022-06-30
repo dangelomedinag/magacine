@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
-	import Icon from '$components/ui/icons/icon.svelte';
+	import Icon from '$icons/icon.svelte';
 	const dispatch = createEventDispatcher();
 
 	// export let label;
@@ -38,7 +38,7 @@
 	<div class="wrapper">
 		<div class="icon">
 			{#key icon}
-				<Icon name={icon} type="solid" />
+				<slot name="icon" />
 			{/key}
 		</div>
 		<div class="label">
@@ -61,7 +61,9 @@
 		/* opacity: var(--aside-link-opacity); */
 		opacity: 1;
 		text-decoration: none;
-		padding: 0.5em 0.2em;
+		padding: 0.5em 0.6em;
+		margin: 0;
+		margin-bottom: 0.2em;
 		position: relative;
 		line-height: 1rem;
 		background-color: transparent;
@@ -73,7 +75,7 @@
 	}
 	.link:hover {
 		opacity: 1;
-		/* background-color: var(--c-divider); */
+		background-color: var(--c-divider);
 		/* color: var(--c-front); */
 	}
 

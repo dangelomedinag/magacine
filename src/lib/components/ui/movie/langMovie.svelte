@@ -1,5 +1,5 @@
 <script>
-	import Icon from '$components/ui/icons/icon.svelte';
+	import Icon from '$icons/icon.svelte';
 
 	import { listFormat } from '$lib/helpers';
 

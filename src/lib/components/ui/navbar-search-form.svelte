@@ -1,8 +1,15 @@
 <script>
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import X from '$icons/solid/x.svelte';
+	import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svelte';
+	import Search from '$icons/solid/search.svelte';
+	/* icons */
+
 	import { createEventDispatcher } from 'svelte';
-	import Icon from '$components/ui/icons/icon.svelte';
+
 	import { quintOut } from 'svelte/easing';
-	import { scale, slide } from 'svelte/transition';
+	import { scale } from 'svelte/transition';
 	const dispatch = createEventDispatcher();
 	let value = '';
 	function handleEsc(e) {
@@ -44,11 +51,15 @@
 <form on:submit|preventDefault on:reset={reset} in:scale={{ easing: quintOut }}>
 	{#if value?.length > 0}
 		<button class="btn" type="reset">
-			<Icon name="x" type="solid" />
+			<Icon>
+				<X />
+			</Icon>
 		</button>
 	{:else}
 		<button class="btn" type="reset" on:click={() => dispatch('close')}>
-			<Icon name="arrow-narrow-up" type="solid" />
+			<Icon>
+				<ArrowNarrowUp />
+			</Icon>
 		</button>
 	{/if}
 	<input
@@ -64,7 +75,9 @@
 		required
 	/>
 	<button class="btn btn-submit">
-		<Icon name="search" type="solid" />
+		<Icon>
+			<Search />
+		</Icon>
 	</button>
 </form>
 

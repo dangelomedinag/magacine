@@ -6,7 +6,7 @@
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import { setBodyScroll } from '$helpers';
-	import Icon from '$components/ui/icons/icon.svelte';
+	import Icon from '$icons/icon.svelte';
 
 	let modal = false;
 	let currentElementFocus = null;

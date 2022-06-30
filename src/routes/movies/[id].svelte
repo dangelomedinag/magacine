@@ -31,20 +31,19 @@
 	import RuntimeMovie from '$lib/components/ui/movie/runtimeMovie.svelte';
 	import InfoMovie from '$lib/components/ui/movie/infoMovie.svelte';
 	import { randomInt } from '$helpers';
-	import Icon from '$components/ui/icons/icon.svelte';
+	import Icon from '$icons/icon.svelte';
 	import { onMount } from 'svelte';
 
 	export let movie;
 	let showPlayer = false;
-	let xxx;
-	// let suggetsPromise = getSuggest();
-	// let existSuggestions = false;
+	let suggestionsMovies;
+
 	onMount(() => {
 		getSuggest();
 	});
 
 	async function getSuggest() {
-		xxx = null;
+		suggestionsMovies = null;
 
 		const { genre, plot } = movie;
 		let selected;
@@ -81,9 +80,9 @@
 			);
 			if (!req.ok) throw Error('bad request');
 
-			xxx = await req.json();
+			suggestionsMovies = await req.json();
 		} catch (error) {
-			xxx = Error(error.message);
+			suggestionsMovies = Error(error.message);
 		}
 	}
 
@@ -145,7 +144,7 @@
 		}}>info</button
 	> -->
 	<a href="#info" use:smoothScroll>info</a>
-	{#if xxx && !(xxx instanceof Error)}
+	{#if suggestionsMovies && !(suggestionsMovies instanceof Error)}
 		<a href="#suggest" use:smoothScroll>suggest</a>
 		<!-- <button
 			on:click={() => {
@@ -198,7 +197,7 @@
 		</div>
 	{/await} -->
 	<div class="suggest" id="suggest">
-		<CarouselMovies movies={xxx} details={false} title="Suggestions">
+		<CarouselMovies movies={suggestionsMovies} details={false} title="Suggestions">
 			<div slot="error" style="width: 100%;">
 				<Toast warn>
 					For now we do <span>not have related movies or series</span>
@@ -230,11 +229,12 @@
 	}
 
 	.poster {
-		background: linear-gradient(to top, var(--c-main) 10%, var(--c-front) 150%);
+		background: linear-gradient(to top, transparent 10%, var(--c-front) 150%);
 		position: relative;
 		text-align: center;
 		width: 100%;
 		height: 100%;
+		/* transition: background 0.3s linear; */
 	}
 
 	.movie {

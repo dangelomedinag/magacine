@@ -1,5 +1,8 @@
 <script>
-	import Icon from '$components/ui/icons/icon.svelte';
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import ColorSwatch from '$icons/outline/color-swatch.svelte';
+	/* icons */
 
 	export let value;
 </script>
@@ -28,7 +31,7 @@ class:tag--drama={tag === 'drama'}
 
 {#if value}
 	<div class="info__item">
-		<span class="info__property"><Icon name="color-swatch" /> genders:</span>
+		<span class="info__property"><Icon><ColorSwatch /></Icon> genders:</span>
 		{#each value as item}
 			{@const tag = item.toLowerCase()}
 			<span class="tag tag--{tag}">#{tag}</span>

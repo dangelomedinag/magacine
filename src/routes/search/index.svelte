@@ -11,6 +11,11 @@
 	import Spinner from '$components/ui/Spinner.svelte';
 	import Toast from '$components/ui/toast.svelte';
 
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svelte';
+	import X from '$icons/solid/x.svelte';
+
 	let value = '';
 	let currentValue = '';
 	let input;
@@ -238,7 +243,7 @@
 					}}
 					class="btn-clear"
 				>
-					<svg
+					<!-- <svg
 						xmlns="http://www.w3.org/2000/svg"
 						style="width: 1rem; height: 1rem;"
 						fill="none"
@@ -247,14 +252,17 @@
 						stroke-width="2"
 					>
 						<path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-					</svg>
+					</svg> -->
+					<Icon>
+						<ArrowNarrowUp />
+					</Icon>
 				</button>
 			{:else}
 				<button type="reset" class="btn-clear">
 					{#if loading}
 						<Spinner size="5" />
 					{:else}
-						<svg
+						<!-- <svg
 							xmlns="http://www.w3.org/2000/svg"
 							style="width: 1rem; height: 1rem;"
 							fill="none"
@@ -263,7 +271,10 @@
 							stroke-width="2"
 						>
 							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
+						</svg> -->
+						<Icon>
+							<X />
+						</Icon>
 					{/if}
 				</button>
 			{/if}

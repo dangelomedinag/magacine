@@ -1,5 +1,4 @@
 <script>
-	import Icon from '$components/ui/icons/icon.svelte';
 	export let value;
 	let open = false;
 	let lengthOfCut = 151;
@@ -31,36 +30,65 @@
 {#if value}
 	<div class="info__item">
 		<span class="info__property">synopsis:</span>
-		<!-- <p on:click={toggleExpand}>
-			{#if valueLength}
-				{@html value.slice(0, 150)}...
-				<button>show more <Icon name="chevron-down" y="10%" /></button>
-			{:else}
-				{@html value}
-				{#if value?.length > 250}
-					<button>show less <Icon name="chevron-up" y="10%" /></button>
-				{/if}
-			{/if}
-		</p> -->
-		<details bind:open class:indicator={value.length > 250}>
-			<summary>
-				{@html getCut(value).summary}{value.length > 250 && !open ? ' ...' : ''}
-				{@html getCut(value).details && open ? getCut(value).details : ''}
-			</summary>
+		<details bind:open class="hide">
+			<summary>{@html getCut(value).summary}</summary>
+			<span>{@html value}</span>
 		</details>
 		<button on:click={toggleExpand}>
-			{#if value.length > 250 && !open}
-				read more <Icon name="chevron-down" y="10%" />
-			{/if}
-			{#if value.length > 250 && open}
-				show less <Icon name="chevron-up" y="10%" />
+			{#if open}
+				show more
+			{:else}
+				show less
 			{/if}
 		</button>
 	</div>
 {/if}
 
 <style>
+	summary::marker {
+		content: '';
+	}
+	summary::after {
+		content: '...';
+	}
+
 	details {
+		position: relative;
+	}
+
+	details[open] summary {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		background-color: red;
+		opacity: 0;
+	}
+
+	details[open] summary:after {
+		content: '';
+	}
+
+	button {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.2em;
+		padding-left: 0;
+		opacity: 0.5;
+		color: var(--c-front);
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+		font-style: oblique;
+		font-weight: bold;
+	}
+	button:hover {
+		opacity: 0.8;
+	}
+
+	/* details {
 		display: inline-flex;
 	}
 	summary::marker {
@@ -85,16 +113,13 @@
 		padding-left: 0;
 		opacity: 0.5;
 		color: var(--c-front);
-		/* background-color: var(--c-divider); */
 		background-color: transparent;
 		border: none;
 		cursor: pointer;
 		font-style: oblique;
 		font-weight: bold;
-		/* margin-bottom: 1em; */
 	}
 	button:hover {
 		opacity: 0.8;
-		/* background-color: var(--c-main); */
-	}
+	} */
 </style>

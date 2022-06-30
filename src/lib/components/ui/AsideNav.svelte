@@ -2,52 +2,137 @@
 	import MenuItem from '$components/ui/MenuItem.svelte';
 	import { notiStore } from '$lib/stores/notifications-store';
 	import { themeStore } from '$lib/stores/theme-store';
+
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import Home from '$icons/solid/home.svelte';
+	import ViewGridAdd from '$icons/solid/view-grid-add.svelte';
+	import InboxIn from '$icons/solid/inbox-in.svelte';
+	import UserGroup from '$icons/solid/user-group.svelte';
+	import Save from '$icons/solid/save.svelte';
+	import Bookmark from '$icons/solid/bookmark.svelte';
+	import Star from '$icons/solid/star.svelte';
+	import Download from '$icons/solid/download.svelte';
+	import Search from '$icons/solid/search.svelte';
+	import Cog from '$icons/solid/cog.svelte';
+	import InformationCircle from '$icons/solid/information-circle.svelte';
+	import Logout from '$icons/solid/logout.svelte';
+	import Sun from '$icons/solid/sun.svelte';
+	import Moon from '$icons/solid/moon.svelte';
+	/* icons */
 </script>
 
 <div id="aside-wrapper">
 	<nav>
 		<span class="section">Menu</span>
 
-		<MenuItem href="/" icon="home" on:tap>Home</MenuItem>
+		<MenuItem href="/" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><Home /></Icon>
+			</svelte:fragment>
+			Home
+		</MenuItem>
+
 		<MenuItem
 			href="/discovery"
 			notification={$notiStore[0].notification}
-			icon="view-grid-add"
 			on:click={() => {
 				$notiStore[0].notification = false;
 			}}
-			on:tap>Discovery</MenuItem
+			on:tap
+		>
+			<svelte:fragment slot="icon">
+				<Icon><ViewGridAdd /></Icon>
+			</svelte:fragment>
+			Discovery</MenuItem
 		>
 
-		<MenuItem href="/soon" icon="inbox-in" on:tap>Comming soon</MenuItem>
+		<MenuItem href="/soon" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><InboxIn /></Icon>
+			</svelte:fragment>
+			Comming soon</MenuItem
+		>
 		<MenuItem
 			href="/community"
-			icon="user-group"
 			notification={$notiStore[1].notification}
 			on:click={() => {
 				$notiStore[1].notification = false;
 			}}
 			on:tap
-			>Community
+		>
+			<svelte:fragment slot="icon">
+				<Icon><UserGroup /></Icon>
+			</svelte:fragment>
+			Community
 		</MenuItem>
 
 		<hr />
 
 		<span class="section">Library</span>
 
-		<MenuItem href="/recent" icon="save" on:tap>Recent</MenuItem>
-		<MenuItem href="/bookmarked" icon="bookmark" on:tap>Bookmarked</MenuItem>
-		<MenuItem href="/rated" icon="star" on:tap>Top Rated</MenuItem>
-		<MenuItem href="/download" icon="download" on:tap>Downloaded</MenuItem>
-		<MenuItem href="/search?s=" icon="search" on:tap>Search</MenuItem>
+		<MenuItem href="/recent" icon="save" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><Save /></Icon>
+			</svelte:fragment>
+			Recent</MenuItem
+		>
+		<MenuItem href="/bookmarked" icon="bookmark" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><Bookmark /></Icon>
+			</svelte:fragment>
+			Bookmarked</MenuItem
+		>
+		<MenuItem href="/rated" icon="star" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><Star /></Icon>
+			</svelte:fragment>
+			Top Rated</MenuItem
+		>
+		<MenuItem href="/download" icon="download" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><Download /></Icon>
+			</svelte:fragment>
+			Downloaded</MenuItem
+		>
+		<MenuItem href="/search?s=" icon="search" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><Search /></Icon>
+			</svelte:fragment>
+			Search</MenuItem
+		>
 	</nav>
 
 	<div>
-		<MenuItem href="/settings" icon="cog" on:tap>Settings</MenuItem>
-		<MenuItem href="/help" icon="information-circle" on:tap>Help</MenuItem>
-		<MenuItem href="/auth/logout" icon="logout" on:tap>Logout</MenuItem>
+		<MenuItem href="/settings" icon="cog" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><Cog /></Icon>
+			</svelte:fragment>
+			Settings</MenuItem
+		>
+		<MenuItem href="/help" icon="information-circle" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><InformationCircle /></Icon>
+			</svelte:fragment>
+			Help</MenuItem
+		>
+		<MenuItem href="/auth/logout" icon="logout" on:tap>
+			<svelte:fragment slot="icon">
+				<Icon><Logout /></Icon>
+			</svelte:fragment>
+			Logout</MenuItem
+		>
 
 		<MenuItem icon={$themeStore === 'dark' ? 'sun' : 'moon'} on:click={themeStore.toogleTheme}>
+			<svelte:fragment slot="icon">
+				<Icon>
+					{#if $themeStore === 'dark'}
+						<Sun />
+					{:else}
+						<Moon />
+					{/if}
+				</Icon>
+			</svelte:fragment>
 			{$themeStore === 'dark' ? 'light' : 'dark'} theme
 		</MenuItem>
 	</div>
@@ -63,15 +148,19 @@
 		justify-content: space-between;
 		height: 100%;
 		padding: 1em 0.4em 6em 0.4em;
-		background-color: var(--aside-bg);
+		/* background-color: var(--aside-bg); */
 		color: var(--c-text-base);
 		/* overflow-y: auto; */
+		/* transition: var(--transition-theme); */
 	}
 
 	hr {
 		display: block;
 		width: 100%;
+		height: 1px;
 		border: 1px solid var(--c-divider);
+		background-color: var(--c-divider);
+		border-radius: 1px;
 		/* opacity: 0.2; */
 	}
 

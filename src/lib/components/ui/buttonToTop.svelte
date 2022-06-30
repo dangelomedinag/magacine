@@ -1,13 +1,22 @@
 <script>
-	import Icon from '$components/ui/icons/icon.svelte';
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import MenuAlt2 from '$icons/outline/menu-alt-2.svelte';
+	import X from '$icons/outline/x.svelte';
+	/* icons */
+
 	export let active = false;
 </script>
 
 <button on:click>
 	{#if !active}
-		<Icon name="menu-alt-2" />
+		<Icon>
+			<MenuAlt2 />
+		</Icon>
 	{:else}
-		<Icon name="x" />
+		<Icon>
+			<X />
+		</Icon>
 	{/if}
 </button>
 

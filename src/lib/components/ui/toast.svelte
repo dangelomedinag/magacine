@@ -1,7 +1,7 @@
 <script>
 	import { quintInOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
-	import Icon from '$components/ui/icons/icon.svelte';
+	import Icon from '$icons/icon.svelte';
 
 	export let success = false,
 		warn = false,

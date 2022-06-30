@@ -1,18 +1,25 @@
 <script>
-	// import { onDestroy } from 'svelte';
-	import SessionModal from '$components/ui/navbar/sessionModal.svelte';
-	import Icon from '$components/ui/icons/icon.svelte';
-	import { afterNavigate, goto } from '$app/navigation';
-	import Modal from '$components/ui/movie/modal.svelte';
-	import CarouselMovies from './CarouselMovies.svelte';
-	// import { page } from '$app/stores';
-	import ThemeToggle from '$components/ui/themeToggle.svelte';
-	import HeaderSticky from './headerSticky.svelte';
-	import { browser } from '$app/env';
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import Home from '$icons/solid/home.svelte';
+	import Search from '$icons/solid/search.svelte';
+	import X from '$icons/solid/x.svelte';
+	import UserCircle from '$icons/solid/user-circle.svelte';
+	import Bell from '$icons/outline/bell.svelte';
+	import Logout from '$icons/outline/user-circle.svelte';
+	/* icons */
+
 	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
+	import Modal from '$components/ui/movie/modal.svelte';
+
+	import ThemeToggle from '$components/ui/themeToggle.svelte';
+	import SessionModal from '$components/ui/navbar/sessionModal.svelte';
 	import { session } from '$app/stores';
 	import NavbarSearchForm from '$components/ui/navbar-search-form.svelte';
 	import NavbarSearchResults from '$components/ui/navbar-search-results.svelte';
+
+	/* variable */
 	export let search = true,
 		bell = true,
 		profile = true;
@@ -80,7 +87,9 @@
 	<div class="content navbar-wrapper">
 		<div class="left dos">
 			<a href="/">
-				<Icon name="home" type="solid" />
+				<Icon type="solid">
+					<Home />
+				</Icon>
 			</a>
 			<ThemeToggle />
 		</div>
@@ -126,7 +135,9 @@
 							searchInput = !searchInput;
 						}}
 					>
-						<Icon name="search" type="solid" />
+						<Icon>
+							<Search />
+						</Icon>
 					</button>
 				{/if}
 			{/if}
@@ -140,21 +151,29 @@
 					}}
 				>
 					{#if searchInput}
-						<Icon name="x" type="solid" />
+						<Icon>
+							<X />
+						</Icon>
 					{:else}
-						<Icon name="search" type="solid" />
+						<Icon>
+							<Search />
+						</Icon>
 					{/if}
 				</button>
 			{/if}
 			{#if bell}
 				<button>
-					<Icon name="bell" />
+					<Icon>
+						<Bell />
+					</Icon>
 				</button>
 			{/if}
 			{#if profile}
 				{#if $session.user}
 					<button on:click={modalSession.open}>
-						<Icon name="user-circle" type="solid" />
+						<Icon>
+							<UserCircle />
+						</Icon>
 					</button>
 				{/if}
 			{/if}
@@ -165,7 +184,7 @@
 <Modal bind:this={modalSession} Zindex="110" btnClose={false}>
 	<SessionModal />
 	<svelte:fragment slot="action">
-		<a class="list__logout" href="/auth/logout">logout <Icon name="logout" /></a>
+		<a class="list__logout" href="/auth/logout">logout <Icon><Logout /></Icon></a>
 		<button href="/auth/logout" on:click={modalSession.close} class="cta">close</button>
 	</svelte:fragment>
 </Modal>
@@ -202,6 +221,7 @@
 		background-color: var(--navbar-bg);
 		border-bottom: 1px solid var(--c-divider);
 		box-shadow: var(--shadow-short);
+		transition: transform 0.3s ease-in-out, var(--transition-theme);
 	}
 	.navbar-wrapper {
 		display: flex;

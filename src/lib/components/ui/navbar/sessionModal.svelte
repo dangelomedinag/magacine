@@ -1,6 +1,12 @@
 <script>
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import UserCircle from '$icons/outline/user-circle.svelte';
+	import Cog from '$icons/outline/cog.svelte';
+	import InformationCircle from '$icons/outline/information-circle.svelte';
+	/* icons */
+
 	import { session } from '$app/stores';
-	import Icon from '$components/ui/icons/icon.svelte';
 </script>
 
 <header class="modal-header">
@@ -10,19 +16,25 @@
 <ul class="list">
 	<li class="list__item list__item--block">
 		<a class="list__link" href="/profile">
-			<Icon name="user-circle" />
+			<Icon>
+				<UserCircle />
+			</Icon>
 			<span class="list__label">Profile</span></a
 		>
 	</li>
 	<li class="list__item">
 		<a class="list__link" href="/settings">
-			<Icon name="cog" />
+			<Icon>
+				<Cog />
+			</Icon>
 			<span class="list__label">Settings</span></a
 		>
 	</li>
 	<li class="list__item">
 		<a class="list__link" href="/help">
-			<Icon name="information-circle" />
+			<Icon>
+				<InformationCircle />
+			</Icon>
 			<span class="list__label">help</span></a
 		>
 	</li>
@@ -50,17 +62,17 @@
 		text-decoration: none;
 		/* margin: 0.2em 0; */
 		font-weight: bold;
-		border-color: rgba(255 255 255 / 7%);
+		border-color: transparent;
 		border-width: 1px;
 		border-style: solid;
 		border-radius: 5px;
-		/* background-color: var(--c-front); */
+		background-color: var(--c-divider);
 	}
 	.list__item:hover {
 		border-color: rgba(255 255 255 / 15%);
 	}
 	.list__item:hover .list__link {
-		color: var(--c-front);
+		/* color: var(--c-front); */
 	}
 
 	.list__item--block {

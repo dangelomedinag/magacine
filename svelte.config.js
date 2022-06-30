@@ -6,7 +6,8 @@ const config = {
 		adapter: vercel(),
 		alias: {
 			$components: 'src/lib/components',
-			$helpers: 'src/lib/helpers'
+			$helpers: 'src/lib/helpers',
+			$icons: 'src/lib/components/ui/icons'
 		}
 	}
 };

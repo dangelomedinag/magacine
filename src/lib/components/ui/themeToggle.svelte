@@ -1,5 +1,10 @@
 <script>
-	import Icon from '$components/ui/icons/icon.svelte';
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import Sun from '$icons/solid/sun.svelte';
+	import Moon from '$icons/solid/moon.svelte';
+	/* icons */
+
 	import { quintIn, quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import { themeStore } from '$lib/stores/theme-store';
@@ -20,9 +25,13 @@
 				}}
 			>
 				{#if $themeStore === 'light'}
-					<Icon name="sun" type="solid" style="color: #ffae17;" />
+					<Icon style="color: #ffae17;">
+						<Sun />
+					</Icon>
 				{:else}
-					<Icon name="moon" type="solid" style="color: darkslateblue;" />
+					<Icon style="color: darkslateblue;">
+						<Moon />
+					</Icon>
 				{/if}
 				{$themeStore}
 			</div>
@@ -41,7 +50,9 @@
 		/* width: 60px; */
 	}
 	button:disabled {
-		opacity: 0.5 !important;
+		opacity: 0.3 !important;
+		background-color: var(--c-divider);
+		cursor: not-allowed !important;
 	}
 
 	div {

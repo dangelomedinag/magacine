@@ -1,26 +1,23 @@
 <script>
-	import { onMount } from 'svelte';
+	/* icons */
+	import Icon from '$icons/icon.svelte';
+	import ChevronRight from '$icons/outline/chevron-right.svelte';
+	/* icons */
 
 	// components
+	import Spinner from '$components/ui/Spinner.svelte';
 	import CardMovie from '$components/ui/card/cardMovie.svelte';
 	import CardMovieSeeAll from './card/cardMovieSeeAll.svelte';
-	import Icon from '$components/ui/icons/icon.svelte';
-	import Spinner from '$components/ui/Spinner.svelte';
 
 	// props
 	export let movies;
 	export let title;
-	// export let priority;
 	export let details = true;
 	export let position = 'relative';
 
 	let container;
 	let pageInfo;
 	let offset = 0;
-
-	onMount(() => {
-		// pageInfo = pages();
-	});
 
 	function prevPage(e) {
 		offset = container.scrollLeft;
@@ -92,7 +89,7 @@
 			{#if movies?.totalResults > 10}
 				<a href="/movies?{movies?.query}" class="header-btn"
 					>See all<span>
-						<Icon name="chevron-right" y="10%" />
+						<Icon y="10%"><ChevronRight /></Icon>
 					</span></a
 				>
 			{/if}
@@ -111,39 +108,6 @@
 	{/if}
 </div>
 
-<!-- <div class="carousel-wrapper priority-{priority}" style:position>
-	<header class="carousel-header">
-		<h3 class="header-title">{title ?? ''}</h3>
-		{#if movies?.totalResults > 10}
-			<a href="/movies?{movies?.query}" class="header-btn"
-				>See all<span>
-					<Icon name="chevron-right" y="10%" />
-				</span></a
-			>
-		{/if}
-	</header>
-	<main class="items-wrapper" bind:this={container}>
-		{#each movies?.results ?? [] as movie, i (movie.uuid)}
-			<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
-		{:else}
-			<Spinner />
-		{/each}
-		{#if movies?.totalResults > 10}
-			<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
-		{/if}
-	</main> -->
-<!-- {#if movies.results?.length > 1}
-		<div class="movement-action">
-			<button on:click={nextPage} class="prev controls">
-				<Icon name="arrow-sm-right" />
-			</button>
-			<button class="next controls" on:click={prevPage}>
-				<Icon name="arrow-sm-left" />
-			</button>
-		</div>
-	{/if} -->
-
-<!-- </div> -->
 <style>
 	/* @media (min-width: 576px) {} */
 	/* @media (min-width: 768px) {} */

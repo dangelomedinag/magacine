@@ -148,6 +148,9 @@
 		--navbar-bg: var(--c-main-content);
 		--navbar-item-opacity: 0.5;
 		--navbar-item-hover: inherit;
+
+		/* transition color theme */
+		--transition-theme: background-color 0.3s linear, color 0.3s linear;
 	}
 
 	:global(body[data-theme='light']) {
@@ -199,6 +202,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: var(--c-main);
+		transition: var(--transition-theme);
 	}
 	.toggle + .main::after {
 		content: '';
@@ -226,7 +230,7 @@
 		/* backdrop-filter: blur(20px); */
 		background-color: var(--c-main-content);
 		/* background-color: #1a171e; */
-		transition: transform 0.4s cubic-bezier(0.83, 0, 0.25, 0.99);
+		transition: transform 0.4s cubic-bezier(0.83, 0, 0.25, 0.99), var(--transition-theme);
 		transform: translateX(-100%);
 		border-right: 1px solid var(--c-divider);
 	}
