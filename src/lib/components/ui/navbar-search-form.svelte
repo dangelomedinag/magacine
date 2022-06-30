@@ -22,19 +22,17 @@
 	}
 
 	function focus(node) {
-		window.addEventListener('keydown', handleEsc);
-		node.addEventListener('focus', keydownScape);
-		node.addEventListener('blur', removeKeyListener);
-
+		// window.addEventListener('keydown', handleEsc);
+		// node.addEventListener('focus', keydownScape);
+		// node.addEventListener('blur', removeKeyListener);
 		node.focus();
-
-		return {
-			destroy() {
-				window.removeEventListener('keydown', handleEsc);
-				node.removeEventListener('focus', keydownScape);
-				node.removeEventListener('blur', removeKeyListener);
-			}
-		};
+		// return {
+		// 	destroy() {
+		// 		window.removeEventListener('keydown', handleEsc);
+		// 		node.removeEventListener('focus', keydownScape);
+		// 		node.removeEventListener('blur', removeKeyListener);
+		// 	}
+		// };
 	}
 
 	function reset(e) {

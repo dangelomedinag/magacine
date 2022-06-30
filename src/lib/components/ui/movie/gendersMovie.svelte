@@ -20,6 +20,7 @@ class:tag--animation={tag === 'animation'}
 class:tag--romance={tag === 'romance'}
 class:tag--musical={tag === 'musical'}
 class:tag--fantasy={tag === 'fantasy'}
+class:tag--biography={tag === 'biography'}
 class:tag--western={tag === 'western'}
 class:tag--history={tag === 'history'} 
 class:tag--drama={tag === 'drama'}
@@ -139,6 +140,11 @@ class:tag--drama={tag === 'drama'}
 		background-color: rgba(185, 63, 88, 0.1);
 	}
 	.tag--fantasy {
+		color: rgb(21, 149, 196);
+		border: 1px solid rgba(21, 149, 196, 0.1);
+		background-color: rgba(21, 149, 196, 0.1);
+	}
+	.tag--biography {
 		color: rgb(21, 149, 196);
 		border: 1px solid rgba(21, 149, 196, 0.1);
 		background-color: rgba(21, 149, 196, 0.1);

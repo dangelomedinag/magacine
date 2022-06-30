@@ -71,8 +71,6 @@
 		const res = await Promise.all(reqs);
 		const data = res.map((e) => (e.message ? new Error(e.message) : e));
 
-		console.log(data);
-
 		movies = data;
 	});
 	// export let movies;

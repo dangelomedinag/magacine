@@ -23,25 +23,25 @@
 
 <script>
 	import { goto, afterNavigate, beforeNavigate } from '$app/navigation';
-	// import CardRatingStarts from '$components/ui/card/cardRatingStarts.svelte';
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 	import NavbarTop from '$components/ui/NavbarTop.svelte';
 	import Toast from '$components/ui/toast.svelte';
-	// import Modal from '$lib/components/ui/movie/modal.svelte';
 	import VideoPlayer from '$lib/components/ui/movie/videoPlayer.svelte';
 	import YearMovie from '$lib/components/ui/movie/yearMovie.svelte';
 	import RuntimeMovie from '$lib/components/ui/movie/runtimeMovie.svelte';
 	import InfoMovie from '$lib/components/ui/movie/infoMovie.svelte';
 	import { randomInt } from '$helpers';
 	import Icon from '$components/ui/icons/icon.svelte';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 
 	export let movie;
-	// let modal;
 	let showPlayer = false;
 	let xxx;
-	let suggetsPromise = getSuggest();
-	let existSuggestions = false;
+	// let suggetsPromise = getSuggest();
+	// let existSuggestions = false;
+	onMount(() => {
+		getSuggest();
+	});
 
 	async function getSuggest() {
 		xxx = null;
@@ -72,6 +72,7 @@
 		// 	existSuggestions = false;
 		// 	return Promise.reject();
 		// }
+
 		try {
 			if (!selected) throw Error('no content for now');
 
@@ -88,8 +89,9 @@
 
 	afterNavigate(({ from, to }) => {
 		if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
+			console.log('after navigate');
 			if (from.pathname !== to.pathname) {
-				suggetsPromise = getSuggest();
+				getSuggest();
 				showPlayer = false;
 			}
 		}

@@ -10,7 +10,6 @@
 
 	let modal = false;
 	let currentElementFocus = null;
-	// let paddingTop = $$slots.action ? "1em" : false;
 	export let Zindex = '0';
 	export let btnClose = true;
 
@@ -54,6 +53,16 @@
 		}
 	}
 
+	function focusOnMount(node) {
+		let firstChild = node.firstChild;
+		if (firstChild?.nodeName === 'A' || firstChild?.nodeName === 'BUTTON') firstChild.focus();
+
+		console.log(firstChild);
+
+		// console.log(document.activeElement);
+
+		// node.focus();
+	}
 	/* test */
 
 	// function setScroll() {
@@ -83,7 +92,7 @@
 		<div class="modal__container">
 			<slot />
 		</div>
-		<div class="modal__actions" class:paddingTop={$$slots.action}>
+		<div class="modal__actions" class:paddingTop={$$slots.action} use:focusOnMount>
 			<slot name="action" />
 		</div>
 		{#if btnClose}
@@ -101,7 +110,7 @@
 
 	:global(body[data-theme='light']) {
 		/* modal */
-		--modal-foreground: rgba(0, 0, 0, 0.5);
+		--modal-foreground: rgba(0, 0, 0, 0.6);
 		--modal-bg: var(--c-main);
 	}
 
@@ -174,6 +183,7 @@
 		border-radius: 5px;
 		text-decoration: none;
 	}
+
 	.modal__actions > :global(button:hover),
 	.modal__actions > :global(a:hover) {
 		background-color: var(--c-divider);
@@ -192,6 +202,14 @@
 	.modal__actions > :global(button.cta:hover),
 	.modal__actions > :global(a.cta:hover) {
 		background-color: var(--c-front-dark);
+	}
+
+	.modal__actions > :global(button):focus,
+	.modal__actions > :global(a):focus {
+		outline-style: dashed;
+		outline-width: 2px;
+		outline-offset: 3px;
+		outline-color: var(--c-divider);
 	}
 
 	.modal__close {

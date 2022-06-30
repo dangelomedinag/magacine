@@ -36,7 +36,7 @@
 			return r.json();
 		});
 
-		e.target.x.focus();
+		// e.target.x.focus();
 		modal.open();
 	}
 	afterNavigate(() => {
