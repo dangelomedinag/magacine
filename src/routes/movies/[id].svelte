@@ -32,6 +32,7 @@
 	import InfoMovie from '$lib/components/ui/movie/infoMovie.svelte';
 	import { randomInt } from '$helpers';
 	import Icon from '$icons/icon.svelte';
+	import Play from '$icons/solid/play.svelte';
 	import { onMount } from 'svelte';
 
 	export let movie;
@@ -159,12 +160,9 @@
 		{#if !showPlayer}
 			<img class="image" src={movie.poster} alt={movie.title} />
 			<button class="btn-play" on:click={() => (showPlayer = !showPlayer)}>
-				<Icon
-					name="play"
-					type="solid"
-					style="background-color: white; border-radius: 50vh;"
-					shadow
-				/>
+				<Icon style="background-color: white; border-radius: 50vh;" shadow>
+					<Play />
+				</Icon>
 			</button>
 			<div class="info__item">
 				<YearMovie value={movie.year} />

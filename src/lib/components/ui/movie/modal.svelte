@@ -7,6 +7,7 @@
 	import { fly } from 'svelte/transition';
 	import { setBodyScroll } from '$helpers';
 	import Icon from '$icons/icon.svelte';
+	import X from '$icons/outline/x.svelte';
 
 	let modal = false;
 	let currentElementFocus = null;
@@ -96,7 +97,7 @@
 			<slot name="action" />
 		</div>
 		{#if btnClose}
-			<button on:click={close} class="modal__close"> <Icon name="x" /></button>
+			<button on:click={close} class="modal__close"> <Icon><X /></Icon></button>
 		{/if}
 	</section>
 {/if}
