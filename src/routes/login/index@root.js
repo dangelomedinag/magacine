@@ -14,7 +14,8 @@ export async function post({ request }) {
 			}
 		};
 	}
-	if (username !== 'dangelomedina' || password !== '123456') {
+
+	if (password !== '123456') {
 		return {
 			body: {
 				status: 404,
@@ -23,16 +24,21 @@ export async function post({ request }) {
 		};
 	}
 
+	let cookieOpts = {
+		path: '/',
+		httpOnly: true,
+		sameSite: 'strict',
+		secure: process.env.NODE_ENV === 'production',
+		maxAge: 60 * 60 * 24 * 7
+	};
+
 	return {
 		status: 303,
 		headers: {
-			'set-cookie': cookie.serialize('sessionid', 'abcdefg', {
-				path: '/',
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: process.env.NODE_ENV === 'production',
-				maxAge: 60 * 60 * 24 * 7
-			}),
+			'set-cookie': [
+				cookie.serialize('mc_sessionid', 'abcdefg', cookieOpts),
+				cookie.serialize('mc_username', username, cookieOpts)
+			],
 			location: '/'
 		}
 	};

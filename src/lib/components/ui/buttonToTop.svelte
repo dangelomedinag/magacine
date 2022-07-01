@@ -8,7 +8,7 @@
 	export let active = false;
 </script>
 
-<button on:click>
+<button title="scroll to top" on:click>
 	{#if !active}
 		<Icon>
 			<MenuAlt2 />

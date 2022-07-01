@@ -31,16 +31,18 @@
 	<div class="info__item">
 		<span class="info__property">synopsis:</span>
 		<details bind:open class="hide">
-			<summary class:total={!getCut(value).summary}>{@html getCut(value).summary}</summary>
+			<summary class:total={!getCut(value).details}>{@html getCut(value).summary}</summary>
 			<span>{@html value}</span>
 		</details>
-		<button on:click={toggleExpand}>
-			{#if open}
-				show less
-			{:else}
-				show more
-			{/if}
-		</button>
+		{#if getCut(value).details}
+			<button on:click={toggleExpand}>
+				{#if open}
+					show less
+				{:else}
+					show more
+				{/if}
+			</button>
+		{/if}
 	</div>
 {/if}
 
@@ -61,14 +63,7 @@
 	}
 
 	details[open] summary {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		background-color: red;
-		opacity: 0;
-		user-select: none;
-		pointer-events: none;
+		display: none;
 	}
 
 	details[open] summary:after {

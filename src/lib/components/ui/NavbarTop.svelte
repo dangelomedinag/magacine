@@ -130,6 +130,7 @@
 				<slot />
 				{#if search}
 					<button
+						title="serach"
 						class="search-second"
 						on:click={() => {
 							searchInput = !searchInput;
@@ -145,24 +146,23 @@
 		<div class="right">
 			{#if search}
 				<button
+					title="serach"
 					class="search-first"
 					on:click={() => {
 						searchInput = !searchInput;
 					}}
 				>
-					{#if searchInput}
-						<Icon>
+					<Icon>
+						{#if searchInput}
 							<X />
-						</Icon>
-					{:else}
-						<Icon>
+						{:else}
 							<Search />
-						</Icon>
-					{/if}
+						{/if}
+					</Icon>
 				</button>
 			{/if}
 			{#if bell}
-				<button>
+				<button title="notification">
 					<Icon>
 						<Bell />
 					</Icon>
@@ -170,10 +170,13 @@
 			{/if}
 			{#if profile}
 				{#if $session.user}
-					<button on:click={modalSession.open}>
+					<button title="session" on:click={modalSession.open}>
 						<Icon>
 							<UserCircle />
 						</Icon>
+						<span class="username">
+							{$session.user.username}
+						</span>
 					</button>
 				{/if}
 			{/if}
@@ -311,5 +314,16 @@
 		justify-content: center;
 		align-items: center;
 		gap: 0.5em;
+	}
+
+	.username {
+		display: none;
+		padding: 0 0.2em;
+	}
+
+	@media (min-width: 768px) {
+		.username {
+			display: inline-block;
+		}
 	}
 </style>

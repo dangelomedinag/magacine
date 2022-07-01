@@ -212,6 +212,7 @@
 		cursor: pointer;
 		/* opacity: 0.5; */
 		backdrop-filter: blur(3px);
+		--webkit-backdrop-filter: blur(3px);
 		background-color: rgba(0, 0, 0, 0.6);
 		/* background-color: var(--c-front); */
 		position: fixed;

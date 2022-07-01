@@ -6,10 +6,11 @@ export async function handle({ event, resolve }) {
 		const cookies = event.request.headers.has('cookie') ? event.request.headers.get('cookie') : '';
 		const cookieSession = cookie.parse(cookies);
 
-		if (cookieSession.sessionid === 'abcdefg') {
+		if (cookieSession.mc_sessionid === 'abcdefg') {
+			const random = Math.round(Math.random());
 			event.locals.user = {
-				username: 'dangelo2022',
-				name: 'dangelo medina'
+				username: cookieSession.mc_username,
+				name: random ? 'dangelo medina' : 'enrique castellano'
 			};
 		}
 	}

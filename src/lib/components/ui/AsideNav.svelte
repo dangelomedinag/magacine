@@ -123,7 +123,11 @@
 			Logout</MenuItem
 		>
 
-		<MenuItem icon={$themeStore === 'dark' ? 'sun' : 'moon'} on:click={themeStore.toogleTheme}>
+		<MenuItem
+			title="toggle theme"
+			icon={$themeStore === 'dark' ? 'sun' : 'moon'}
+			on:click={themeStore.toogleTheme}
+		>
 			<svelte:fragment slot="icon">
 				<Icon>
 					{#if $themeStore === 'dark'}

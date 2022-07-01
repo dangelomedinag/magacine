@@ -68,7 +68,12 @@
 		<div class="indicators">
 			{#each words as _, i}
 				{@const index = i + 1}
-				<button class="page" on:click={() => setPage(index)} disabled={currentPage == index} />
+				<button
+					title="page indicator"
+					class="page"
+					on:click={() => setPage(index)}
+					disabled={currentPage == index}
+				/>
 			{/each}
 		</div>
 		<!-- <div class="cta-wrapper">

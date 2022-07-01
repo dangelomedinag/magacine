@@ -5,9 +5,10 @@
 	const dispatch = createEventDispatcher();
 
 	// export let label;
-	export let href = false;
+	export let href = undefined;
 	export let icon;
 	export let notification = false;
+	export let title = undefined;
 
 	function tap(node) {
 		function sendEvent() {
@@ -34,6 +35,7 @@
 	on:click
 	use:tap
 	tabindex="0"
+	{title}
 >
 	<div class="wrapper">
 		<div class="icon">
