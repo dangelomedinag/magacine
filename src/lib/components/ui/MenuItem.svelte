@@ -1,13 +1,12 @@
 <script>
 	import { page } from '$app/stores';
+	import { notiStore } from '$lib/stores/notifications-store';
 	import { createEventDispatcher } from 'svelte';
-	import Icon from '$icons/icon.svelte';
 	const dispatch = createEventDispatcher();
 
 	// export let label;
 	export let href = undefined;
-	export let icon;
-	export let notification = false;
+	// export let notification = false;
 	export let title = undefined;
 
 	function tap(node) {
@@ -25,6 +24,14 @@
 	}
 
 	$: active = $page.url.pathname === href;
+	$: obj = $notiStore.filter((e) => e.label === href);
+
+	// let activeNotification = $notiStore.filter((e) => e.label === href);
+
+	notiStore.subscribe((no) => {
+		// console.log({ activeNotification });
+		// console.log({ no });
+	});
 </script>
 
 <svelte:element
@@ -39,14 +46,12 @@
 >
 	<div class="wrapper">
 		<div class="icon">
-			{#key icon}
-				<slot name="icon" />
-			{/key}
+			<slot name="icon" />
 		</div>
 		<div class="label">
 			<slot />
-			{#if notification}
-				<div class="notification">{notification}</div>
+			{#if obj.length > 0}
+				<div class="notification">{obj[0].notification}</div>
 			{/if}
 		</div>
 	</div>

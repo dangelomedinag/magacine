@@ -98,13 +98,15 @@
 	});
 
 	function smoothScroll(node) {
-		async function scrollToPosition(e) {
+		function scrollToPosition(e) {
 			e.preventDefault();
 			const ele = document.getElementById(url.hash.substring(1));
 			if (ele) {
 				const navbar = document.querySelector('nav.navbar');
-				const isExpand = document.querySelector('div.block');
 				const navbarHeight = navbar.clientHeight;
+				const isExpand = document.querySelector('div.block');
+
+				console.log(navbarHeight);
 
 				try {
 					let n = ele.offsetTop - navbarHeight;

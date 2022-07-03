@@ -35,9 +35,8 @@
 
 		<MenuItem
 			href="/discovery"
-			notification={$notiStore[0].notification}
 			on:click={() => {
-				$notiStore[0].notification = false;
+				notiStore.update((store) => store.filter((r) => r.label !== '/discovery'));
 			}}
 			on:tap
 		>
@@ -55,9 +54,8 @@
 		>
 		<MenuItem
 			href="/community"
-			notification={$notiStore[1].notification}
 			on:click={() => {
-				$notiStore[1].notification = false;
+				notiStore.update((store) => store.filter((r) => r.label !== '/community'));
 			}}
 			on:tap
 		>
@@ -71,31 +69,31 @@
 
 		<span class="section">Library</span>
 
-		<MenuItem href="/recent" icon="save" on:tap>
+		<MenuItem href="/recent" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Save /></Icon>
 			</svelte:fragment>
 			Recent</MenuItem
 		>
-		<MenuItem href="/bookmarked" icon="bookmark" on:tap>
+		<MenuItem href="/bookmarked" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Bookmark /></Icon>
 			</svelte:fragment>
 			Bookmarked</MenuItem
 		>
-		<MenuItem href="/rated" icon="star" on:tap>
+		<MenuItem href="/rated" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Star /></Icon>
 			</svelte:fragment>
 			Top Rated</MenuItem
 		>
-		<MenuItem href="/download" icon="download" on:tap>
+		<MenuItem href="/download" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Download /></Icon>
 			</svelte:fragment>
 			Downloaded</MenuItem
 		>
-		<MenuItem href="/search?s=" icon="search" on:tap>
+		<MenuItem href="/search?s=" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Search /></Icon>
 			</svelte:fragment>
@@ -104,30 +102,26 @@
 	</nav>
 
 	<div>
-		<MenuItem href="/settings" icon="cog" on:tap>
+		<MenuItem href="/settings" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Cog /></Icon>
 			</svelte:fragment>
 			Settings</MenuItem
 		>
-		<MenuItem href="/help" icon="information-circle" on:tap>
+		<MenuItem href="/help" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><InformationCircle /></Icon>
 			</svelte:fragment>
 			Help</MenuItem
 		>
-		<MenuItem href="/auth/logout" icon="logout" on:tap>
+		<MenuItem href="/auth/logout" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Logout /></Icon>
 			</svelte:fragment>
 			Logout</MenuItem
 		>
 
-		<MenuItem
-			title="toggle theme"
-			icon={$themeStore === 'dark' ? 'sun' : 'moon'}
-			on:click={themeStore.toogleTheme}
-		>
+		<MenuItem title="toggle theme" on:click={themeStore.toogleTheme}>
 			<svelte:fragment slot="icon">
 				<Icon>
 					{#if $themeStore === 'dark'}

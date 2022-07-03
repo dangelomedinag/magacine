@@ -15,7 +15,7 @@ export async function post({ request }) {
 		};
 	}
 
-	if (password !== '123456') {
+	if (password.length < 1) {
 		return {
 			body: {
 				status: 404,

@@ -10,7 +10,11 @@ export function get() {
 					path: '/',
 					expires: new Date(0)
 				}),
-				cookie.serialize('mc_sessionid', '', {
+				cookie.serialize('mc_username', '', {
+					path: '/',
+					expires: new Date(0)
+				}),
+				cookie.serialize('mc_theme', '', {
 					path: '/',
 					expires: new Date(0)
 				})

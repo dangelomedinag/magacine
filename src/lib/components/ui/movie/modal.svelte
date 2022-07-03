@@ -1,7 +1,7 @@
 <script>
 	import { browser } from '$app/env';
 
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -9,12 +9,15 @@
 	import Icon from '$icons/icon.svelte';
 	import X from '$icons/outline/x.svelte';
 
-	let modal = false;
+	export let modal = false;
 	let currentElementFocus = null;
-	export let Zindex = '0';
+	export let Zindex = '111';
 	export let btnClose = true;
 
 	// const getVal = () => modal;
+	onMount(() => {
+		if (modal) open();
+	});
 
 	export function open() {
 		if (currentElementFocus) {
@@ -58,7 +61,7 @@
 		let firstChild = node.firstChild;
 		if (firstChild?.nodeName === 'A' || firstChild?.nodeName === 'BUTTON') firstChild.focus();
 
-		console.log(firstChild);
+		// console.log(firstChild);
 
 		// console.log(document.activeElement);
 
@@ -94,7 +97,7 @@
 			<slot />
 		</div>
 		<div class="modal__actions" class:paddingTop={$$slots.action} use:focusOnMount>
-			<slot name="action" />
+			<slot name="action" {close} />
 		</div>
 		{#if btnClose}
 			<button on:click={close} class="modal__close"> <Icon><X /></Icon></button>
@@ -142,7 +145,7 @@
 		top: 50%;
 		transform: translate(-50%, -50%);
 		width: 95%;
-		max-width: 700px;
+		/* max-width: 700px; */
 		max-height: 90%;
 
 		display: flex;
@@ -229,11 +232,11 @@
 		color: var(--c-text-base);
 		padding: 0;
 		border: 1px solid transparent;
-		background-color: var(--c-main-content);
+		background-color: var(--modal-bg);
 	}
 
 	.modal__close:hover {
-		background-color: var(--c-main);
+		background-color: var(--c-main-content);
 	}
 
 	.modal__close:active {
@@ -259,5 +262,11 @@
 
 	.modal__container::-webkit-scrollbar-thumb:hover {
 		background: #555;
+	}
+
+	@media (min-width: 992px) {
+		.modal {
+			max-width: 50vw;
+		}
 	}
 </style>

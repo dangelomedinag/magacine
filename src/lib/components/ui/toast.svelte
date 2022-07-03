@@ -1,7 +1,13 @@
 <script>
 	import { quintInOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
+
+	// icons
 	import Icon from '$icons/icon.svelte';
+	import Check from '$icons/outline/check.svelte';
+	import Exclamation from '$icons/outline/exclamation.svelte';
+	import ExclamationCircle from '$icons/outline/exclamation-circle.svelte';
+	import Flag from '$icons/outline/flag.svelte';
 
 	export let success = false,
 		warn = false,
@@ -17,13 +23,21 @@
 >
 	<div class="toast__icon">
 		{#if success}
-			<Icon name="check" />
+			<Icon>
+				<Check />
+			</Icon>
 		{:else if warn}
-			<Icon name="exclamation" />
+			<Icon>
+				<Exclamation />
+			</Icon>
 		{:else if danger}
-			<Icon name="exclamation-circle" />
+			<Icon>
+				<ExclamationCircle />
+			</Icon>
 		{:else}
-			<Icon name="flag" />
+			<Icon>
+				<Flag />
+			</Icon>
 		{/if}
 	</div>
 	<span class="toast__message">

@@ -18,6 +18,8 @@
 	import { session } from '$app/stores';
 	import NavbarSearchForm from '$components/ui/navbar-search-form.svelte';
 	import NavbarSearchResults from '$components/ui/navbar-search-results.svelte';
+	import Notification from './notification.svelte';
+	import { notiStore } from '$lib/stores/notifications-store';
 
 	/* variable */
 	export let search = true,
@@ -25,6 +27,7 @@
 		profile = true;
 	let modal;
 	let modalSession;
+	let modalNotification;
 	let searchInput = false;
 	let results;
 
@@ -87,7 +90,7 @@
 	<div class="content navbar-wrapper">
 		<div class="left dos">
 			<a href="/">
-				<Icon type="solid">
+				<Icon>
 					<Home />
 				</Icon>
 			</a>
@@ -105,27 +108,6 @@
 						modal.close();
 					}}
 				/>
-				<!-- <form on:submit|preventDefault={submit}>
-					<input
-						use:focus
-						class="searchBox"
-						type="search"
-						name="x"
-						id="x"
-						autocomplete="off"
-						value="suspense"
-					/>
-					<button
-						type="button"
-						on:click={() => {
-							searchInput = !searchInput;
-							modal.close();
-						}}
-						style="display: inline-flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: var(--c-text-base)"
-					>
-						<Icon name="x" type="solid" />
-					</button>
-				</form> -->
 			{:else}
 				<slot />
 				{#if search}
@@ -162,8 +144,8 @@
 				</button>
 			{/if}
 			{#if bell}
-				<button title="notification">
-					<Icon>
+				<button title="notification" on:click={modalNotification.open}>
+					<Icon counter={$notiStore.length}>
 						<Bell />
 					</Icon>
 				</button>
@@ -206,6 +188,10 @@
 			}}>close</button
 		>
 	</svelte:fragment>
+</Modal>
+
+<Modal bind:this={modalNotification}>
+	<Notification />
 </Modal>
 
 <style>

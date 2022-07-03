@@ -39,6 +39,9 @@
 	import { navigating } from '$app/stores';
 	import 'nprogress/nprogress.css';
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import { pricePlans } from '$lib/stores/plans-store';
+	import Modal from '$lib/components/ui/movie/modal.svelte';
+	import PriceTable from '$lib/components/ui/priceTable.svelte';
 	let toggle = false;
 
 	// NProgress css
@@ -89,8 +92,19 @@
 </svelte:head>
 
 {#if dev}
-	<MediaQueries bottom="50%" />
+	<MediaQueries bottom="0" />
 {/if}
+<Modal modal={$pricePlans}>
+	<PriceTable />
+	<svelte:fragment slot="action" let:close>
+		<button
+			on:click={() => {
+				close();
+				$pricePlans = false;
+			}}>close</button
+		>
+	</svelte:fragment>
+</Modal>
 
 <div class="wrapper">
 	<ButtonToTop active={toggle} on:click={toggleAside} />
@@ -150,7 +164,7 @@
 		--navbar-item-hover: inherit;
 
 		/* transition color theme */
-		--transition-theme: background-color 0.3s linear, color 0.3s linear;
+		--transition-theme: background-color 0.2s linear;
 	}
 
 	:global(body[data-theme='light']) {
@@ -201,6 +215,7 @@
 	.main {
 		width: 100%;
 		height: 100%;
+		min-height: 100vh;
 		background-color: var(--c-main);
 		transition: var(--transition-theme);
 	}

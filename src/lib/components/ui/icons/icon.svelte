@@ -1,4 +1,5 @@
 <script>
+	export let counter = false;
 	export let x = undefined;
 	export let y = undefined;
 	export let deg = undefined;
@@ -21,6 +22,9 @@
 		: ''}
 >
 	<slot />
+	{#if counter}
+		<div class="counter">{counter}</div>
+	{/if}
 </div>
 
 <style>
@@ -30,6 +34,7 @@
 
 	div {
 		display: inline-flex;
+		position: relative;
 	}
 
 	:global(svg[aria-hidden='true']) {
@@ -39,6 +44,24 @@
 		height: var(--icon-size);
 		width: var(--icon-size);
 		color: inherit;
+	}
+
+	.counter {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		background-color: var(--c-front);
+		color: white;
+		right: -8px;
+		top: -10px;
+		width: 16px;
+		height: 16px;
+		/* width: 5px; */
+		/* padding: 0.1em; */
+		border-radius: 50vh;
+		font-size: 0.7rem;
+		text-align: center;
 	}
 
 	.shadow :global(svg[aria-hidden='true']) {

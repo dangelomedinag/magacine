@@ -32,11 +32,11 @@
 				type="text"
 				name="username"
 				id="usename"
-				value="dangelomedina"
+				value=""
 				placeholder="username or email"
 				autocomplete="off"
 			/>
-			<input type="password" name="password" id="password" value="123456" placeholder="password" />
+			<input type="password" name="password" id="password" value="" placeholder="any password" />
 			<input type="submit" value="inicar session" />
 		</form>
 		<div class="actions">

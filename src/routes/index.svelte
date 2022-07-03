@@ -17,7 +17,7 @@
 	}
 </script> -->
 <script>
-	import { goto } from '$app/navigation';
+	// import { goto } from '$app/navigation';
 	import { page, session } from '$app/stores';
 
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
@@ -40,37 +40,100 @@
 	let act = 'movies';
 
 	const setTab = (tab) => {
-		goto('#index-movies');
+		// goto('#index-movies');
 		act = tab;
 	};
+
+	function smoothScroll(node, target) {
+		// console.log(target);
+		let hash;
+		if (node.href) hash = node.href;
+		else if (target) hash = target;
+
+		// console.log(hash);
+
+		const url = new URL(location);
+		url.hash = hash;
+
+		function scrollToTarget(e) {
+			if (!target) e.preventDefault();
+			// console.log(url.hash);
+			const ele = document.getElementById(url.hash.substring(1));
+
+			if (ele) {
+				const navbar = document.querySelector('nav.navbar');
+				const navbarHeight = navbar.clientHeight;
+				// const isExpand = navbar.querySelector('div.center.block');
+
+				// console.log({ navbarHeight });
+				// console.log({ isExpand });
+
+				try {
+					let n = ele.offsetTop - navbarHeight - 52;
+					// if (isExpand) n = n + 52;
+					scrollTo({ behavior: 'smooth', top: n });
+				} catch (error) {}
+			}
+		}
+
+		// function scrollToPosition(e) {
+		// 	if (!target) {
+		// 		e.preventDefault();
+		// 	}
+		// 	scrollToTarget(url.hash);
+		// }
+
+		// if (url.host === location.host && url.pathname === location.pathname) {
+
+		if (url.hash.length > 1) {
+			// console.log('que lo q');
+			node.addEventListener('click', scrollToTarget);
+		}
+		// }
+
+		return {
+			destroy() {
+				node.removeEventListener('click', scrollToTarget);
+			}
+		};
+	}
 </script>
 
 <svelte:head>
 	<title>Magacine - home</title>
 </svelte:head>
+<!-- use:smoothScroll={{ href: '#index-movies', tab: 'movies' }} -->
+<!-- use:smoothScroll={{ href: '#index-movies', tab: 'series' }} -->
 
 <NavbarTop>
-	<button on:click={() => setTab('movies')} class:active={act === 'movies'}>Movies</button>
-	<button on:click={() => setTab('series')} class:active={act === 'series'}>Series</button>
+	<button
+		use:smoothScroll={'#index-movies'}
+		on:click={() => setTab('movies')}
+		class:active={act === 'movies'}>Movies</button
+	>
+	<button
+		use:smoothScroll={'#index-movies'}
+		on:click={() => setTab('series')}
+		class:active={act === 'series'}>Series</button
+	>
 </NavbarTop>
-
 <Hero />
+
 <div class="content">
 	{#if $session.user}
 		<h1>¡Welcome again, <span>{$session.user.name}</span>!</h1>
 	{/if}
-
-	<div id={'index-movies'}>
+	<div id="index-movies">
 		{#if act === 'movies'}
-			<CarouselMovies details={false} {movies} title="Top rated" />
-		{/if}
-
-		{#if act === 'series'}
 			<CarouselMovies
 				details={false}
 				movies={$page.stuff.suggest}
-				title="Top rated ({$page.stuff.suggest.totalResults} results)"
+				title="Our pick for {$session.user.name}"
 			/>
+		{/if}
+
+		{#if act === 'series'}
+			<CarouselMovies details={false} {movies} title="Our pick for {$session.user.name}" />
 		{/if}
 	</div>
 </div>
@@ -89,6 +152,7 @@
 		font-size: 2rem;
 		margin-top: 0;
 		font-weight: lighter;
+		text-align: center;
 	}
 
 	span {
