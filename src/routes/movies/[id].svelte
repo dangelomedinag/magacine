@@ -30,7 +30,7 @@
 	import YearMovie from '$lib/components/ui/movie/yearMovie.svelte';
 	import RuntimeMovie from '$lib/components/ui/movie/runtimeMovie.svelte';
 	import InfoMovie from '$lib/components/ui/movie/infoMovie.svelte';
-	import { randomInt } from '$helpers';
+	import { randomInt, scrollToTarget } from '$helpers';
 	import Icon from '$icons/icon.svelte';
 	import Play from '$icons/solid/play.svelte';
 	import { onMount } from 'svelte';
@@ -89,7 +89,6 @@
 
 	afterNavigate(({ from, to }) => {
 		if (from && to && from.pathname.startsWith('/movies/') && to.pathname.startsWith('/movies/')) {
-			console.log('after navigate');
 			if (from.pathname !== to.pathname) {
 				getSuggest();
 				showPlayer = false;
@@ -97,41 +96,41 @@
 		}
 	});
 
-	function smoothScroll(node) {
-		function scrollToPosition(e) {
-			e.preventDefault();
-			const ele = document.getElementById(url.hash.substring(1));
-			if (ele) {
-				const navbar = document.querySelector('nav.navbar');
-				const navbarHeight = navbar.clientHeight;
-				const isExpand = document.querySelector('div.block');
+	// function smoothScroll(node) {
+	// 	function scrollToPosition(e) {
+	// 		e.preventDefault();
+	// 		const ele = document.getElementById(url.hash.substring(1));
+	// 		if (ele) {
+	// 			const navbar = document.querySelector('nav.navbar');
+	// 			const navbarHeight = navbar.clientHeight;
+	// 			const isExpand = document.querySelector('div.block');
 
-				console.log(navbarHeight);
+	// 			console.log(navbarHeight);
 
-				try {
-					let n = ele.offsetTop - navbarHeight;
-					if (!isExpand) n = n + 52;
-					scrollTo({ behavior: 'smooth', top: n });
-				} catch (error) {
-					// console.log(error.message);
-				}
-			}
-		}
+	// 			try {
+	// 				let n = ele.offsetTop - navbarHeight;
+	// 				if (!isExpand) n = n + 52;
+	// 				scrollTo({ behavior: 'smooth', top: n });
+	// 			} catch (error) {
+	// 				// console.log(error.message);
+	// 			}
+	// 		}
+	// 	}
 
-		const url = new URL(node.href);
+	// 	const url = new URL(node.href);
 
-		if (url.host === location.host && url.pathname === location.pathname) {
-			if (url.hash.length > 1) {
-				node.addEventListener('click', scrollToPosition);
-			}
-		}
+	// 	if (url.host === location.host && url.pathname === location.pathname) {
+	// 		if (url.hash.length > 1) {
+	// 			node.addEventListener('click', scrollToPosition);
+	// 		}
+	// 	}
 
-		return {
-			destroy() {
-				node.removeEventListener('click', scrollToPosition);
-			}
-		};
-	}
+	// 	return {
+	// 		destroy() {
+	// 			node.removeEventListener('click', scrollToPosition);
+	// 		}
+	// 	};
+	// }
 </script>
 
 <svelte:head>
@@ -141,19 +140,9 @@
 </svelte:head>
 
 <NavbarTop>
-	<!-- <button
-		on:click={() => {
-			goto('#info', { replaceState: true });
-		}}>info</button
-	> -->
-	<a href="#info" use:smoothScroll>info</a>
+	<a href="#info" use:scrollToTarget>info</a>
 	{#if suggestionsMovies && !(suggestionsMovies instanceof Error)}
-		<a href="#suggest" use:smoothScroll>suggest</a>
-		<!-- <button
-			on:click={() => {
-				goto('#suggest', { replaceState: true });
-			}}>suggest</button
-		> -->
+		<a href="#suggest" use:scrollToTarget>suggest</a>
 	{/if}
 </NavbarTop>
 

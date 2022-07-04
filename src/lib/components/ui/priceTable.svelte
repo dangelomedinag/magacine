@@ -4,6 +4,19 @@
 
 	let tablePrice = [
 		{
+			title: 'Platinum Packege',
+			symbol: '$',
+			price: 49,
+			benefits: [
+				'Unlimited Listing',
+				'Edit Your Listing',
+				'Approve Reviews',
+				'Take Booking Online',
+				'24/7 Support Service'
+			],
+			recommended: true
+		},
+		{
 			title: 'Bronze Packege',
 			symbol: '$',
 			price: 10,
@@ -14,18 +27,6 @@
 			symbol: '$',
 			price: 19,
 			benefits: ['Unlimited Listing', 'Edit Your Listing', 'Approve Reviews']
-		},
-		{
-			title: 'Platinum Packege',
-			symbol: '$',
-			price: 49,
-			benefits: [
-				'Unlimited Listing',
-				'Edit Your Listing',
-				'Approve Reviews',
-				'Take Booking Online',
-				'24/7 Support Service'
-			]
 		}
 	];
 </script>
@@ -33,8 +34,8 @@
 <h2 class="pricingTable-title">Find a <span>plan</span> that's right for you<span>.</span></h2>
 <h3 class="pricingTable-subtitle">Every plan comes with a <span>30-day free trial</span>.</h3>
 <div class="pricing">
-	{#each tablePrice as card, i}
-		<div class="pricing__card" class:pricing__card--recomend={i == 2}>
+	{#each tablePrice as card}
+		<div class="pricing__card" class:pricing__card--recomend={card.recommended}>
 			<header class="pricing__header">
 				<h4 class="pricing__title">
 					{card.title}
@@ -170,12 +171,17 @@
 		margin: 0.5em 0;
 	}
 	.pricing__price {
-		font-size: 1.5rem;
+		font-size: 1rem;
 		font-weight: lighter;
 		margin: 0.5em 0;
 	}
+
+	.pricing__number {
+		font-size: 1.8rem;
+		color: #42936a;
+	}
 	.pricing__symbol {
-		font-style: oblique;
+		/* font-style: oblique; */
 	}
 
 	.pricing__benefits {

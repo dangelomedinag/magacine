@@ -6,6 +6,7 @@
 	import X from '$icons/solid/x.svelte';
 	import UserCircle from '$icons/solid/user-circle.svelte';
 	import Bell from '$icons/outline/bell.svelte';
+	import BellSolid from '$icons/solid/bell.svelte';
 	import Logout from '$icons/outline/user-circle.svelte';
 	/* icons */
 
@@ -26,6 +27,7 @@
 		bell = true,
 		profile = true;
 	let modal;
+	let ddd;
 	let modalSession;
 	let modalNotification;
 	let searchInput = false;
@@ -146,7 +148,11 @@
 			{#if bell}
 				<button title="notification" on:click={modalNotification.open}>
 					<Icon counter={$notiStore.length}>
-						<Bell />
+						{#if $notiStore.length}
+							<BellSolid />
+						{:else}
+							<Bell />
+						{/if}
 					</Icon>
 				</button>
 			{/if}
@@ -190,7 +196,7 @@
 	</svelte:fragment>
 </Modal>
 
-<Modal bind:this={modalNotification}>
+<Modal bind:this={modalNotification} bind:modal={ddd}>
 	<Notification />
 </Modal>
 

@@ -93,7 +93,7 @@
 		in:fly={{ y: 100, duration: 300, easing: quintOut }}
 		class="modal"
 	>
-		<div class="modal__container">
+		<div class="modal__container" class:paddingtotal={!$$slots.action}>
 			<slot />
 		</div>
 		<div class="modal__actions" class:paddingTop={$$slots.action} use:focusOnMount>
@@ -157,12 +157,18 @@
 			0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
 			0 32px 32px rgba(0, 0, 0, 0.11);
 		overflow: hidden;
-		padding: 1em;
+		/* padding: 1em; */
 	}
 
 	.modal__container {
+		padding: 1em;
+		padding-bottom: 0;
 		overflow-y: auto;
 		overflow-x: hidden;
+	}
+
+	.paddingtotal {
+		padding-bottom: 1em;
 	}
 
 	.modal__actions {
@@ -171,7 +177,9 @@
 	}
 
 	.paddingTop {
-		padding-top: 1em;
+		border-top: 1px solid var(--c-divider);
+		padding: 1em;
+		/* padding-top: 1em; */
 	}
 
 	.modal__actions > :global(button),
@@ -232,11 +240,12 @@
 		color: var(--c-text-base);
 		padding: 0;
 		border: 1px solid transparent;
-		background-color: var(--modal-bg);
+		background-color: transparent;
+		/* filter: drop-shadow(0 0 2px 0px rgba(0, 0, 0, 1)); */
 	}
 
 	.modal__close:hover {
-		background-color: var(--c-main-content);
+		background-color: var(--c-divider);
 	}
 
 	.modal__close:active {

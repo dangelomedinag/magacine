@@ -8,6 +8,7 @@ export const notiStore = writable([
 		items: [
 			{
 				id: '1',
+				read: false,
 				type: 'movie',
 				href: '/discovery',
 				detail:
@@ -15,6 +16,7 @@ export const notiStore = writable([
 			},
 			{
 				id: '2',
+				read: false,
 				type: 'serie',
 				href: '/discovery',
 				detail:
@@ -22,6 +24,7 @@ export const notiStore = writable([
 			},
 			{
 				id: '3',
+				read: false,
 				type: 'movie',
 				href: '/discovery',
 				detail:
@@ -36,6 +39,7 @@ export const notiStore = writable([
 		items: [
 			{
 				id: '1',
+				read: false,
 				type: 'blog',
 				href: '/community',
 				detail: 'botchat_real replied to your comment'
