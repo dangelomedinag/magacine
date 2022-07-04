@@ -34,7 +34,7 @@ export const scrollToTarget = (node, opts) => {
 		url.hash = opts?.target;
 	}
 
-	function handlerClick(e) {
+	async function handlerClick(e) {
 		// prevent action if target is <a></a> element
 		if (!opts) e.preventDefault();
 
@@ -48,8 +48,11 @@ export const scrollToTarget = (node, opts) => {
 		let offsetTop = htmlElement.offsetTop - navbarHeight - 50;
 		if (offsetTop <= 0) offsetTop = 0;
 
+		await goto(url, { replaceState: true, noscroll: true });
 		// scroll to target
 		scrollTo({ behavior: opts?.behavior ? opts.behavior : 'smooth', top: offsetTop });
+
+		/* scrollTo({ behavior: opts?.behavior ? opts.behavior : 'smooth', top: offsetTop });
 
 		function changeURL() {
 			if (Math.round(window.scrollY) == offsetTop) {
@@ -58,7 +61,7 @@ export const scrollToTarget = (node, opts) => {
 				});
 			}
 		}
-		window.addEventListener('scroll', changeURL);
+		window.addEventListener('scroll', changeURL); */
 	}
 
 	// valid length hash

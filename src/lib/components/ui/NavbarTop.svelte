@@ -19,7 +19,7 @@
 	import { session } from '$app/stores';
 	import NavbarSearchForm from '$components/ui/navbar-search-form.svelte';
 	import NavbarSearchResults from '$components/ui/navbar-search-results.svelte';
-	import Notification from './notification.svelte';
+	import Notification from '$components/ui/notification.svelte';
 	import { notiStore } from '$lib/stores/notifications-store';
 
 	/* variable */
@@ -173,6 +173,9 @@
 </nav>
 
 <Modal bind:this={modalSession} Zindex="110" btnClose={false}>
+	<svelte:fragment slot="header">
+		Session <Icon y="10%"><UserCircle /></Icon>
+	</svelte:fragment>
 	<SessionModal />
 	<svelte:fragment slot="action">
 		<a class="list__logout" href="/auth/logout">logout <Icon><Logout /></Icon></a>
@@ -181,6 +184,9 @@
 </Modal>
 
 <Modal bind:this={modal} Zindex="110" btnClose={false}>
+	<svelte:fragment slot="header">
+		search <Icon y="10%"><Search /></Icon>
+	</svelte:fragment>
 	<NavbarSearchResults {results} />
 
 	<svelte:fragment slot="action">
@@ -197,10 +203,25 @@
 </Modal>
 
 <Modal bind:this={modalNotification} bind:modal={ddd}>
+	<svelte:fragment slot="header">
+		{$notiStore.length ?? ''} Notifications <Icon y="10%"><BellSolid /></Icon>
+	</svelte:fragment>
 	<Notification />
 </Modal>
 
 <style>
+	/* header {
+		--icon-size: 1.2rem;
+		padding: 0.5em 0;
+		position: sticky;
+		background-color: var(--modal-bg);
+		top: 0;
+		font-size: var(--icon-size);
+		text-align: center;
+		font-weight: bold;
+		border-bottom: 1px solid var(--c-divider);
+	} */
+
 	:root {
 		--navbar-item-gap: 0.5em;
 	}

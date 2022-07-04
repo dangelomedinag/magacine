@@ -140,10 +140,12 @@
 </svelte:head>
 
 <NavbarTop>
-	<a href="#info" use:scrollToTarget>info</a>
-	{#if suggestionsMovies && !(suggestionsMovies instanceof Error)}
-		<a href="#suggest" use:scrollToTarget>suggest</a>
-	{/if}
+	{#key suggestionsMovies}
+		<a href="#info" use:scrollToTarget>info</a>
+		{#if suggestionsMovies && !(suggestionsMovies instanceof Error)}
+			<a href="#suggest" use:scrollToTarget>suggest</a>
+		{/if}
+	{/key}
 </NavbarTop>
 
 <div class="container ">

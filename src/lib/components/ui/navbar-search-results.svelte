@@ -10,7 +10,7 @@
 	export let results;
 </script>
 
-<header class="modal-header">
+<!-- <header class="modal-header">
 	{#await results}
 		Searching...
 	{:then response}
@@ -18,7 +18,7 @@
 	{:catch error}
 		{error.message}
 	{/await}
-</header>
+</header> -->
 
 {#await results}
 	<Spinner />

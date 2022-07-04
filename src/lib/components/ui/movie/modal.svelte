@@ -93,6 +93,12 @@
 		in:fly={{ y: 100, duration: 300, easing: quintOut }}
 		class="modal"
 	>
+		{#if $$slots.header}
+			<header class="modal__header">
+				<slot name="header" />
+			</header>
+		{/if}
+
 		<div class="modal__container" class:paddingtotal={!$$slots.action}>
 			<slot />
 		</div>
@@ -169,6 +175,18 @@
 
 	.paddingtotal {
 		padding-bottom: 1em;
+	}
+
+	.modal__header {
+		--icon-size: 1rem;
+		padding: 0.5em 0;
+		position: sticky;
+		background-color: var(--modal-bg);
+		top: 0;
+		font-size: var(--icon-size);
+		text-align: center;
+		font-weight: bold;
+		border-bottom: 1px solid var(--c-divider);
 	}
 
 	.modal__actions {
