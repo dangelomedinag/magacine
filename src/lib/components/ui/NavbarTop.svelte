@@ -204,9 +204,10 @@
 
 <Modal bind:this={modalNotification} bind:modal={ddd}>
 	<svelte:fragment slot="header">
-		{$notiStore.length ?? ''} Notifications <Icon y="10%"><BellSolid /></Icon>
+		<Icon y="10%"><BellSolid /></Icon>
+		{$notiStore.length ?? ''} Notifications
 	</svelte:fragment>
-	<Notification />
+	<Notification on:clickItem={() => modalNotification.close()} />
 </Modal>
 
 <style>

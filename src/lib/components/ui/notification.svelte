@@ -4,10 +4,11 @@
 	import Trash from '$icons/solid/trash.svelte';
 	import Eye from '$icons/solid/eye.svelte';
 	import EyeOff from '$icons/solid/eye-off.svelte';
-
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
-	// import X from '$icons/solid/x.svelte';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	function MarkAsReadItem(parentId, itemId) {
 		notiStore.update((value) => {
@@ -27,6 +28,12 @@
 			return value;
 		});
 	}
+
+	function onClickItem(parentId, itemId) {
+		MarkAsReadItem(parentId, itemId);
+		DeleteItem(parentId, itemId);
+		dispatch('clickItem');
+	}
 </script>
 
 <!-- <header>
@@ -40,9 +47,11 @@
 				<li out:fly|local={{ easing: quintOut, x: 100 }} class:read={!el.read}>
 					<div class="item">
 						<div class="item-content">
-							<div>
+							<div class="item-container">
 								{#if el.href}
-									<a href={el.href} on:click={() => {}}>{@html el.detail}</a>
+									<a href={el.href} on:click={() => onClickItem(item.id, el.id)}
+										>{@html el.detail}</a
+									>
 								{:else}
 									{@html el.detail}
 								{/if}
@@ -202,6 +211,10 @@
 		justify-content: space-between;
 	}
 
+	.item-container {
+		width: 100%;
+	}
+
 	.item-content a {
 		text-align: left;
 		padding: 0;
@@ -213,6 +226,8 @@
 		display: block;
 		font-size: 1rem;
 		text-decoration: none;
+		/* width: 100%;
+		display: block; */
 	}
 
 	.item-content button {

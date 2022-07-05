@@ -27,11 +27,6 @@
 	$: obj = $notiStore.filter((e) => e.label === href);
 
 	// let activeNotification = $notiStore.filter((e) => e.label === href);
-
-	notiStore.subscribe((no) => {
-		// console.log({ activeNotification });
-		// console.log({ no });
-	});
 </script>
 
 <svelte:element
@@ -51,7 +46,7 @@
 		<div class="label">
 			<slot />
 			{#if obj.length > 0}
-				<div class="notification">{obj[0].notification}</div>
+				<div class="notification">{obj[0].items.length ? obj[0].items.length : ''}</div>
 			{/if}
 		</div>
 	</div>
