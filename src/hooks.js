@@ -15,22 +15,20 @@ export async function handle({ event, resolve }) {
 
 	const response = await resolve(event, {
 		transformPage: ({ html }) => {
-			// console.log(html);
 			if (cookieSession.mc_theme) {
 				if (cookieSession.mc_theme === 'light') {
-					console.log('theme SSR');
 					return html.replace('data-theme="dark"', 'data-theme="' + cookieSession.mc_theme + '"');
 				}
 			}
 			return html;
 		}
 	});
+
 	return response;
 }
 
 /** @type {import('@sveltejs/kit').GetSession} */
 export function getSession(event) {
-	// console.log(event.request.headers);
 	return event.locals.user
 		? {
 				user: {

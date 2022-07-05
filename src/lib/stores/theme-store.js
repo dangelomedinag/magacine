@@ -23,10 +23,14 @@ const themeStoreCustom = () => {
 				let dataTheme = document.body.dataset.theme;
 				document.body.dataset.theme = dataTheme === 'dark' ? 'light' : 'dark';
 				// localStorage.setItem('user-theme', document.body.dataset.theme);
-				await fetch('/api/theme', {
-					method: 'PUT',
-					body: JSON.stringify({ theme: document.body.dataset.theme })
-				});
+				try {
+					await fetch('/api/theme', {
+						method: 'PUT',
+						body: JSON.stringify({ theme: document.body.dataset.theme })
+					});
+				} catch (error) {
+					console.error('error on set theme');
+				}
 				return set(document.body.dataset.theme);
 			}
 		}
