@@ -130,20 +130,10 @@
 		height: 100%;
 		inset: 0;
 
-		/* max-width: 1400px; */
 		background-color: var(--modal-foreground);
 
-		cursor: pointer;
-		/* user-select: none; */
-		/* z-index: 95; */
-		/* margin: 0 auto; */
+		/* cursor: pointer; */
 	}
-
-	/* @media (min-width: 992px) {
-		:global(.sidebar.toggle + main) .modal {
-			transform: translate(-30%, -50%);
-		}
-	} */
 
 	.modal {
 		position: fixed;
@@ -151,7 +141,6 @@
 		top: 50%;
 		transform: translate(-50%, -50%);
 		width: 95%;
-		/* max-width: 700px; */
 		max-height: 90%;
 
 		display: flex;
@@ -163,7 +152,6 @@
 			0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
 			0 32px 32px rgba(0, 0, 0, 0.11);
 		overflow: hidden;
-		/* padding: 1em; */
 	}
 
 	.modal__container {
@@ -196,7 +184,7 @@
 
 	.paddingTop {
 		border-top: 1px solid var(--c-divider);
-		padding: 1em;
+		padding: 0.5em;
 		/* padding-top: 1em; */
 	}
 
@@ -234,11 +222,11 @@
 		background-color: var(--c-front-dark);
 	}
 
-	.modal__actions > :global(button):focus,
-	.modal__actions > :global(a):focus {
+	.modal__actions > :global(button:focus),
+	.modal__actions > :global(a:focus) {
 		outline-style: dashed;
 		outline-width: 2px;
-		outline-offset: 3px;
+		outline-offset: -2px;
 		outline-color: var(--c-divider);
 	}
 
@@ -259,7 +247,6 @@
 		padding: 0;
 		border: 1px solid transparent;
 		background-color: transparent;
-		/* filter: drop-shadow(0 0 2px 0px rgba(0, 0, 0, 1)); */
 	}
 
 	.modal__close:hover {

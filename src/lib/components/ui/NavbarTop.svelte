@@ -8,6 +8,7 @@
 	import Bell from '$icons/outline/bell.svelte';
 	import BellSolid from '$icons/solid/bell.svelte';
 	import Logout from '$icons/outline/user-circle.svelte';
+	import ExclamationCircle from '$icons/outline/exclamation-circle.svelte';
 	/* icons */
 
 	import { onMount } from 'svelte';
@@ -91,11 +92,11 @@
 <nav class="navbar">
 	<div class="content navbar-wrapper">
 		<div class="left dos">
-			<a href="/">
+			<!-- <a href="/">
 				<Icon>
 					<Home />
 				</Icon>
-			</a>
+			</a> -->
 			<ThemeToggle />
 		</div>
 		<div class="center">
@@ -137,9 +138,7 @@
 					}}
 				>
 					<Icon>
-						{#if searchInput}
-							<X />
-						{:else}
+						{#if !searchInput}
 							<Search />
 						{/if}
 					</Icon>
@@ -185,7 +184,13 @@
 
 <Modal bind:this={modal} Zindex="110" btnClose={false}>
 	<svelte:fragment slot="header">
-		search <Icon y="10%"><Search /></Icon>
+		{#await results}
+			<Icon y="10%"><Search /></Icon> Searching...
+		{:then _}
+			<Icon y="10%"><Search /></Icon> Search
+		{:catch _}
+			<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
+		{/await}
 	</svelte:fragment>
 	<NavbarSearchResults {results} />
 

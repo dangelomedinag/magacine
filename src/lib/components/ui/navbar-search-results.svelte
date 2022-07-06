@@ -6,38 +6,46 @@
 	import { quintInOut } from 'svelte/easing';
 	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 	import { page } from '$app/stores';
+	import Icon from '$icons/icon.svelte';
+	import Film from '$icons/outline/film.svelte';
+	import DesktopComputer from '$icons/outline/desktop-computer.svelte';
+	import Collection from '$icons/outline/collection.svelte';
 
 	export let results;
 </script>
-
-<!-- <header class="modal-header">
-	{#await results}
-		Searching...
-	{:then response}
-		{response.search}
-	{:catch error}
-		{error.message}
-	{/await}
-</header> -->
 
 {#await results}
 	<Spinner />
 {:then response}
 	<ul class="list">
+		<li class="total-results">
+			{response.search} - {response.totalResults} results
+		</li>
 		{#each response.results as movie, i (movie.uuid)}
 			<li class="list__item" in:fly={{ x: 60, easing: quintInOut, delay: 50 * i }}>
+				<img src={movie.poster} alt={movie.title} />
+				<span class="n-top">{i + 1}</span>
 				<span class="info-wrapper">
 					<div class="title">
 						{movie.title} - {movie.year}
 					</div>
-					<div class="type">{movie.type}</div>
+					<div class="type">
+						<span class="icon">
+							<Icon y="20%">
+								{#if movie.type === 'movie'}
+									<Film />
+								{:else if movie.type === 'game'}
+									<DesktopComputer />
+								{:else if movie.type === 'series'}
+									<Collection />
+								{/if}
+							</Icon>
+						</span>
+						{movie.type}
+					</div>
 				</span>
-				<img src={movie.poster} alt={movie.title} />
 			</li>
 		{/each}
-		<li class="total-results">
-			{response.totalResults} total results
-		</li>
 	</ul>
 {:catch error}
 	<div class="toast-wrapper">
@@ -55,28 +63,39 @@
 		padding: 1em 0;
 	}
 
-	.modal-header {
-		text-align: center;
-	}
-
 	.list {
 		list-style: none;
-		padding: 1em 0;
+		padding: 0;
 		margin: 0;
 		flex-direction: column;
 		display: flex;
-		gap: 0.2em;
+		padding-bottom: 1em;
+		/* gap: 0.2em; */
 	}
 
 	.list__item {
+		overflow: hidden;
+		position: relative;
 		display: flex;
-		justify-content: space-between;
+		/* justify-content: space-between; */
 		align-items: center;
-		border-bottom: 1px solid var(--c-divider);
+		border-top: 1px solid var(--c-divider);
 		/* flex-basis: 100%; */
 	}
 	.list__item:hover {
 		background-color: var(--c-divider);
+	}
+
+	.n-top {
+		vertical-align: middle;
+		position: absolute;
+		top: 0;
+		right: 0;
+		line-height: 6rem;
+		font-weight: bold;
+		font-size: 12rem;
+		color: var(--c-divider);
+		opacity: 0.2;
 	}
 	/* .list__item:hover .list__link {
 		color: var(--c-front);
@@ -99,9 +118,11 @@
 	} */
 
 	img {
-		max-height: 70px;
+		max-height: 120px;
+		min-height: 120px;
 		display: block;
-		width: 50px;
+		width: 100%;
+		max-width: 80px;
 		object-fit: cover;
 	}
 
@@ -110,19 +131,26 @@
 	}
 
 	.title {
-		width: 250px;
+		font-weight: bold;
+		/* width: 250px;
 		white-space: nowrap;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		text-overflow: ellipsis; */
 	}
 
 	.type {
 		font-weight: lighter;
 	}
 
+	.icon {
+		opacity: 0.5;
+		padding-right: 0.2em;
+	}
+
 	.total-results {
 		text-align: center;
-		padding-top: 0.5em;
+		padding-bottom: 0.5em;
 		flex-basis: 100%;
+		font-style: italic;
 	}
 </style>

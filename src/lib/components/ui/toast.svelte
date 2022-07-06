@@ -127,16 +127,7 @@
 		/* background-color: rgb(67, 33, 33); */
 	}
 
-	.toast__message {
-		/* padding: 1em 0; */
-	}
-
 	.toast__message :global(span) {
 		font-weight: bold;
-	}
-
-	svg {
-		width: 1.5rem;
-		height: 1.5rem;
 	}
 </style>

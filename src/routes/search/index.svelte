@@ -61,8 +61,6 @@
 		} catch (error) {
 			await getMovies();
 		}
-
-		// input.focus();
 	});
 
 	function openSuggestions() {
@@ -91,7 +89,6 @@
 		}
 
 		await getMovies();
-		// lastValue = getInputValue();
 		closeSuggestions();
 	}
 
@@ -100,7 +97,6 @@
 		value = '';
 		delay(() => {
 			closeSuggestions();
-			// autocomplete = [];
 		}, 10);
 		input.focus();
 	}
@@ -195,14 +191,6 @@
 		});
 	}
 
-	function onBlur() {
-		// delay(() => {
-		// 	if (!showSuggest) return;
-		// 	closeSuggestions();
-		// }, 50);
-		// closeSuggestions();
-	}
-
 	function onFocus() {
 		if (lastValue.toLowerCase() === getInputValue() && getInputValue().length > 0) {
 			openSuggestions();
@@ -220,11 +208,7 @@
 	<title>Magacine - Search</title>
 </svelte:head>
 
-<NavbarTop search={false}>
-	<!-- {#if movies?.results}
-		<span>{value} - {movies?.totalResults} results</span>
-	{/if} -->
-</NavbarTop>
+<NavbarTop search={false} />
 
 <div class="content">
 	<h1 style="text-align: center;">Search</h1>
@@ -243,16 +227,6 @@
 					}}
 					class="btn-clear"
 				>
-					<!-- <svg
-						xmlns="http://www.w3.org/2000/svg"
-						style="width: 1rem; height: 1rem;"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						stroke-width="2"
-					>
-						<path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-					</svg> -->
 					<Icon>
 						<ArrowNarrowUp />
 					</Icon>
@@ -262,24 +236,12 @@
 					{#if loading}
 						<Spinner size="5" />
 					{:else}
-						<!-- <svg
-							xmlns="http://www.w3.org/2000/svg"
-							style="width: 1rem; height: 1rem;"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							stroke-width="2"
-						>
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg> -->
 						<Icon>
 							<X />
 						</Icon>
 					{/if}
 				</button>
 			{/if}
-			<!-- {#if showSuggest}
-			{/if} -->
 			<input
 				bind:this={input}
 				bind:value
@@ -345,15 +307,6 @@
 </div>
 
 <style>
-	.content {
-		/* margin-top: 1em; */
-		/* height: 600px; */
-		/* background-image: linear-gradient(var(--c-front) -80%, transparent 20%); */
-		/* background-size: 100% 100%;
-		background-position: center;
-		background-repeat: no-repeat; */
-	}
-
 	.search-container {
 		position: relative;
 		margin: 1em auto;

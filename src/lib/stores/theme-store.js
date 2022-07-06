@@ -5,14 +5,6 @@ const themeStoreCustom = () => {
 	const { subscribe, set } = writable(null);
 
 	if (browser) {
-		// const themePrefers = localStorage.getItem('user-theme');
-		// if (!themePrefers) {
-		// 	localStorage.setItem('user-theme', document.body.dataset.theme);
-		// 	set(document.body.dataset.theme);
-		// } else {
-		// 	set(themePrefers);
-		// 	document.body.dataset.theme = themePrefers;
-		// }
 		set(document.body.dataset.theme);
 	}
 
@@ -22,7 +14,6 @@ const themeStoreCustom = () => {
 			if (browser) {
 				let dataTheme = document.body.dataset.theme;
 				document.body.dataset.theme = dataTheme === 'dark' ? 'light' : 'dark';
-				// localStorage.setItem('user-theme', document.body.dataset.theme);
 				try {
 					await fetch('/api/theme', {
 						method: 'PUT',
@@ -31,6 +22,7 @@ const themeStoreCustom = () => {
 				} catch (error) {
 					console.error('error on set theme');
 				}
+
 				return set(document.body.dataset.theme);
 			}
 		}

@@ -4,6 +4,8 @@
 	import X from '$icons/solid/x.svelte';
 	import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svelte';
 	import Search from '$icons/solid/search.svelte';
+	import Trash from '$icons/solid/trash.svelte';
+	// import X from '$icons/solid/x.svelte';
 	/* icons */
 
 	import { createEventDispatcher } from 'svelte';
@@ -52,13 +54,13 @@
 	{#if value?.length > 0}
 		<button class="btn" type="reset">
 			<Icon>
-				<X />
+				<Trash />
 			</Icon>
 		</button>
 	{:else}
 		<button class="btn" type="reset" on:click={() => dispatch('close')}>
 			<Icon>
-				<ArrowNarrowUp />
+				<X />
 			</Icon>
 		</button>
 	{/if}
@@ -85,21 +87,17 @@
 	/* search box */
 
 	form {
-		/* position: relative; */
-		padding: 0.7em;
+		padding: 0.7em 0;
 		margin: 0;
 		display: flex;
 		flex-wrap: nowrap;
-
 		width: 100%;
 		gap: 1em;
 	}
 
 	.searchBox {
 		padding: 0.3em 0.5em;
-		/* line-height: 1rem; */
 		font-size: 1rem;
-		/* padding: 0.2em; */
 		font-weight: bold;
 		width: 100%;
 		color: var(--c-text-base);
@@ -108,14 +106,10 @@
 		border-radius: 50vh;
 		text-align: center;
 		outline: none;
-		/* font-size: 1rem; */
-		/* line-height: 1rem; */
-		/* height: 100%; */
 	}
 
 	.searchBox:focus {
 		background-color: var(--c-divider);
-		/* outline: 2px solid var(--c-divider); */
 	}
 
 	.btn {
