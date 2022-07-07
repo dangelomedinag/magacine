@@ -22,13 +22,15 @@
 	import NavbarSearchResults from '$components/ui/navbar-search-results.svelte';
 	import Notification from '$components/ui/notification.svelte';
 	import { notiStore } from '$lib/stores/notifications-store';
+	// import SessionModalTest from '$components/ui/sessionModalTest.svelte';
 
 	/* variable */
 	export let search = true,
 		bell = true,
 		profile = true;
-	let modal;
+	let modalSearch;
 	let modalSession;
+	// $: console.log(modalSession);
 	let modalNotification;
 	let searchInput = false;
 	let results;
@@ -37,9 +39,12 @@
 		e.target.x.blur();
 
 		let query = e.target.x.value.trim();
-		let url = new URL(location);
+		console.log(location.origin);
+		let url = new URL('/api', location.origin);
+		url.searchParams.set('limit', 3);
+		url.searchParams.set('s', query);
 
-		results = fetch(url.origin + '/api/?limit=3&s=' + query).then(async (r) => {
+		results = fetch(url.href).then(async (r) => {
 			if (!r.ok) {
 				const error = await r.json();
 				throw error;
@@ -49,15 +54,15 @@
 		});
 
 		// e.target.x.focus();
-		modal.open();
+		modalSearch.open();
 	}
 	afterNavigate(() => {
 		document.querySelector('nav.navbar').style.transform = `translateY(0px)`;
 	});
 	let lastScroll = 0;
-	// let currentScroll = 0;
-	let down = false;
-	let up = false;
+	let expand;
+	// let down = false;
+	// let up = false;
 	onMount(() => {
 		const navbar = document.querySelector('nav.navbar');
 		let leftContainer;
@@ -67,19 +72,21 @@
 			if (window.scrollY > 150) {
 				if (currentScroll - lastScroll > 0) {
 					navbar.style.transform = `translateY(-${leftContainer + 2}px)`;
-					down = true;
-					up = false;
-					document.querySelector('div.center').classList.add('block');
+					expand = true;
+					// down = true;
+					// up = false;
+					// document.querySelector('div.center').classList.add('block');
 				} else {
 					navbar.style.transform = `translateY(0px)`;
-					down = false;
-					up = true;
-					document.querySelector('div.center').classList.remove('block');
+					expand = false;
+					// down = false;
+					// up = true;
+					// document.querySelector('div.center').classList.remove('block');
 				}
 			}
 			lastScroll = currentScroll;
 		}
-		// const body = document.body;
+
 		if (!matchMedia('(min-width: 576px)').matches) {
 			window.addEventListener('scroll', alternatedNavbar);
 		}
@@ -87,18 +94,17 @@
 	});
 </script>
 
-<!-- <nav class="navbar" class:scroll-down={down} class:scroll-up={up}> -->
 <nav class="navbar">
 	<div class="content navbar-wrapper">
-		<div class="left dos" class:esconder={searchInput}>
-			<!-- <a href="/">
+		<div class="left navbar_slots" class:esconder={searchInput}>
+			<a href="/" class="navbar-item">
 				<Icon>
 					<Home />
 				</Icon>
-			</a> -->
+			</a>
 			<ThemeToggle />
 		</div>
-		<div class="center">
+		<div class="center navbar_slots" class:block={expand}>
 			{#if searchInput}
 				<NavbarSearchForm
 					on:esc={() => {
@@ -107,7 +113,7 @@
 					on:submit={submit}
 					on:close={() => {
 						searchInput = !searchInput;
-						modal.close();
+						modalSearch.close();
 					}}
 				/>
 			{:else}
@@ -127,12 +133,12 @@
 				{/if}
 			{/if}
 		</div>
-		<div class="right" class:esconder={searchInput}>
+		<div class="right navbar_slots" class:esconder={searchInput}>
 			{#if search}
 				{#if !searchInput}
 					<button
 						title="search"
-						class="search-first"
+						class="search-first navbar-item"
 						on:click={() => {
 							searchInput = !searchInput;
 						}}
@@ -144,7 +150,7 @@
 				{/if}
 			{/if}
 			{#if bell}
-				<button title="notification" on:click={modalNotification.open}>
+				<button title="notification" class="navbar-item" on:click={modalNotification.open}>
 					<Icon counter={$notiStore.length}>
 						{#if $notiStore.length}
 							<BellSolid />
@@ -156,7 +162,7 @@
 			{/if}
 			{#if profile}
 				{#if $session.user}
-					<button title="session" on:click={modalSession.open}>
+					<button title="session" class="navbar-item" on:click={modalSession.open}>
 						<Icon>
 							<UserCircle />
 						</Icon>
@@ -169,11 +175,12 @@
 		</div>
 	</div>
 </nav>
+
 {#if searchInput}
 	<div class="foreground" on:click|self={() => (searchInput = false)} />
 {/if}
 
-<Modal bind:this={modalSession} Zindex="110" btnClose={false}>
+<Modal bind:this={modalSession} btnClose={false}>
 	<svelte:fragment slot="header">
 		Session <Icon y="10%"><UserCircle /></Icon>
 	</svelte:fragment>
@@ -184,7 +191,7 @@
 	</svelte:fragment>
 </Modal>
 
-<Modal bind:this={modal} Zindex="110" btnClose={false}>
+<Modal bind:this={modalSearch} btnClose={false}>
 	<svelte:fragment slot="header">
 		{#await results}
 			<Icon y="10%"><Search /></Icon> Searching...
@@ -200,12 +207,7 @@
 		{#await results then response}
 			<a href="/search?s={response.search}" class="cta">show all</a>
 		{/await}
-		<button
-			on:click={() => {
-				modal.close();
-				// searchInput = false;
-			}}>close</button
-		>
+		<button on:click={modalSearch.close}>close</button>
 	</svelte:fragment>
 </Modal>
 
@@ -218,17 +220,9 @@
 </Modal>
 
 <style>
-	/* header {
-		--icon-size: 1.2rem;
-		padding: 0.5em 0;
-		position: sticky;
-		background-color: var(--modal-bg);
-		top: 0;
-		font-size: var(--icon-size);
-		text-align: center;
-		font-weight: bold;
-		border-bottom: 1px solid var(--c-divider);
-	} */
+	:global(.d-none) {
+		display: none;
+	}
 
 	@media (min-width: 576px) {
 		.esconder {
@@ -270,18 +264,12 @@
 		align-items: center;
 		flex-wrap: wrap;
 	}
-	.left,
-	.center,
-	.right {
+
+	.navbar_slots {
 		display: flex;
 	}
 
-	.left > :global(button),
-	.right > :global(button),
-	.center > :global(button),
-	.left > :global(a),
-	.right > :global(a),
-	.center > :global(a) {
+	.navbar-item {
 		background-color: transparent;
 		color: inherit;
 		border: 2px solid transparent;
@@ -293,31 +281,33 @@
 		justify-content: center;
 		align-items: center;
 		padding: 0.9em 0.5em;
-		line-height: 1rem;
 		text-decoration: none;
 		cursor: pointer;
 	}
-	.left > :global(button:hover),
-	.right > :global(button:hover),
-	.center > :global(button:hover),
-	.left > :global(a:hover),
-	.right > :global(a:hover),
-	.center > :global(a:hover),
-	.center > :global(button.active),
-	.center > :global(a.active) {
+
+	.navbar-item:hover {
 		opacity: 1;
 		color: var(--navbar-item-hover);
 	}
-	.center > :global(button.active) {
-		border-bottom: 2px solid var(--c-front);
-	}
+
 	.center {
 		order: 3;
 		width: 100%;
 	}
 	.center > :global(button),
 	.center > :global(a) {
+		background-color: transparent;
+		border: 2px solid transparent;
 		font-weight: bold;
+		line-height: 1rem;
+		color: inherit;
+		padding: 0.9em 0.5em;
+		opacity: var(--navbar-item-opacity);
+		text-decoration: none;
+	}
+	.center > :global(button.active) {
+		border-bottom: 2px solid var(--c-front);
+		opacity: 1;
 	}
 
 	@media (min-width: 576px) {
@@ -325,8 +315,6 @@
 			flex-wrap: nowrap;
 		}
 		.center {
-			/* max-width: 500px; */
-			/* width: 100%; */
 			width: auto;
 			position: absolute;
 			top: 50%;
@@ -340,12 +328,14 @@
 			display: inline-flex;
 		}
 	}
+
 	.search-second {
 		display: none !important;
 		margin-left: auto !important;
 	}
-	:global(.center.block) > :global(button + .search-second),
-	:global(.center.block) > :global(a + .search-second) {
+
+	.center.block > :global(button + .search-second) 
+	/* :global(.center.block) > :global(a + .search-second) */ {
 		display: inline-flex !important;
 	}
 

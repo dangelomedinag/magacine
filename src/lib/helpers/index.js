@@ -13,8 +13,6 @@ export const listFormat = (
 export const setBodyScroll = (state) => {
 	import('$app/env').then(({ browser }) => {
 		if (browser) {
-			// let val = fn();
-
 			const body = document.body;
 			const prop = body.style.overflow;
 
