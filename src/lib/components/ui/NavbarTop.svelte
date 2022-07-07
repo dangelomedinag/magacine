@@ -28,7 +28,6 @@
 		bell = true,
 		profile = true;
 	let modal;
-	let ddd;
 	let modalSession;
 	let modalNotification;
 	let searchInput = false;
@@ -91,7 +90,7 @@
 <!-- <nav class="navbar" class:scroll-down={down} class:scroll-up={up}> -->
 <nav class="navbar">
 	<div class="content navbar-wrapper">
-		<div class="left dos">
+		<div class="left dos" class:esconder={searchInput}>
 			<!-- <a href="/">
 				<Icon>
 					<Home />
@@ -128,21 +127,21 @@
 				{/if}
 			{/if}
 		</div>
-		<div class="right">
+		<div class="right" class:esconder={searchInput}>
 			{#if search}
-				<button
-					title="serach"
-					class="search-first"
-					on:click={() => {
-						searchInput = !searchInput;
-					}}
-				>
-					<Icon>
-						{#if !searchInput}
+				{#if !searchInput}
+					<button
+						title="search"
+						class="search-first"
+						on:click={() => {
+							searchInput = !searchInput;
+						}}
+					>
+						<Icon>
 							<Search />
-						{/if}
-					</Icon>
-				</button>
+						</Icon>
+					</button>
+				{/if}
 			{/if}
 			{#if bell}
 				<button title="notification" on:click={modalNotification.open}>
@@ -170,6 +169,9 @@
 		</div>
 	</div>
 </nav>
+{#if searchInput}
+	<div class="foreground" on:click|self={() => (searchInput = false)} />
+{/if}
 
 <Modal bind:this={modalSession} Zindex="110" btnClose={false}>
 	<svelte:fragment slot="header">
@@ -201,13 +203,13 @@
 		<button
 			on:click={() => {
 				modal.close();
-				searchInput = false;
+				// searchInput = false;
 			}}>close</button
 		>
 	</svelte:fragment>
 </Modal>
 
-<Modal bind:this={modalNotification} bind:modal={ddd}>
+<Modal bind:this={modalNotification}>
 	<svelte:fragment slot="header">
 		<Icon y="10%"><BellSolid /></Icon>
 		{$notiStore.length ?? ''} Notifications
@@ -228,9 +230,26 @@
 		border-bottom: 1px solid var(--c-divider);
 	} */
 
+	@media (min-width: 576px) {
+		.esconder {
+			visibility: hidden;
+		}
+	}
+	.foreground {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: black;
+		opacity: 0.8;
+		z-index: 50;
+	}
+
 	:root {
 		--navbar-item-gap: 0.5em;
 	}
+
 	.navbar {
 		--icon-size: 1.2rem;
 		width: 100%;
@@ -306,6 +325,8 @@
 			flex-wrap: nowrap;
 		}
 		.center {
+			/* max-width: 500px; */
+			/* width: 100%; */
 			width: auto;
 			position: absolute;
 			top: 50%;

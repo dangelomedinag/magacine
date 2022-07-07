@@ -2,7 +2,7 @@
 	/* icons */
 	import Icon from '$icons/icon.svelte';
 	import X from '$icons/solid/x.svelte';
-	import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svelte';
+	// import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svelte';
 	import Search from '$icons/solid/search.svelte';
 	import Trash from '$icons/solid/trash.svelte';
 	// import X from '$icons/solid/x.svelte';
@@ -31,17 +31,17 @@
 	}
 
 	function focus(node) {
-		// window.addEventListener('keydown', handleEsc);
+		window.addEventListener('keydown', handleEsc);
 		// node.addEventListener('focus', keydownScape);
 		// node.addEventListener('blur', removeKeyListener);
 		node.focus();
-		// return {
-		// 	destroy() {
-		// 		window.removeEventListener('keydown', handleEsc);
-		// 		node.removeEventListener('focus', keydownScape);
-		// 		node.removeEventListener('blur', removeKeyListener);
-		// 	}
-		// };
+		return {
+			destroy() {
+				window.removeEventListener('keydown', handleEsc);
+				// node.removeEventListener('focus', keydownScape);
+				// node.removeEventListener('blur', removeKeyListener);
+			}
+		};
 	}
 
 	function reset(e) {

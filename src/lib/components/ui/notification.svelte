@@ -7,6 +7,7 @@
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import { createEventDispatcher } from 'svelte';
+	import { flip } from 'svelte/animate';
 
 	const dispatch = createEventDispatcher();
 
@@ -42,18 +43,24 @@
 		<ul class="notification__list">
 			{#each item.items as el (el.id)}
 				<li
+					animate:flip={{ easing: quintOut, delay: 200 }}
 					class="notification__item"
 					out:fly|local={{ easing: quintOut, x: 100 }}
-					class:read={!el.read}
+					class:notification__item--unread={!el.read}
 				>
 					<div class="notification__container">
 						<div class="notification__details">
 							{#if el.href}
-								<a href={el.href} class="element" on:click={() => onClickItem(item.id, el.id)}
-									>{@html el.detail}</a
+								<a
+									href={el.href}
+									class="notification__element"
+									on:click={() => onClickItem(item.id, el.id)}>{@html el.detail}</a
 								>
 							{:else}
-								<button class="element" on:click={() => MarkAsReadItem(item.id, el.id)}>
+								<button
+									class="notification__element"
+									on:click={() => MarkAsReadItem(item.id, el.id)}
+								>
 									{@html el.detail}
 								</button>
 							{/if}
@@ -114,12 +121,11 @@
 		background-color: var(--modal-bg);
 		transition: box-shadow 0.2s ease-in-out;
 	}
-	.read {
-		/* box-shadow: none; */
+	.notification__item--unread {
 		box-shadow: var(--shadow-long);
 	}
 
-	.read::before {
+	.notification__item--unread::before {
 		content: '';
 		width: 2px;
 		height: 100%;
@@ -128,28 +134,6 @@
 		inset: 0;
 	}
 
-	/* .actions {
-		display: flex;
-	}
-
-	.actions__btn {
-		border-radius: 3px;
-		width: 100%;
-		background-color: transparent;
-		color: inherit;
-		border: none;
-		font-size: 0.8rem;
-		padding: 0.4em 0;
-		text-align: center;
-	}
-
-	.actions__btn:hover {
-		background-color: var(--c-divider);
-	} */
-
-	/* details { */
-	/* padding: 1em; */
-	/* } */
 	.notification__container {
 		display: flex;
 		justify-content: space-between;
@@ -159,7 +143,7 @@
 		width: 100%;
 	}
 
-	.element {
+	.notification__element {
 		text-align: left;
 		padding: 0;
 		margin: 0;

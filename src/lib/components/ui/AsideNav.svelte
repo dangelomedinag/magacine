@@ -52,6 +52,7 @@
 			</svelte:fragment>
 			Comming soon</MenuItem
 		>
+
 		<MenuItem
 			href="/community"
 			on:click={() => {
