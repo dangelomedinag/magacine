@@ -22,7 +22,6 @@
 	import NavbarSearchResults from '$components/ui/navbar-search-results.svelte';
 	import Notification from '$components/ui/notification.svelte';
 	import { notiStore } from '$lib/stores/notifications-store';
-	// import SessionModalTest from '$components/ui/sessionModalTest.svelte';
 
 	/* variable */
 	export let search = true,
@@ -30,16 +29,15 @@
 		profile = true;
 	let modalSearch;
 	let modalSession;
-	// $: console.log(modalSession);
 	let modalNotification;
 	let searchInput = false;
 	let results;
+	let buttonSearch;
+
+	$: console.log(buttonSearch);
 
 	function submit(e) {
-		// e.target.x.blur();
-
 		let query = e.target.x.value.trim();
-		// console.log(location.origin);
 		let url = new URL('/api', location.origin);
 		url.searchParams.set('limit', 3);
 		url.searchParams.set('s', query);
@@ -56,11 +54,14 @@
 		e.target.x.focus();
 		modalSearch.open();
 	}
+
 	afterNavigate(() => {
 		document.querySelector('nav.navbar').style.transform = `translateY(0px)`;
 	});
+
 	let lastScroll = 0;
 	let expand;
+
 	onMount(() => {
 		const navbar = document.querySelector('nav.navbar');
 		let leftContainer;
@@ -71,15 +72,9 @@
 				if (currentScroll - lastScroll > 0) {
 					navbar.style.transform = `translateY(-${leftContainer + 2}px)`;
 					expand = true;
-					// down = true;
-					// up = false;
-					// document.querySelector('div.center').classList.add('block');
 				} else {
 					navbar.style.transform = `translateY(0px)`;
 					expand = false;
-					// down = false;
-					// up = true;
-					// document.querySelector('div.center').classList.remove('block');
 				}
 			}
 			lastScroll = currentScroll;
@@ -93,6 +88,10 @@
 
 	function focusIn(node) {
 		node.focus();
+	}
+
+	function toggleSearchInput() {
+		searchInput = !searchInput;
 	}
 </script>
 
@@ -109,25 +108,17 @@
 		<div class="center navbar_slots" class:block={expand}>
 			{#if searchInput}
 				<NavbarSearchForm
-					on:esc={() => {
-						searchInput = !searchInput;
-					}}
+					on:esc={toggleSearchInput}
 					on:submit={submit}
 					on:close={() => {
-						searchInput = !searchInput;
+						toggleSearchInput();
 						modalSearch.close();
 					}}
 				/>
 			{:else}
 				<slot />
 				{#if search}
-					<button
-						title="serach"
-						class="search-second"
-						on:click={() => {
-							searchInput = !searchInput;
-						}}
-					>
+					<button title="serach" class="search-second" on:click={toggleSearchInput}>
 						<Icon>
 							<Search />
 						</Icon>
@@ -138,13 +129,7 @@
 		<div class="right navbar_slots" class:esconder={searchInput}>
 			{#if search}
 				{#if !searchInput}
-					<button
-						title="search"
-						class="search-first navbar-item"
-						on:click={() => {
-							searchInput = !searchInput;
-						}}
-					>
+					<button title="search" class="search-first navbar-item" on:click={toggleSearchInput}>
 						<Icon>
 							<Search />
 						</Icon>
@@ -227,13 +212,7 @@
 		.esconder {
 			visibility: hidden;
 			opacity: 0;
-			/* display: none; */
 		}
-
-		/* .esconder :global(*) { */
-		/* visibility: hidden; */
-		/* display: none; */
-		/* } */
 	}
 	.foreground {
 		position: fixed;

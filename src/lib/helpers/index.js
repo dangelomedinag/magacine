@@ -10,7 +10,7 @@ export const listFormat = (
 	const intl = new Intl.ListFormat(language, opts);
 	return intl.format(array);
 };
-export const setBodyScroll = (state) => {
+export const setBodyScroll = (state, ref) => {
 	import('$app/env').then(({ browser }) => {
 		if (browser) {
 			const body = document.body;
@@ -18,6 +18,8 @@ export const setBodyScroll = (state) => {
 
 			if (state && prop !== 'hidden') body.style.overflow = 'hidden';
 			else body.style.overflow = 'auto';
+
+			if (ref) ref.focus();
 		}
 	});
 };

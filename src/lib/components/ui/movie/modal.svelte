@@ -1,11 +1,11 @@
 <script>
 	import { browser } from '$app/env';
-
 	import { onDestroy, onMount } from 'svelte';
-
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import { setBodyScroll } from '$helpers';
+
+	// icons
 	import Icon from '$icons/icon.svelte';
 	import X from '$icons/outline/x.svelte';
 
@@ -15,7 +15,6 @@
 	export let Zindex = '111';
 	export let btnClose = true;
 
-	// const getVal = () => modal;
 	onMount(() => {
 		if (modal) open();
 	});
@@ -26,11 +25,9 @@
 			console.log({ currentElementFocus });
 			currentElementFocus.blur();
 		}
-		// console.log(ref);
-		ref.focus();
 
 		modal = true;
-		setBodyScroll(modal);
+		setBodyScroll(modal, ref);
 
 		if (browser) {
 			window.addEventListener('keydown', handleEsc);
@@ -48,13 +45,11 @@
 		else open();
 	}
 
-	function clickForeground(e) {
-		// if (e.target.contains(e.currentTarget)) close();
+	function clickForeground() {
 		close();
 	}
 
 	function handleEsc(e) {
-		// console.log('scape');
 		if (e.key === 'Escape') {
 			e.preventDefault();
 			close();
@@ -62,7 +57,6 @@
 	}
 
 	function focusOnMount(node) {
-		// let firstChild = node.firstChild;
 		console.log(node.children);
 		if (node.children.length > 0) {
 			console.log(node.children[1]);
@@ -70,24 +64,7 @@
 
 			if (children.tagName === 'A' || children.tagName === 'BUTTON') children.focus();
 		}
-		// if (firstChild?.nodeName === 'A' || firstChild?.nodeName === 'BUTTON') firstChild.focus();
-		// console.log(firstChild);
-		// console.log(document.activeElement);
-		// node.focus();
 	}
-	/* test */
-
-	// function setScroll() {
-	// 	if (browser) {
-	// 		const body = document.body;
-	// 		const prop = body.style.overflow;
-
-	// 		if (modal && prop !== 'hidden') body.style.overflow = 'hidden';
-	// 		else body.style.overflow = 'auto';
-	// 	}
-	// }
-
-	/* test */
 
 	onDestroy(() => {
 		if (browser) close();
@@ -97,8 +74,8 @@
 {#if modal}
 	<div style:z-index={Zindex} class="foreground content" on:click|self={clickForeground} />
 	<section
-		tabindex="-1"
 		bind:this={ref}
+		tabindex="-1"
 		style:z-index={Zindex}
 		in:fly={{ y: 100, duration: 300, easing: quintOut }}
 		class="modal"
