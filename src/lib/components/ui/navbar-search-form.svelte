@@ -32,14 +32,14 @@
 
 	function focus(node) {
 		window.addEventListener('keydown', handleEsc);
-		// node.addEventListener('focus', keydownScape);
-		// node.addEventListener('blur', removeKeyListener);
+		node.addEventListener('focus', keydownScape);
+		node.addEventListener('blur', removeKeyListener);
 		node.focus();
 		return {
 			destroy() {
 				window.removeEventListener('keydown', handleEsc);
-				// node.removeEventListener('focus', keydownScape);
-				// node.removeEventListener('blur', removeKeyListener);
+				node.removeEventListener('focus', keydownScape);
+				node.removeEventListener('blur', removeKeyListener);
 			}
 		};
 	}

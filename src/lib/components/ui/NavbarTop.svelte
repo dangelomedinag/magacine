@@ -36,10 +36,10 @@
 	let results;
 
 	function submit(e) {
-		e.target.x.blur();
+		// e.target.x.blur();
 
 		let query = e.target.x.value.trim();
-		console.log(location.origin);
+		// console.log(location.origin);
 		let url = new URL('/api', location.origin);
 		url.searchParams.set('limit', 3);
 		url.searchParams.set('s', query);
@@ -53,7 +53,7 @@
 			return r.json();
 		});
 
-		// e.target.x.focus();
+		e.target.x.focus();
 		modalSearch.open();
 	}
 	afterNavigate(() => {
@@ -61,8 +61,6 @@
 	});
 	let lastScroll = 0;
 	let expand;
-	// let down = false;
-	// let up = false;
 	onMount(() => {
 		const navbar = document.querySelector('nav.navbar');
 		let leftContainer;
@@ -92,6 +90,10 @@
 		}
 		return () => window.removeEventListener('scroll', alternatedNavbar);
 	});
+
+	function focusIn(node) {
+		node.focus();
+	}
 </script>
 
 <nav class="navbar">
@@ -191,7 +193,7 @@
 	</svelte:fragment>
 </Modal>
 
-<Modal bind:this={modalSearch} btnClose={false}>
+<Modal bind:this={modalSearch}>
 	<svelte:fragment slot="header">
 		{#await results}
 			<Icon y="10%"><Search /></Icon> Searching...
@@ -205,9 +207,10 @@
 
 	<svelte:fragment slot="action">
 		{#await results then response}
-			<a href="/search?s={response.search}" class="cta">show all</a>
+			<a use:focusIn href="/search?s={response.search}" class="cta">show all</a>
+		{:catch}
+			<button use:focusIn on:click={modalSearch.close}>close</button>
 		{/await}
-		<button on:click={modalSearch.close}>close</button>
 	</svelte:fragment>
 </Modal>
 
@@ -220,14 +223,17 @@
 </Modal>
 
 <style>
-	:global(.d-none) {
-		display: none;
-	}
-
 	@media (min-width: 576px) {
 		.esconder {
 			visibility: hidden;
+			opacity: 0;
+			/* display: none; */
 		}
+
+		/* .esconder :global(*) { */
+		/* visibility: hidden; */
+		/* display: none; */
+		/* } */
 	}
 	.foreground {
 		position: fixed;

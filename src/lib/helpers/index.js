@@ -49,7 +49,7 @@ export const scrollToTarget = (node, opts) => {
 		await goto(url, { replaceState: true, noscroll: true });
 		// scroll to target
 		scrollTo({ behavior: opts?.behavior ? opts.behavior : 'smooth', top: offsetTop });
-
+		node.focus();
 		/* scrollTo({ behavior: opts?.behavior ? opts.behavior : 'smooth', top: offsetTop });
 
 		function changeURL() {

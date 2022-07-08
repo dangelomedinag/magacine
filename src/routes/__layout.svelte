@@ -94,11 +94,13 @@
 {#if dev}
 	<MediaQueries bottom="0" />
 {/if}
+
 <Modal modal={$pricePlans}>
 	<svelte:fragment slot="header">¡Wellcome!</svelte:fragment>
 	<PriceTable />
 	<svelte:fragment slot="action" let:close>
 		<button
+			tabindex="0"
 			on:click={() => {
 				close();
 				$pricePlans = false;

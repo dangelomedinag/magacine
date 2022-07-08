@@ -11,6 +11,7 @@
 
 	export let modal = false;
 	let currentElementFocus = null;
+	let ref;
 	export let Zindex = '111';
 	export let btnClose = true;
 
@@ -20,10 +21,13 @@
 	});
 
 	export function open() {
-		if (currentElementFocus) {
+		if (!currentElementFocus) {
 			currentElementFocus = document.activeElement;
+			console.log({ currentElementFocus });
 			currentElementFocus.blur();
 		}
+		// console.log(ref);
+		ref.focus();
 
 		modal = true;
 		setBodyScroll(modal);
@@ -58,13 +62,17 @@
 	}
 
 	function focusOnMount(node) {
-		let firstChild = node.firstChild;
-		if (firstChild?.nodeName === 'A' || firstChild?.nodeName === 'BUTTON') firstChild.focus();
+		// let firstChild = node.firstChild;
+		console.log(node.children);
+		if (node.children.length > 0) {
+			console.log(node.children[1]);
+			let children = node.children[0];
 
+			if (children.tagName === 'A' || children.tagName === 'BUTTON') children.focus();
+		}
+		// if (firstChild?.nodeName === 'A' || firstChild?.nodeName === 'BUTTON') firstChild.focus();
 		// console.log(firstChild);
-
 		// console.log(document.activeElement);
-
 		// node.focus();
 	}
 	/* test */
@@ -89,10 +97,16 @@
 {#if modal}
 	<div style:z-index={Zindex} class="foreground content" on:click|self={clickForeground} />
 	<section
+		tabindex="-1"
+		bind:this={ref}
 		style:z-index={Zindex}
 		in:fly={{ y: 100, duration: 300, easing: quintOut }}
 		class="modal"
 	>
+		{#if btnClose}
+			<button tabindex="0" on:click={close} class="modal__close"> <Icon><X /></Icon></button>
+		{/if}
+
 		{#if $$slots.header}
 			<header class="modal__header">
 				<slot name="header" />
@@ -105,9 +119,6 @@
 		<div class="modal__actions" class:paddingTop={$$slots.action} use:focusOnMount>
 			<slot name="action" {close} />
 		</div>
-		{#if btnClose}
-			<button on:click={close} class="modal__close"> <Icon><X /></Icon></button>
-		{/if}
 	</section>
 {/if}
 
@@ -152,6 +163,10 @@
 			0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
 			0 32px 32px rgba(0, 0, 0, 0.11);
 		overflow: hidden;
+	}
+	.modal:focus,
+	.modal:focus-visible {
+		outline: none;
 	}
 
 	.modal__container {
@@ -240,6 +255,7 @@
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
+		z-index: 1;
 
 		width: 2.5em;
 		height: 2.5em;
