@@ -29,19 +29,20 @@
 </script>
 
 <script>
-	import Footer from '$components/Footer.svelte';
-	import AsideNav from '$components/ui/AsideNav.svelte';
-	import NProgress from 'nprogress';
-	import ButtonToTop from '$components/ui/buttonToTop.svelte';
-	import MediaQueries from '$components/mediaQueries.svelte';
-
 	import { dev } from '$app/env';
 	import { navigating } from '$app/stores';
-	import 'nprogress/nprogress.css';
-	import { afterNavigate, beforeNavigate } from '$app/navigation';
+
+	import Footer from '$components/footer.svelte';
+	import Aside from '$components/aside.svelte';
+	import NProgress from 'nprogress';
+	import ButtonToTop from '$components/buttonToTop.svelte';
+	import MediaQueries from '$components/dev/mediaQueries.svelte';
+	import PriceTable from '$components/ui/priceTable.svelte';
+	import Modal from '$components/ui/modal.svelte';
+
 	import { pricePlans } from '$lib/stores/plans-store';
-	import Modal from '$lib/components/ui/movie/modal.svelte';
-	import PriceTable from '$lib/components/ui/priceTable.svelte';
+	import 'nprogress/nprogress.css';
+
 	let toggle = false;
 
 	// NProgress css
@@ -52,7 +53,6 @@
 
 	$: {
 		if ($navigating) {
-			// console.log($navigating.from.pathname, $navigating.to.pathname);
 			if ($navigating.from.pathname !== $navigating.to.pathname) {
 				NProgress.start();
 			}
@@ -75,16 +75,6 @@
 	function matchMobile() {
 		return matchMedia('(min-width: 992px)').matches;
 	}
-
-	// afterNavigate(() => {
-	// 	document.documentElement.style.scrollBehavior = 'auto';
-	// });
-
-	// beforeNavigate(({ from, to }) => {
-	// 	if (to?.hash !== '') {
-	// 		document.documentElement.style.scrollBehavior = 'smooth';
-	// 	}
-	// });
 </script>
 
 <svelte:head>
@@ -112,7 +102,7 @@
 <div class="wrapper">
 	<ButtonToTop active={toggle} on:click={toggleAside} />
 	<aside class="sidebar" class:toggle>
-		<AsideNav
+		<Aside
 			on:tap={() => {
 				if (!matchMobile()) closeAside();
 			}}

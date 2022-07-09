@@ -1,10 +1,7 @@
 <script context="module">
 	/** @type {import('@sveltejs/kit').Load}*/
 	export async function load({ url, fetch }) {
-		// const param = url.searchParams.get('s');
-
 		const query = new URLSearchParams(url.search);
-		// query.set('s', param);
 
 		const req = await fetch('/api?' + query.toString());
 		const res = await req.json();
@@ -18,12 +15,12 @@
 </script>
 
 <script>
-	// import CarouselMovies from '$components/ui/CarouselMovies.svelte';
 	import { onMount } from 'svelte';
-	import MovieItem from '$components/ui/movieItem.svelte';
-	import NavbarTop from '$components/ui/NavbarTop.svelte';
-	import Spinner from '$components/ui/Spinner.svelte';
-	import Toast from '$components/ui/toast.svelte';
+
+	import MovieItem from '$components/gridMovies/movieItem.svelte';
+	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	import Spinner from '$components/ui/spinner.svelte';
+	import Alert from '$components/ui/alert.svelte';
 
 	export let movies;
 	let rawMovies = { ...movies };
@@ -31,8 +28,6 @@
 	let loading = false;
 	let stop = false;
 	let element;
-
-	$: total = movies.results.length + 1;
 
 	const delay = (fn, ms) => setTimeout(fn, ms);
 
@@ -44,11 +39,6 @@
 
 		const callback = (entries, observer) => {
 			entries.forEach((entry) => {
-				// Cada entry describe un cambio en la intersección para
-				// un elemento observado
-				//   entry.boundingClientRect
-				//   entry.intersectionRatio
-				//   entry.intersectionRect
 				if (entry.isIntersecting) {
 					if (stop) {
 						return observer.disconnect();
@@ -56,9 +46,6 @@
 					loading = true;
 					delay(loadMore, 400);
 				}
-				//   entry.rootBounds
-				//   entry.target
-				//   entry.time
 			});
 		};
 
@@ -112,8 +99,7 @@
 
 <div class="content">
 	<h1>{movies.search} - all results</h1>
-	<!-- <hr /> -->
-	<!-- <CarouselMovies {movies} /> -->
+
 	<div class="grid-movies">
 		{#each movies.results as movie (movie.uuid)}
 			<MovieItem {movie} />
@@ -123,10 +109,10 @@
 		{#if loading}
 			<Spinner position="relative" top={'30%'}>loading more...</Spinner>
 		{:else if stop}
-			<Toast>
+			<Alert>
 				<span>{movies.results.length} results</span> | there are <span>no more</span> movies/series to
 				show
-			</Toast>
+			</Alert>
 		{/if}
 	</div>
 </div>

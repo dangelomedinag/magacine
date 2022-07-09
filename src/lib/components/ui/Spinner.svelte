@@ -30,14 +30,8 @@
 		justify-content: center;
 		align-items: center;
 		position: relative;
-		/* width: 80px;
-		height: 80px; */
 	}
-	/* .lds-ripple.absolute {
-		position: absolute;
-		top: 0;
-		left: 0;
-	} */
+
 	.lds-ripple span {
 		position: absolute;
 		border-color: inherit;

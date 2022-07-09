@@ -22,18 +22,22 @@
 </script>
 
 <script>
-	import { goto, afterNavigate, beforeNavigate } from '$app/navigation';
-	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
-	import NavbarTop from '$components/ui/NavbarTop.svelte';
-	import Toast from '$components/ui/toast.svelte';
-	import VideoPlayer from '$lib/components/ui/movie/videoPlayer.svelte';
-	import YearMovie from '$lib/components/ui/movie/yearMovie.svelte';
-	import RuntimeMovie from '$lib/components/ui/movie/runtimeMovie.svelte';
-	import InfoMovie from '$lib/components/ui/movie/infoMovie.svelte';
+	import { afterNavigate } from '$app/navigation';
+	import { onMount } from 'svelte';
+
+	import CarouselMovies from '$components/card/carouselMovies.svelte';
+	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	import Alert from '$components/ui/alert.svelte';
+	import VideoPlayer from '$components/movie/videoPlayer.svelte';
+	import YearMovie from '$components/movie/yearMovie.svelte';
+	import RuntimeMovie from '$components/movie/runtimeMovie.svelte';
+	import InfoMovie from '$components/movie/infoMovie.svelte';
+
 	import { randomInt, scrollToTarget } from '$helpers';
+
+	//icons
 	import Icon from '$icons/icon.svelte';
 	import Play from '$icons/solid/play.svelte';
-	import { onMount } from 'svelte';
 
 	export let movie;
 	let showPlayer = false;
@@ -95,42 +99,6 @@
 			}
 		}
 	});
-
-	// function smoothScroll(node) {
-	// 	function scrollToPosition(e) {
-	// 		e.preventDefault();
-	// 		const ele = document.getElementById(url.hash.substring(1));
-	// 		if (ele) {
-	// 			const navbar = document.querySelector('nav.navbar');
-	// 			const navbarHeight = navbar.clientHeight;
-	// 			const isExpand = document.querySelector('div.block');
-
-	// 			console.log(navbarHeight);
-
-	// 			try {
-	// 				let n = ele.offsetTop - navbarHeight;
-	// 				if (!isExpand) n = n + 52;
-	// 				scrollTo({ behavior: 'smooth', top: n });
-	// 			} catch (error) {
-	// 				// console.log(error.message);
-	// 			}
-	// 		}
-	// 	}
-
-	// 	const url = new URL(node.href);
-
-	// 	if (url.host === location.host && url.pathname === location.pathname) {
-	// 		if (url.hash.length > 1) {
-	// 			node.addEventListener('click', scrollToPosition);
-	// 		}
-	// 	}
-
-	// 	return {
-	// 		destroy() {
-	// 			node.removeEventListener('click', scrollToPosition);
-	// 		}
-	// 	};
-	// }
 </script>
 
 <svelte:head>
@@ -172,27 +140,12 @@
 	</div>
 </div>
 <div class="content">
-	<!-- {#await suggetsPromise()}
-		<p>cargando sugerencias...</p>
-	{:then value}
-		{#if Array.isArray(value?.results)}
-			<div class="suggest" id="suggest">
-				<CarouselMovies movies={value} details={false} title="Suggestions"  />
-			</div>
-		{/if}
-	{:catch}
-		<div style="padding: var(--gap-content) 0;">
-			<Toast warn>
-				For now we do <span>not have related movies or series</span>
-			</Toast>
-		</div>
-	{/await} -->
 	<div class="suggest" id="suggest">
 		<CarouselMovies movies={suggestionsMovies} details={false} title="Suggestions">
 			<div slot="error" style="width: 100%;">
-				<Toast warn>
+				<Alert warn>
 					For now we do <span>not have related movies or series</span>
-				</Toast>
+				</Alert>
 			</div>
 		</CarouselMovies>
 	</div>
@@ -230,9 +183,6 @@
 
 	.movie {
 		width: 100%;
-	}
-
-	.info {
 	}
 
 	.image {

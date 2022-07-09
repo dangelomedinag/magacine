@@ -7,7 +7,7 @@ const config = {
 		alias: {
 			$components: 'src/lib/components',
 			$helpers: 'src/lib/helpers',
-			$icons: 'src/lib/components/ui/icons'
+			$icons: 'src/lib/components/icons'
 		}
 	}
 };

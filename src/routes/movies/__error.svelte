@@ -12,11 +12,6 @@
 
 <script>
 	export let message, status;
-
-	function back() {
-		console.log(history.length);
-		// history.go(-2);
-	}
 </script>
 
 <div class="content wrapper">
@@ -33,7 +28,6 @@
 				you out and get you back home.
 			</p>
 
-			<!-- <button on:click={back}>back</button> -->
 			<a href="/">home</a>
 		</div>
 	</div>
@@ -44,10 +38,6 @@
 		font-size: 5rem;
 		font-weight: lighter;
 		margin: 0;
-	}
-
-	.wrapper {
-		/* background: linear-gradient(to right, #41295a, #2f0743); */
 	}
 
 	.container {
@@ -81,10 +71,6 @@
 		/* font-size: 1.5rem; */
 		font-size: 5rem;
 		text-align: center;
-	}
-
-	.details {
-		/* width: 60%; */
 	}
 
 	a {

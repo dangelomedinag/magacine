@@ -1,10 +1,12 @@
 <script>
-	import { page, session } from '$app/stores';
-	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
-	import Hero from '$components/ui/hero.svelte';
-	import NavbarTop from '$components/ui/NavbarTop.svelte';
-	import { scrollToTarget } from '$lib/helpers';
 	import { onMount } from 'svelte';
+	import { page, session } from '$app/stores';
+
+	import CarouselMovies from '$components/card/carouselMovies.svelte';
+	import Hero from '$components/ui/hero.svelte';
+	import NavbarTop from '$components/navbar/navbarTop.svelte';
+
+	import { scrollToTarget } from '$helpers';
 
 	let movies;
 
@@ -28,8 +30,6 @@
 <svelte:head>
 	<title>Magacine - home</title>
 </svelte:head>
-<!-- use:smoothScroll={{ href: '#index-movies', tab: 'movies' }} -->
-<!-- use:smoothScroll={{ href: '#index-movies', tab: 'series' }} -->
 
 <NavbarTop>
 	<button
@@ -43,6 +43,7 @@
 		class:active={act === 'series'}>Series</button
 	>
 </NavbarTop>
+
 <Hero />
 
 <div class="content">

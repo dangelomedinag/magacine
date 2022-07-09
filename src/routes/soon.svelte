@@ -17,8 +17,9 @@
 </script>
 
 <script>
-	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
-	import NavbarTop from '$components/ui/NavbarTop.svelte';
+	import CarouselMovies from '$components/card/carouselMovies.svelte';
+	import NavbarTop from '$components/navbar/navbarTop.svelte';
+
 	export let movies;
 </script>
 
@@ -33,6 +34,5 @@
 <style>
 	h1 {
 		font-size: 2rem;
-		/* margin-bottom: 0.5em; */
 	}
 </style>

@@ -1,7 +1,6 @@
 <script>
 	import { imgs } from '$lib/imgs';
-	import { quintInOut, elasticInOut, cubicInOut } from 'svelte/easing';
-	import { fade, scale, slide } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
 	export let words = [
@@ -23,7 +22,6 @@
 		else if (i < 2) i += 1;
 
 		word = words[i - 1].word;
-		// urls = words[i - 1].imgs;
 		currentPage = i;
 		i++;
 	}
@@ -38,7 +36,6 @@
 		i = pag;
 		currentPage = pag;
 		word = words[pag - 1].word;
-		// urls = words[pag - 1].imgs;
 
 		interval = setInterval(play, frequency);
 	}
@@ -46,12 +43,10 @@
 
 <section>
 	<div class="imgs-wrapper">
-		<!-- {#each urls as src (src)} -->
 		<img src={urls[0]} alt="hero spider man" loading="lazy" />
 		<img src={urls[1]} alt="hero spider man" loading="lazy" />
 		<img src={urls[2]} alt="hero spider man" loading="lazy" />
 		<img src={urls[3]} alt="hero spider man" loading="lazy" />
-		<!-- {/each} -->
 	</div>
 
 	<div class="copy content">
@@ -76,31 +71,12 @@
 				/>
 			{/each}
 		</div>
-		<!-- <div class="cta-wrapper">
-			<a href={'#'}
-				>discovery
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-					stroke-width="2"
-				>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M16 17l-4 4m0 0l-4-4m4 4V3" />
-				</svg>
-			</a>
-		</div> -->
 	</div>
 </section>
 
 <style>
 	section {
 		position: relative;
-		/* display: flex;
-		justify-content: center;
-		align-items: center; */
-		/* flex-wrap: wrap; */
-		/* background-color: var(--c-front); */
 		margin-bottom: 1.5em;
 		border-bottom: 2px solid var(--c-front);
 	}
@@ -122,7 +98,6 @@
 	.imgs-wrapper::before {
 		content: '';
 		position: absolute;
-		/* z-index: 10; */
 		width: 100%;
 		height: 100%;
 		top: 0;
@@ -131,14 +106,12 @@
 		background-size: 100% 100%;
 		background-position: center;
 		background-repeat: no-repeat;
-		/* border-bottom: 1px solid var(--c-front); */
 	}
 
 	img {
 		min-width: 0;
 		max-width: 100%;
 		height: 100%;
-		/* display: block; */
 		object-fit: cover;
 		object-position: top;
 	}
@@ -148,12 +121,10 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
-		/* align-items: center; */
 		width: 100%;
 		height: 100%;
 		top: 0;
 		left: 0;
-		/* padding: var(--gap-content); */
 		text-align: left;
 	}
 
@@ -162,11 +133,9 @@
 		height: 6px;
 		padding: 0;
 		margin: 0 0.5em;
-		/* opacity: 0.2; */
 		border-radius: 50vh;
 		border: none;
 		background-color: var(--c-divider);
-		/* border: 2px solid transparent; */
 	}
 
 	.page:disabled {
@@ -178,7 +147,6 @@
 
 	.page:not(:disabled):hover,
 	.page:not(:disabled):focus {
-		/* border: 2px solid var(--c-front); */
 		outline: 3px solid var(--c-front);
 		outline-offset: 3px;
 		cursor: pointer;
@@ -203,32 +171,6 @@
 		font-weight: lighter;
 		display: block;
 	}
-	/* .cta-wrapper {
-		margin: 0 auto;
-	} */
-
-	/* a {
-		color: var(--c-front);
-		font-weight: lighter;
-		padding: 0;
-		text-decoration: none;
-		display: inline-flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 0.5em;
-		padding: 0.2em 0.8em;
-		border-radius: 50vh;
-	} */
-
-	/* a:hover {
-		color: white;
-	} */
-
-	/* svg {
-		width: 1rem;
-		height: 1rem;
-	} */
 
 	.indicators {
 		margin: 0 auto;

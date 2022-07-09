@@ -1,4 +1,5 @@
 <script>
+	// icons
 	import Icon from '$icons/icon.svelte';
 	import CheckCircle from '$icons/solid/check-circle.svelte';
 
@@ -71,7 +72,6 @@
 	.pricing {
 		margin: 1em 0;
 		display: flex;
-		/* flex-direction: column; */
 		justify-content: center;
 		align-items: center;
 		padding: 1em;
@@ -81,12 +81,9 @@
 		flex-shrink: 0;
 		flex-basis: 100%;
 		flex-wrap: wrap;
-		/* flex: 0 1 100%; */
-		/* color: #42936a; */
 	}
 
 	h2 {
-		/* width: 100%; */
 		text-align: center;
 		font-size: 3rem;
 		letter-spacing: -4px;
@@ -95,7 +92,6 @@
 		text-align: center;
 		background-color: var(--c-divider);
 		padding: 0.5em 1em;
-		/* display: inline-block; */
 		border-radius: 50vh;
 		margin: 0 auto;
 	}
@@ -106,9 +102,6 @@
 	}
 
 	.pricing__card {
-		/* background-color: var(--c-divider); */
-		/* padding: 0.5em; */
-		/* width: 90%; */
 		max-width: 250px;
 		text-align: center;
 		display: flex;
@@ -117,9 +110,7 @@
 		box-shadow: var(--shadow-long);
 		border: 1px solid var(--c-divider);
 		overflow: hidden;
-
 		transition: transform 0.2s ease-in-out;
-		/* flex: 0 0 100%; */
 	}
 
 	.pricing__card:hover {
@@ -135,7 +126,6 @@
 	}
 
 	.pricing__card--recomend:hover .pricing__btn {
-		/* color: white; */
 		background-color: #3ad588;
 	}
 	.pricing__card--recomend .pricing__btn {
@@ -150,18 +140,9 @@
 	.pricing__main,
 	.pricing__footer {
 		width: 100%;
-		/* border: 1px solid var(--c-main); */
-		/* padding: 0.5em 0; */
 	}
-	/* .pricing__header, */
-	.pricing__main,
-	.pricing__footer {
-		/* flex: 0 0 50%; */
-		/* width: 100%; */
-		/* display: inline-block; */
-	}
+
 	.pricing__main {
-		/* background-color: var(--c-divider); */
 		padding-bottom: 1em;
 	}
 
@@ -179,9 +160,6 @@
 	.pricing__number {
 		font-size: 1.8rem;
 		color: #42936a;
-	}
-	.pricing__symbol {
-		/* font-style: oblique; */
 	}
 
 	.pricing__benefits {
@@ -219,11 +197,6 @@
 	@media (min-width: 768px) {
 		.pricing {
 			flex-direction: row;
-		}
-
-		.pricing__main,
-		.pricing__footer {
-			/* flex: 0 1 100%; */
 		}
 	}
 </style>

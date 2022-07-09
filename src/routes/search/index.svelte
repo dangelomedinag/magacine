@@ -6,10 +6,10 @@
 	import { quintInOut } from 'svelte/easing';
 	import { CODE } from './_ERRORS_CODE';
 
-	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
-	import NavbarTop from '$components/ui/NavbarTop.svelte';
-	import Spinner from '$components/ui/Spinner.svelte';
-	import Toast from '$components/ui/toast.svelte';
+	import CarouselMovies from '$components/card/carouselMovies.svelte';
+	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	import Spinner from '$components/ui/spinner.svelte';
+	import Alert from '$components/ui/alert.svelte';
 
 	/* icons */
 	import Icon from '$icons/icon.svelte';
@@ -34,7 +34,6 @@
 	let options = [
 		{ value: 'movie', label: 'movies' },
 		{ value: 'series', label: 'series' }
-		// { value: 'episode', label: 'episodes' }
 	];
 
 	onMount(async () => {
@@ -295,7 +294,7 @@
 	</div>
 	{#if errors}
 		<div style="padding: 1em 0;">
-			<Toast {...errors.level}><span>{errors.message}</span></Toast>
+			<Alert {...errors.level}><span>{errors.message}</span></Alert>
 		</div>
 	{/if}
 	{#if movies}

@@ -1,5 +1,5 @@
 import { API_KEY, API_URL } from '$lib/_env';
-import { uuid } from '$lib/helpers';
+import { uuid } from '$helpers';
 
 async function getResource({ url }) {
 	// get params

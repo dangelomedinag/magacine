@@ -1,43 +1,10 @@
-<!-- <script context="module">
-	export const prerender = true;
-	export async function load({ fetch }) {
-		const reqs = [
-			fetch('/api?s=saw').then((r) => {
-				return r.json();
-			}),
-			fetch('/api?s=blood').then((r) => {
-				return r.json();
-			}),
-			fetch('/api?s=horror').then((r) => {
-				return r.json();
-			}),
-			fetch('/api?s=horror&page=2').then((r) => {
-				return r.json();
-			}),
-			fetch('/api?s=comedy').then((r) => {
-				return r.json();
-			}),
-			fetch('/api?s=comedy&page=2').then((r) => {
-				return r.json();
-			})
-		];
-
-		const res = await Promise.all(reqs);
-		const data = res.map((e) => (e.message ? new Error(e.message) : e));
-
-		return {
-			props: {
-				movies: data
-			}
-		};
-	}
-</script> -->
 <script>
-	import CarouselMovies from '$components/ui/CarouselMovies.svelte';
-
-	import NavbarTop from '$components/ui/NavbarTop.svelte';
-	import Toast from '$lib/components/ui/toast.svelte';
 	import { onMount } from 'svelte';
+
+	// components
+	import CarouselMovies from '$components/card/carouselMovies.svelte';
+	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	import Alert from '$components/ui/alert.svelte';
 
 	let movies = [];
 	onMount(async () => {
@@ -73,7 +40,7 @@
 
 		movies = data;
 	});
-	// export let movies;
+
 	let act = 'suspense';
 
 	const setTab = (tab) => (act = tab);
@@ -91,7 +58,6 @@
 
 <div class="content">
 	{#if act === 'suspense'}
-		<!-- content here -->
 		<CarouselMovies
 			movies={movies[0]}
 			title="Suspense  {movies[0]?.totalResults ?? 'loading'} results)"
@@ -102,7 +68,6 @@
 		/>
 	{/if}
 	{#if act === 'terror'}
-		<!-- content here -->
 		<CarouselMovies
 			movies={movies[2]}
 			title="Terror  {movies[2]?.totalResults ?? 'loading'} results)"
@@ -112,14 +77,13 @@
 			title="Terror  {movies[3]?.totalResults ?? 'loading'} results)"
 		>
 			<div slot="error" let:message>
-				<Toast danger>
+				<Alert danger>
 					<span>{message}</span>
-				</Toast>
+				</Alert>
 			</div>
 		</CarouselMovies>
 	{/if}
 	{#if act === 'comedy'}
-		<!-- content here -->
 		<CarouselMovies
 			movies={movies[4]}
 			title="Comedy  {movies[4]?.totalResults ?? 'loading'} results)"
@@ -129,7 +93,6 @@
 			title="Comedy  {movies[5]?.totalResults ?? 'loading'} results)"
 		/>
 	{/if}
-	<!-- <CarouselMovies movies={stuff.fast} title="top releases"  /> -->
 </div>
 
 <style>
