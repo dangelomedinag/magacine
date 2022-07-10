@@ -13,17 +13,18 @@ const themeStoreCustom = () => {
 		toogleTheme: async () => {
 			if (browser) {
 				let dataTheme = document.body.dataset.theme;
-				document.body.dataset.theme = dataTheme === 'dark' ? 'light' : 'dark';
+				let nextTheme = dataTheme === 'dark' ? 'light' : 'dark';
 				try {
 					await fetch('/api/theme', {
 						method: 'PUT',
-						body: JSON.stringify({ theme: document.body.dataset.theme })
+						body: JSON.stringify({ theme: nextTheme })
 					});
 				} catch (error) {
 					console.error('error on set theme');
 				}
 
-				return set(document.body.dataset.theme);
+				document.body.dataset.theme = nextTheme;
+				return set(nextTheme);
 			}
 		}
 	};
