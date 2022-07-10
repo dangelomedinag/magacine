@@ -19,7 +19,7 @@
 
 	import MovieItem from '$components/gridMovies/movieItem.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
-	import Spinner from '$components/ui/spinner.svelte';
+	import Spinner from '$lib/components/ui/spinner.svelte';
 	import Alert from '$components/ui/alert.svelte';
 
 	export let movies;

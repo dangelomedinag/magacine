@@ -4,7 +4,7 @@
 	import ChevronRight from '$icons/outline/chevron-right.svelte';
 
 	// components
-	import Spinner from '$components/ui/spinner.svelte';
+	import Spinner from '$lib/components/ui/spinner.svelte';
 	import CardMovie from '$components/card/cardMovie.svelte';
 	import CardMovieSeeAll from '$components/card/cardMovieSeeAll.svelte';
 

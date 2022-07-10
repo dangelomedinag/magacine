@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 
 	// components
-	import Spinner from '$components/ui/spinner.svelte';
+	import Spinner from '$lib/components/ui/spinner.svelte';
 	import Alert from '$components/ui/alert.svelte';
 	import CarouselMovies from '$lib/components/card/carouselMovies.svelte';
 	import Icon from '$icons/icon.svelte';

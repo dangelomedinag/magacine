@@ -8,7 +8,7 @@
 
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
-	import Spinner from '$components/ui/spinner.svelte';
+	import Spinner from '$lib/components/ui/spinner.svelte';
 	import Alert from '$components/ui/alert.svelte';
 
 	/* icons */
