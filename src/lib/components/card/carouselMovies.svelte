@@ -14,9 +14,9 @@
 	export let details = true;
 	export let position = 'relative';
 
-	let container;
-	let pageInfo;
-	let offset = 0;
+	// let container;
+	// let pageInfo;
+	// let offset = 0;
 
 	/* function prevPage(e) {
 		offset = container.scrollLeft;
@@ -81,7 +81,7 @@
 	{#if !movies}
 		<Spinner />
 	{:else if movies?.results?.length > 0}
-		<header class="carousel-header">
+		<header class="carousel-header content">
 			<h3 class="header-title">{title ?? ''}</h3>
 			{#if movies?.totalResults > 10}
 				<a href="/movies?{movies?.query}" class="header-btn"
@@ -91,7 +91,7 @@
 				>
 			{/if}
 		</header>
-		<main class="items-wrapper" bind:this={container}>
+		<main class="items-wrapper content">
 			{#each movies.results as movie, i (movie.uuid)}
 				<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
 			{/each}
@@ -112,7 +112,7 @@
 	/* @media (min-width: 1200px) {} */
 
 	.carousel-wrapper {
-		--w-card: 250px;
+		/* --w-card: 250px; */
 
 		padding-bottom: 2em;
 		position: relative;
@@ -155,6 +155,22 @@
 	.header-title {
 		font-size: 1.3rem;
 		margin: 0;
+		flex-shrink: 1;
+		flex-grow: 1;
+
+		width: 250px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	@media (min-width: 300px) {
+		.header-title {
+			width: 100%;
+			white-space: normal;
+			overflow: auto;
+			text-overflow: initial;
+		}
 	}
 
 	.header-btn {
@@ -166,6 +182,8 @@
 		justify-content: center;
 		align-items: center;
 		text-decoration: none;
+		flex-shrink: 0;
+		flex-grow: 0;
 	}
 
 	.header-btn:hover {
@@ -173,19 +191,12 @@
 		cursor: pointer;
 	}
 
-	/* .header-btn svg {
-		width: 20px;
-		height: 20px;
-	} */
-
 	.items-wrapper {
 		display: flex;
+		gap: 1em;
 		overflow-x: auto;
-		padding-left: 0;
-		padding-right: 1em;
-		padding-top: 1em;
-		padding-bottom: 1em;
-		/* height: 500px; */
+		padding-top: 3em;
+		padding-bottom: 3em;
 		scroll-behavior: smooth;
 	}
 
@@ -380,6 +391,7 @@
 	} */
 
 	/* custom scroll bars */
+
 	.items-wrapper::-webkit-scrollbar {
 		height: 5px;
 		border-radius: 10px;
@@ -387,16 +399,27 @@
 
 	.items-wrapper::-webkit-scrollbar-track {
 		background: rgba(128, 128, 128, 0.05);
-		margin: 10px;
+		margin: var(--gap-content);
 		border-radius: 10px;
 		overflow: hidden;
 	}
 
 	.items-wrapper::-webkit-scrollbar-thumb {
 		background: rgba(255, 255, 255, 0.05);
+		border-radius: 15px;
 	}
 
 	.items-wrapper::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
+
+	:global(body[data-theme='light']) .items-wrapper::-webkit-scrollbar-track {
+		background: var(--c-divider);
+	}
+	:global(body[data-theme='light']) .items-wrapper::-webkit-scrollbar-thumb {
+		background: var(--c-divider);
+	}
+	:global(body[data-theme='light']) .items-wrapper::-webkit-scrollbar-thumb:hover {
 		background: #555;
 	}
 </style>

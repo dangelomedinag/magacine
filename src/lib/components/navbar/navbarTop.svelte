@@ -62,7 +62,7 @@
 	onMount(() => {
 		const navbar = document.querySelector('nav.navbar');
 		let leftContainer;
-		function alternatedNavbar(e) {
+		function alternatedNavbar() {
 			let currentScroll = window.pageYOffset;
 			if (!leftContainer) leftContainer = document.querySelector('div.left').offsetHeight;
 			if (window.scrollY > 150) {

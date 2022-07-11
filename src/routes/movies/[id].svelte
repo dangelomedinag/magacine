@@ -81,7 +81,7 @@
 			if (!selected) throw Error('no content for now');
 
 			const req = await fetch(
-				'/api?s=' + selected.toLowerCase().replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, '')
+				'/api?s=' + selected.toLowerCase().replace(/\.|\(|\)|"|'|,|\$|-/g, '')
 			);
 			if (!req.ok) throw Error('bad request');
 
@@ -139,18 +139,18 @@
 		{/key}
 	</div>
 </div>
-<div class="content">
-	<div class="suggest" id="suggest">
-		<CarouselMovies movies={suggestionsMovies} details={false} title="Suggestions">
-			<div slot="error" style="width: 100%;">
-				<Alert warn>
-					For now we do <span>not have related movies or series</span>
-				</Alert>
-			</div>
-		</CarouselMovies>
-	</div>
+<!-- <div class="content"> -->
+<div class="suggest" id="suggest">
+	<CarouselMovies movies={suggestionsMovies} details={false} title="Suggestions">
+		<div slot="error" style="width: 100%;">
+			<Alert warn>
+				For now we do <span>not have related movies or series</span>
+			</Alert>
+		</div>
+	</CarouselMovies>
 </div>
 
+<!-- </div> -->
 <style>
 	:root {
 		/* modal */

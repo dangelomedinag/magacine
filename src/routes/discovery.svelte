@@ -58,23 +58,22 @@
 
 <div class="content">
 	{#if act === 'suspense'}
-		<CarouselMovies
-			movies={movies[0]}
-			title="Suspense  {movies[0]?.totalResults ?? 'loading'} results)"
-		/>
+		<CarouselMovies movies={movies[0]} title="Suspense" --card-w="240px" --card-h="390px" />
 		<CarouselMovies
 			movies={movies[1]}
-			title="Suspense  {movies[1]?.totalResults ?? 'loading'} results)"
+			title="Suspense  {movies[1]?.totalResults ?? 'loading'} results"
 		/>
 	{/if}
 	{#if act === 'terror'}
 		<CarouselMovies
 			movies={movies[2]}
-			title="Terror  {movies[2]?.totalResults ?? 'loading'} results)"
+			title="Terror  {movies[2]?.totalResults ?? 'loading'} results"
+			--card-w="240px"
+			--card-h="390px"
 		/>
 		<CarouselMovies
 			movies={movies[3]}
-			title="Terror  {movies[3]?.totalResults ?? 'loading'} results)"
+			title="Terror  {movies[3]?.totalResults ?? 'loading'} results"
 		>
 			<div slot="error" let:message>
 				<Alert danger>
@@ -86,11 +85,13 @@
 	{#if act === 'comedy'}
 		<CarouselMovies
 			movies={movies[4]}
-			title="Comedy  {movies[4]?.totalResults ?? 'loading'} results)"
+			title="Comedy  {movies[4]?.totalResults ?? 'loading'} results"
+			--card-w="240px"
+			--card-h="370px"
 		/>
 		<CarouselMovies
 			movies={movies[5]}
-			title="Comedy  {movies[5]?.totalResults ?? 'loading'} results)"
+			title="Comedy  {movies[5]?.totalResults ?? 'loading'} results"
 		/>
 	{/if}
 </div>

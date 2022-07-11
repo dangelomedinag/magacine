@@ -6,7 +6,7 @@
 
 	import { themeStore } from '$lib/stores/theme-store';
 
-	function handleChange(e) {
+	function handleChange() {
 		themeStore.toogleTheme();
 	}
 </script>

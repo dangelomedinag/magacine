@@ -61,9 +61,6 @@
 		}
 	}
 
-	function openAside() {
-		toggle = true;
-	}
 	function closeAside() {
 		toggle = false;
 	}
@@ -157,6 +154,10 @@
 
 		/* transition color theme */
 		--transition-theme: background-color 0.2s linear;
+
+		/* card Movie */
+		--card-w: 500px;
+		--card-h: 350px;
 	}
 
 	:global(body[data-theme='light']) {
@@ -186,6 +187,10 @@
 		/* --navbar-item: var(--c-main-content); */
 		--navbar-item-opacity: 1;
 		--navbar-item-hover: var(--c-front);
+
+		/* card Movie */
+		--card-w: 200px;
+		--card-h: 350px;
 	}
 
 	:global(#nprogress .bar) {

@@ -1,48 +1,42 @@
 <script>
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 
 	import ProgressLine from '$components/card/cardProgressLine.svelte';
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
 
-	let element;
 	export let details = true;
 	export let movie;
 	export let progress = 0;
 	export let i;
-	let promiseDetails = new Promise((res, rej) => {});
+	export let showDetails = false;
+	let promiseDetails = new Promise(() => {});
 
-	let options = {
-		rootMargin: '0px',
-		threshold: 0
-	};
-
-	if (!details) {
-		promiseDetails = Promise.reject();
-	}
+	onMount(() => {
+		if (!details) promiseDetails = Promise.reject();
+	});
 
 	const callback = (entries, observer) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
-				loadDetails()
-					.then((r) => {
-						promiseDetails = r;
-					})
-					.catch(() => {
-						promiseDetails = Promise.reject();
-					})
-					.finally(() => {
-						observer.disconnect();
-					});
+				showDetails = true;
+				promiseDetails = loadDetails().finally(() => {
+					observer.disconnect();
+				});
 			}
 		});
 	};
 
-	function showDetails(node) {
-		if (!details) {
-			return;
-		}
-		let observer = new IntersectionObserver(callback, options);
+	function intersecting(node, cb) {
+		if (!details) return;
+
+		let options = {
+			rootMargin: '0px',
+			threshold: 0
+		};
+
+		let observer = new IntersectionObserver(cb, options);
 		observer.observe(node);
 
 		return {
@@ -60,7 +54,11 @@
 	}
 </script>
 
-<figure use:showDetails in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }} class="item">
+<figure
+	use:intersecting={callback}
+	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
+	class="item"
+>
 	<a sveltekit:prefetch class="item-link" href="/movies/{movie.imdbid}">
 		<img class="item-poster" src={movie.poster} alt={movie.title} loading="lazy" />
 	</a>
@@ -78,23 +76,23 @@
 			{#await promiseDetails}
 				wait...
 			{:then value}
-				<img class="rating-logo" src="/imgs/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
-				<div class="rating-wrapper">
-					<span class="rating-label">rating {(value.imdbrating / 2).toFixed(1)}</span>
+				<div style="display: flex; align-items: center;">
+					<img class="rating-logo" src="/imgs/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
+					<div class="rating-wrapper">
+						<span class="rating-label">{(value.imdbrating / 2).toFixed(1)}</span>
+					</div>
+					<CardRatingStarts rating={value.imdbrating} />
 				</div>
-				<CardRatingStarts rating={value.imdbrating} />
-			{:catch}
-				<!-- error handle -->
 			{/await}
 		</div>
 	</figcaption>
 </figure>
 
 <style>
-	:root {
-		--card-w: 200px;
+	/* :root {
+		--card-w: 500px;
 		--card-h: 350px;
-	}
+	} */
 
 	.item {
 		position: relative;
@@ -108,10 +106,11 @@
 		max-width: var(--card-w);
 		position: relative;
 		margin: 0;
-		margin-right: 1em;
-		background-color: var(--c-main-content);
-		border: 1px solid rgba(128, 128, 128, 0.3);
+		/* margin-right: 1em; */
+		background-color: var(--c-main);
+		border: 1px solid var(--c-divider);
 		transition: transform 100ms ease-in-out;
+		box-shadow: var(--shadow-long);
 	}
 
 	.item-link {
@@ -173,7 +172,7 @@
 	}
 
 	.item:hover {
-		box-shadow: var(--shadow-short);
+		/* box-shadow: var(--shadow-long); */
 		transform: translateY(-1%);
 	}
 

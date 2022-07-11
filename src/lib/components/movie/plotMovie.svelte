@@ -18,7 +18,7 @@
 		};
 	}
 
-	function toggleExpand(e) {
+	function toggleExpand() {
 		if (value < 250) {
 			open = false;
 			return;

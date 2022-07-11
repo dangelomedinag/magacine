@@ -50,19 +50,21 @@
 	{#if $session.user}
 		<h1>¡Welcome again, <span>{$session.user.name}</span>!</h1>
 	{/if}
-	<div id="index-movies">
-		{#if act === 'movies'}
-			<CarouselMovies
-				details={false}
-				movies={$page.stuff.suggest}
-				title="Our pick for {$session.user.name}"
-			/>
-		{/if}
+</div>
+<div id="index-movies">
+	{#if act === 'movies'}
+		<CarouselMovies
+			details={false}
+			movies={$page.stuff.suggest}
+			title="Our pick for {$session.user.name}"
+			--card-w="220px"
+			--card-h="370px"
+		/>
+	{/if}
 
-		{#if act === 'series'}
-			<CarouselMovies details={false} {movies} title="Our pick for {$session.user.name}" />
-		{/if}
-	</div>
+	{#if act === 'series'}
+		<CarouselMovies details={false} {movies} title="Our pick for {$session.user.name}" />
+	{/if}
 </div>
 
 <style>

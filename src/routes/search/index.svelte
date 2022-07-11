@@ -209,102 +209,102 @@
 
 <NavbarTop search={false} />
 
-<div class="content">
-	<h1 style="text-align: center;">Search</h1>
-	<div class="search-container">
-		<form
-			on:reset={onReset}
-			on:submit|preventDefault={submit}
-			class="search-box"
-			class:search-box--open={showSuggest}
-		>
-			{#if showSuggest}
-				<button
-					type="button"
-					on:click={() => {
-						closeSuggestions();
-					}}
-					class="btn-clear"
-				>
-					<Icon>
-						<ArrowNarrowUp />
-					</Icon>
-				</button>
-			{:else}
-				<button type="reset" class="btn-clear">
-					{#if loading}
-						<Spinner size="5" />
-					{:else}
-						<Icon>
-							<X />
-						</Icon>
-					{/if}
-				</button>
-			{/if}
-			<input
-				bind:this={input}
-				bind:value
-				type="search"
-				name="mysearch"
-				id="mysearch"
-				class="input-search"
-				on:focus={onFocus}
-				on:input={onInput}
-				required
-				placeholder="ej. spider-man"
-				autocomplete="off"
-			/>
-			<button type="submit" class="btn-search">search</button>
-		</form>
-
-		<div class="autocomplete-container" class:autocomplete-container--open={showSuggest}>
-			{#if showSuggest}
-				{#each autocomplete.results as item, i (item.uuid)}
-					<button
-						in:fly={{ y: 15, delay: 20 * i, duration: 150, easing: quintInOut }}
-						class="item"
-						on:click={() => setValue(item)}>{item.title.toLowerCase()}</button
-					>
-				{/each}
-			{/if}
-		</div>
-	</div>
-	<div class="filters">
-		{#each options as item}
-			<label
-				for="radio-{item.value}"
-				class="option"
-				class:option--active={selected.includes(item.value)}
+<!-- <div class="contenta"> -->
+<h1 style="text-align: center;">Search</h1>
+<div class="search-container content">
+	<form
+		on:reset={onReset}
+		on:submit|preventDefault={submit}
+		class="search-box"
+		class:search-box--open={showSuggest}
+	>
+		{#if showSuggest}
+			<button
+				type="button"
+				on:click={() => {
+					closeSuggestions();
+				}}
+				class="btn-clear"
 			>
-				<span>{item.label}</span>
-				<!-- <div class="option"> -->
-				<input
-					on:change={() => {
-						lastValue = '';
-						lastSearch = undefined;
-					}}
-					id="radio-{item.value}"
-					class="check-item"
-					type="checkbox"
-					bind:group={selected}
-					value={item.value}
-				/>
-			</label>
-		{/each}
-	</div>
-	{#if errors}
-		<div style="padding: 1em 0;">
-			<Alert {...errors.level}><span>{errors.message}</span></Alert>
-		</div>
-	{/if}
-	{#if movies}
-		<CarouselMovies details={false} {movies} title="{movies.totalResults} results" />
-	{:else if errors?.level?.danger}
-		<!-- content here -->
-		<CarouselMovies details={false} movies={$page.stuff?.suggest} title="suggestions" />
-	{/if}
-</div>
+				<Icon>
+					<ArrowNarrowUp />
+				</Icon>
+			</button>
+		{:else}
+			<button type="reset" class="btn-clear">
+				{#if loading}
+					<Spinner size="5" />
+				{:else}
+					<Icon>
+						<X />
+					</Icon>
+				{/if}
+			</button>
+		{/if}
+		<input
+			bind:this={input}
+			bind:value
+			type="search"
+			name="mysearch"
+			id="mysearch"
+			class="input-search"
+			on:focus={onFocus}
+			on:input={onInput}
+			required
+			placeholder="ej. spider-man"
+			autocomplete="off"
+		/>
+		<button type="submit" class="btn-search">search</button>
+	</form>
 
+	<div class="autocomplete-container" class:autocomplete-container--open={showSuggest}>
+		{#if showSuggest}
+			{#each autocomplete.results as item, i (item.uuid)}
+				<button
+					in:fly={{ y: 15, delay: 20 * i, duration: 150, easing: quintInOut }}
+					class="item"
+					on:click={() => setValue(item)}>{item.title.toLowerCase()}</button
+				>
+			{/each}
+		{/if}
+	</div>
+</div>
+<div class="filters">
+	{#each options as item}
+		<label
+			for="radio-{item.value}"
+			class="option"
+			class:option--active={selected.includes(item.value)}
+		>
+			<span>{item.label}</span>
+			<!-- <div class="option"> -->
+			<input
+				on:change={() => {
+					lastValue = '';
+					lastSearch = undefined;
+				}}
+				id="radio-{item.value}"
+				class="check-item"
+				type="checkbox"
+				bind:group={selected}
+				value={item.value}
+			/>
+		</label>
+	{/each}
+</div>
+{#if errors}
+	<div style="padding: 1em 0;">
+		<Alert {...errors.level}><span>{errors.message}</span></Alert>
+	</div>
+{/if}
+{#if movies}
+	<CarouselMovies details={false} {movies} title="{movies.totalResults} results" />
+{:else if errors?.level?.danger}
+	<!-- content here -->
+	<CarouselMovies details={false} movies={$page.stuff?.suggest} title="suggestions" />
+{/if}
+
+<!-- </div> -->
 <style>
 	.search-container {
 		position: relative;
