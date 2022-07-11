@@ -6,6 +6,14 @@ export async function post({ request }) {
 	const username = data.get('username').toLowerCase().trim();
 	const password = data.get('password').toLowerCase().trim();
 
+	if (username === 'invalid') {
+		return {
+			body: {
+				status: 404,
+				errors: 'invalid username or password'
+			}
+		};
+	}
 	if (!username || !password) {
 		return {
 			body: {

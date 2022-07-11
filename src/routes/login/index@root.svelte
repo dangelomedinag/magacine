@@ -1,4 +1,4 @@
-<script context="module">
+<!-- <script context="module">
 	export async function load({ session, props }) {
 		if (session.user) {
 			return {
@@ -12,40 +12,68 @@
 			props
 		};
 	}
-</script>
-
+</script> -->
 <script>
+	import Alert from '$components/ui/alert.svelte';
+	import { session } from '$app/stores';
+	import { pricePlans } from '$lib/stores/plans-store';
 	export let errors;
+
+	function onclick() {
+		$pricePlans = false;
+	}
 </script>
 
 <svelte:head>
 	<title>Sign In - Magacine</title>
 </svelte:head>
 
-<main>
-	<!-- <p>Lorem ipsum dolor sit.</p> -->
-	<div class="form-container">
-		<h1>Sign In</h1>
+<main class="login">
+	<div class="login__container">
+		{#if $session.user}
+			<h1 class="login__title">Session</h1>
+			<a href="/" on:click={onclick} class="login__session__user">
+				<img src={$session.user.avatar} alt="{$session.user.username} - avatar profile" />
+				<h3>{$session.user.username}</h3>
+				<h4>{$session.user.name}</h4>
+			</a>
+			<a href="/auth/logout" class="login__close">logout all sessions</a>
+		{:else}
+			<h1 class="login__title">Sign In</h1>
 
-		<form action="/login" method="post">
-			<input
-				type="text"
-				name="username"
-				id="usename"
-				value=""
-				placeholder="username or email"
-				autocomplete="off"
-			/>
-			<input type="password" name="password" id="password" value="" placeholder="any password" />
-			<input type="submit" value="inicar session" />
-		</form>
-		<div class="actions">
-			<a href={'#'} class="link">remember me</a>
-			<a href={'#'} class="link">Need help?</a>
-		</div>
+			<form action="/login" method="post" class="login__form">
+				<input
+					class="login__input login__input__username"
+					type="text"
+					name="username"
+					id="usename"
+					placeholder="username or email"
+					autocomplete="off"
+					minlength="1"
+					required
+				/>
+				<input
+					class="login__input login__input__pass"
+					type="password"
+					name="password"
+					id="password"
+					value=""
+					placeholder="any password"
+					required
+					minlength="1"
+				/>
+				<input class="login__input login__submit" type="submit" value="inicar session" />
+			</form>
+			<div class="login__actions">
+				<a href={'#'} class="login__link">remember me</a>
+				<a href={'#'} class="login__link">Need help?</a>
+			</div>
 
-		{#if errors}
-			<p>{errors}</p>
+			{#if errors}
+				<div class="login__error">
+					<Alert danger><span>{errors}</span></Alert>
+				</div>
+			{/if}
 		{/if}
 	</div>
 
@@ -53,7 +81,7 @@
 </main>
 
 <style>
-	main {
+	.login {
 		position: relative;
 		display: flex;
 		flex-direction: column;
@@ -66,77 +94,89 @@
 		background-repeat: no-repeat;
 		background-position: center center;
 		background-size: cover;
-		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 		background-color: #b3b3b3;
 		background-blend-mode: multiply;
 	}
 
-	.form-container {
+	.login__container {
 		width: 95%;
-		background: rgba(0, 0, 0, 0.85);
+		background: var(--c-main);
 		padding: 2em;
 		border-radius: 10px;
+		box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+			0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09), 0 32px 16px rgba(0, 0, 0, 0.09);
 	}
 
-	form {
+	.login__form {
 		display: flex;
 		flex-direction: column;
+		gap: 0.8em;
 		width: 100%;
 	}
 
-	input[type='text'],
-	input[type='password'] {
-		background-color: #333;
+	.login__input__username,
+	.login__input__pass {
+		background-color: var(--c-divider);
 		color: #b3b3b3;
 	}
 
-	input[type='submit'] {
+	.login__submit {
 		color: white;
 		background-color: var(--c-front);
 	}
-	input[type='submit']:hover {
+	.login__submit:hover {
 		color: white;
 		background-color: var(--c-front-dark);
 		cursor: poiter;
 	}
 
-	input {
-		margin-bottom: 0.5em;
+	.login__input {
+		/* margin-bottom: 0.5em; */
 		padding: 0.8em;
 		font-size: 1rem;
 		border: none;
 		border-radius: 5px;
+		border: 2px solid transparent;
 	}
 
-	h1,
-	p {
+	.login__input:focus,
+	.login__input:focus-visible {
+		outline: none;
+		border: 2px solid var(--c-divider);
+	}
+
+	.login__title {
 		display: block;
 		width: 100%;
-	}
-
-	h1 {
+		color: var(--c-text-base);
 		margin-top: 0;
-		font-size: 2rem;
-		color: white;
+		font-size: 2.5rem;
+		/* line-height: 2rem; */
+		/* color: white; */
 	}
 
-	.actions {
+	.login__actions {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		padding-top: 1em;
 	}
 
-	.link {
+	.login__link {
 		color: rgba(255, 255, 255, 0.5);
 	}
-	.link:hover {
+	.login__link:hover {
 		color: rgb(255, 255, 255);
+	}
+
+	.login__error {
+		padding-top: 2em;
 	}
 
 	@media (min-width: 576px) {
 	}
 	@media (min-width: 768px) {
-		.form-container {
+		.login__container {
 			width: 60%;
 			max-width: 700px;
 		}
@@ -144,5 +184,61 @@
 	@media (min-width: 992px) {
 	}
 	@media (min-width: 1200px) {
+	}
+
+	/* session active */
+
+	.login__session__user {
+		/* display: flex; */
+		/* flex-direction: column;
+		align-items: center; */
+		display: block;
+		padding: 1em;
+		color: inherit;
+		width: auto;
+	}
+	.login__session__user:hover {
+		background-color: var(--c-divider);
+		color: var(--c-front);
+	}
+
+	.login__session__user img {
+		text-align: center;
+		margin: 0 auto;
+		display: block;
+		border-radius: 100%;
+		width: 100px;
+		height: auto;
+		border: 3px solid var(--c-front);
+	}
+
+	.login__session__user h3,
+	.login__session__user h4 {
+		margin: 0;
+	}
+
+	.login__close {
+		display: block;
+		width: 100%;
+		padding: 1em;
+		background-color: transparent;
+		color: inherit;
+		font-weight: bold;
+		margin: 0;
+		margin-top: 1em;
+		border: 1px solid var(--c-divider);
+		border-radius: 5px;
+	}
+
+	.login__close:hover,
+	.login__close:active {
+		color: white;
+	}
+
+	.login__close:hover {
+		background-color: var(--c-front);
+	}
+	.login__close:active {
+		background-color: var(--c-front-dark);
 	}
 </style>

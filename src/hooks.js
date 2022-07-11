@@ -33,7 +33,8 @@ export function getSession(event) {
 		? {
 				user: {
 					username: event.locals.user.username,
-					name: event.locals.user.name
+					name: event.locals.user.name,
+					avatar: 'https://i.pravatar.cc/100?u=userfake@pravatar.com'
 				}
 		  }
 		: {};

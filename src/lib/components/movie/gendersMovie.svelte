@@ -144,4 +144,14 @@
 		border: 1px solid rgba(196, 106, 21, 0.1);
 		background-color: rgba(196, 106, 21, 0.1);
 	}
+	.tag--game-show {
+		color: rgb(21, 149, 196);
+		border: 1px solid rgba(21, 149, 196, 0.1);
+		background-color: rgba(21, 149, 196, 0.1);
+	}
+	.tag--reality-tv {
+		color: rgb(126, 149, 0);
+		border: 1px solid rgba(126, 149, 0, 0.1);
+		background-color: rgba(126, 149, 0, 0.1);
+	}
 </style>

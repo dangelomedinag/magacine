@@ -40,7 +40,7 @@ async function getResource({ params }) {
 export async function get(event) {
 	if (event.params.id === 'favicon.png') {
 		// inusual request - sveltekit issues
-		console.log('[id] === ', event.params.id);
+		// console.log('[id] === ', event.params.id);
 		return {
 			status: 403
 		};
