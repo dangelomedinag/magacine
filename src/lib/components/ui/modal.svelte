@@ -78,7 +78,7 @@
 		bind:this={ref}
 		tabindex="-1"
 		style:z-index={Zindex}
-		in:fly={{ y: 100, duration: 300, easing: quintOut }}
+		in:fly={{ y: 100, duration: 500, easing: quintOut }}
 		class="modal"
 	>
 		{#if btnClose}
