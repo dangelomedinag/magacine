@@ -10,6 +10,7 @@
 
 	// props
 	export let movies;
+	export let full = false;
 	export let title;
 	export let details = true;
 	export let position = 'relative';
@@ -93,7 +94,7 @@
 		</header>
 		<main class="items-wrapper content">
 			{#each movies.results as movie, i (movie.uuid)}
-				<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} />
+				<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} {full} />
 			{/each}
 			{#if movies?.totalResults > 10}
 				<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
@@ -114,6 +115,7 @@
 	.carousel-wrapper {
 		/* --w-card: 250px; */
 
+		padding-top: 1em;
 		padding-bottom: 2em;
 		position: relative;
 		/* height: 400px; */
@@ -195,7 +197,7 @@
 		display: flex;
 		gap: 1em;
 		overflow-x: auto;
-		padding-top: 3em;
+		padding-top: 2em;
 		padding-bottom: 3em;
 		scroll-behavior: smooth;
 	}

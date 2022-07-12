@@ -9,6 +9,9 @@
 		{ word: 'Animations', imgs: imgs.anim },
 		{ word: 'All', imgs: imgs.serie }
 	];
+	export let copy = 'in one place.';
+	export let paragraph =
+		'Everything you want to see, without limits or commercials, and more movies and series are added every week!';
 	export let frequency = 3000;
 
 	let urls = words[0].imgs;
@@ -18,6 +21,13 @@
 	let interval;
 
 	function play() {
+		// if (Boolean(words.length)) {
+		// 	return () => clearInterval(interval);
+		// }
+		if (words.length <= 1) {
+			return () => clearInterval(interval);
+		}
+
 		if (i > words.length) i = 1;
 		else if (i < 2) i += 1;
 
@@ -54,11 +64,10 @@
 			{#key word}
 				<span in:slide out:slide|local class="firstline">{word}<span class="comma">,</span> </span>
 			{/key}
-			<span class="secondline">in one place.</span>
+			<span class="secondline">{copy}</span>
 		</h1>
 		<p>
-			Everything you want to see, without limits or commercials, and more movies and series are
-			added every week!
+			{paragraph}
 		</p>
 		<div class="indicators">
 			{#each words as _, i}

@@ -5,8 +5,10 @@
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import Alert from '$components/ui/alert.svelte';
+	import Hero from '$components/ui/hero.svelte';
 
 	let movies = [];
+	let imgs;
 	onMount(async () => {
 		const reqs = [
 			fetch('/api?s=saw').then((r) => {
@@ -39,6 +41,7 @@
 		const data = res.map((e) => (e.message ? new Error(e.message) : e));
 
 		movies = data;
+		imgs = data.map((r) => r.results.map((m) => m.poster).slice(0, 4));
 	});
 
 	let act = 'suspense';
@@ -56,17 +59,26 @@
 	<button on:click={() => setTab('comedy')} class:active={act === 'comedy'}>Comedy</button>
 </NavbarTop>
 
-<div class="content">
+<div class="wrapper">
 	{#if act === 'suspense'}
-		<CarouselMovies movies={movies[0]} title="Suspense" --card-w="240px" --card-h="390px" />
+		<CarouselMovies movies={movies[0]} full title="Suspense" --card-w="240px" --card-h="390px" />
+		{#if imgs}
+			<Hero
+				words={[{ word: 'Suspense', imgs: imgs[0] }, { word: 'Blood' }]}
+				copy="all, in Magacine"
+				paragraph=""
+			/>
+		{/if}
 		<CarouselMovies
 			movies={movies[1]}
 			title="Suspense  {movies[1]?.totalResults ?? 'loading'} results"
 		/>
 	{/if}
 	{#if act === 'terror'}
+		<Hero words={[{ word: 'Terror', imgs: imgs[2] }]} />
 		<CarouselMovies
 			movies={movies[2]}
+			full
 			title="Terror  {movies[2]?.totalResults ?? 'loading'} results"
 			--card-w="240px"
 			--card-h="390px"
@@ -74,21 +86,17 @@
 		<CarouselMovies
 			movies={movies[3]}
 			title="Terror  {movies[3]?.totalResults ?? 'loading'} results"
-		>
-			<div slot="error" let:message>
-				<Alert danger>
-					<span>{message}</span>
-				</Alert>
-			</div>
-		</CarouselMovies>
+		/>
 	{/if}
 	{#if act === 'comedy'}
 		<CarouselMovies
 			movies={movies[4]}
+			full
 			title="Comedy  {movies[4]?.totalResults ?? 'loading'} results"
 			--card-w="240px"
 			--card-h="370px"
 		/>
+		<Hero words={[{ word: 'Comedy', imgs: imgs[4] }]} />
 		<CarouselMovies
 			movies={movies[5]}
 			title="Comedy  {movies[5]?.totalResults ?? 'loading'} results"
@@ -97,8 +105,7 @@
 </div>
 
 <style>
-	.content {
-		padding-top: 2em;
-		padding-bottom: 2em;
+	.wrapper {
+		/* padding-top: 2em; */
 	}
 </style>

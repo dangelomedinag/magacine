@@ -6,6 +6,7 @@
 	import ProgressLine from '$components/card/cardProgressLine.svelte';
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
 
+	export let full = false;
 	export let details = true;
 	export let movie;
 	export let progress = 0;
@@ -21,9 +22,11 @@
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
 				showDetails = true;
-				promiseDetails = loadDetails().finally(() => {
-					observer.disconnect();
-				});
+				promiseDetails = loadDetails()
+					.catch((e) => e.message)
+					.finally(() => {
+						observer.disconnect();
+					});
 			}
 		});
 	};
@@ -67,25 +70,34 @@
 		<ProgressLine value={movie.progress} />
 	{/if}
 
-	<figcaption class="description-wrapper">
-		<div class="info-wrapper">
-			<h2 class="movie-title">{movie.title}</h2>
+	{#if !full}
+		<figcaption class="description-wrapper">
+			<div class="info-wrapper">
+				<h2 class="movie-title">{movie.title}</h2>
 
-			<p class="movie-year">{movie.year}</p>
+				<p class="movie-year">{movie.year}</p>
 
-			{#await promiseDetails}
-				wait...
-			{:then value}
-				<div style="display: flex; align-items: center;">
-					<img class="rating-logo" src="/imgs/imdb-logo.png" alt="imdb trade mark" loading="lazy" />
-					<div class="rating-wrapper">
-						<span class="rating-label">{(value.imdbrating / 2).toFixed(1)}</span>
+				{#await promiseDetails}
+					wait...
+				{:then value}
+					<div style="display: flex; align-items: center;">
+						<img
+							class="rating-logo"
+							src="/imgs/imdb-logo.png"
+							alt="imdb trade mark"
+							loading="lazy"
+						/>
+						<div class="rating-wrapper">
+							<span class="rating-label">{(value.imdbrating / 2).toFixed(1)}</span>
+						</div>
+						<CardRatingStarts rating={value.imdbrating} />
 					</div>
-					<CardRatingStarts rating={value.imdbrating} />
-				</div>
-			{/await}
-		</div>
-	</figcaption>
+				{:catch err}
+					<!-- err handle -->
+				{/await}
+			</div>
+		</figcaption>
+	{/if}
 </figure>
 
 <style>
@@ -106,7 +118,6 @@
 		max-width: var(--card-w);
 		position: relative;
 		margin: 0;
-		/* margin-right: 1em; */
 		background-color: var(--c-main);
 		border: 1px solid var(--c-divider);
 		transition: transform 100ms ease-in-out;

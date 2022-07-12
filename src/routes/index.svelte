@@ -8,16 +8,24 @@
 
 	import { scrollToTarget } from '$helpers';
 
-	let movies;
+	let movies = [];
 
 	onMount(async () => {
-		const req = await fetch('/api?s=got');
-		if (!req.ok) {
-			const res = await req.json();
-			return { status: req.status, error: new Error(res.message) };
-		}
+		const reqs = [
+			fetch('/api?s=marvel&type=movie').then((r) => {
+				// if (!r.ok) throw r;
+				return r.json();
+			}),
+			fetch('/api?s=city&type=series').then((r) => {
+				// if (!r.ok) throw r;
+				return r.json();
+			})
+		];
 
-		movies = await req.json();
+		const res = await Promise.all(reqs);
+		const data = res.map((e) => (e.message ? new Error(e.message) : e));
+
+		movies = data;
 	});
 
 	let act = 'movies';
@@ -51,11 +59,12 @@
 		<h1>¡Welcome again, <span>{$session.user.name}</span>!</h1>
 	{/if}
 </div>
+
 <div id="index-movies">
 	{#if act === 'movies'}
 		<CarouselMovies
 			details={false}
-			movies={$page.stuff.suggest}
+			movies={movies[0]}
 			title="Our pick for {$session.user.name}"
 			--card-w="220px"
 			--card-h="370px"
@@ -63,7 +72,7 @@
 	{/if}
 
 	{#if act === 'series'}
-		<CarouselMovies details={false} {movies} title="Our pick for {$session.user.name}" />
+		<CarouselMovies details={false} movies={movies[1]} title="Our pick for {$session.user.name}" />
 	{/if}
 </div>
 

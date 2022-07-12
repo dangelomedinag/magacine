@@ -13,8 +13,21 @@
 	import Film from '$icons/outline/film.svelte';
 	import DesktopComputer from '$icons/outline/desktop-computer.svelte';
 	import Collection from '$icons/outline/collection.svelte';
+	import { onMount } from 'svelte';
 
 	export let results;
+	let suggestionsMovies = undefined;
+
+	onMount(() => {
+		results.catch(() => {
+			getSuggestions();
+		});
+	});
+
+	async function getSuggestions() {
+		let sug = await fetch('/api?s=avengers');
+		suggestionsMovies = await sug.json();
+	}
 </script>
 
 {#await results}
@@ -58,7 +71,7 @@
 			</span>
 		</Alert>
 	</div>
-	<CarouselMovies details={false} movies={$page.stuff.suggest} title="suggestions" />
+	<CarouselMovies details={false} movies={suggestionsMovies} title="suggestions" />
 {/await}
 
 <style>

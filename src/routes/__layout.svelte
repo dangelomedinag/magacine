@@ -8,23 +8,7 @@
 			};
 		}
 
-		const url = '/api?s=marvel';
-
-		const req = await fetch(url);
-		if (!req.ok) {
-			return {
-				stuff: {
-					suggest: []
-				}
-			};
-		}
-		const movies = await req.json();
-
-		return {
-			stuff: {
-				suggest: movies
-			}
-		};
+		return { status: 200 };
 	};
 </script>
 
@@ -42,8 +26,18 @@
 
 	import { pricePlans } from '$lib/stores/plans-store';
 	import 'nprogress/nprogress.css';
+	import { onMount } from 'svelte';
 
 	let toggle = false;
+
+	onMount(() => {
+		let timeout = setTimeout(() => {
+			modal.open();
+		}, 300);
+
+		return () => clearTimeout(timeout);
+	});
+	let modal;
 
 	// NProgress css
 	NProgress.configure({
@@ -81,18 +75,14 @@
 	<MediaQueries bottom="0" />
 {/if}
 
-<Modal modal={$pricePlans}>
+<Modal
+	bind:this={modal}
+	on:close={() => {
+		pricePlans.update((v) => !v);
+	}}
+>
 	<svelte:fragment slot="header">¡Wellcome!</svelte:fragment>
 	<PriceTable />
-	<svelte:fragment slot="action" let:close>
-		<button
-			tabindex="0"
-			on:click={() => {
-				close();
-				$pricePlans = false;
-			}}>close</button
-		>
-	</svelte:fragment>
 </Modal>
 
 <div class="wrapper">

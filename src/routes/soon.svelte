@@ -25,13 +25,17 @@
 
 <NavbarTop />
 
-<div class="content">
+<div class="wrapper content">
 	<h1>Next Releases</h1>
-
-	<CarouselMovies {movies} title="comming soom" />
 </div>
 
+<CarouselMovies {movies} title="comming soom" />
+
 <style>
+	.wrapper {
+		padding-top: 1em;
+	}
+
 	h1 {
 		font-size: 2rem;
 	}

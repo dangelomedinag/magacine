@@ -142,7 +142,7 @@
 <!-- <div class="content"> -->
 <div class="suggest" id="suggest">
 	<CarouselMovies movies={suggestionsMovies} details={false} title="Suggestions">
-		<div slot="error" style="width: 100%;">
+		<div slot="error" style="width: 100%;" class="content">
 			<Alert warn>
 				For now we do <span>not have related movies or series</span>
 			</Alert>

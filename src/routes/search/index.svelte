@@ -28,6 +28,7 @@
 	let timerErrors;
 	let errors;
 	let loading = false;
+	let suggestionsMovies = undefined;
 
 	// filters
 	let selected = ['movie', 'series'];
@@ -137,6 +138,8 @@
 			if (!error.level.warn) movies = undefined;
 			lastSearch = undefined;
 			errors = error;
+			let sug = await fetch('/api?s=avengers');
+			suggestionsMovies = await sug.json();
 		}
 	}
 
@@ -211,7 +214,7 @@
 
 <!-- <div class="contenta"> -->
 <h1 style="text-align: center;">Search</h1>
-<div class="search-container content">
+<div class="search-container">
 	<form
 		on:reset={onReset}
 		on:submit|preventDefault={submit}
@@ -293,7 +296,7 @@
 	{/each}
 </div>
 {#if errors}
-	<div style="padding: 1em 0;">
+	<div style="padding-top: 1em; padding-bottom: 1em;" class="content">
 		<Alert {...errors.level}><span>{errors.message}</span></Alert>
 	</div>
 {/if}
@@ -301,7 +304,7 @@
 	<CarouselMovies details={false} {movies} title="{movies.totalResults} results" />
 {:else if errors?.level?.danger}
 	<!-- content here -->
-	<CarouselMovies details={false} movies={$page.stuff?.suggest} title="suggestions" />
+	<CarouselMovies details={false} movies={suggestionsMovies} title="suggestions" />
 {/if}
 
 <!-- </div> -->

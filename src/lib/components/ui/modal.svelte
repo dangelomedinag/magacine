@@ -1,6 +1,6 @@
 <script>
 	import { browser } from '$app/env';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -11,10 +11,12 @@
 	import X from '$icons/outline/x.svelte';
 
 	export let modal = false;
-	let currentElementFocus = null;
-	let ref;
 	export let Zindex = '111';
 	export let btnClose = true;
+
+	let currentElementFocus = null;
+	let ref;
+	const dispatch = createEventDispatcher();
 
 	onMount(() => {
 		if (modal) open();
@@ -38,8 +40,8 @@
 		modal = false;
 		setBodyScroll(modal);
 		if (currentElementFocus) currentElementFocus.focus();
-
 		window.removeEventListener('keydown', handleEsc);
+		dispatch('close');
 	}
 	export function toogle() {
 		if (modal) close();
