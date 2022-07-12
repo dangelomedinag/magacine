@@ -1,6 +1,15 @@
 import * as cookie from 'cookie';
+
+/** @type {import("@sveltejs/kit").RequestHandler} */
 export async function put({ request }) {
 	const { theme } = await request.json();
+
+	if (!theme) {
+		return {
+			status: 403,
+			body: { message: 'invalid theme' }
+		};
+	}
 
 	let cookieOpts = {
 		path: '/',
@@ -12,6 +21,7 @@ export async function put({ request }) {
 
 	return {
 		status: 303,
+		body: { message: 'ok' },
 		headers: {
 			'set-cookie': cookie.serialize('mc_theme', theme, cookieOpts)
 		}

@@ -33,9 +33,9 @@
 	onMount(() => {
 		let timeout = setTimeout(() => {
 			modal.open();
-		}, 300);
 
-		return () => clearTimeout(timeout);
+			return clearTimeout(timeout);
+		}, 300);
 	});
 	let modal;
 

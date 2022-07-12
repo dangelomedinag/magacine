@@ -14,6 +14,7 @@ const themeStoreCustom = () => {
 			if (browser) {
 				let dataTheme = document.body.dataset.theme;
 				let nextTheme = dataTheme === 'dark' ? 'light' : 'dark';
+
 				try {
 					await fetch('/api/theme', {
 						method: 'PUT',
