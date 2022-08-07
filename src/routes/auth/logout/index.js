@@ -1,7 +1,7 @@
 import * as cookie from 'cookie';
 
 /**@type {import("@sveltejs/kit").RequestHandler} */
-export function get() {
+export function GET() {
 	return {
 		status: 303,
 		headers: {
