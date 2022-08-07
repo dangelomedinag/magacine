@@ -1,15 +1,17 @@
-import { API_KEY, API_URL } from '$lib/_env';
-// import { logHours } from '$helpers/logs';
+import { env } from '$env/dynamic/private';
 import { transform } from './_transformContract';
 
+const { OMDB_API_KEY, OMDB_API_URL } = env;
+
+/** @type {import('@sveltejs/kit').RequestHandler} */
 async function getResource({ params }) {
 	const id = params.id;
 	if (!id || !id.startsWith('tt') || id.length < 5) throw { message: 'Not valid id request' };
 
-	const api = new URL(API_URL);
+	const api = new URL(OMDB_API_URL);
 	api.searchParams.set('i', id);
 	api.searchParams.set('plot', 'full');
-	api.searchParams.set('apikey', API_KEY);
+	api.searchParams.set('apikey', OMDB_API_KEY);
 
 	const timeout = 8000;
 	const controller = new AbortController();
@@ -37,15 +39,7 @@ async function getResource({ params }) {
 }
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get(event) {
-	if (event.params.id === 'favicon.png') {
-		// inusual request - sveltekit issues
-		// console.log('[id] === ', event.params.id);
-		return {
-			status: 403
-		};
-	}
-
+export async function GET(event) {
 	try {
 		const response = await getResource(event);
 		return response;

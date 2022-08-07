@@ -1,22 +1,25 @@
-// transform response to consistent contract API
-
-export function transform(json) {
+/**
+ * @param {import("$lib/types").OMDBMovie} movie
+ */
+export function transform(movie) {
+	/**@type {Partial<import("$lib/types").OMDBMovie>} */
 	let obj = {};
 
-	for (const key in json) {
-		let value = json[key];
+	for (const key in movie) {
+		let value = movie[key];
 
 		if (value === 'N/A' || value === '') {
 			value = null;
 		}
+
 		if (key === 'Response') {
-			value = json[key] === 'True';
+			value = movie[key] === 'True';
 		}
 
-		if (key === 'Ratings' && Array.isArray(json[key]) && json[key].length > 0) {
+		if (key === 'Ratings' && Array.isArray(movie[key]) && movie[key].length > 0) {
 			let newArray = [];
 
-			newArray = json[key].map((e) => {
+			newArray = movie[key].map((e) => {
 				let newRatings = {};
 
 				if (!Array.isArray(e) && typeof e === 'object') {
@@ -36,12 +39,12 @@ export function transform(json) {
 			}
 
 			if (key === 'Genre') {
-				if (value.includes(',')) value = json[key].split(',').map((e) => e.trim());
+				if (value.includes(',')) value = movie[key].split(',').map((e) => e.trim());
 				else value = [];
 			}
 
 			if (key === 'Language') {
-				if (value.includes(',')) value = json[key].split(',').map((e) => e.trim());
+				if (value.includes(',')) value = movie[key].split(',').map((e) => e.trim());
 				else value = [value];
 			}
 		} else {

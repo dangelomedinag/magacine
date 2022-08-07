@@ -1,6 +1,9 @@
-import { API_KEY, API_URL } from '$lib/_env';
+import { env } from '$env/dynamic/private';
 import { uuid } from '$helpers';
 
+const { OMDB_API_KEY, OMDB_API_URL } = env;
+
+/** @type {import('@sveltejs/kit').RequestHandler} */
 async function getResource({ url }) {
 	// get params
 	const params = url.searchParams;
@@ -13,7 +16,7 @@ async function getResource({ url }) {
 	const limit = params.has('limit') ? params.get('limit') : false;
 
 	// create URL object of resource
-	const api = new URL(API_URL);
+	const api = new URL(OMDB_API_URL);
 
 	if (search.length > 2) api.searchParams.set('s', search);
 	else throw { message: 'Too namy results' };
@@ -37,7 +40,7 @@ async function getResource({ url }) {
 		else throw { message: "<type> param only accept { 'movie'|'series'|'episode' } value." };
 	}
 
-	api.searchParams.set('apikey', API_KEY);
+	api.searchParams.set('apikey', OMDB_API_KEY);
 
 	const data = await fetch(api.href);
 	const json = await data.json();
@@ -79,7 +82,7 @@ async function getResource({ url }) {
 }
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get(event) {
+export async function GET(event) {
 	try {
 		const response = await getResource(event);
 		return response;

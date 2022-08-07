@@ -1,7 +1,7 @@
 import * as cookie from 'cookie';
 
 /** @type {import("@sveltejs/kit").RequestHandler} */
-export async function put({ request }) {
+export async function PUT({ request }) {
 	const { theme } = await request.json();
 
 	if (!theme) {
