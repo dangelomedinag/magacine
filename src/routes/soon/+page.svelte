@@ -1,22 +1,8 @@
-<script context="module">
-	export async function load({ fetch }) {
-		const req = await fetch('/api?s=america&year=2022');
-		if (!req.ok) {
-			const res = await req.json();
-			return { status: req.status, error: new Error(res.message) };
-		}
 
-		const res = await req.json();
-
-		return {
-			props: {
-				movies: res
-			}
-		};
-	}
-</script>
 
 <script>
+	throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
+
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
 

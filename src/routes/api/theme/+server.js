@@ -1,3 +1,4 @@
+import { json as json$1 } from '@sveltejs/kit';
 import * as cookie from 'cookie';
 
 /** @type {import("@sveltejs/kit").RequestHandler} */
@@ -5,10 +6,9 @@ export async function PUT({ request }) {
 	const { theme } = await request.json();
 
 	if (!theme) {
-		return {
-			status: 403,
-			body: { message: 'invalid theme' }
-		};
+		return json$1({ message: 'invalid theme' }, {
+			status: 403
+		});
 	}
 
 	let cookieOpts = {
@@ -19,11 +19,10 @@ export async function PUT({ request }) {
 		maxAge: 60 * 60 * 24 * 7
 	};
 
-	return {
+	return json$1({ message: 'ok' }, {
 		status: 303,
-		body: { message: 'ok' },
 		headers: {
 			'set-cookie': cookie.serialize('mc_theme', theme, cookieOpts)
 		}
-	};
+	});
 }

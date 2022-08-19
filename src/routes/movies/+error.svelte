@@ -1,28 +1,16 @@
-<script context="module">
-	/** @type {import('@sveltejs/kit').ErrorLoad} */
-	export function load({ error, status }) {
-		return {
-			props: {
-				message: error.message,
-				status
-			}
-		};
-	}
-</script>
-
 <script>
-	export let message, status;
+	import { page } from '$app/stores';
 </script>
 
 <div class="content wrapper">
 	<div class="container">
 		<div class="error">
-			<span>{status}</span>
+			<span>{$page.status}</span>
 			page not found
 		</div>
 		<div class="details">
 			<h1>Hmm.</h1>
-			<code>{message}</code>
+			<code>{page.error.message}</code>
 			<p>
 				It seems that the page you were trying to access is no longer available. Let us help guide
 				you out and get you back home.

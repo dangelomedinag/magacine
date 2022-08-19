@@ -13,7 +13,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "^1.0.0-next.49",
-		"@sveltejs/kit": "^1.0.0-next.403",
+		"@sveltejs/kit": "^1.0.0-next.423",
 		"eslint": "^8.16.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^4.0.0",

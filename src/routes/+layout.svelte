@@ -1,16 +1,4 @@
-<script context="module">
-	/** @type {import("@sveltejs/kit").LoadEvent}*/
-	export const load = async ({ fetch, session }) => {
-		if (!session.user) {
-			return {
-				status: 303,
-				redirect: '/login'
-			};
-		}
 
-		return { status: 200 };
-	};
-</script>
 
 <script>
 	import { dev } from '$app/env';

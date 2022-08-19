@@ -1,27 +1,6 @@
-<script context="module">
-	/**  @type {import("@sveltejs/kit").Load}*/
-	export const load = async ({ fetch, params }) => {
-		try {
-			const req = await fetch('/api/' + params.id);
-			if (!req.ok) throw req;
-			const movie = await req.json();
-
-			return {
-				props: {
-					movie: movie
-				}
-			};
-		} catch (error) {
-			const msg = await error.json();
-			return {
-				status: 404,
-				error: new Error(`${params.id} - ${msg.message}`)
-			};
-		}
-	};
-</script>
-
 <script>
+	// throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
+
 	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 
@@ -39,7 +18,8 @@
 	import Icon from '$icons/icon.svelte';
 	import Play from '$icons/solid/play.svelte';
 
-	export let movie;
+	/**@type {import("./$types").PageData}*/
+	export let data;
 	let showPlayer = false;
 	let suggestionsMovies;
 
@@ -50,7 +30,7 @@
 	async function getSuggest() {
 		suggestionsMovies = null;
 
-		const { genre, plot } = movie;
+		const { genre, plot } = data.movie;
 		let selected;
 		if (plot) {
 			const plotArr = plot.split(' ');
@@ -103,7 +83,8 @@
 
 <svelte:head>
 	<title
-		>{movie?.title.length > 14 ? `${movie.title.slice(0, 13)}...` : movie.title} - {movie.type}</title
+		>{data.movie?.title.length > 14 ? `${data.movie.title.slice(0, 13)}...` : data.movie.title} - {data
+			.movie.type}</title
 	>
 </svelte:head>
 
@@ -119,23 +100,23 @@
 <div class="container ">
 	<div class:movie={showPlayer} class:poster={!showPlayer}>
 		{#if !showPlayer}
-			<img class="image" src={movie.poster} alt={movie.title} />
+			<img class="image" src={data.movie.poster} alt={data.movie.title} />
 			<button class="btn-play" on:click={() => (showPlayer = !showPlayer)}>
 				<Icon style="background-color: white; border-radius: 50vh;" shadow>
 					<Play />
 				</Icon>
 			</button>
 			<div class="info__item">
-				<YearMovie value={movie.year} />
-				<RuntimeMovie value={movie.runtime} />
+				<YearMovie value={data.movie.year} />
+				<RuntimeMovie value={data.movie.runtime} />
 			</div>
 		{:else}
 			<VideoPlayer />
 		{/if}
 	</div>
 	<div class="info content" id="info">
-		{#key movie}
-			<InfoMovie {movie} />
+		{#key data.movie}
+			<InfoMovie movie={data.movie} />
 		{/key}
 	</div>
 </div>

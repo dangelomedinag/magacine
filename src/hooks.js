@@ -10,9 +10,11 @@ export async function handle({ event, resolve }) {
 		const random = Math.round(Math.random());
 		event.locals.user = {
 			username: cookieSession.mc_username,
-			name: random ? 'dangelo medina' : 'enrique castellano'
+			name: random ? 'dangelo medina' : 'enrique castellano',
+			avatar: 'https://i.pravatar.cc/100?u=userfake@pravatar.com'
 		};
 	}
+	// console.log(event.locals.user);
 
 	const response = await resolve(event, {
 		transformPageChunk: ({ html }) => {
@@ -26,17 +28,4 @@ export async function handle({ event, resolve }) {
 	});
 
 	return response;
-}
-
-/** @type {import('@sveltejs/kit').GetSession} */
-export function getSession(event) {
-	return event.locals.user
-		? {
-				user: {
-					username: event.locals.user.username,
-					name: event.locals.user.name,
-					avatar: 'https://i.pravatar.cc/100?u=userfake@pravatar.com'
-				}
-		  }
-		: {};
 }

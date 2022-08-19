@@ -1,7 +1,9 @@
-import { env } from '$env/dynamic/private';
+// import { error } from '@sveltejs/kit';
+// import { env } from '$env/static/public';
 import { uuid } from '$helpers';
 
-const { OMDB_API_KEY, OMDB_API_URL } = env;
+// console.log({ env });
+// const { OMDB_API_KEY, OMDB_API_URL } = env;
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 async function getResource({ url }) {
@@ -16,7 +18,7 @@ async function getResource({ url }) {
 	const limit = params.has('limit') ? params.get('limit') : false;
 
 	// create URL object of resource
-	const api = new URL(OMDB_API_URL);
+	const api = new URL('https://www.omdbapi.com');
 
 	if (search.length > 2) api.searchParams.set('s', search);
 	else throw { message: 'Too namy results' };
@@ -40,7 +42,7 @@ async function getResource({ url }) {
 		else throw { message: "<type> param only accept { 'movie'|'series'|'episode' } value." };
 	}
 
-	api.searchParams.set('apikey', OMDB_API_KEY);
+	api.searchParams.set('apikey', 'eedc324b');
 
 	const data = await fetch(api.href);
 	const json = await data.json();
@@ -70,28 +72,35 @@ async function getResource({ url }) {
 		if (!isNaN(n) && n > 0 && json.Search.length > n) json.Search.length = n;
 	}
 
-	return {
-		status: data.status,
-		body: {
+	return new Response(
+		JSON.stringify({
 			results: json.Search,
 			totalResults: !rest ? +json.totalResults : +json.totalResults - rest,
 			search: search,
 			query: url.searchParams.toString()
+		}),
+		{
+			headers: {
+				'content-type': 'application/json; charset=utf-8'
+			}
 		}
-	};
+	);
 }
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
+/** @type {import('./$types').RequestHandler} */
 export async function GET(event) {
 	try {
 		const response = await getResource(event);
+		// throw new Error("@migration task: Migrate this return statement (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292701)");
 		return response;
-	} catch (error) {
+	} catch ($error) {
 		const params = event.url.searchParams;
 		const search = params.has('s') ? params.get('s') : false;
-		return {
-			status: 404,
-			body: { ...error, search, query: params.toString() }
-		};
+		return new Response(JSON.stringify({ ...$error, search, query: params.toString() }), {
+			headers: {
+				'content-type': 'application/json'
+			},
+			status: 404
+		});
 	}
 }

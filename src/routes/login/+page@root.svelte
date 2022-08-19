@@ -1,22 +1,11 @@
-<!-- <script context="module">
-	export async function load({ session, props }) {
-		if (session.user) {
-			return {
-				status: 303,
-				redirect: '/'
-			};
-		}
-
-		return {
-			status: 200,
-			props
-		};
-	}
-</script> -->
+<!--  -->
 <script>
+	// throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
+
 	import Alert from '$components/ui/alert.svelte';
-	import { session } from '$app/stores';
+	import { page } from '$app/stores';
 	import { pricePlans } from '$lib/stores/plans-store';
+
 	export let errors;
 
 	function onclick() {
@@ -30,12 +19,12 @@
 
 <main class="login">
 	<div class="login__container">
-		{#if $session.user}
+		{#if $page.data.user}
 			<h1 class="login__title">Session</h1>
 			<a href="/" on:click={onclick} class="login__session__user">
-				<img src={$session.user.avatar} alt="{$session.user.username} - avatar profile" />
-				<h3>{$session.user.username}</h3>
-				<h4>{$session.user.name}</h4>
+				<img src={$page.data.user.avatar} alt="{$page.data.user.username} - avatar profile" />
+				<h3>{$page.data.user.username}</h3>
+				<h4>{$page.data.user.name}</h4>
 			</a>
 			<a href="/auth/logout" class="login__close">logout all sessions</a>
 		{:else}
@@ -51,6 +40,7 @@
 					autocomplete="off"
 					minlength="1"
 					required
+					value="invalid"
 				/>
 				<input
 					class="login__input login__input__pass"

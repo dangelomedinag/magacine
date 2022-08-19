@@ -1,19 +1,3 @@
-<script context="module">
-	/** @type {import('@sveltejs/kit').Load}*/
-	export async function load({ url, fetch }) {
-		const query = new URLSearchParams(url.search);
-
-		const req = await fetch('/api?' + query.toString());
-		const res = await req.json();
-
-		return {
-			props: {
-				movies: res
-			}
-		};
-	}
-</script>
-
 <script>
 	import { onMount } from 'svelte';
 
@@ -22,8 +6,9 @@
 	import Spinner from '$lib/components/ui/spinner.svelte';
 	import Alert from '$components/ui/alert.svelte';
 
-	export let movies;
-	let rawMovies = { ...movies };
+	/**@type {import("./$types").PageData}*/
+	export let data;
+	let rawMovies = { ...data.movies };
 	let offset = 1;
 	let loading = false;
 	let stop = false;
@@ -59,7 +44,7 @@
 		offset++;
 
 		const query = new URLSearchParams();
-		query.set('s', movies.search);
+		query.set('s', data.movies.search);
 		query.set('page', offset);
 
 		const req = await fetch('api?' + query.toString());
@@ -71,37 +56,37 @@
 			return;
 		}
 
-		movies.results = [...movies.results, ...res.results];
+		data.movies.results = [...data.movies.results, ...res.results];
 		loading = false;
 		// movies.totalResults = movies.totalResults + res.totalResults;
 
-		rawMovies = { ...movies };
+		rawMovies = { ...data.movies };
 	}
 </script>
 
 <NavbarTop>
 	<button
 		on:click={() => {
-			movies.results = rawMovies.results.filter((m) => m.type === 'movie');
+			data.movies.results = rawMovies.results.filter((m) => m.type === 'movie');
 		}}>movies</button
 	>
 	<button
 		on:click={() => {
-			movies.results = rawMovies.results.filter((m) => m.type === 'series');
+			data.movies.results = rawMovies.results.filter((m) => m.type === 'series');
 		}}>series</button
 	>
 	<button
 		on:click={() => {
-			movies.results = rawMovies.results;
+			data.movies.results = rawMovies.results;
 		}}>all</button
 	>
 </NavbarTop>
 
 <div class="content">
-	<h1>{movies.search} - all results</h1>
+	<h1>{data.movies.search} - all results</h1>
 
 	<div class="grid-movies">
-		{#each movies.results as movie (movie.uuid)}
+		{#each data.movies.results as movie (movie.uuid)}
 			<MovieItem {movie} />
 		{/each}
 	</div>
@@ -110,8 +95,8 @@
 			<Spinner position="relative" top={'30%'}>loading more...</Spinner>
 		{:else if stop}
 			<Alert>
-				<span>{movies.results.length} results</span> | there are <span>no more</span> movies/series to
-				show
+				<span>{data.movies.results.length} results</span> | there are <span>no more</span> movies/series
+				to show
 			</Alert>
 		{/if}
 	</div>

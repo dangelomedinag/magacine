@@ -21,7 +21,7 @@
 	import Notification from '$components/navbar/navbarNotification.svelte';
 
 	// stores
-	import { session } from '$app/stores';
+	import { page } from '$app/stores';
 	import { notiStore } from '$lib/stores/notifications-store';
 
 	export let search = true,
@@ -145,13 +145,13 @@
 				</button>
 			{/if}
 			{#if profile}
-				{#if $session.user}
+				{#if $page.data.user}
 					<button title="session" class="navbar-item" on:click={modalSession.open}>
 						<Icon>
 							<UserCircle />
 						</Icon>
 						<span class="username">
-							{$session.user.username}
+							{$page.data.user.username}
 						</span>
 					</button>
 				{/if}

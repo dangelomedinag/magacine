@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { page, session } from '$app/stores';
+	import { page } from '$app/stores';
 
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import Hero from '$components/ui/hero.svelte';
@@ -24,7 +24,7 @@
 
 		const res = await Promise.all(reqs);
 		const data = res.map((e) => (e.message ? new Error(e.message) : e));
-
+		console.log(data);
 		movies = data;
 	});
 
@@ -33,6 +33,8 @@
 	const setTab = (tab) => {
 		act = tab;
 	};
+
+	console.log($page.data.user);
 </script>
 
 <svelte:head>
@@ -54,25 +56,29 @@
 
 <Hero />
 
-<div class="content">
+<!-- <div class="content">
 	{#if $session.user}
 		<h1>¡Welcome again, <span>{$session.user.name}</span>!</h1>
 	{/if}
-</div>
+</div> -->
 
 <div id="index-movies">
 	{#if act === 'movies'}
 		<CarouselMovies
 			details={false}
 			movies={movies[0]}
-			title="Our pick for {$session.user.name}"
+			title="Our pick for {$page.data.user.name}"
 			--card-w="220px"
 			--card-h="370px"
 		/>
 	{/if}
 
 	{#if act === 'series'}
-		<CarouselMovies details={false} movies={movies[1]} title="Our pick for {$session.user.name}" />
+		<CarouselMovies
+			details={false}
+			movies={movies[1]}
+			title="Our pick for {$page.data.user.name}"
+		/>
 	{/if}
 </div>
 

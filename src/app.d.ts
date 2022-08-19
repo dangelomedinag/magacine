@@ -7,6 +7,7 @@ declare namespace App {
 		user: {
 			username: string;
 			name: string;
+			avatar: string;
 		};
 	}
 	// interface Platform {}
