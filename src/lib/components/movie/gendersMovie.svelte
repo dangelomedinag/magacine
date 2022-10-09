@@ -154,4 +154,9 @@
 		border: 1px solid rgba(126, 149, 0, 0.1);
 		background-color: rgba(126, 149, 0, 0.1);
 	}
+	.tag--war {
+		color: rgb(46, 162, 112);
+		border: 1px solid rgba(46, 162, 112, 0.2);
+		background-color: rgba(46, 162, 112, 0.2);
+	}
 </style>

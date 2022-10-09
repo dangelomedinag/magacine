@@ -3,8 +3,12 @@
 	import { fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 
+	import Icon from '$icons/icon.svelte';
+	import Star from '$icons/solid/star.svelte';
+
 	import ProgressLine from '$components/card/cardProgressLine.svelte';
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
+	import { FavMovies } from '$lib/stores/favoritesStore';
 
 	export let full = false;
 	export let details = true;
@@ -17,6 +21,8 @@
 	onMount(() => {
 		if (!details) promiseDetails = Promise.reject();
 	});
+
+	$: isFav = $FavMovies.some((m) => m.imdbid === movie.imdbid);
 
 	const callback = (entries, observer) => {
 		entries.forEach((entry) => {
@@ -61,8 +67,21 @@
 	use:intersecting={callback}
 	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
 	class="item"
+	class:fav-active={isFav}
 >
-	<a sveltekit:prefetch class="item-link" href="/movies/{movie.imdbid}">
+	<button
+		on:click={() => {
+			FavMovies.toogleFav(movie);
+		}}
+		class="fav"
+	>
+		<Icon y="5%"
+			><Star />{#if isFav}
+				fav
+			{/if}</Icon
+		>
+	</button>
+	<a data-sveltekit-prefetch class="item-link" href="/movies/{movie.imdbid}">
 		<img class="item-poster" src={movie.poster} alt={movie.title} loading="lazy" />
 	</a>
 
@@ -92,8 +111,8 @@
 						</div>
 						<CardRatingStarts rating={value.imdbrating} />
 					</div>
-				{:catch err}
-					<!-- err handle -->
+				{:catch}
+					<!--  -->
 				{/await}
 			</div>
 		</figcaption>
@@ -105,6 +124,43 @@
 		--card-w: 500px;
 		--card-h: 350px;
 	} */
+
+	.fav {
+		--icon-size: 1.5rem;
+		display: none;
+		font-weight: bold;
+
+		color: rgb(255, 221, 50);
+		background-color: #1f1c23;
+		padding: 0 0.3em;
+		margin: 0.8em;
+		border-radius: 50vh;
+		/* width: calc(var(--icon-size) + 0.5rem);
+		height: calc(var(--icon-size) + 0.5rem); */
+		border: 1px solid transparent;
+
+		/* display: block; */
+		position: absolute;
+		top: 0;
+		right: 0;
+
+		box-shadow: var(--shadow-long);
+	}
+
+	.fav:hover {
+		color: #1f1c23;
+		background-color: rgb(255, 221, 50);
+	}
+
+	.fav-active {
+		border-bottom: 2px solid rgb(255, 221, 50) !important;
+	}
+
+	.fav-active .fav {
+		display: block !important;
+		color: #1f1c23;
+		background-color: rgb(255, 221, 50);
+	}
 
 	.item {
 		position: relative;
@@ -131,6 +187,7 @@
 		overflow: hidden;
 		margin: 0;
 		padding: 0;
+		border-radius: 15px;
 	}
 
 	.item-poster {
@@ -185,6 +242,9 @@
 	.item:hover {
 		/* box-shadow: var(--shadow-long); */
 		transform: translateY(-1%);
+	}
+	.item:hover .fav {
+		display: block;
 	}
 
 	.item:hover .movie-title {

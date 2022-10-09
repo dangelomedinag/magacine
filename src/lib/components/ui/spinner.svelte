@@ -1,7 +1,7 @@
 <script>
-	export let color = 'brown';
+	export let color = 'var(--c-front)';
 	export let position = 'static';
-	export let size = 80;
+	export let size = '5rem';
 	export let top = false;
 	export let left = false;
 	export let right = false;
@@ -15,9 +15,9 @@
 	style:left
 	style:right
 	style:bottom
-	style:width={size + 'px'}
-	style:height={size + 'px'}
-	style="border-color: {color};"
+	style:with={size}
+	style:height={size}
+	style="border-color: {color}; --size-spin:{size};"
 >
 	<span />
 	<span />
@@ -26,6 +26,7 @@
 
 <style>
 	.lds-ripple {
+		/* --size-spin: 10rem; */
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
@@ -58,8 +59,8 @@
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			width: 72px;
-			height: 72px;
+			width: var(--size-spin);
+			height: var(--size-spin);
 			opacity: 0;
 		}
 	}

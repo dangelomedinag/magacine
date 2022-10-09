@@ -1,0 +1,29 @@
+[
+	{
+		"username": "dangelomedinag",
+		"name": "dangelo",
+		"lastname": "medina",
+		"id": "523asd4sa523d",
+		"hash": "$2b$06$CGG4cTPtxNB/L7nlR07xBOOxyk9yWAqmRGp3mHOV7WGrWJMqDuZwK",
+		"role": "admin",
+		"refresh_token": "ab4c0467-de78-4d91-8f6d-8420441a13d2"
+	},
+	{
+		"username": "other",
+		"name": "loco",
+		"lastname": "maldini",
+		"id": "kldasdas45da12s3",
+		"hash": "$2b$06$CGG4cTPtxNB/L7nlR07xBOOxyk9yWAqmRGp3mHOV7WGrWJMqDuZwK",
+		"role": "admin",
+		"refresh_token": "199b25d9-3111-422c-b0d4-251b5ff9795d"
+	},
+	{
+		"username": "mariaalcala1",
+		"name": "maria",
+		"lastname": "alcala",
+		"id": "sdasalkhfda090fd8yfaknl",
+		"hash": "$2b$06$CGG4cTPtxNB/L7nlR07xBOOxyk9yWAqmRGp3mHOV7WGrWJMqDuZwK",
+		"role": "admin",
+		"refresh_token": "b925c15a-bd16-4899-a249-abf97ff85385"
+	}
+]

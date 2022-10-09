@@ -9,6 +9,7 @@
 
 	export let href = undefined;
 	export let title = undefined;
+	export let type = undefined;
 
 	function tap(node) {
 		function sendEvent() {
@@ -24,13 +25,15 @@
 		};
 	}
 
-	$: active = $page.url.pathname === href;
+	$: active = $page.url.pathname === href ?? false;
+
 	$: obj = $notiStore.filter((e) => e.label === href);
 </script>
 
 <svelte:element
 	this={href ? 'a' : 'button'}
-	class="link {active ? 'active' : ''}"
+	type={href ? undefined : type ? type : undefined}
+	class="link"
 	class:active
 	{href}
 	on:click
@@ -91,8 +94,8 @@
 		display: inline-block;
 		top: -50%;
 		right: -10px;
-		background-color: var(--aside-link-bubble-bg);
-		color: var(--aside-link-bubble);
+		background-color: var(--c-front);
+		color: var(--c-white);
 		padding: 0 7px;
 		/* padding-left: 5px;
 		padding-right: 5px; */
@@ -130,6 +133,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		border: 1px solid transparent;
+		/* background-color: white; */
 		/* color: var(--aside-link-label); */
 		/* position: relative; */
 	}
@@ -182,13 +186,13 @@
 			top: 0;
 			width: auto;
 			left: 40px;
-			background-color: var(--aside-link-label-bg);
+			background-color: var(--c-main-invert);
 			border-radius: 50vh;
 			border-color: var(--c-divider);
 			padding-top: 0.2em;
 			padding-bottom: 0.2em;
 
-			color: var(--aside-link-label);
+			color: var(--c-main);
 			box-shadow: var(--shadow-long);
 		}
 		:global(aside:not(.toggle)) .link:hover .notification {

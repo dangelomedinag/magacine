@@ -1,5 +1,5 @@
 <script>
-	import { session } from '$app/stores';
+	import { page } from '$app/stores';
 
 	// icons
 	import Icon from '$icons/icon.svelte';
@@ -9,7 +9,7 @@
 </script>
 
 <header class="modal-header">
-	{$session.user.name}
+	{$page.data.user.name}
 </header>
 
 <ul class="list">

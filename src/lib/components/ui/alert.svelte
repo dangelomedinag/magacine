@@ -45,22 +45,11 @@
 	</span>
 </div>
 
-<style>
-	:root {
-		/* alert */
-		--alert-text: var(--c-text-base);
-		--alert-bg: transparent;
-		--alert-border: var(--c-text-base);
-	}
-
-	:global(body[data-theme='light']) {
-		/* alert */
-		--alert-text: var(--c-text-base);
-		--alert-bg: transparent;
-		--alert-border: var(--c-text-base);
-	}
-
+<style lang="scss">
 	.alert {
+		--alert-text: var(--c-text-base);
+		--alert-bg: transparent;
+		--alert-border: var(--c-text-base);
 		--icon-size: 1.5rem;
 
 		will-change: transform;
@@ -81,50 +70,94 @@
 	}
 
 	.alert--success {
-		color: rgb(123, 190, 148);
-		border: 1px solid rgb(0, 70, 35);
-		background-color: rgb(49, 49, 0);
+		--alert-bg: rgb(123, 190, 148);
+		/* --alert-border: rgb(0, 70, 35); */
+		--alert-text: rgb(0, 70, 35);
 	}
 
-	.alert--warn {
-		--alert-text: rgb(190, 190, 123);
-		--alert-bg: rgb(49, 49, 0);
-		--alert-border: rgb(70, 70, 0);
-
-		color: var(--alert-text);
-		border: 1px solid var(--alert-border);
-		background-color: var(--alert-bg);
-	}
-	:global(body[data-theme='light']) .alert--warn {
-		/* alert */
-		--alert-text: rgb(115, 97, 4);
-		--alert-bg: rgb(225, 206, 128);
-		--alert-border: rgb(160, 143, 16);
-	}
-
-	.alert--danger {
-		--alert-text: rgb(255, 137, 137);
-		--alert-bg: rgb(160, 65, 65);
-		--alert-border: rgb(128, 44, 44);
-
-		color: var(--alert-text);
-		border: 1px solid var(--alert-border);
-		background-color: var(--alert-bg);
+	@mixin dark-theme {
+		.alert--success {
+			--alert-text: rgb(123, 190, 148);
+			--alert-bg: rgb(0, 70, 35);
+			/* --alert-border: rgb(0, 70, 35); */
+		}
+		.alert--warn {
+			--alert-text: rgb(190, 190, 123);
+			--alert-bg: rgb(49, 49, 0);
+			/* --alert-border: rgb(70, 70, 0); */
+		}
+		.alert--danger {
+			--alert-text: rgb(255, 171, 171);
+			--alert-bg: rgb(140, 47, 47);
+			--alert-border: rgb(128, 44, 44);
+		}
 	}
 
-	:global(body[data-theme='light']) .alert--danger {
-		/* alert */
-		--alert-text: rgb(255, 171, 171);
-		--alert-bg: rgb(140, 47, 47);
-		--alert-border: rgb(128, 44, 44);
+	@mixin light-theme {
+		.alert--warn {
+			--alert-text: #9d8929;
+			--alert-bg: #fff7d2;
+			/* --alert-border: rgb(219 195 70); */
+		}
+		.alert--danger {
+			--alert-text: rgb(255, 137, 137);
+			--alert-bg: rgb(160, 65, 65);
+			--alert-border: rgb(128, 44, 44);
+		}
 	}
+
+	@media (prefers-color-scheme: dark) {
+		@include dark-theme;
+
+		:global(:root.light) {
+			@include light-theme;
+		}
+	}
+	@media (prefers-color-scheme: light) {
+		@include light-theme;
+
+		:global(:root.dark) {
+			@include light-theme;
+		}
+	}
+
+	// :global(:root.dark) {
+	// 	.alert--success {
+	// 		--alert-text: rgb(123, 190, 148);
+	// 		--alert-bg: rgb(0, 70, 35);
+	// 		/* --alert-border: rgb(0, 70, 35); */
+	// 	}
+	// 	.alert--warn {
+	// 		--alert-text: rgb(190, 190, 123);
+	// 		--alert-bg: rgb(49, 49, 0);
+	// 		/* --alert-border: rgb(70, 70, 0); */
+	// 	}
+	// 	.alert--danger {
+	// 		--alert-text: rgb(255, 171, 171);
+	// 		--alert-bg: rgb(140, 47, 47);
+	// 		--alert-border: rgb(128, 44, 44);
+	// 	}
+	// }
+
+	/* @media (prefers-color-scheme: light) { */
+	// :global(:root.light) {
+	// 	.alert--warn {
+	// 		--alert-text: #9d8929;
+	// 		--alert-bg: #fff7d2;
+	// 		/* --alert-border: rgb(219 195 70); */
+	// 	}
+	// 	.alert--danger {
+	// 		--alert-text: rgb(255, 137, 137);
+	// 		--alert-bg: rgb(160, 65, 65);
+	// 		--alert-border: rgb(128, 44, 44);
+	// 	}
+	// }
+	/* } */
 
 	.alert__icon {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		/* padding: 0.8em; */
-		/* background-color: rgb(67, 33, 33); */
 	}
 
 	.alert__message :global(span) {

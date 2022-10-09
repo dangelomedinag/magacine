@@ -1,0 +1,59 @@
+:root {
+	color-scheme: dark light;
+	--c-white: white;
+	--c-dark: 242424;
+	--c-main-invert: white;
+	--c-main: #1f1c23;
+	--c-main-content: hsl(273, 13%, 16%);
+	--c-front: #e63946;
+	--c-front-dark: hsl(355, 63%, 35%);
+	--c-text-base: #f1faee;
+	--c-divider: rgba(255, 255, 255, 0.1);
+	--shadow-long: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+		0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
+		0 32px 64px rgba(0, 0, 0, 0.07);
+
+	color: var(--c-text-base);
+}
+
+@mixin light-theme-scheme {
+	color-scheme: light;
+	--c-main-invert: #242424;
+	--c-main: #ffffff;
+	--c-main-content: hsl(0, 0%, 90%);
+	--c-text-base: #161616;
+	--c-divider: rgba(0, 0, 0, 0.1);
+}
+
+@mixin dark-theme-scheme {
+	color-scheme: dark;
+	--c-main-invert: white;
+	--c-main: #1f1c23;
+	--c-main-content: hsl(273, 13%, 16%);
+	--c-text-base: #f1faee;
+	--c-divider: rgba(255, 255, 255, 0.1);
+}
+
+/*
+* Light Theme Colors
+*/
+@media (prefers-color-scheme: light) {
+	:root {
+		@include light-theme-scheme;
+	}
+	:root.dark {
+		@include dark-theme-scheme;
+	}
+}
+
+/*
+* Dark Theme Colors
+*/
+@media (prefers-color-scheme: dark) {
+	:root {
+		@include dark-theme-scheme;
+	}
+	:root.light {
+		@include light-theme-scheme;
+	}
+}

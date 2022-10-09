@@ -1,4 +1,6 @@
 <script>
+	// import { browser } from '$app/environment';
+
 	// icons
 	/* import Icon from '$icons/icon.svelte';
 	import Sun from '$icons/solid/sun.svelte';

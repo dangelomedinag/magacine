@@ -83,11 +83,11 @@
 			</svelte:fragment>
 			Bookmarked</AsideItem
 		>
-		<AsideItem href="/rated" on:tap>
+		<AsideItem href="/favorites" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Star /></Icon>
 			</svelte:fragment>
-			Top Rated</AsideItem
+			Favorites</AsideItem
 		>
 		<AsideItem href="/download" on:tap>
 			<svelte:fragment slot="icon">
@@ -95,7 +95,7 @@
 			</svelte:fragment>
 			Downloaded</AsideItem
 		>
-		<AsideItem href="/search?s=" on:tap>
+		<AsideItem href="/search" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon><Search /></Icon>
 			</svelte:fragment>
@@ -116,12 +116,15 @@
 			</svelte:fragment>
 			Help</AsideItem
 		>
-		<AsideItem href="/auth/logout" on:tap>
-			<svelte:fragment slot="icon">
-				<Icon><Logout /></Icon>
-			</svelte:fragment>
-			Logout</AsideItem
-		>
+
+		<form method="post" action="/logout" style="display: contents;">
+			<AsideItem on:tap type="submit">
+				<svelte:fragment slot="icon">
+					<Icon><Logout /></Icon>
+				</svelte:fragment>
+				Logout
+			</AsideItem>
+		</form>
 
 		<AsideItem title="toggle theme" on:click={themeStore.toogleTheme}>
 			<svelte:fragment slot="icon">

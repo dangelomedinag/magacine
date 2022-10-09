@@ -169,9 +169,13 @@
 		Session <Icon y="10%"><UserCircle /></Icon>
 	</svelte:fragment>
 	<SessionModal />
+
 	<svelte:fragment slot="action">
-		<a class="list__logout" href="/auth/logout">logout <Icon><Logout /></Icon></a>
-		<button href="/auth/logout" on:click={modalSession.close} class="cta">close</button>
+		<form method="post" action="/logout" style="display: contents;">
+			<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
+		</form>
+		<!-- <a class="list__logout" href="/auth/logout">logout <Icon><Logout /></Icon></a> -->
+		<button on:click={modalSession.close} class="cta">close</button>
 	</svelte:fragment>
 </Modal>
 
@@ -235,7 +239,7 @@
 		top: 0;
 		z-index: 51;
 		overflow: hidden;
-		background-color: var(--navbar-bg);
+		background-color: var(--c-main-content);
 		border-bottom: 1px solid var(--c-divider);
 		box-shadow: var(--shadow-short);
 		transition: transform 0.3s ease-in-out, var(--transition-theme);

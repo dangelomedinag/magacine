@@ -11,7 +11,7 @@ export const listFormat = (
 	return intl.format(array);
 };
 export const setBodyScroll = (state, ref) => {
-	import('$app/env').then(({ browser }) => {
+	import('$app/environment').then(({ browser }) => {
 		if (browser) {
 			const body = document.body;
 			const prop = body.style.overflow;
@@ -73,3 +73,7 @@ export const scrollToTarget = (node, opts) => {
 		}
 	};
 };
+export const timeoutPromise = (ms = 1500) =>
+	new Promise((res) => {
+		setTimeout(res, ms);
+	});

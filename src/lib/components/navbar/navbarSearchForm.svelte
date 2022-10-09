@@ -14,7 +14,6 @@
 	function handleEsc(e) {
 		if (e.key === 'Escape') {
 			e.preventDefault();
-			console.log('escape');
 			dispatch('esc');
 		}
 	}

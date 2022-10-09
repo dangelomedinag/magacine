@@ -1,5 +1,5 @@
 <script>
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import { onDestroy, onMount, createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -176,8 +176,8 @@
 		/* padding-top: 1em; */
 	}
 
-	.modal__actions > :global(button),
-	.modal__actions > :global(a) {
+	.modal__actions :global(button),
+	.modal__actions :global(a) {
 		flex: 1 1 100%;
 		text-align: center;
 		background-color: transparent;
@@ -188,28 +188,28 @@
 		text-decoration: none;
 	}
 
-	.modal__actions > :global(button:hover),
-	.modal__actions > :global(a:hover) {
+	.modal__actions :global(button:hover),
+	.modal__actions :global(a:hover) {
 		background-color: var(--c-divider);
 	}
-	.modal__actions > :global(a:hover) {
+	.modal__actions :global(a:hover) {
 		text-decoration: underline;
 		text-underline-offset: 2px;
 		text-decoration-style: dotted;
 	}
 
-	.modal__actions > :global(button.cta),
-	.modal__actions > :global(a.cta) {
+	.modal__actions :global(button.cta),
+	.modal__actions :global(a.cta) {
 		background-color: var(--c-front);
 		color: white;
 	}
-	.modal__actions > :global(button.cta:hover),
-	.modal__actions > :global(a.cta:hover) {
+	.modal__actions :global(button.cta:hover),
+	.modal__actions :global(a.cta:hover) {
 		background-color: var(--c-front-dark);
 	}
 
-	.modal__actions > :global(button:focus),
-	.modal__actions > :global(a:focus) {
+	.modal__actions :global(button:focus),
+	.modal__actions :global(a:focus) {
 		outline-style: dashed;
 		outline-width: 2px;
 		outline-offset: -2px;

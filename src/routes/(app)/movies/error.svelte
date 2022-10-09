@@ -10,7 +10,7 @@
 		</div>
 		<div class="details">
 			<h1>Hmm.</h1>
-			<code>{$page.error.message} - {$page.error.whateverYouWant}</code>
+			<code>{$page.error.message}</code>
 			<p>
 				It seems that the page you were trying to access is no longer available. Let us help guide
 				you out and get you back home.
