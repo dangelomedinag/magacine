@@ -56,7 +56,7 @@
 
 <style>
 	.link {
-		font-size: 0.9rem;
+		font-size: 0.9em;
 		font-weight: 700;
 		width: 100%;
 		display: block;

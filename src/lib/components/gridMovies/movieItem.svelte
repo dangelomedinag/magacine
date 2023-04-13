@@ -1,9 +1,11 @@
 <script>
+	import { fly, scale } from 'svelte/transition';
+
 	export let movie;
 </script>
 
-<a href="movies/{movie.imdbid}">
-	<img src={movie.poster} alt="poster of movie - {movie.title}" loading="lazy" />
+<a in:fly={{ duration: 300, y: '5%' }} href="movies/{movie.imdbid}">
+	<img loading="lazy" src={movie.poster} alt="poster of movie - {movie.title}" />
 </a>
 
 <style>
@@ -25,6 +27,8 @@
 		display: block;
 		width: 100%;
 		height: 100%;
+		min-height: 100px;
+		max-height: 250px;
 		object-fit: cover;
 	}
 </style>

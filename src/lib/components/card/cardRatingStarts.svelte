@@ -1,7 +1,7 @@
 <script>
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import StarSolid from '$icons/solid/star.svelte';
+	import StarSolid from '$icons/solid/star.svg?raw';
 	import StarOutline from '$icons/outline/star.svelte';
 
 	export let rating;
@@ -22,7 +22,7 @@
 			</Icon>
 		{:else}
 			<Icon style="color: var(--rating-stars-fill);">
-				<StarSolid />
+				{@html StarSolid}
 			</Icon>
 		{/if}
 	{/each}

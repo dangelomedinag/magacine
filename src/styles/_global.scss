@@ -5,10 +5,11 @@
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
+	box-sizing: inherit;
 }
 
 html {
+	box-sizing: border-box;
 	font-size: 16px;
 	font-smooth: always;
 	-webkit-font-smoothing: antialiased;
@@ -30,6 +31,7 @@ body {
 	background-color: var(--c-main-content);
 	color: var(--c-text-base);
 	transition: var(--transition-theme);
+	font-size: 0.95em;
 }
 
 h1,
@@ -57,6 +59,10 @@ a {
 }
 
 @media (min-width: 576px) {
+	body {
+		font-size: 1em;
+	}
+
 	.content {
 		--gap-content: 2em;
 	}

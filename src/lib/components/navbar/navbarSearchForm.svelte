@@ -5,9 +5,9 @@
 
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import X from '$icons/solid/x.svelte';
-	import Search from '$icons/solid/search.svelte';
-	import Trash from '$icons/solid/trash.svelte';
+	import X from '$icons/solid/x.svg?raw';
+	import Search from '$icons/solid/search.svg?raw';
+	import Trash from '$icons/solid/trash.svg?raw';
 
 	const dispatch = createEventDispatcher();
 	let value = '';
@@ -50,13 +50,13 @@
 	{#if value?.length > 0}
 		<button class="btn" type="reset">
 			<Icon>
-				<Trash />
+				{@html Trash}
 			</Icon>
 		</button>
 	{:else}
 		<button class="btn" type="reset" on:click={() => dispatch('close')}>
 			<Icon>
-				<X />
+				{@html X}
 			</Icon>
 		</button>
 	{/if}
@@ -74,7 +74,7 @@
 	/>
 	<button class="btn btn-submit">
 		<Icon>
-			<Search />
+			{@html Search}
 		</Icon>
 	</button>
 </form>

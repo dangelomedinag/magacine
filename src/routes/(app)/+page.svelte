@@ -8,22 +8,7 @@
 
 	import { scrollToTarget } from '$helpers';
 
-	let movies = [];
-
-	onMount(async () => {
-		const reqs = [
-			fetch('/api?s=marvel&type=movie').then((r) => {
-				return r.json();
-			}),
-			fetch('/api?s=city&type=series').then((r) => {
-				return r.json();
-			})
-		];
-
-		const res = await Promise.all(reqs);
-		const data = res.map((e) => (e.message ? new Error(e.message) : e));
-		movies = data;
-	});
+	export let data;
 
 	let act = 'movies';
 
@@ -37,7 +22,23 @@
 </svelte:head>
 
 <NavbarTop>
-	<button
+	{#await data.stream.movies then _}
+		<a
+			data-sveltekit-replacestate
+			class:active={act === 'movies'}
+			on:click={() => setTab('movies')}
+			href="#index-movies">Movies</a
+		>
+	{/await}
+	{#await data.stream.series then _}
+		<a
+			data-sveltekit-replacestate
+			class:active={act === 'series'}
+			on:click={() => setTab('series')}
+			href="#index-movies">Series</a
+		>
+	{/await}
+	<!-- <button
 		use:scrollToTarget={{ target: '#index-movies' }}
 		on:click={() => setTab('movies')}
 		class:active={act === 'movies'}>Movies</button
@@ -46,7 +47,7 @@
 		use:scrollToTarget={{ target: '#index-movies' }}
 		on:click={() => setTab('series')}
 		class:active={act === 'series'}>Series</button
-	>
+	> -->
 </NavbarTop>
 
 <Hero />
@@ -57,25 +58,36 @@
 	{/if}
 </div> -->
 
-<div id="index-movies">
-	{#if act === 'movies'}
-		<CarouselMovies
-			details={false}
-			movies={movies[0]}
-			title="Our pick for {$page.data.user.name}"
-			--card-w="220px"
-			--card-h="370px"
-		/>
-	{/if}
+{#if data.stream}
+	<div id="index-movies">
+		{#await data.stream.movies then value}
+			{#if act === 'movies'}
+				<CarouselMovies
+					details={false}
+					movies={value}
+					title="Our pick for {$page.data.user.name}"
+				/>
+			{/if}
+		{/await}
+		{#await data.stream.series then value}
+			{#if act === 'series'}
+				<CarouselMovies
+					details={false}
+					movies={value}
+					title="Our pick for {$page.data.user.name}"
+				/>
+			{/if}
+		{/await}
+	</div>
+{/if}
 
-	{#if act === 'series'}
+<!-- {#if act === 'series'}
 		<CarouselMovies
 			details={false}
 			movies={movies[1]}
 			title="Our pick for {$page.data.user.name}"
 		/>
-	{/if}
-</div>
+	{/if} -->
 
 <style>
 	/* @media (min-width: 576px) {}
@@ -83,11 +95,11 @@
 	@media (min-width: 992px) {}
 	@media (min-width: 1200px) {} */
 
-	.content {
+	/* .content {
 		padding-top: 1em;
-	}
+	} */
 
-	h1 {
+	/* h1 {
 		font-size: 2rem;
 		margin-top: 0;
 		font-weight: lighter;
@@ -96,5 +108,5 @@
 
 	span {
 		font-weight: normal;
-	}
+	} */
 </style>

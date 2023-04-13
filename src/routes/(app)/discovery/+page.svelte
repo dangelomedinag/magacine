@@ -4,7 +4,7 @@
 	// components
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
-	import Alert from '$components/ui/alert.svelte';
+	// import Alert from '$components/ui/alert.svelte';
 	import Hero from '$components/ui/hero.svelte';
 
 	let movies = [];
@@ -61,7 +61,7 @@
 
 <div class="wrapper">
 	{#if act === 'suspense'}
-		<CarouselMovies movies={movies[0]} full title="Suspense" --card-w="240px" --card-h="390px" />
+		<CarouselMovies movies={movies[0]} full title="Suspense" />
 		{#if imgs}
 			<Hero
 				words={[{ word: 'Suspense', imgs: imgs[0] }, { word: 'Blood' }]}

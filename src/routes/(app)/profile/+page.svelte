@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import { themeStore } from '$lib/stores/theme-store';
-	let form;
+	// let form;
 
 	function getColorSchemePrefers(event) {
 		if (event) return event.matches ? 'light' : 'dark';
@@ -26,8 +26,6 @@
 			id="theme"
 			value={$themeStore}
 			on:change={(e) => {
-				console.log(e.target.value);
-
 				if (e.target.value === 'system') {
 					document.documentElement.classList.remove('dark');
 					document.documentElement.classList.remove('light');

@@ -1,10 +1,7 @@
 <script>
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
-	/** @type {import("./$types").PageData}*/
 	export let data;
-
-	
 </script>
 
 <NavbarTop />

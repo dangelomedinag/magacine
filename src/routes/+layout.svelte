@@ -1,6 +1,5 @@
 <script>
 	import { dev } from '$app/environment';
-	import { navigating } from '$app/stores';
 	import NProgress from 'nprogress';
 	import MediaQueries from '$components/dev/mediaQueries.svelte';
 	import 'nprogress/nprogress.css';
@@ -53,16 +52,6 @@
 	NProgress.configure({
 		minimum: 0.16
 	});
-
-	// $: {
-	// 	if ($navigating) {
-
-	// 		NProgress.start();
-	// 	}
-	// 	if (!$navigating) {
-	// 		NProgress.done();
-	// 	}
-	// }
 
 	beforeNavigate(() => {
 		NProgress.start();

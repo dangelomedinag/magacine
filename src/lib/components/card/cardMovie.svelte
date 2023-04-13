@@ -4,7 +4,7 @@
 	import { quintInOut } from 'svelte/easing';
 
 	import Icon from '$icons/icon.svelte';
-	import Star from '$icons/solid/star.svelte';
+	import Star from '$icons/solid/star.svg?raw';
 
 	import ProgressLine from '$components/card/cardProgressLine.svelte';
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
@@ -76,13 +76,13 @@
 		class="fav"
 	>
 		<Icon y="5%"
-			><Star />{#if isFav}
+			>{@html Star}{#if isFav}
 				fav
 			{/if}</Icon
 		>
 	</button>
-	<a data-sveltekit-prefetch class="item-link" href="/movies/{movie.imdbid}">
-		<img class="item-poster" src={movie.poster} alt={movie.title} loading="lazy" />
+	<a data-sveltekit-preload-code class="item-link" href="/movies/{movie.imdbid}">
+		<img loading="lazy" class="item-poster" src={movie.poster} alt={movie.title} />
 	</a>
 
 	{#if progress}
@@ -127,7 +127,7 @@
 
 	.fav {
 		--icon-size: 1.5rem;
-		display: none;
+		/* display: none; */
 		font-weight: bold;
 
 		color: rgb(255, 221, 50);
@@ -157,7 +157,7 @@
 	}
 
 	.fav-active .fav {
-		display: block !important;
+		/* display: block !important; */
 		color: #1f1c23;
 		background-color: rgb(255, 221, 50);
 	}
@@ -236,6 +236,15 @@
 		margin-right: 5px;
 	}
 
+	@media (min-width: 576px) {
+		.fav {
+			display: none;
+		}
+
+		.fav-active .fav {
+			display: block;
+		}
+	}
 	@media (min-width: 768px) {
 	}
 

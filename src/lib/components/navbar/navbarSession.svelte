@@ -79,6 +79,7 @@
 		align-items: center;
 		color: var(--c-text-base);
 		text-decoration: none;
+		font-size: 1em;
 	}
 
 	.list__label {

@@ -1,4 +1,8 @@
 <script>
+	import { onMount } from 'svelte';
+	export let icon;
+	export let name = '';
+	export let type = 'solid';
 	export let counter = false;
 	export let x = undefined;
 	export let y = undefined;
@@ -7,6 +11,9 @@
 	export let shadow = false;
 	let Class = '';
 	export { Class as class };
+	onMount(async () => {
+		icon = await import(`./${type}/${name}.svg?raw`);
+	});
 </script>
 
 <div
@@ -21,7 +28,10 @@
 		? `rotate(${deg})`
 		: ''}
 >
-	<slot />
+	<!-- <slot /> -->
+	{#if icon}
+		{@html icon.default}
+	{/if}
 	{#if counter}
 		<div class="counter">{counter}</div>
 	{/if}
@@ -29,7 +39,7 @@
 
 <style>
 	:root {
-		--icon-size: 1em;
+		--icon-size: 1rem;
 	}
 
 	div {

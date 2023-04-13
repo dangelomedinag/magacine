@@ -1,11 +1,10 @@
 <script>
-	import Alert from '$components/ui/alert.svelte';
 	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
 	import { pricePlans } from '$lib/stores/plans-store';
-	import { enhance, applyAction } from '$app/forms';
+	import Alert from '$components/ui/alert.svelte';
 	import Spinner from '$components/ui/spinner.svelte';
 
-	/**@type {import("./$types").ActionData}*/
 	export let form;
 	let loading = false;
 	function onclick() {
@@ -32,7 +31,6 @@
 			<form action="/logout" method="post">
 				<button type="submit" class="login__close">logout all sessions</button>
 			</form>
-			<!-- <a href="/logout" class="login__close">logout all sessions</a> -->
 		{:else}
 			<h1 class="login__title">Sign In</h1>
 			<form
@@ -43,7 +41,7 @@
 						form.errors = undefined;
 					}
 					loading = true;
-					return async ({ result, update }) => {
+					return async ({ update }) => {
 						await update();
 						loading = false;
 					};

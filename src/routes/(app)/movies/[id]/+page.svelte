@@ -1,9 +1,4 @@
 <script>
-	// throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
-
-	import { afterNavigate } from '$app/navigation';
-	import { onMount } from 'svelte';
-
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import Alert from '$components/ui/alert.svelte';
@@ -12,80 +7,62 @@
 	import RuntimeMovie from '$components/movie/runtimeMovie.svelte';
 	import InfoMovie from '$components/movie/infoMovie.svelte';
 
-	import { randomInt, scrollToTarget } from '$helpers';
-
 	//icons
 	import Icon from '$icons/icon.svelte';
-	import Play from '$icons/solid/play.svelte';
-	// import { FavMovies } from '$lib/stores/favoritesStore';
-	// import Star from '$components/icons/solid/star.svelte';
+	import Play from '$icons/solid/play.svg?raw';
 
-	/**@type {import("./$types").PageData}*/
 	export let data;
 	let showPlayer = false;
-	let suggestionsMovies;
+	// let suggestionsMovies;
 
-	onMount(() => {
-		getSuggest();
-	});
+	// onMount(() => {
+	// 	getSuggest();
+	// });
 
-	async function getSuggest() {
-		suggestionsMovies = null;
+	// async function getSuggest() {
+	// 	suggestionsMovies = null;
 
-		const { genre, plot } = data.movie;
-		let selected;
-		if (plot) {
-			const plotArr = plot.split(' ');
-			const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
-			selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
-		} else {
-			if (genre.length > 0) {
-				selected = genre[randomInt(genre.length - 1)];
-			}
-		}
+	// 	const { genre, plot } = data.movie;
+	// 	let selected;
+	// 	if (plot) {
+	// 		const plotArr = plot.split(' ');
+	// 		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
+	// 		selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
+	// 	} else {
+	// 		if (genre.length > 0) {
+	// 			selected = genre[randomInt(genre.length - 1)];
+	// 		}
+	// 	}
 
-		// try {
-		// 	if (!selected) throw Error('no content');
-		// 	const req = await fetch(
-		// 		'/api?s=' + selected.toLowerCase().replace(/\.|\(|\)|\"|\'|\,|\$|\-/g, '')
-		// 	);
-		// 	if (!req.ok) {
-		// 		throw Error('bad request');
-		// 	}
-		// 	existSuggestions = true;
-		// 	return req.json();
-		// } catch (error) {
-		// 	existSuggestions = false;
-		// 	return Promise.reject();
-		// }
+	// 	try {
+	// 		if (!selected) throw Error('no content for now');
 
-		try {
-			if (!selected) throw Error('no content for now');
+	// 		const req = await fetch(
+	// 			'/api?s=' + selected.toLowerCase().replace(/\.|\(|\)|"|'|,|\$|-/g, '')
+	// 		);
+	// 		if (!req.ok) throw Error('bad request');
 
-			const req = await fetch(
-				'/api?s=' + selected.toLowerCase().replace(/\.|\(|\)|"|'|,|\$|-/g, '')
-			);
-			if (!req.ok) throw Error('bad request');
+	// 		suggestionsMovies = await req.json();
+	// 	} catch (error) {
+	// 		suggestionsMovies = Error(error.message);
+	// 	}
+	// }
 
-			suggestionsMovies = await req.json();
-		} catch (error) {
-			suggestionsMovies = Error(error.message);
-		}
-	}
+	// afterNavigate(({ from, to }) => {
+	// 	if (
+	// 		from &&
+	// 		to &&
+	// 		from.url.pathname.startsWith('/movies/') &&
+	// 		to.url.pathname.startsWith('/movies/')
+	// 	) {
+	// 		if (from.url.pathname !== to.url.pathname) {
+	// 			getSuggest();
+	// 			showPlayer = false;
+	// 		}
+	// 	}
+	// });
 
-	afterNavigate(({ from, to }) => {
-		if (
-			from &&
-			to &&
-			from.url.pathname.startsWith('/movies/') &&
-			to.url.pathname.startsWith('/movies/')
-		) {
-			if (from.url.pathname !== to.url.pathname) {
-				getSuggest();
-				showPlayer = false;
-			}
-		}
-	});
+	// $: console.log(data);
 </script>
 
 <svelte:head>
@@ -96,21 +73,19 @@
 </svelte:head>
 
 <NavbarTop>
-	{#key suggestionsMovies}
-		<a href="#info" use:scrollToTarget>info</a>
-		{#if suggestionsMovies && !(suggestionsMovies instanceof Error)}
-			<a href="#suggest" use:scrollToTarget>suggest</a>
-		{/if}
-	{/key}
+	<a href="#info">info</a>
+	{#if !data.error}
+		<a href="#suggest">suggest</a>
+	{/if}
 </NavbarTop>
 
-<div class="container ">
+<div class="container">
 	<div class:movie={showPlayer} class:poster={!showPlayer}>
 		{#if !showPlayer}
 			<img class="image" src={data.movie.poster} alt={data.movie.title} />
 			<button class="btn-play" on:click={() => (showPlayer = !showPlayer)}>
 				<Icon style="background-color: white; border-radius: 50vh;" shadow>
-					<Play />
+					{@html Play}
 				</Icon>
 			</button>
 			<div class="info__item">
@@ -127,18 +102,24 @@
 		{/key}
 	</div>
 </div>
-<!-- <div class="content"> -->
+
 <div class="suggest" id="suggest">
-	<CarouselMovies movies={suggestionsMovies} details={false} title="Suggestions">
-		<div slot="error" style="width: 100%;" class="content">
+	{#if data.error}
+		<div style="width: 100%;" class="content">
 			<Alert warn>
 				For now we do <span>not have related movies or series</span>
 			</Alert>
 		</div>
-	</CarouselMovies>
+	{/if}
+	{#if data.stream}
+		{#await data.stream.suggestions}
+			<CarouselMovies movies={undefined} details={false} title="loading" />
+		{:then value}
+			<CarouselMovies movies={value} details={false} title="Suggestions" />
+		{/await}
+	{/if}
 </div>
 
-<!-- </div> -->
 <style>
 	:root {
 		/* modal */
@@ -229,7 +210,7 @@
 	}
 
 	.suggest {
-		padding-top: 3em;
+		padding-block: 3em;
 	}
 
 	:global(.info__item) {

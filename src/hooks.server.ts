@@ -1,7 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { transformPageColorSchemePrefers } from '$lib/hooks';
 
-/** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
 	const authorization = event.cookies.get('token');
 	if (authorization) {
@@ -21,17 +20,11 @@ export async function handle({ event, resolve }) {
 	}
 
 	const response = await resolve(event, {
+		filterSerializedResponseHeaders: (name) => name.startsWith('cache-control'),
 		transformPageChunk: ({ html }) => {
 			return transformPageColorSchemePrefers(event.cookies, html);
 		}
 	});
 
 	return response;
-}
-
-/**@type {import("@sveltejs/kit").HandleServerError} */
-export function handleError({ error }) {
-	return {
-		message: error.message
-	};
 }

@@ -1,10 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 
-/**@type {import("./$types").Actions} */
 export const actions = {
 	default: ({ cookies, locals }) => {
-		// console.log(locals);
-
 		if (!locals.user) {
 			throw redirect(301, '/login');
 		}

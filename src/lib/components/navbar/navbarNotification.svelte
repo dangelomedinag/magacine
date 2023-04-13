@@ -6,9 +6,9 @@
 
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import Trash from '$icons/solid/trash.svelte';
-	import Eye from '$icons/solid/eye.svelte';
-	import EyeOff from '$icons/solid/eye-off.svelte';
+	import Trash from '$icons/solid/trash.svg?raw';
+	import Eye from '$icons/solid/eye.svg?raw';
+	import EyeOff from '$icons/solid/eye-off.svg?raw';
 
 	import { notiStore } from '$lib/stores/notifications-store';
 
@@ -69,14 +69,14 @@
 						</div>
 						<div class="notification__actions">
 							<button class="actions__btn" on:click={() => DeleteItem(item.id, el.id)}
-								><Icon><Trash /></Icon></button
+								><Icon>{@html Trash}</Icon></button
 							>
 							<button class="actions__btn" on:click={() => MarkAsReadItem(item.id, el.id)}>
 								<Icon>
 									{#if !el.read}
-										<Eye />
+										{@html Eye}
 									{:else}
-										<EyeOff />
+										{@html EyeOff}
 									{/if}
 								</Icon>
 							</button>
@@ -94,6 +94,11 @@
 {/each}
 
 <style>
+	h5 {
+		margin: 0.2em 0;
+		font-size: 1em;
+	}
+
 	.empty {
 		text-align: center;
 	}
@@ -102,10 +107,6 @@
 		font-weight: lighter;
 		margin-top: 2em;
 		font-size: 1.5rem;
-	}
-
-	h5 {
-		margin: 0.2em 0;
 	}
 
 	.notification__list {
@@ -153,7 +154,7 @@
 		background-color: transparent;
 		border: 1px solid transparent;
 		display: block;
-		font-size: 1rem;
+		font-size: 1em;
 		text-decoration: none;
 		padding: 1em;
 		width: 100%;

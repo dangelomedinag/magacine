@@ -2,8 +2,7 @@ import { uuid } from '$helpers';
 import { OMDB_API_KEY } from '$env/static/private';
 import { PUBLIC_OMDB_API_URL } from '$env/static/public';
 
-/** @type {import('./$types').RequestHandler} */
-async function getResource({ url }) {
+async function getResource({ url, setHeaders }) {
 	const params = url.searchParams;
 	const search = params.has('s') ? params.get('s') : false;
 	if (!search) throw { message: 'Query must contain an <s> query param.' };
@@ -41,6 +40,7 @@ async function getResource({ url }) {
 	api.searchParams.set('apikey', OMDB_API_KEY);
 
 	const data = await fetch(api.href);
+
 	const json = await data.json();
 
 	if (!json) throw { message: 'Movies or Series not found.' };
@@ -68,22 +68,21 @@ async function getResource({ url }) {
 		if (!isNaN(n) && n > 0 && json.Search.length > n) json.Search.length = n;
 	}
 
+	setHeaders({
+		'content-type': 'application/json; charset=utf-8',
+		'cache-control': data.headers.get('cache-control')
+	});
+
 	return new Response(
 		JSON.stringify({
 			results: json.Search,
 			totalResults: !rest ? +json.totalResults : +json.totalResults - rest,
 			search: search,
 			query: url.searchParams.toString()
-		}),
-		{
-			headers: {
-				'content-type': 'application/json; charset=utf-8'
-			}
-		}
+		})
 	);
 }
 
-/** @type {import('./$types').RequestHandler} */
 export async function GET(event) {
 	try {
 		const response = await getResource(event);

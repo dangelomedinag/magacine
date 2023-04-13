@@ -1,9 +1,9 @@
-/**
- * @param {import("$lib/types").OMDBMovie} movie
- */
-export function transform(movie) {
-	/**@type {Partial<import("$lib/types").OMDBMovie>} */
-	let obj = {};
+import { uuid } from '$helpers';
+import type { OMDBMovie, MovieItem } from '$lib/types';
+
+export function transform(movie: OMDBMovie) {
+	let obj: Partial<MovieItem> = {};
+	obj.uuid = uuid();
 
 	for (const key in movie) {
 		let value = movie[key];
@@ -20,7 +20,7 @@ export function transform(movie) {
 			let newArray = [];
 
 			newArray = movie[key].map((e) => {
-				let newRatings = {};
+				let newRatings: { [index: string]: any } = {};
 
 				if (!Array.isArray(e) && typeof e === 'object') {
 					for (const k in e) {

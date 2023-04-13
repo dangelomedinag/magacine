@@ -1,15 +1,13 @@
 import { redirect } from '@sveltejs/kit';
 
-/**@type {import("./$types").Actions} */
 export const actions = {
 	default: async ({ cookies, locals, request }) => {
 		if (!locals.user) {
-			throw redirect(404, '/login');
+			throw redirect(307, '/login');
 		}
 		const fields = await request.formData();
 
-		const typeTheme = fields.get('theme');
-		console.log(typeTheme);
+		const typeTheme = fields.get('theme') as string;
 
 		const opts = {
 			path: '/',
@@ -19,13 +17,11 @@ export const actions = {
 		let cookieOpts = {
 			path: '/',
 			httpOnly: true,
-			sameSite: 'strict',
+			sameSite: true,
 			secure: process.env.NODE_ENV === 'production',
 			maxAge: 60 * 60 * 24 * 7
 		};
 
 		cookies.set('mc_theme', typeTheme ?? '', typeTheme === 'system' ? opts : cookieOpts);
-
-		// throw redirect(303, url.pathname);
 	}
 };

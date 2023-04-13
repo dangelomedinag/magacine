@@ -12,7 +12,7 @@
 <style>
 	h1 {
 		margin: 0;
-		font-size: 2rem;
+		font-size: 2em;
 		font-weight: 800;
 	}
 </style>

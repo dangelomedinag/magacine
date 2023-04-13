@@ -1,6 +1,6 @@
 <script>
 	import Icon from '$icons/icon.svelte';
-	import ExternalLink from '$icons/solid/external-link.svelte';
+	import ExternalLink from '$icons/solid/external-link.svg?raw';
 
 	export let value;
 	let arr;
@@ -17,12 +17,12 @@
 				{@const href = 'https://www.google.com/search?q=' + encodeURI(item.trim())}
 
 				{#if i >= arr.length - 1}
-					and <a {href}>{item} <Icon><ExternalLink /></Icon> </a>
+					and <a {href}>{item} <Icon>{@html ExternalLink}</Icon> </a>
 				{:else}
-					<a {href}>{item} <Icon><ExternalLink /></Icon></a>
+					<a {href}>{item} <Icon>{@html ExternalLink}</Icon></a>
 				{/if}
 			{:else}
-				<a {href}>{item} <Icon><ExternalLink /></Icon></a>
+				<a {href}>{item} <Icon>{@html ExternalLink}</Icon></a>
 			{/each}
 		</div>
 	</div>

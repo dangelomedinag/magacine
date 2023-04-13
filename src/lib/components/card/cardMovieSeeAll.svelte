@@ -29,10 +29,10 @@
 </div>
 
 <style>
-	:root {
+	/* :root {
 		--card-w: 200px;
 		--card-h: 350px;
-	}
+	} */
 
 	.item {
 		position: relative;

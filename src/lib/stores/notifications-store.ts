@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export const notiStore = writable([
+const DEMO_NOTIFICATION = [
 	{
 		id: 'ac',
 		label: '/profile',
@@ -41,19 +41,7 @@ export const notiStore = writable([
 				detail: 'Discover these <strong>3 new movies</strong> that premiered this week.'
 			}
 		]
-	},
-	{
-		id: 'b',
-		label: '/community',
-		notification: 'new',
-		items: [
-			{
-				id: '1',
-				read: false,
-				type: 'blog',
-				href: '/community/post/comment?id=1234',
-				detail: '<strong class="username">botchat_real</strong> replied to your comment'
-			}
-		]
 	}
-]);
+];
+
+export const notiStore = writable(DEMO_NOTIFICATION);

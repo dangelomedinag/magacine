@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	// icons
 	import Icon from '$icons/icon.svelte';
 	import ChevronRight from '$icons/outline/chevron-right.svelte';
@@ -7,84 +7,59 @@
 	import Spinner from '$lib/components/ui/spinner.svelte';
 	import CardMovie from '$components/card/cardMovie.svelte';
 	import CardMovieSeeAll from '$components/card/cardMovieSeeAll.svelte';
+	import type { MovieItem } from '$lib/types';
+
+	interface CarouselMoviesData {
+		results: MovieItem[];
+		query?: string;
+		search?: string;
+		totalResults?: number;
+	}
+
+	type CarouselMoviesProp = undefined | CarouselMoviesData | Error;
 
 	// props
-	export let movies;
+	export let movies: CarouselMoviesProp = undefined;
 	export let full = false;
-	export let title;
+	export let title: string = '';
 	export let details = true;
 	export let position = 'relative';
-
-	// let container;
-	// let pageInfo;
-	// let offset = 0;
-
-	/* function prevPage(e) {
-		offset = container.scrollLeft;
-		let prev = 0;
-
-		for (let i = 0; i < pageInfo.steps.length; i++) {
-			if (offset <= pageInfo.steps[i] + 1) {
-				prev = pageInfo.steps[i - 1];
-				break;
-			}
-		}
-
-		container.scrollLeft = prev;
-	} */
-	/* function nextPage(e) {
-		offset = container.scrollLeft;
-		let next = 0;
-
-		for (let i = 0; i < pageInfo.steps.length; i++) {
-			if (offset < pageInfo.steps[i] - 2) {
-				next = pageInfo.steps[i] - 2;
-				break;
-			}
-		}
-
-		container.scrollLeft = next;
-		// currentNext = next;
-	} */
-	/* const getExtra = (node) => {
-		let extra = 0;
-		let computedStyle = window.getComputedStyle(node);
-		extra += parseInt(computedStyle.marginLeft, 10);
-		extra += parseInt(computedStyle.marginRight, 10);
-		extra += parseInt(computedStyle.borderWidth, 10);
-		extra += parseInt(computedStyle.paddingLeft, 10);
-		extra += parseInt(computedStyle.paddingRight, 10);
-		return extra;
-	}; */
-	/* function pages() {
-		
-		let margin;
-		let childs = container.querySelectorAll('figure');
-		let steps = [];
-		let cardWidth;
-
-		childs.forEach((card, index) => {
-			cardWidth = card.getBoundingClientRect().width;
-			if (index < 1) {
-				margin = getExtra(card);
-				steps.push(cardWidth + margin);
-			}
-			if (index > 0) {
-				steps.push(steps[index - 1] + cardWidth + 16);
-			}
-		});
-
-		return { steps, current: container.scrollLeft };
-	} */
 </script>
 
 <div class="carousel-wrapper" style:position>
 	{#if !movies}
 		<Spinner />
-	{:else if movies?.results?.length > 0}
+	{/if}
+
+	{#if movies}
+		{#if movies instanceof Error}
+			<slot name="error" message={movies.message} />
+		{:else}
+			<header class="carousel-header content">
+				<h3 class="header-title">{title}</h3>
+				{#if movies.totalResults > 10}
+					<a href="/movies?{movies?.query}" class="header-btn"
+						>See all<span>
+							<Icon y="10%"><ChevronRight /></Icon>
+						</span></a
+					>
+				{/if}
+			</header>
+			<main class="items-wrapper content">
+				{#each movies.results as movie, i (movie.uuid)}
+					<CardMovie {details} {movie} progress={movie.progress ?? 0} {i} {full} />
+				{/each}
+				{#if movies?.totalResults > 10}
+					<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
+				{/if}
+			</main>
+		{/if}
+	{/if}
+	<!-- 
+	{#if movies}
 		<header class="carousel-header content">
-			<h3 class="header-title">{title ?? ''}</h3>
-			{#if movies?.totalResults > 10}
+			<h3 class="header-title">{title}</h3>
+			{#if movies.totalResults > 10}
 				<a href="/movies?{movies?.query}" class="header-btn"
 					>See all<span>
 						<Icon y="10%"><ChevronRight /></Icon>
@@ -100,10 +75,13 @@
 				<CardMovieSeeAll query={movies.query} posters={movies.results.map((m) => m.poster)} />
 			{/if}
 		</main>
-	{/if}
-	{#if movies instanceof Error}
+
 		<slot name="error" message={movies.message} />
 	{/if}
+
+	{#if movies instanceof Error}
+		<slot name="error" message={movies.message} />
+	{/if} -->
 </div>
 
 <style>
@@ -155,7 +133,7 @@
 	}
 
 	.header-title {
-		font-size: 1.3rem;
+		font-size: 1.3em;
 		margin: 0;
 		flex-shrink: 1;
 		flex-grow: 1;

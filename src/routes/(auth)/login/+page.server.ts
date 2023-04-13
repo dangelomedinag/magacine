@@ -2,15 +2,13 @@ import { invalid, redirect } from '@sveltejs/kit';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import dbusers from './dbusers.json';
-import type { PageServerLoad, Actions } from './$types';
 import { timeoutPromise } from '$helpers';
-// import type { Cookies } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export async function load({ locals }) {
 	return {
 		user: locals?.user
 	};
-};
+}
 
 let cookieOpts = {
 	path: '/',
@@ -20,7 +18,6 @@ let cookieOpts = {
 	maxAge: 60 * 60 * 24 * 7
 };
 
-/**@type {import("./$types").Actions} */
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
 		const fields = await request.formData();

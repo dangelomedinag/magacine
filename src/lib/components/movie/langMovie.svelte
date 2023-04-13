@@ -1,6 +1,6 @@
 <script>
 	import Icon from '$icons/icon.svelte';
-	import Translate from '$icons/solid/translate.svelte';
+	import Translate from '$icons/solid/translate.svg?raw';
 
 	import { listFormat } from '$lib/helpers';
 
@@ -9,7 +9,7 @@
 
 {#if value?.length > 0}
 	<div class="info__item">
-		<span class="info__property"><Icon y="10%"><Translate /></Icon> language:</span>
+		<span class="info__property"><Icon y="10%">{@html Translate}</Icon> language:</span>
 		<span>
 			{listFormat(value)}
 		</span>

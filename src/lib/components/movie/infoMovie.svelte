@@ -13,9 +13,10 @@
 	import Modal from '$components/ui/modal.svelte';
 	import { FavMovies } from '$lib/stores/favoritesStore';
 	import Icon from '$components/icons/icon.svelte';
-	import Star from '$components/icons/solid/star.svelte';
+	import Star from '$components/icons/solid/star.svg?raw';
 	import { goto } from '$app/navigation';
-	import Link from '$components/icons/solid/link.svelte';
+	import Link from '$components/icons/solid/link.svg?raw';
+	import { onMount } from 'svelte';
 
 	export let movie;
 	const {
@@ -35,6 +36,13 @@
 
 	let modal;
 
+	onMount(() => {
+		if (modal) {
+			const url = new URL(location);
+			if (url.hash === '#modal') modal.open();
+		}
+	});
+
 	$: isFav = $FavMovies.some((m) => m.imdbid === movie.imdbid);
 </script>
 
@@ -48,7 +56,7 @@
 <div style="display: flex; gap:0.5em;">
 	<button on:click={() => FavMovies.toogleFav(movie)} class="btn-details" class:fav={isFav}>
 		{#if isFav}
-			delete <Icon y="10%"><Star /></Icon>
+			delete <Icon y="10%">{@html Star}</Icon>
 		{:else}
 			add to favorites
 		{/if}
@@ -56,7 +64,7 @@
 	{#if isFav}
 		<button on:click={() => goto('/favorites')} class="btn-details">
 			view favorites
-			<Icon y="13%"><Link /></Icon>
+			<Icon y="13%">{@html Link}</Icon>
 		</button>
 	{/if}
 </div>
@@ -72,6 +80,7 @@
 
 <style>
 	.btn-details {
+		font-size: 1em;
 		display: block;
 		width: 100%;
 		border: 1px solid var(--c-divider);

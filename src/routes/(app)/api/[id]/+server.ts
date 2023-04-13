@@ -2,7 +2,6 @@ import { transform } from '../transformContract';
 import { OMDB_API_KEY } from '$env/static/private';
 import { PUBLIC_OMDB_API_URL } from '$env/static/public';
 
-/** @type {import('./$types').RequestHandler} */
 async function getResource({ params }) {
 	const id = params.id;
 	if (!id || !id.startsWith('tt') || id.length < 5) throw { message: 'Not valid id request' };
@@ -22,6 +21,8 @@ async function getResource({ params }) {
 
 	if (!data.ok) throw { message: 'Error fetch data. code ' + data.statusText };
 
+	const cacheControl = data.headers.get('cache-control');
+
 	const json = await data.json();
 	clearTimeout(timer);
 
@@ -30,14 +31,17 @@ async function getResource({ params }) {
 
 	// transform response
 	const body = transform(json);
-	return new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } });
+	return new Response(JSON.stringify(body), {
+		headers: {
+			'content-type': 'application/json',
+			'cache-control': cacheControl ?? 'unknowk'
+		}
+	});
 }
 
-/** @type {import('./$types').RequestHandler} */
 export async function GET(event) {
 	try {
 		const response = await getResource(event);
-		// await new Promise((res) => setTimeout(res, 3000));
 		return response;
 	} catch (err) {
 		return new Response(JSON.stringify(err), {

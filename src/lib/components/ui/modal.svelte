@@ -8,7 +8,8 @@
 
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import X from '$icons/outline/x.svelte';
+	import X from '$icons/solid/x.svg?raw';
+	import { goto } from '$app/navigation';
 
 	export let modal = false;
 	export let Zindex = '111';
@@ -18,11 +19,11 @@
 	let ref;
 	const dispatch = createEventDispatcher();
 
-	onMount(() => {
+	onMount(async () => {
 		if (modal) open();
 	});
 
-	export function open() {
+	export async function open() {
 		if (!currentElementFocus) {
 			currentElementFocus = document.activeElement;
 
@@ -32,12 +33,20 @@
 		modal = true;
 		setBodyScroll(modal, ref);
 
+		const URLhashed = new URL(location);
+		URLhashed.hash = 'modal';
+		await goto(URLhashed, { replaceState: true, noScroll: true });
+
 		if (browser) {
 			window.addEventListener('keydown', handleEsc);
 		}
 	}
-	export function close() {
+	export async function close() {
 		modal = false;
+		const URLhashed = new URL(location);
+		URLhashed.hash = '';
+		await goto(URLhashed, { replaceState: true, noScroll: true });
+
 		setBodyScroll(modal);
 		if (currentElementFocus) currentElementFocus.focus();
 		window.removeEventListener('keydown', handleEsc);
@@ -56,6 +65,7 @@
 		if (e.key === 'Escape') {
 			e.preventDefault();
 			close();
+			window.removeEventListener('keydown', handleEsc);
 		}
 	}
 
@@ -73,7 +83,12 @@
 </script>
 
 {#if modal}
-	<div style:z-index={Zindex} class="foreground content" on:click|self={clickForeground} />
+	<div
+		style:z-index={Zindex}
+		class="foreground content"
+		on:click|self={clickForeground}
+		on:keydown
+	/>
 	<section
 		bind:this={ref}
 		tabindex="-1"
@@ -82,7 +97,7 @@
 		class="modal"
 	>
 		{#if btnClose}
-			<button tabindex="0" on:click={close} class="modal__close"> <Icon><X /></Icon></button>
+			<button tabindex="0" on:click={close} class="modal__close"> <Icon>{@html X}</Icon></button>
 		{/if}
 
 		{#if $$slots.header}
@@ -154,7 +169,7 @@
 	}
 
 	.modal__header {
-		--icon-size: 1rem;
+		--icon-size: 1em;
 		padding: 0.5em 0;
 		position: sticky;
 		background-color: var(--modal-bg);
@@ -217,7 +232,7 @@
 	}
 
 	.modal__close {
-		--icon-size: 1.2rem;
+		--icon-size: 1.2em;
 
 		cursor: pointer;
 		position: absolute;
@@ -228,10 +243,10 @@
 		align-items: center;
 		z-index: 1;
 
-		width: 2.5em;
-		height: 2.5em;
+		/* width: 1em;
+		height: 1em; */
 		color: var(--c-text-base);
-		padding: 0;
+		padding: 0.5em;
 		border: 1px solid transparent;
 		background-color: transparent;
 	}

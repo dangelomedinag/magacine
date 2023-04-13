@@ -4,11 +4,11 @@
 
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import Home from '$icons/solid/home.svelte';
-	import Search from '$icons/solid/search.svelte';
-	import UserCircle from '$icons/solid/user-circle.svelte';
+	import Home from '$icons/solid/home.svg?raw';
+	import Search from '$icons/solid/search.svg?raw';
+	import UserCircle from '$icons/solid/user-circle.svg?raw';
 	import Bell from '$icons/outline/bell.svelte';
-	import BellSolid from '$icons/solid/bell.svelte';
+	import BellSolid from '$icons/solid/bell.svg?raw';
 	import Logout from '$icons/outline/user-circle.svelte';
 	import ExclamationCircle from '$icons/outline/exclamation-circle.svelte';
 
@@ -97,7 +97,7 @@
 		<div class="left navbar_slots" class:esconder={searchInput}>
 			<a href="/" class="navbar-item">
 				<Icon>
-					<Home />
+					{@html Home}
 				</Icon>
 			</a>
 			<ThemeToggle />
@@ -117,7 +117,7 @@
 				{#if search}
 					<button title="serach" class="search-second" on:click={toggleSearchInput}>
 						<Icon>
-							<Search />
+							{@html Search}
 						</Icon>
 					</button>
 				{/if}
@@ -128,7 +128,7 @@
 				{#if !searchInput}
 					<button title="search" class="search-first navbar-item" on:click={toggleSearchInput}>
 						<Icon>
-							<Search />
+							{@html Search}
 						</Icon>
 					</button>
 				{/if}
@@ -137,7 +137,7 @@
 				<button title="notification" class="navbar-item" on:click={modalNotification.open}>
 					<Icon counter={$notiStore.length}>
 						{#if $notiStore.length}
-							<BellSolid />
+							{@html BellSolid}
 						{:else}
 							<Bell />
 						{/if}
@@ -148,7 +148,7 @@
 				{#if $page.data.user}
 					<button title="session" class="navbar-item" on:click={modalSession.open}>
 						<Icon>
-							<UserCircle />
+							{@html UserCircle}
 						</Icon>
 						<span class="username">
 							{$page.data.user.username}
@@ -166,7 +166,7 @@
 
 <Modal bind:this={modalSession} btnClose={false}>
 	<svelte:fragment slot="header">
-		Session <Icon y="10%"><UserCircle /></Icon>
+		Session <Icon y="10%">{@html UserCircle}</Icon>
 	</svelte:fragment>
 	<SessionModal />
 
@@ -182,9 +182,9 @@
 <Modal bind:this={modalSearch}>
 	<svelte:fragment slot="header">
 		{#await results}
-			<Icon y="10%"><Search /></Icon> Searching...
+			<Icon y="10%">{@html Search}</Icon> Searching...
 		{:then _}
-			<Icon y="10%"><Search /></Icon> Search
+			<Icon y="10%">{@html Search}</Icon> Search
 		{:catch _}
 			<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
 		{/await}
@@ -202,7 +202,7 @@
 
 <Modal bind:this={modalNotification}>
 	<svelte:fragment slot="header">
-		<Icon y="10%"><BellSolid /></Icon>
+		<Icon y="10%">{@html BellSolid}</Icon>
 		{$notiStore.length ?? ''} Notifications
 	</svelte:fragment>
 	<Notification on:clickItem={() => modalNotification.close()} />
@@ -282,6 +282,7 @@
 	}
 	.center > :global(button),
 	.center > :global(a) {
+		font-size: 1em;
 		background-color: transparent;
 		border: 2px solid transparent;
 		font-weight: bold;
@@ -291,7 +292,8 @@
 		opacity: var(--navbar-item-opacity);
 		text-decoration: none;
 	}
-	.center > :global(button.active) {
+	.center > :global(button.active),
+	.center > :global(a.active) {
 		border-bottom: 2px solid var(--c-front);
 		opacity: 1;
 	}
@@ -320,7 +322,8 @@
 		margin-left: auto !important;
 	}
 
-	.center.block > :global(button + .search-second) 
+	.center.block > :global(button + .search-second),
+	.center.block > :global(a + .search-second)
 	/* :global(.center.block) > :global(a + .search-second) */ {
 		display: inline-flex !important;
 	}

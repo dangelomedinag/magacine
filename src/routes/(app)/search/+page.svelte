@@ -1,6 +1,5 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
@@ -13,8 +12,8 @@
 
 	/* icons */
 	import Icon from '$icons/icon.svelte';
-	import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svelte';
-	import X from '$icons/solid/x.svelte';
+	import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svg?raw';
+	import X from '$icons/solid/x.svg?raw';
 
 	let value = '';
 	let currentValue = '';
@@ -230,7 +229,7 @@
 				class="btn-clear"
 			>
 				<Icon>
-					<ArrowNarrowUp />
+					{@html ArrowNarrowUp}
 				</Icon>
 			</button>
 		{:else}
@@ -239,7 +238,7 @@
 					<Spinner size="5" />
 				{:else}
 					<Icon>
-						<X />
+						{@html X}
 					</Icon>
 				{/if}
 			</button>

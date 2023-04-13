@@ -1,4 +1,6 @@
-export interface MovieItem {
+export type stringIndexed = { [index: string]: any };
+
+export interface MovieItem extends stringIndexed {
 	title: string;
 	year: string;
 	rated: string;
@@ -24,6 +26,7 @@ export interface MovieItem {
 	production: any;
 	website: any;
 	response: boolean;
+	uuid: string;
 }
 
 export interface Rating {
@@ -31,7 +34,7 @@ export interface Rating {
 	value: string;
 }
 
-export interface OMDBMovie {
+export interface OMDBMovie extends stringIndexed {
 	Title: string;
 	Year: string;
 	Rated: string;
@@ -59,7 +62,7 @@ export interface OMDBMovie {
 	Response: string;
 }
 
-export interface OMDBRating {
+export interface OMDBRating extends stringIndexed {
 	Source: string;
 	Value: string;
 }

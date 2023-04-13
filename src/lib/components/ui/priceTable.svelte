@@ -1,7 +1,7 @@
 <script>
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import CheckCircle from '$icons/solid/check-circle.svelte';
+	import CheckCircle from '$icons/solid/check-circle.svg?raw';
 
 	let tablePrice = [
 		{
@@ -55,7 +55,7 @@
 				<ul class="pricing__benefits">
 					{#each card.benefits as item}
 						<li class="pricing__listItem">
-							<Icon style="color: #42936a;"><CheckCircle /></Icon>
+							<Icon style="color: #42936a;">{@html CheckCircle}</Icon>
 							{item}
 						</li>
 					{/each}

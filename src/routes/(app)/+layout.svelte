@@ -10,14 +10,14 @@
 	import { onMount } from 'svelte';
 
 	let toggle = false;
+	// $: console.log($pricePlans);
 
 	onMount(() => {
-		let timeout = setTimeout(() => {
-			modal.open();
-
-			return clearTimeout(timeout);
-		}, 300);
+		// pricePlans.updateToLocalValue();
+		if (!$pricePlans) return;
+		modal.open();
 	});
+
 	let modal;
 
 	function closeAside() {
@@ -39,7 +39,8 @@
 <Modal
 	bind:this={modal}
 	on:close={() => {
-		pricePlans.update((v) => !v);
+		pricePlans.set(false);
+		pricePlans.saveLocalStorage();
 	}}
 >
 	<svelte:fragment slot="header">¡Wellcome!</svelte:fragment>
@@ -57,6 +58,7 @@
 	</aside>
 	<main
 		class="main"
+		on:keydown
 		on:click={() => {
 			if (!matchMobile()) closeAside();
 		}}
@@ -131,6 +133,7 @@
 
 	@media (min-width: 768px) {
 	}
+
 	@media (min-width: 992px) {
 		.main {
 			width: 95%;

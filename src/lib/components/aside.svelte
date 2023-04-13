@@ -3,20 +3,22 @@
 
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import Home from '$icons/solid/home.svelte';
-	import ViewGridAdd from '$icons/solid/view-grid-add.svelte';
-	import InboxIn from '$icons/solid/inbox-in.svelte';
-	import UserGroup from '$icons/solid/user-group.svelte';
-	import Save from '$icons/solid/save.svelte';
-	import Bookmark from '$icons/solid/bookmark.svelte';
-	import Star from '$icons/solid/star.svelte';
-	import Download from '$icons/solid/download.svelte';
-	import Search from '$icons/solid/search.svelte';
-	import Cog from '$icons/solid/cog.svelte';
-	import InformationCircle from '$icons/solid/information-circle.svelte';
-	import Logout from '$icons/solid/logout.svelte';
-	import Sun from '$icons/solid/sun.svelte';
-	import Moon from '$icons/solid/moon.svelte';
+	// import IconTest from './icons/iconTest.svelte';
+	// import HomeSvg from '$icons/solid/home.svg?raw';
+	import Home from '$icons/solid/home.svg?raw';
+	import ViewGridAdd from '$icons/solid/view-grid-add.svg?raw';
+	import InboxIn from '$icons/solid/inbox-in.svg?raw';
+	import UserGroup from '$icons/solid/user-group.svg?raw';
+	import Save from '$icons/solid/save.svg?raw';
+	import Bookmark from '$icons/solid/bookmark.svg?raw';
+	import Star from '$icons/solid/star.svg?raw';
+	import Download from '$icons/solid/download.svg?raw';
+	import Search from '$icons/solid/search.svg?raw';
+	import Cog from '$icons/solid/cog.svg?raw';
+	import InformationCircle from '$icons/solid/information-circle.svg?raw';
+	import Logout from '$icons/solid/logout.svg?raw';
+	import Sun from '$icons/solid/sun.svg?raw';
+	import Moon from '$icons/solid/moon.svg?raw';
 
 	// stores
 	import { notiStore } from '$lib/stores/notifications-store';
@@ -29,7 +31,10 @@
 
 		<AsideItem href="/" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><Home /></Icon>
+				<Icon>
+					<!-- <Home /> -->
+					{@html Home}
+				</Icon>
 			</svelte:fragment>
 			Home
 		</AsideItem>
@@ -42,14 +47,14 @@
 			on:tap
 		>
 			<svelte:fragment slot="icon">
-				<Icon><ViewGridAdd /></Icon>
+				<Icon>{@html ViewGridAdd}</Icon>
 			</svelte:fragment>
 			Discovery</AsideItem
 		>
 
 		<AsideItem href="/soon" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><InboxIn /></Icon>
+				<Icon>{@html InboxIn}</Icon>
 			</svelte:fragment>
 			Comming soon</AsideItem
 		>
@@ -62,7 +67,7 @@
 			on:tap
 		>
 			<svelte:fragment slot="icon">
-				<Icon><UserGroup /></Icon>
+				<Icon>{@html UserGroup}</Icon>
 			</svelte:fragment>
 			Community
 		</AsideItem>
@@ -73,31 +78,31 @@
 
 		<AsideItem href="/recent" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><Save /></Icon>
+				<Icon>{@html Save}</Icon>
 			</svelte:fragment>
 			Recent</AsideItem
 		>
 		<AsideItem href="/bookmarked" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><Bookmark /></Icon>
+				<Icon>{@html Bookmark}</Icon>
 			</svelte:fragment>
 			Bookmarked</AsideItem
 		>
 		<AsideItem href="/favorites" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><Star /></Icon>
+				<Icon>{@html Star}</Icon>
 			</svelte:fragment>
 			Favorites</AsideItem
 		>
 		<AsideItem href="/download" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><Download /></Icon>
+				<Icon>{@html Download}</Icon>
 			</svelte:fragment>
 			Downloaded</AsideItem
 		>
 		<AsideItem href="/search" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><Search /></Icon>
+				<Icon>{@html Search}</Icon>
 			</svelte:fragment>
 			Search</AsideItem
 		>
@@ -106,13 +111,13 @@
 	<div>
 		<AsideItem href="/settings" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><Cog /></Icon>
+				<Icon>{@html Cog}</Icon>
 			</svelte:fragment>
 			Settings</AsideItem
 		>
 		<AsideItem href="/help" on:tap>
 			<svelte:fragment slot="icon">
-				<Icon><InformationCircle /></Icon>
+				<Icon>{@html InformationCircle}</Icon>
 			</svelte:fragment>
 			Help</AsideItem
 		>
@@ -120,7 +125,7 @@
 		<form method="post" action="/logout" style="display: contents;">
 			<AsideItem on:tap type="submit">
 				<svelte:fragment slot="icon">
-					<Icon><Logout /></Icon>
+					<Icon>{@html Logout}</Icon>
 				</svelte:fragment>
 				Logout
 			</AsideItem>
@@ -130,9 +135,9 @@
 			<svelte:fragment slot="icon">
 				<Icon>
 					{#if $themeStore === 'dark'}
-						<Sun />
+						{@html Sun}
 					{:else}
-						<Moon />
+						{@html Moon}
 					{/if}
 				</Icon>
 			</svelte:fragment>
@@ -143,7 +148,7 @@
 
 <style>
 	#aside-wrapper {
-		--icon-size: 1.5rem;
+		--icon-size: 1.5em;
 
 		display: flex;
 		flex-direction: column;

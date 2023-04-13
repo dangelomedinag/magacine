@@ -1,9 +1,5 @@
 import { json } from '@sveltejs/kit';
-// import * as cookie from 'cookie';
-// import type { CookieSerializeOptions } from 'cookie';
-// import type { RequestHandler } from './$types';
 
-/**@type {import("./$types").RequestHandler} */
 export async function PUT({ request, cookies }) {
 	const { theme } = await request.json();
 
