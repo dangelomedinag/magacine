@@ -11,8 +11,6 @@
 	const setTab = (tab) => {
 		act = tab;
 	};
-
-	// $: console.log($page.data);
 </script>
 
 <svelte:head>

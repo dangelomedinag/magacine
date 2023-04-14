@@ -7,7 +7,7 @@ export async function load({ fetch }) {
 		throw error(500, res.message);
 	}
 
-	const res = await req.json();
+	const res = req.json();
 
 	return {
 		movies: res

@@ -1,15 +1,30 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
-	import { pricePlans } from '$lib/stores/plans-store';
 	import Alert from '$components/ui/alert.svelte';
 	import Spinner from '$components/ui/spinner.svelte';
+	import type { SubmitFunction } from '@sveltejs/kit';
 
 	export let form;
+
 	let loading = false;
-	function onclick() {
-		$pricePlans = false;
-	}
+
+	const handlerSubmit = (() => {
+		loading = true;
+		return async ({ update }) => {
+			await update({ reset: true });
+			loading = false;
+		};
+	}) satisfies SubmitFunction;
+
+	const completeInput = (invalid?: boolean) => {
+		const username_input = document.getElementById('username');
+		if (username_input && 'value' in username_input)
+			username_input.value = invalid ? 'invalid' : 'magacineuser';
+
+		const password_input = document.getElementById('password');
+		if (password_input && 'value' in password_input) password_input.value = 'superpassword';
+	};
 </script>
 
 <svelte:head>
@@ -18,72 +33,81 @@
 
 <main class="login">
 	{#if loading}
-		<Spinner position="absolute" size="8rem" />
+		<Spinner position="absolute" size="8em" />
 	{/if}
-	<div class="login__container">
+	<div class="container">
 		{#if $page.data.user}
-			<h1 class="login__title">Session</h1>
-			<a href="/" on:click={onclick} class="login__session__user">
-				<img src={$page.data.user.avatar} alt="{$page.data.user.username} - avatar profile" />
-				<h3>{$page.data.user.username}</h3>
-				<h4>{$page.data.user.name} {$page.data.user.lastname}</h4>
-			</a>
-			<form action="/logout" method="post">
-				<button type="submit" class="login__close">logout all sessions</button>
+			<h1 class="title">Session</h1>
+			<form action="/logout" method="post" class="form">
+				<a href="/" class="link user">
+					<img
+						loading="lazy"
+						src={$page.data.user.avatar}
+						alt="{$page.data.user.username} - avatar profile"
+					/>
+					<span class="username">@{$page.data.user.username}</span>
+					<h2>{$page.data.user.name} {$page.data.user.lastname}</h2>
+				</a>
+				<input class="input submit" type="submit" value="logout all sessions" />
 			</form>
 		{:else}
-			<h1 class="login__title">Sign In</h1>
-			<form
-				method="post"
-				class="login__form"
-				use:enhance={() => {
-					if (form?.errors) {
-						form.errors = undefined;
-					}
-					loading = true;
-					return async ({ update }) => {
-						await update();
-						loading = false;
-					};
-				}}
-			>
-				<input
-					class="login__input login__input__username"
-					type="text"
-					name="username"
-					id="usename"
-					placeholder="username or email"
-					autocomplete="off"
-					minlength="1"
-					required
-					value="dangelomedinag"
-				/>
-				<input
-					class="login__input login__input__pass"
-					type="password"
-					name="password"
-					id="password"
-					placeholder="any password"
-					required
-					minlength="1"
-					value="superpassword"
-				/>
-				<input class="login__input login__submit" type="submit" value="inicar session" />
-			</form>
-			<div class="login__actions">
-				<a href={'#'} class="login__link">remember me</a>
-				<a href={'#'} class="login__link">Need help?</a>
-			</div>
-
-			{#if form?.errors}
-				<div class="login__error">
-					<Alert warn><span>{form?.errors}</span></Alert>
+			<h1 class="title">Sign in</h1>
+			<form method="post" class="form" use:enhance={handlerSubmit}>
+				<div class:error={form?.username}>
+					<label for="username">username:</label>
+					<input
+						class="input"
+						type="text"
+						name="username"
+						id="username"
+						placeholder="✅ any word ❌ 'invalid' or 'non-existent'"
+						autocomplete="off"
+						minlength="3"
+						required
+						on:input={(e) => {
+							if (form?.username) {
+								if (form.username !== e.currentTarget.value) form.username = '';
+								if (!form.username && !form.password) form = null;
+							}
+						}}
+					/>
 				</div>
-			{/if}
+				<div class:error={form?.password}>
+					<label for="password">password:</label>
+					<input
+						class="input"
+						type="password"
+						name="password"
+						id="password"
+						placeholder="✅ 'superpassword' ❌ any other word"
+						required
+						minlength="3"
+						on:input={(e) => {
+							if (form?.password) {
+								if (form.password !== e.currentTarget.value) form.password = '';
+								if (!form.username && !form.password) form = null;
+							}
+						}}
+					/>
+				</div>
+				<input
+					class="input submit"
+					type="submit"
+					value={loading ? 'await please...' : 'inicar session'}
+					disabled={loading}
+				/>
+				{#if form?.errors}
+					<div>
+						<Alert warn><span>Message:</span> {form?.errors}</Alert>
+					</div>
+				{/if}
+			</form>
+			<div class="actions">
+				<a href={'#'} on:click={() => completeInput()} class="link">remember me</a>
+				<a href={'#'} on:click={() => completeInput(true)} class="link">Need help?</a>
+			</div>
 		{/if}
 	</div>
-
-	<section />
 </main>
 
 <style>
@@ -104,147 +128,123 @@
 		background-blend-mode: multiply;
 	}
 
-	.login__container {
-		width: 95%;
+	.container {
+		width: 90%;
 		background: var(--c-main);
-		padding: 2em;
+		padding: 1em;
 		border-radius: 10px;
-		box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-			0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09), 0 32px 16px rgba(0, 0, 0, 0.09);
+		box-shadow: var(--shadow-long);
+		max-width: 500px;
 	}
 
-	.login__form {
+	.title {
+		display: block;
+		width: 100%;
+		font-size: 2em;
+		margin-top: 0;
+		color: var(--c-text-base);
+	}
+
+	.form {
 		display: flex;
 		flex-direction: column;
 		gap: 0.8em;
 		width: 100%;
 	}
 
-	.login__input__username,
-	.login__input__pass {
-		background-color: var(--c-divider);
-		color: #b3b3b3;
-	}
-
-	.login__submit {
-		color: white;
-		background-color: var(--c-front);
-	}
-	.login__submit:hover {
-		color: white;
-		background-color: var(--c-front-dark);
-		cursor: poiter;
-	}
-
-	.login__input {
-		/* margin-bottom: 0.5em; */
-		padding: 0.8em;
-		font-size: 1rem;
-		border: none;
-		border-radius: 5px;
-		border: 2px solid transparent;
-	}
-
-	.login__input:focus,
-	.login__input:focus-visible {
-		outline: none;
-		border: 2px solid var(--c-divider);
-	}
-
-	.login__title {
+	.input {
+		font-size: 1em;
 		display: block;
 		width: 100%;
-		color: var(--c-text-base);
-		margin-top: 0;
-		font-size: 2.5rem;
-		/* line-height: 2rem; */
-		/* color: white; */
+		padding: 0.8em;
+		border-width: 1px;
+		border-color: transparent;
+		background-color: rgba(128, 128, 128, 0.15);
+		border-radius: 5px;
 	}
 
-	.login__actions {
+	.error .input {
+		border-color: #d42525;
+	}
+	.error .input:focus {
+		outline-color: #d42525;
+	}
+	.error label {
+		color: #d42525;
+		opacity: 1;
+	}
+
+	label {
+		text-align: left;
+		display: block;
+		font-size: 0.8rem;
+		margin-bottom: 0.2em;
+		/* opacity: 0.5; */
+	}
+
+	.submit {
+		background-color: var(--c-front);
+		font-weight: bold;
+		color: white;
+	}
+	.input:focus {
+		/* outline-offset: -3px; */
+		outline-color: grey;
+		outline-width: 1px;
+		outline-style: dashed;
+	}
+
+	.submit:disabled,
+	.form:invalid > .submit {
+		opacity: 0.5;
+		cursor: not-allowed;
+		background-color: grey;
+	}
+
+	.form:not(:invalid) .submit:not(:disabled):hover {
+		background-color: var(--c-front-dark);
+	}
+
+	.user {
+		display: block;
+		color: inherit;
+		width: auto;
+		text-decoration: none;
+	}
+
+	.user img {
+		text-align: center;
+		margin: 0 auto;
+		display: block;
+		border-radius: 100%;
+		width: 80px;
+		height: auto;
+		border: 3px solid var(--c-front);
+	}
+
+	.username {
+		font-size: 0.8em;
+	}
+	h2 {
+		font-size: 1.2em;
+		text-transform: uppercase;
+		margin: 0;
+	}
+
+	.actions {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		padding-top: 1em;
 	}
 
-	.login__link {
+	.link {
+		font-size: 0.9em;
+		text-decoration: none;
 		color: var(--c-text-base);
 	}
-	.login__link:hover {
+
+	.link:hover {
 		color: var(--c-front);
-	}
-
-	.login__error {
-		padding-top: 2em;
-	}
-
-	@media (min-width: 576px) {
-	}
-	@media (min-width: 768px) {
-		.login__container {
-			width: 60%;
-			max-width: 700px;
-		}
-	}
-	@media (min-width: 992px) {
-	}
-	@media (min-width: 1200px) {
-	}
-
-	/* session active */
-
-	.login__session__user {
-		/* display: flex; */
-		/* flex-direction: column;
-		align-items: center; */
-		display: block;
-		padding: 1em;
-		color: inherit;
-		width: auto;
-	}
-	.login__session__user:hover {
-		background-color: var(--c-divider);
-		color: var(--c-front);
-	}
-
-	.login__session__user img {
-		text-align: center;
-		margin: 0 auto;
-		display: block;
-		border-radius: 100%;
-		width: 100px;
-		height: auto;
-		border: 3px solid var(--c-front);
-	}
-
-	.login__session__user h3,
-	.login__session__user h4 {
-		margin: 0;
-	}
-
-	.login__close {
-		display: block;
-		width: 100%;
-		padding: 1em;
-		background-color: transparent;
-		color: inherit;
-		font-weight: bold;
-		margin: 0;
-		margin-top: 1em;
-		border: 1px solid var(--c-divider);
-		border-radius: 5px;
-	}
-
-	.login__close:hover,
-	.login__close:active {
-		color: white;
-	}
-
-	.login__close:hover {
-		background-color: var(--c-front);
-	}
-	.login__close:active {
-		background-color: var(--c-front-dark);
 	}
 </style>

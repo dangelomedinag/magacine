@@ -24,21 +24,36 @@ export const actions = {
 		const username = (fields.get('username') as string).toLowerCase().trim();
 		const password = (fields.get('password') as string).toLowerCase().trim();
 
-		if (username === 'invalid' || !username || !password) {
-			await timeoutPromise(2000);
-			return fail(404, { errors: 'invalid username or password' });
+		await timeoutPromise(1000);
+
+		if (username === 'invalid' || username === 'non-existent' || !username || !password) {
+			return fail(404, {
+				errors: 'invalid username or password',
+				username: username ?? '',
+				password: password ?? ''
+			});
 		}
 
 		if (password.length < 1) {
-			await timeoutPromise(300);
-			return fail(404, { errors: 'invalid credentials' });
+			return fail(404, {
+				errors: 'you must provide a password',
+				username: username ?? '',
+				password: password ?? ''
+			});
 		}
 
-		const user = dbusers.filter((u) => u.username === username)[0];
+		const user = dbusers.filter((u) => u.username === 'dangelomedinag')[0];
 		const comparedPass = await bcrypt.compare(password, dbusers[0].hash);
 
-		if (!user || !comparedPass) {
-			return fail(404, { errors: 'invalid credentials' });
+		// if (!user) {
+		// 	return fail(404, { errors: 'email/username not exist', username });
+		// }
+		if (!comparedPass) {
+			return fail(404, {
+				errors: 'invalid credentials',
+				username: username ?? '',
+				password: password ?? ''
+			});
 		}
 
 		// eslint-disable-next-line no-unused-vars

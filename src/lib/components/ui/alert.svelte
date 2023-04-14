@@ -1,6 +1,6 @@
 <script>
 	import { quintInOut } from 'svelte/easing';
-	import { fly } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 
 	// icons
 	import Icon from '$icons/icon.svelte';
@@ -15,7 +15,7 @@
 </script>
 
 <div
-	transition:fly|local={{ y: 30, easing: quintInOut }}
+	transition:slide|local={{ axis: 'y', duration: 600 }}
 	class="alert"
 	class:alert--warn={warn}
 	class:alert--danger={danger}
@@ -50,59 +50,65 @@
 		--alert-text: var(--c-text-base);
 		--alert-bg: transparent;
 		--alert-border: var(--c-text-base);
-		--icon-size: 1.5rem;
+		--icon-size: 1.5em;
 
 		will-change: transform;
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
-		gap: 1em;
+		gap: 0.5em;
 		padding: 0.5em;
 		text-align: center;
 		color: var(--alert-text);
 		border: 1px solid var(--c-divider);
 		border-radius: 5px;
 		background-color: var(--alert-bg);
-		font-weight: lighter;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
-			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
-			0 32px 64px rgba(0, 0, 0, 0.07);
+
+		// font-weight: lighter;
+		// box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+		// 	0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
+		// 	0 32px 64px rgba(0, 0, 0, 0.07);
 	}
 
 	.alert--success {
-		--alert-bg: rgb(123, 190, 148);
-		/* --alert-border: rgb(0, 70, 35); */
-		--alert-text: rgb(0, 70, 35);
+		--alert-icon: #2e7d32;
+		--alert-text: #1e4620;
+		--alert-bg: #edf7ed;
 	}
 
 	@mixin dark-theme {
 		.alert--success {
-			--alert-text: rgb(123, 190, 148);
-			--alert-bg: rgb(0, 70, 35);
+			--alert-icon: #66bb6a;
+			--alert-text: #cce8cd;
+			--alert-bg: #0c130d;
 			/* --alert-border: rgb(0, 70, 35); */
 		}
 		.alert--warn {
-			--alert-text: rgb(190, 190, 123);
-			--alert-bg: rgb(49, 49, 0);
-			/* --alert-border: rgb(70, 70, 0); */
+			--alert-icon: #ffa726;
+			--alert-text: #ffe2b7;
+			--alert-bg: #191207;
+			// --alert-border: rgb(70, 70, 0);
 		}
 		.alert--danger {
-			--alert-text: rgb(255, 171, 171);
-			--alert-bg: rgb(140, 47, 47);
-			--alert-border: rgb(128, 44, 44);
+			--alert-icon: #f44336;
+			--alert-text: #f4c7c7;
+			--alert-bg: #160b0b;
+			// --alert-border: rgb(128, 44, 44);
 		}
 	}
 
 	@mixin light-theme {
 		.alert--warn {
-			--alert-text: #9d8929;
-			--alert-bg: #fff7d2;
+			--alert-icon: #ed6c02;
+			--alert-text: #663c00;
+			--alert-bg: #fff4e5;
 			/* --alert-border: rgb(219 195 70); */
 		}
 		.alert--danger {
-			--alert-text: rgb(255, 137, 137);
-			--alert-bg: rgb(160, 65, 65);
-			--alert-border: rgb(128, 44, 44);
+			--alert-icon: #d32f2f;
+			--alert-text: #5f2120;
+			--alert-bg: #fdeded;
+			// --alert-border: rgb(128, 44, 44);
 		}
 	}
 
@@ -158,8 +164,14 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		color: var(--alert-icon);
 	}
 
+	.alert__message {
+		// font-size: 0.9em;
+		// font-weight: bold;
+		// line-height: 0.9em;
+	}
 	.alert__message :global(span) {
 		font-weight: bold;
 	}
