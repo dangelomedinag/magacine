@@ -83,8 +83,8 @@
 <style>
 	.footer {
 		padding-bottom: 2em;
-		display: flex;
-		flex-flow: row wrap;
+		/* display: flex; */
+		/* flex-flow: row wrap; */
 		background-color: var(--c-main);
 		border-top: 1px solid rgba(230, 230, 230, 0.2);
 	}
