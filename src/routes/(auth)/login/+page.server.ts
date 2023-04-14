@@ -1,4 +1,4 @@
-import { invalid, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import dbusers from './dbusers.json';
@@ -26,19 +26,19 @@ export const actions: Actions = {
 
 		if (username === 'invalid' || !username || !password) {
 			await timeoutPromise(2000);
-			return invalid(404, { errors: 'invalid username or password' });
+			return fail(404, { errors: 'invalid username or password' });
 		}
 
 		if (password.length < 1) {
 			await timeoutPromise(300);
-			return invalid(404, { errors: 'invalid credentials' });
+			return fail(404, { errors: 'invalid credentials' });
 		}
 
 		const user = dbusers.filter((u) => u.username === username)[0];
 		const comparedPass = await bcrypt.compare(password, dbusers[0].hash);
 
 		if (!user || !comparedPass) {
-			return invalid(404, { errors: 'invalid credentials' });
+			return fail(404, { errors: 'invalid credentials' });
 		}
 
 		// eslint-disable-next-line no-unused-vars
