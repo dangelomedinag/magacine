@@ -33,9 +33,9 @@
 		modal = true;
 		setBodyScroll(modal, ref);
 
-		const URLhashed = new URL(location);
-		URLhashed.hash = 'modal';
-		await goto(URLhashed, { replaceState: true, noScroll: true });
+		// const URLhashed = new URL(location);
+		// URLhashed.hash = 'modal';
+		// await goto(URLhashed, { replaceState: true, noScroll: true });
 
 		if (browser) {
 			window.addEventListener('keydown', handleEsc);

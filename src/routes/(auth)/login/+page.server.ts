@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import dbusers from './dbusers.json';
 import { timeoutPromise } from '$helpers';
@@ -18,7 +18,7 @@ let cookieOpts = {
 	maxAge: 60 * 60 * 24 * 7
 };
 
-export const actions: Actions = {
+export const actions = {
 	default: async ({ request, cookies }) => {
 		const fields = await request.formData();
 		const username = (fields.get('username') as string).toLowerCase().trim();
@@ -46,8 +46,6 @@ export const actions: Actions = {
 
 		const token = jwt.sign(payload, '123', { expiresIn: `${15 * 60 * 1000}` });
 
-		// await timeoutPromise();
-
 		cookies.set('refresh_token', user.refresh_token, {
 			path: '/',
 			httpOnly: true,
@@ -55,6 +53,7 @@ export const actions: Actions = {
 			secure: process.env.NODE_ENV === 'production',
 			maxAge: 60 * 60 * 24 * 7
 		});
+
 		cookies.set('token', token, {
 			path: '/',
 			httpOnly: true,

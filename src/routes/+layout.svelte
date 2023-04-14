@@ -6,7 +6,6 @@
 	import { onMount } from 'svelte';
 	import { themeStore } from '$lib/stores/theme-store';
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
-	// import Spinner from '$components/ui/spinner.svelte';
 
 	function getColorSchemePrefers(event) {
 		if (event) return event.matches ? 'light' : 'dark';

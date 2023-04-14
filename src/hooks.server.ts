@@ -1,8 +1,9 @@
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { transformPageColorSchemePrefers } from '$lib/hooks';
 
 export async function handle({ event, resolve }) {
 	const authorization = event.cookies.get('token');
+
 	if (authorization) {
 		try {
 			const { username, name, lastname, role } = jwt.verify(authorization, '123');

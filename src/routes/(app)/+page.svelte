@@ -1,12 +1,8 @@
 <script>
-	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
-
+	// import { page } from '$app/stores';
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import Hero from '$components/ui/hero.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
-
-	import { scrollToTarget } from '$helpers';
 
 	export let data;
 
@@ -15,6 +11,8 @@
 	const setTab = (tab) => {
 		act = tab;
 	};
+
+	// $: console.log($page.data);
 </script>
 
 <svelte:head>
@@ -65,7 +63,7 @@
 				<CarouselMovies
 					details={false}
 					movies={value}
-					title="Our pick for {$page.data.user.name}"
+					title="Our pick for {data.user.name ?? 'you'}"
 				/>
 			{/if}
 		{/await}
@@ -74,7 +72,7 @@
 				<CarouselMovies
 					details={false}
 					movies={value}
-					title="Our pick for {$page.data.user.name}"
+					title="Our pick for {data.user.name ?? 'you'}"
 				/>
 			{/if}
 		{/await}
