@@ -1,5 +1,5 @@
 import { transform } from '../transformContract';
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 import { PUBLIC_OMDB_API_URL } from '$env/static/public';
 
 async function getResource({ params }) {
