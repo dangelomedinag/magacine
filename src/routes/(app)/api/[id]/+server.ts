@@ -1,15 +1,16 @@
 import { transform } from '../transformContract';
-import { OMDB_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { PUBLIC_OMDB_API_URL } from '$env/static/public';
 
 async function getResource({ params }) {
+	console.log(env.OMDB_API_KEY);
 	const id = params.id;
 	if (!id || !id.startsWith('tt') || id.length < 5) throw { message: 'Not valid id request' };
 
 	const api = new URL(PUBLIC_OMDB_API_URL);
 	api.searchParams.set('i', id);
 	api.searchParams.set('plot', 'full');
-	api.searchParams.set('apikey', OMDB_API_KEY);
+	api.searchParams.set('apikey', env.OMDB_API_KEY);
 
 	const timeout = 8000;
 	const controller = new AbortController();

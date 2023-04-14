@@ -47,15 +47,12 @@ export async function load({ fetch, params, setHeaders }) {
 			movie
 		};
 		const word = getWord(movie);
-		console.log(word);
 
 		if (word.length > 0) {
 			response.stream = { suggestions: getSuggest(word, fetch) };
 		} else {
 			response.error = Error('No content for now');
 		}
-
-		console.log(response);
 
 		return response;
 	} catch (err) {

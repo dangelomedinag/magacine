@@ -1,5 +1,5 @@
 import { uuid } from '$helpers';
-import { OMDB_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { PUBLIC_OMDB_API_URL } from '$env/static/public';
 
 async function getResource({ url, setHeaders }) {
@@ -37,7 +37,7 @@ async function getResource({ url, setHeaders }) {
 		else throw { message: "<type> param only accept { 'movie'|'series'|'episode' } value." };
 	}
 
-	api.searchParams.set('apikey', OMDB_API_KEY);
+	api.searchParams.set('apikey', env.OMDB_API_KEY);
 
 	const data = await fetch(api.href);
 

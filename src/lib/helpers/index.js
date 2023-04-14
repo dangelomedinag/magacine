@@ -48,7 +48,7 @@ export const scrollToTarget = (node, opts) => {
 		let offsetTop = htmlElement.offsetTop - navbarHeight - 50;
 		if (offsetTop <= 0) offsetTop = 0;
 
-		await goto(url, { replaceState: true, noscroll: true });
+		await goto(url, { replaceState: true, noScroll: true });
 		// scroll to target
 		scrollTo({ behavior: opts?.behavior ? opts.behavior : 'smooth', top: offsetTop });
 		node.focus();
