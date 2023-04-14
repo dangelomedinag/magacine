@@ -1,6 +1,6 @@
 import { uuid } from '$helpers';
 import { env } from '$env/dynamic/private';
-import { PUBLIC_OMDB_API_URL } from '$env/static/public';
+const { OMDB_API_KEY, OMDB_API_URL } = env;
 
 async function getResource({ url, setHeaders }) {
 	const params = url.searchParams;
@@ -13,7 +13,7 @@ async function getResource({ url, setHeaders }) {
 	const limit = params.has('limit') ? params.get('limit') : false;
 
 	// create URL object of resource
-	const api = new URL(PUBLIC_OMDB_API_URL);
+	const api = new URL(OMDB_API_URL);
 
 	if (search.length > 2) api.searchParams.set('s', search);
 	else throw { message: 'Too namy results' };
@@ -37,7 +37,7 @@ async function getResource({ url, setHeaders }) {
 		else throw { message: "<type> param only accept { 'movie'|'series'|'episode' } value." };
 	}
 
-	api.searchParams.set('apikey', env.OMDB_API_KEY);
+	api.searchParams.set('apikey', OMDB_API_KEY);
 
 	const data = await fetch(api.href);
 
