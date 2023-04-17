@@ -4,26 +4,41 @@
 	import Alert from '$components/ui/alert.svelte';
 	import Spinner from '$components/ui/spinner.svelte';
 	import type { SubmitFunction } from '@sveltejs/kit';
+	import { tick } from 'svelte';
 
 	export let form;
 
 	let loading = false;
 
-	const handlerSubmit = (() => {
+	const handlerSubmit = (({ form }) => {
 		loading = true;
-		return async ({ update }) => {
-			await update({ reset: true });
+		return async ({ update, result }) => {
+			await update();
+
 			loading = false;
+
+			if (result.type === 'failure') {
+				await tick();
+
+				form.username.focus();
+			}
 		};
 	}) satisfies SubmitFunction;
 
 	const completeInput = (invalid?: boolean) => {
-		const username_input = document.getElementById('username');
-		if (username_input && 'value' in username_input)
-			username_input.value = invalid ? 'invalid' : 'magacineuser';
+		const formElement = document.forms.item(0);
 
-		const password_input = document.getElementById('password');
-		if (password_input && 'value' in password_input) password_input.value = 'superpassword';
+		if (formElement) {
+			formElement.username.value = invalid ? 'invalid' : 'magacineuser';
+			formElement.password.value = 'superpassword';
+		}
+
+		// const username_input = document.getElementById('username');
+		// if (username_input && 'value' in username_input)
+		// 	username_input.value = invalid ? 'invalid' : 'magacineuser';
+
+		// const password_input = document.getElementById('password');
+		// if (password_input && 'value' in password_input) password_input.value = 'superpassword';
 	};
 </script>
 
@@ -52,7 +67,7 @@
 			</form>
 		{:else}
 			<h1 class="title">Sign in</h1>
-			<form method="post" class="form" use:enhance={handlerSubmit}>
+			<form id="form_login" method="post" class="form" use:enhance={handlerSubmit}>
 				<div class:error={form?.username}>
 					<label for="username">username:</label>
 					<input
@@ -64,9 +79,13 @@
 						autocomplete="off"
 						minlength="3"
 						required
+						disabled={loading}
 						on:input={(e) => {
 							if (form?.username) {
-								if (form.username !== e.currentTarget.value) form.username = '';
+								if (form.username !== e.currentTarget.value) {
+									form.username = '';
+									form.password = '';
+								}
 								if (!form.username && !form.password) form = null;
 							}
 						}}
@@ -82,6 +101,7 @@
 						placeholder="✅ 'superpassword' ❌ any other word"
 						required
 						minlength="3"
+						disabled={loading}
 						on:input={(e) => {
 							if (form?.password) {
 								if (form.password !== e.currentTarget.value) form.password = '';
@@ -97,13 +117,16 @@
 					disabled={loading}
 				/>
 				{#if form?.errors}
-					<div>
-						<Alert warn><span>Message:</span> {form?.errors}</Alert>
-					</div>
+					<Alert warn on:click={() => (form.errors = '')}
+						><span>Message:</span> {form?.errors}</Alert
+					>
 				{/if}
 			</form>
 			<div class="actions">
-				<a href={'#'} on:click={() => completeInput()} class="link">remember me</a>
+				<label for="remember" class="link"
+					><input id="remember" type="checkbox" checked disabled={loading} /> Remember me
+				</label>
+				<!-- <a href={'#'} on:click={() => completeInput()} class="link">remember me</a> -->
 				<a href={'#'} on:click={() => completeInput(true)} class="link">Need help?</a>
 			</div>
 		{/if}
@@ -124,15 +147,15 @@
 		background-repeat: no-repeat;
 		background-position: center center;
 		background-size: cover;
-		background-color: #b3b3b3;
+		background-color: #000000b3;
 		background-blend-mode: multiply;
 	}
 
 	.container {
 		width: 90%;
 		background: var(--c-main);
-		padding: 1em;
-		border-radius: 10px;
+		padding: 1.5em;
+		border-radius: 12px;
 		box-shadow: var(--shadow-long);
 		max-width: 500px;
 	}
@@ -165,6 +188,7 @@
 
 	.error .input {
 		border-color: #d42525;
+		background-color: rgba(255, 0, 0, 0.05);
 	}
 	.error .input:focus {
 		outline-color: #d42525;
@@ -175,8 +199,9 @@
 	}
 
 	label {
-		text-align: left;
+		accent-color: var(--c-front);
 		display: block;
+		text-align: left;
 		font-size: 0.8rem;
 		margin-bottom: 0.2em;
 		/* opacity: 0.5; */

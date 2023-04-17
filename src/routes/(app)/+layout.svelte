@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Footer from '$components/footer.svelte';
 	import Aside from '$components/aside.svelte';
 
@@ -10,15 +10,13 @@
 	import { onMount } from 'svelte';
 
 	let toggle = false;
-	// $: console.log($pricePlans);
 
 	onMount(() => {
-		// pricePlans.updateToLocalValue();
 		if (!$pricePlans) return;
 		modal.open();
 	});
 
-	let modal;
+	let modal: Modal;
 
 	function closeAside() {
 		toggle = false;

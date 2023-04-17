@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { quintInOut } from 'svelte/easing';
 	import { fly, slide } from 'svelte/transition';
 
@@ -8,14 +8,35 @@
 	import Exclamation from '$icons/outline/exclamation.svelte';
 	import ExclamationCircle from '$icons/outline/exclamation-circle.svelte';
 	import Flag from '$icons/outline/flag.svelte';
+	import X from '$icons/solid/x.svg?raw';
+	import { onMount, onDestroy } from 'svelte';
 
 	export let success = false,
 		warn = false,
 		danger = false;
+
+	let active = false;
+
+	let activeElement: EventTarget | null;
+	onMount(() => {
+		active = true;
+	});
+
+	onDestroy(() => {
+		if (activeElement) activeElement.focus();
+		document.body.removeEventListener('focusout', setActiveElement);
+		active = false;
+	});
+
+	function setActiveElement(e: Event) {
+		activeElement = e.target ?? null;
+	}
 </script>
 
+<svelte:body on:focusout={setActiveElement} />
+
 <div
-	transition:slide|local={{ axis: 'y', duration: 600 }}
+	transition:slide|local={{ axis: 'y', duration: 600, easing: quintInOut }}
 	class="alert"
 	class:alert--warn={warn}
 	class:alert--danger={danger}
@@ -43,6 +64,11 @@
 	<span class="alert__message">
 		<slot />
 	</span>
+	<button type="button" on:click>
+		<Icon>
+			{@html X}
+		</Icon>
+	</button>
 </div>
 
 <style lang="scss">
@@ -58,16 +84,11 @@
 		align-items: center;
 		gap: 0.5em;
 		padding: 0.5em;
-		text-align: center;
+		text-align: left;
 		color: var(--alert-text);
 		border: 1px solid var(--c-divider);
 		border-radius: 5px;
 		background-color: var(--alert-bg);
-
-		// font-weight: lighter;
-		// box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
-		// 	0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
-		// 	0 32px 64px rgba(0, 0, 0, 0.07);
 	}
 
 	.alert--success {
@@ -127,39 +148,6 @@
 		}
 	}
 
-	// :global(:root.dark) {
-	// 	.alert--success {
-	// 		--alert-text: rgb(123, 190, 148);
-	// 		--alert-bg: rgb(0, 70, 35);
-	// 		/* --alert-border: rgb(0, 70, 35); */
-	// 	}
-	// 	.alert--warn {
-	// 		--alert-text: rgb(190, 190, 123);
-	// 		--alert-bg: rgb(49, 49, 0);
-	// 		/* --alert-border: rgb(70, 70, 0); */
-	// 	}
-	// 	.alert--danger {
-	// 		--alert-text: rgb(255, 171, 171);
-	// 		--alert-bg: rgb(140, 47, 47);
-	// 		--alert-border: rgb(128, 44, 44);
-	// 	}
-	// }
-
-	/* @media (prefers-color-scheme: light) { */
-	// :global(:root.light) {
-	// 	.alert--warn {
-	// 		--alert-text: #9d8929;
-	// 		--alert-bg: #fff7d2;
-	// 		/* --alert-border: rgb(219 195 70); */
-	// 	}
-	// 	.alert--danger {
-	// 		--alert-text: rgb(255, 137, 137);
-	// 		--alert-bg: rgb(160, 65, 65);
-	// 		--alert-border: rgb(128, 44, 44);
-	// 	}
-	// }
-	/* } */
-
 	.alert__icon {
 		display: flex;
 		justify-content: center;
@@ -168,11 +156,31 @@
 	}
 
 	.alert__message {
-		// font-size: 0.9em;
-		// font-weight: bold;
-		// line-height: 0.9em;
 	}
 	.alert__message :global(span) {
 		font-weight: bold;
+	}
+
+	button {
+		--icon-size: 1em;
+
+		// width: 100%;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		height: auto;
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: var(--alert-icon);
+		background-color: transparent;
+		border: 1px solid transparent;
+		padding: 0.1em;
+		margin: 0;
+		border-radius: 5px;
+	}
+
+	button:focus {
+		outline: 1px dashed var(--alert-icon);
 	}
 </style>

@@ -11,11 +11,10 @@
 html {
 	box-sizing: border-box;
 	font-size: 16px;
-	font-smooth: always;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: auto;
 	text-rendering: optimizeLegibility;
-	scroll-behavior: smooth;
+	// scroll-behavior: smooth;
 }
 
 html,

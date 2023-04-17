@@ -1,4 +1,5 @@
 <script>
+	import 'normalize.css';
 	import { dev } from '$app/environment';
 	import NProgress from 'nprogress';
 	import MediaQueries from '$components/dev/mediaQueries.svelte';

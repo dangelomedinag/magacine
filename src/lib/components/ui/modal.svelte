@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { browser } from '$app/environment';
 	import { onDestroy, onMount, createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
@@ -9,14 +9,13 @@
 	// icons
 	import Icon from '$icons/icon.svelte';
 	import X from '$icons/solid/x.svg?raw';
-	import { goto } from '$app/navigation';
 
 	export let modal = false;
 	export let Zindex = '111';
 	export let btnClose = true;
 
-	let currentElementFocus = null;
-	let ref;
+	let currentElementFocus: Element | null = null;
+	let ref: HTMLElement;
 	const dispatch = createEventDispatcher();
 
 	onMount(async () => {
@@ -24,11 +23,12 @@
 	});
 
 	export async function open() {
-		if (!currentElementFocus) {
-			currentElementFocus = document.activeElement;
+		// console.log(document.activeElement);
+		// if (!currentElementFocus) {
+		// 	currentElementFocus = document.activeElement;
 
-			currentElementFocus.blur();
-		}
+		// 	(currentElementFocus as HTMLElement).blur();
+		// }
 
 		modal = true;
 		setBodyScroll(modal, ref);
@@ -43,12 +43,13 @@
 	}
 	export async function close() {
 		modal = false;
-		const URLhashed = new URL(location);
-		URLhashed.hash = '';
-		await goto(URLhashed, { replaceState: true, noScroll: true });
+		// const URLhashed = new URL(location);
+		// URLhashed.hash = '';
+		// await goto(URLhashed, { replaceState: true, noScroll: true });
 
 		setBodyScroll(modal);
 		if (currentElementFocus) currentElementFocus.focus();
+
 		window.removeEventListener('keydown', handleEsc);
 		dispatch('close');
 	}
@@ -69,10 +70,10 @@
 		}
 	}
 
-	function focusOnMount(node) {
+	function focusOnMount(node: HTMLElement) {
 		if (node.children.length > 0) {
 			let children = node.children[0];
-
+			console.log(children.tagName);
 			if (children.tagName === 'A' || children.tagName === 'BUTTON') children.focus();
 		}
 	}
@@ -140,6 +141,7 @@
 		top: 50%;
 		transform: translate(-50%, -50%);
 		width: 95%;
+		max-width: 500px;
 		max-height: 90%;
 
 		display: flex;
@@ -280,9 +282,9 @@
 		background: #555;
 	}
 
-	@media (min-width: 992px) {
+	/* @media (min-width: 992px) {
 		.modal {
 			max-width: 50vw;
 		}
-	}
+	} */
 </style>

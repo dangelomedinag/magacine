@@ -1,21 +1,19 @@
 <script>
-	import Icon from '$components/icons/icon.svelte';
-	import viewColumns from '$icons/solid/view-columns.svg?raw';
-	import viewColumn from '$icons/solid/view-column.svg?raw';
-	import plusSmall from '$icons/solid/plus-small.svg?raw';
-	import minusSmall from '$icons/solid/minus-small.svg?raw';
+	// import Icon from '$components/icons/icon.svelte';
+	// import viewColumns from '$icons/solid/view-columns.svg?raw';
+	// import viewColumn from '$icons/solid/view-column.svg?raw';
+	// import plusSmall from '$icons/solid/plus-small.svg?raw';
+	// import minusSmall from '$icons/solid/minus-small.svg?raw';
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
-	import CarouselMovies from '$components/card/carouselMovies.svelte';
+	// import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import { FavMovies } from '$lib/stores/favoritesStore';
-
-	// const error = Error('add movies to favorite list');
-	let value = 2;
+	import CardMovie from '$components/card/cardMovie.svelte';
 </script>
 
 <NavbarTop />
 
-{#if $FavMovies.length}
+<!-- {#if $FavMovies.length}
 	<div class="ajustment">
 		<Icon>
 			{@html minusSmall}
@@ -31,27 +29,28 @@
 			{@html plusSmall}
 		</Icon>
 	</div>
-{/if}
+{/if} -->
+<h1>Favorites</h1>
 
-{#each Array(Math.ceil($FavMovies.length / value)) as _, i}
-	<CarouselMovies
-		movies={{ results: $FavMovies.slice(value * i, value * (i + 1)) }}
-		details={false}
-		title={i < 1 ? 'Favorites' : ''}
-	/>
-{:else}
-	<h1>nothing yet</h1>
-	<div class="rating-wrapper">
-		<CardRatingStarts
-			rating="4.3"
-			--rating-stars-fill="var(--c-divider)"
-			--rating-stars="var(--c-divider)"
-		/>
-	</div>
-	<p>
-		<a href="/discovery">discovery movies</a>
-	</p>
-{/each}
+<div class="content" class:wrapper={$FavMovies.length} style="padding-block: 3em;">
+	{#each $FavMovies as _, i (_.uuid)}
+		<CardMovie {i} movie={_} />
+	{:else}
+		<div class="empty-list">
+			<h1>nothing yet</h1>
+			<div class="rating-wrapper">
+				<CardRatingStarts
+					rating="4.3"
+					--rating-stars-fill="var(--c-divider)"
+					--rating-stars="var(--c-divider)"
+				/>
+			</div>
+			<p>
+				<a href="/discovery">discovery movies</a>
+			</p>
+		</div>
+	{/each}
+</div>
 
 <!-- {/if} -->
 
@@ -73,12 +72,24 @@
 </CarouselMovies> -->
 
 <style>
-	.ajustment {
+	.empty-list {
+		width: 100%;
+	}
+	/* .ajustment {
 		display: flex;
 		gap: 0.5em;
 		align-items: center;
 		margin-inline: auto;
 		padding: 1em;
+	} */
+
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(0px, var(--card-w)));
+		/* grid-template-rows: auto; */
+		place-items: center;
+		justify-content: center;
+		gap: 1em;
 	}
 
 	h1 {

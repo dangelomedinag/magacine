@@ -1,7 +1,8 @@
+import type { MoviesResponse } from '$lib/types.js';
 import { error } from '@sveltejs/kit';
 
-const getMore = async ({ totalResults, query, search }, fetch) => {
-	const arrPages = Array(5)
+const getMore = async ({ query }: MoviesResponse, fetch: typeof globalThis.fetch) => {
+	const arrPages: Promise<MoviesResponse>[] = Array(5)
 		.fill('')
 		.map((_, i) => fetch(`/api?${query}&page=${i + 2}`).then((r) => r.json()));
 
@@ -12,27 +13,35 @@ const getMore = async ({ totalResults, query, search }, fetch) => {
 };
 
 export async function load({ url, fetch, setHeaders }) {
-	if (url.searchParams.has('s')) {
-		try {
-			const req = await fetch('/api' + url.search.toString());
-			if (!req.ok) throw req;
-			const cacheControl = req.headers.get('cache-control');
-			if (cacheControl) setHeaders({ 'cache-control': cacheControl });
-			const res = await req.json();
+	// if (url.searchParams.has('s')) {
+	try {
+		const req = await fetch('/api' + url.search.toString());
+		if (!req.ok) throw req;
+		const cacheControl = req.headers.get('cache-control');
+		if (cacheControl) setHeaders({ 'cache-control': cacheControl });
+		const res: MoviesResponse = await req.json();
 
-			const response = {
-				movies: res
+		type Res = {
+			movies: MoviesResponse;
+			stream?: {
+				data: Promise<MoviesResponse[]>;
 			};
+		};
+		const response: Res = {
+			movies: res
+		};
 
-			const pages = Math.ceil(res.totalResults / 10);
-			if (pages > 5) {
-				response.stream = { data: getMore(res, fetch) };
-			}
-
-			return response;
-		} catch (err) {
-			const res = await err.json();
-			throw error(err.status, res.message);
+		const pages = Math.ceil(res.totalResults / 10);
+		if (pages > 5) {
+			response.stream = { data: getMore(res, fetch) };
 		}
+
+		return response;
+	} catch (err) {
+		// @ts-ignore
+		const res = await err.json();
+		// @ts-ignore
+		throw error(err.status, res.message);
 	}
+	// }
 }

@@ -47,6 +47,10 @@
 {/if}
 
 <style>
+	summary {
+		padding: 0;
+		margin: 0;
+	}
 	summary::marker {
 		content: '';
 	}
@@ -76,7 +80,8 @@
 		align-items: center;
 		justify-content: center;
 		gap: 0.2em;
-		padding-left: 0;
+		padding-block-start: 1em;
+		padding-inline: 0;
 		opacity: 0.5;
 		color: var(--c-front);
 		background-color: transparent;
@@ -85,6 +90,7 @@
 		font-style: oblique;
 		font-weight: bold;
 	}
+
 	button:hover {
 		opacity: 0.8;
 	}

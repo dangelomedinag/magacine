@@ -30,7 +30,7 @@ export const actions = {
 			return fail(404, {
 				errors: 'invalid username or password',
 				username: username ?? '',
-				password: password ?? ''
+				password: ''
 			});
 		}
 
@@ -38,7 +38,7 @@ export const actions = {
 			return fail(404, {
 				errors: 'you must provide a password',
 				username: username ?? '',
-				password: password ?? ''
+				password: ''
 			});
 		}
 
@@ -52,7 +52,7 @@ export const actions = {
 			return fail(404, {
 				errors: 'invalid credentials',
 				username: username ?? '',
-				password: password ?? ''
+				password: ''
 			});
 		}
 

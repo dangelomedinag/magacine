@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
 	import MovieItem from '$components/gridMovies/movieItem.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	import type { MovieResult } from '$lib/types';
 
 	export let data;
 	let arr = data.movies.results;
@@ -61,9 +62,9 @@
 	// 	rawMovies = { ...data.movies };
 	// }
 
-	function setPage(page, results) {
+	function setPage(page: number, results: MovieResult[]) {
 		if (page < 1) {
-			arr = data.movies.results;
+			arr = data.movies?.results;
 			active = page;
 			return;
 		}
@@ -116,7 +117,7 @@
 
 <h1>Hello world</h1> -->
 <div class="content">
-	<h1>{data.movies.search}</h1>
+	<h1>{data.movies?.search}</h1>
 	<p>page: {active} - all results</p>
 
 	<div class="grid-movies">

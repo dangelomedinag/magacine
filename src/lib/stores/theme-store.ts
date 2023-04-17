@@ -1,7 +1,9 @@
 import { writable } from 'svelte/store';
 
+type themeOption = 'light' | 'dark' | null;
+
 const themeStoreCustom = () => {
-	const { subscribe, set, update } = writable(null);
+	const { subscribe, set, update } = writable<themeOption>(null);
 
 	return {
 		subscribe,

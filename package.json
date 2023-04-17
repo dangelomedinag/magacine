@@ -45,6 +45,7 @@
 	"type": "module",
 	"dependencies": {
 		"bcrypt": "^5.0.1",
-		"jsonwebtoken": "^9.0.0"
+		"jsonwebtoken": "^9.0.0",
+		"normalize.css": "^8.0.1"
 	}
 }

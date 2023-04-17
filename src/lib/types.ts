@@ -1,6 +1,4 @@
-export type stringIndexed = { [index: string]: any };
-
-export interface MovieItem extends stringIndexed {
+export interface MovieItem {
 	title: string;
 	year: string;
 	rated: string;
@@ -27,14 +25,53 @@ export interface MovieItem extends stringIndexed {
 	website: any;
 	response: boolean;
 	uuid: string;
+	[index: string]: any;
 }
 
 export interface Rating {
 	source: string;
 	value: string;
+	[index: string]: any;
 }
 
-export interface OMDBMovie extends stringIndexed {
+export type typeResult = 'movie' | 'series' | 'episode';
+
+export interface MovieResult {
+	title: string;
+	year: string;
+	imdbid: string;
+	type: typeResult;
+	poster: string;
+	uuid: string;
+	[index: string]: any;
+}
+
+export interface MoviesResponse {
+	results: MovieResult[];
+	totalResults: number;
+	search: string;
+	query: string;
+	[index: string]: any;
+}
+
+export interface OMDBMoviesItem {
+	Title: string;
+	Year: string;
+	imdbID: string;
+	Type: string;
+	Poster: string;
+	[index: string]: any;
+}
+
+export interface OMDBMoviesResponse {
+	Search?: OMDBMoviesItem[];
+	totalResults?: string;
+	Response: 'True' | 'False';
+	Error: string;
+	[index: string]: any;
+}
+
+export interface OMDBMovie {
 	Title: string;
 	Year: string;
 	Rated: string;
@@ -60,9 +97,11 @@ export interface OMDBMovie extends stringIndexed {
 	Production: string;
 	Website: string;
 	Response: string;
+	[index: string]: any;
 }
 
-export interface OMDBRating extends stringIndexed {
+export interface OMDBRating {
 	Source: string;
 	Value: string;
+	[index: string]: any;
 }

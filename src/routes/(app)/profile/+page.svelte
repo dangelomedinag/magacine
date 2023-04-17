@@ -1,15 +1,31 @@
-<script>
+<script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import { themeStore } from '$lib/stores/theme-store';
-	// let form;
 
-	function getColorSchemePrefers(event) {
-		if (event) return event.matches ? 'light' : 'dark';
-
-		if (window.matchMedia) {
+	function getColorSchemePrefers() {
+		if ('matchMedia' in window)
 			return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+		return null;
+	}
+
+	function changes(e: Event) {
+		if (!e.target || !('value' in e.target)) return;
+
+		if (e.target.value === 'system') {
+			document.documentElement.classList.remove('dark');
+			document.documentElement.classList.remove('light');
+			themeStore.set(getColorSchemePrefers());
+		}
+
+		if (e.target.value === 'dark') {
+			themeStore.set('dark');
+			document.documentElement.classList.add('dark');
+		}
+		if (e.target.value === 'light') {
+			document.documentElement.classList.add('light');
+			themeStore.set('light');
 		}
 	}
 </script>
@@ -21,28 +37,7 @@
 	<h1>{$page.data.user.username}</h1>
 	<p>{$page.data.user.name}</p>
 	<form method="POST" use:enhance>
-		<select
-			name="theme"
-			id="theme"
-			value={$themeStore}
-			on:change={(e) => {
-				if (e.target.value === 'system') {
-					document.documentElement.classList.remove('dark');
-					document.documentElement.classList.remove('light');
-					themeStore.set(getColorSchemePrefers());
-				}
-
-				if (e.target.value === 'dark') {
-					themeStore.set('dark');
-					document.documentElement.classList.add('dark');
-				}
-				if (e.target.value === 'light') {
-					document.documentElement.classList.add('light');
-					themeStore.set('light');
-				}
-				// form.submit();
-			}}
-		>
+		<select name="theme" id="theme" value={$themeStore} on:change={changes}>
 			<option value="system">system</option>
 			<option value="dark">dark</option>
 			<option value="light">light</option>
@@ -55,6 +50,7 @@
 <style>
 	.wrapper {
 		text-align: center;
+		padding-block: 3em;
 	}
 
 	img {

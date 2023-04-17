@@ -7,16 +7,17 @@
 	import Spinner from '$lib/components/ui/spinner.svelte';
 	import CardMovie from '$components/card/cardMovie.svelte';
 	import CardMovieSeeAll from '$components/card/cardMovieSeeAll.svelte';
-	import type { MovieItem } from '$lib/types';
+	import type { MovieItem, MoviesResponse } from '$lib/types';
 
-	interface CarouselMoviesData {
-		results: MovieItem[];
-		query?: string;
-		search?: string;
-		totalResults?: number;
-	}
+	// interface CarouselMoviesData {
+	// 	results: MovieItem[];
+	// 	query?: string;
+	// 	search?: string;
+	// 	totalResults?: number;
+	// }
+	// MoviesRespons
 
-	type CarouselMoviesProp = undefined | CarouselMoviesData | Error;
+	type CarouselMoviesProp = undefined | MoviesResponse | Error;
 
 	// props
 	export let movies: CarouselMoviesProp = undefined;
@@ -144,14 +145,14 @@
 		text-overflow: ellipsis;
 	}
 
-	@media (min-width: 300px) {
+	/* @media (min-width: 300px) {
 		.header-title {
 			width: 100%;
 			white-space: normal;
 			overflow: auto;
 			text-overflow: initial;
 		}
-	}
+	} */
 
 	.header-btn {
 		background-color: transparent;
