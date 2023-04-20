@@ -20,6 +20,7 @@
 	const dispatch = createEventDispatcher();
 
 	onMount(async () => {
+		console.log('modal');
 		if (modal) open();
 	});
 
@@ -70,7 +71,7 @@
 	});
 
 	afterNavigate(({ type }) => {
-		console.log(type);
+		// console.log(type);
 		if (type === 'link') close();
 	});
 </script>

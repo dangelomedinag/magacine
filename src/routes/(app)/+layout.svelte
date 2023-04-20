@@ -38,16 +38,18 @@
 	<title>Magacine - movies, series & all, in one place</title>
 </svelte:head>
 
-<Modal
-	bind:this={modal}
-	on:close={() => {
-		pricePlans.set(false);
-		pricePlans.saveLocalStorage();
-	}}
->
-	<svelte:fragment slot="header">¡Wellcome!</svelte:fragment>
-	<PriceTable />
-</Modal>
+{#if $pricePlans}
+	<Modal
+		bind:this={modal}
+		on:close={() => {
+			pricePlans.set(false);
+			pricePlans.saveLocalStorage();
+		}}
+	>
+		<svelte:fragment slot="header">¡Wellcome!</svelte:fragment>
+		<PriceTable />
+	</Modal>
+{/if}
 
 <Layout open={toggle} on:close-menu={toggleAside}>
 	<svelte:fragment slot="header">

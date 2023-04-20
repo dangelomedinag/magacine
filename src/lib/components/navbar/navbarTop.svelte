@@ -1,5 +1,5 @@
-<script>
-	import { onMount } from 'svelte';
+<script lang="ts">
+	import { onMount, tick } from 'svelte';
 	import { afterNavigate } from '$app/navigation';
 
 	// icons
@@ -27,11 +27,24 @@
 	export let search = true,
 		bell = true,
 		profile = true;
-	let modalSearch;
-	let modalSession;
-	let modalNotification;
+	let modalSearch: Modal;
+	let modalSession: Modal;
+	let modalNotification: Modal;
 	let searchInput = false;
 	let results;
+	let showModalSearch: boolean = false;
+	let showModalSession: boolean = false;
+	let showModalNotification: boolean = false;
+
+	async function openModal(modal: string) {
+		if (modal === 'search') showModalSearch = true;
+		if (modal === 'session') showModalSession = true;
+		if (modal === 'notification') showModalNotification = true;
+		await tick();
+		if (modal === 'search') modalSearch.open();
+		if (modal === 'session') modalSession.open();
+		if (modal === 'notification') modalNotification.open();
+	}
 
 	function submit(e) {
 		let query = e.target.x.value.trim();
@@ -49,7 +62,7 @@
 		});
 
 		e.target.x.focus();
-		modalSearch.open();
+		openModal('search').then();
 	}
 
 	afterNavigate(() => {
@@ -92,7 +105,7 @@
 	}
 </script>
 
-<nav class="navbar">
+<nav class="navbar" class:search-open={searchInput}>
 	<div class="content navbar-wrapper">
 		<div class="left navbar_slots" class:esconder={searchInput}>
 			<a href="/" class="navbar-item">
@@ -134,7 +147,7 @@
 				{/if}
 			{/if}
 			{#if bell}
-				<button title="notification" class="navbar-item" on:click={modalNotification.open}>
+				<button title="notification" class="navbar-item" on:click={() => openModal('notification')}>
 					<Icon counter={$notiStore.length}>
 						{#if $notiStore.length}
 							{@html BellSolid}
@@ -146,7 +159,7 @@
 			{/if}
 			{#if profile}
 				{#if $page.data.user}
-					<button title="session" class="navbar-item" on:click={modalSession.open}>
+					<button title="session" class="navbar-item" on:click={() => openModal('session')}>
 						<Icon>
 							{@html UserCircle}
 						</Icon>
@@ -164,49 +177,61 @@
 	<div class="foreground" on:click|self={() => (searchInput = false)} />
 {/if}
 
-<Modal bind:this={modalSession} btnClose={false}>
-	<svelte:fragment slot="header">
-		Session <Icon y="10%">{@html UserCircle}</Icon>
-	</svelte:fragment>
-	<SessionModal />
+{#if showModalSession}
+	<Modal bind:this={modalSession} btnClose={false}>
+		<svelte:fragment slot="header">
+			Session <Icon y="10%">{@html UserCircle}</Icon>
+		</svelte:fragment>
+		<SessionModal />
 
-	<svelte:fragment slot="action">
-		<form method="post" action="/logout" style="display: contents;">
-			<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
-		</form>
-		<!-- <a class="list__logout" href="/auth/logout">logout <Icon><Logout /></Icon></a> -->
-		<button on:click={modalSession.close} class="cta">close</button>
-	</svelte:fragment>
-</Modal>
+		<svelte:fragment slot="action">
+			<form method="post" action="/logout" style="display: contents;">
+				<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
+			</form>
+			<!-- <a class="list__logout" href="/auth/logout">logout <Icon><Logout /></Icon></a> -->
+			<button on:click={modalSession.close} class="cta">close</button>
+		</svelte:fragment>
+	</Modal>
+{/if}
 
-<Modal bind:this={modalSearch}>
-	<svelte:fragment slot="header">
-		{#await results}
-			<Icon y="10%">{@html Search}</Icon> Searching...
-		{:then _}
-			<Icon y="10%">{@html Search}</Icon> Search
-		{:catch _}
-			<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
-		{/await}
-	</svelte:fragment>
-	<NavbarSearchResults {results} />
+{#if showModalSearch}
+	<!-- content here -->
+	<Modal bind:this={modalSearch}>
+		<svelte:fragment slot="header">
+			{#await results}
+				<Icon y="10%">{@html Search}</Icon> Searching...
+			{:then _}
+				<Icon y="10%">{@html Search}</Icon> Search
+			{:catch _}
+				<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
+			{/await}
+		</svelte:fragment>
+		<NavbarSearchResults {results} />
 
-	<svelte:fragment slot="action">
-		{#await results then response}
-			<a use:focusIn href="/search?s={response.search}" class="cta">show all</a>
-		{:catch}
-			<button use:focusIn on:click={modalSearch.close}>close</button>
-		{/await}
-	</svelte:fragment>
-</Modal>
+		<svelte:fragment slot="action">
+			{#await results then response}
+				<a
+					use:focusIn
+					href="/search?s={encodeURIComponent(response.search)}"
+					class="cta"
+					on:click={() => (searchInput = false)}>show all</a
+				>
+			{:catch}
+				<button use:focusIn on:click={modalSearch.close}>close</button>
+			{/await}
+		</svelte:fragment>
+	</Modal>
+{/if}
 
-<Modal bind:this={modalNotification}>
-	<svelte:fragment slot="header">
-		<Icon y="10%">{@html BellSolid}</Icon>
-		{$notiStore.length ?? ''} Notifications
-	</svelte:fragment>
-	<Notification on:clickItem={() => modalNotification.close()} />
-</Modal>
+{#if showModalNotification}
+	<Modal bind:this={modalNotification}>
+		<svelte:fragment slot="header">
+			<Icon y="10%">{@html BellSolid}</Icon>
+			{$notiStore.length ?? ''} Notifications
+		</svelte:fragment>
+		<Notification on:clickItem={() => modalNotification.close()} />
+	</Modal>
+{/if}
 
 <style>
 	@media (min-width: 576px) {
@@ -246,6 +271,11 @@
 		box-shadow: var(--shadow-short);
 		transition: transform 0.3s ease-in-out, var(--transition-theme);
 	}
+
+	.navbar.search-open {
+		background-color: var(--c-main);
+	}
+
 	.navbar-wrapper {
 		display: flex;
 		justify-content: space-between;

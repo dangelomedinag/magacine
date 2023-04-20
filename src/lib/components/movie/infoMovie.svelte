@@ -16,7 +16,7 @@
 	import Star from '$components/icons/solid/star.svg?raw';
 	import { goto } from '$app/navigation';
 	import Link from '$components/icons/solid/link.svg?raw';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import type { MovieItem } from '$lib/types';
 
 	export let movie: MovieItem;
@@ -36,13 +36,20 @@
 	} = movie;
 
 	let modal: Modal;
+	let showModal: boolean = false;
 
-	onMount(() => {
-		if (modal) {
-			const url = new URL(location);
-			if (url.hash === '#modal') modal.open();
-		}
-	});
+	async function openModal() {
+		showModal = true;
+		await tick();
+		modal.open();
+	}
+
+	// onMount(() => {
+	// 	if (modal) {
+	// 		const url = new URL(location);
+	// 		if (url.hash === '#modal') modal.open();
+	// 	}
+	// });
 
 	function favoritesAction(movie: MovieItem) {
 		const mesage = isFav ? 'Remove item of favorites?' : 'Add item of favorites?';
@@ -60,7 +67,7 @@
 <LangMovie value={language} />
 <RatingMovie value={imdbrating} {ratings} />
 
-<button on:click={modal.open} class="btn-details">more details</button>
+<button on:click={openModal} class="btn-details">more details</button>
 <div style="display: flex; gap:0.5em;">
 	<button on:click={() => favoritesAction(movie)} class="btn-details" class:fav={isFav}>
 		{#if isFav}
@@ -77,14 +84,16 @@
 	{/if}
 </div>
 
-<Modal bind:this={modal} Zindex="110">
-	<ReleasedMovie value={released} />
-	<DirectorMovie value={director} />
-	<WriterMovie value={writer} />
-	<ActorsMovie value={actors} />
-	<AwardsMovie value={awards} />
-	<CountryMovie value={country} />
-</Modal>
+{#if showModal}
+	<Modal bind:this={modal} Zindex="110" on:close={() => (showModal = false)}>
+		<ReleasedMovie value={released} />
+		<DirectorMovie value={director} />
+		<WriterMovie value={writer} />
+		<ActorsMovie value={actors} />
+		<AwardsMovie value={awards} />
+		<CountryMovie value={country} />
+	</Modal>
+{/if}
 
 <style>
 	.btn-details {

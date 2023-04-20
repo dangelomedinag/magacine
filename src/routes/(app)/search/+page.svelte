@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount, tick } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import { quadInOut } from 'svelte/easing';
+	import { quintInOut } from 'svelte/easing';
 	import { CODE } from './_ERRORS_CODE';
 
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
@@ -10,7 +10,6 @@
 
 	/* icons */
 	import Icon from '$icons/icon.svelte';
-	import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svg?raw';
 	import X from '$icons/solid/x.svg?raw';
 	import GridCards from '$components/gridMovies/GridCards.svelte';
 	import SectionPage from '$components/ui/SectionPage.svelte';
@@ -33,7 +32,6 @@
 	let errors = undefined;
 
 	let loading = false;
-	// let suggestionsMovies = undefined;
 
 	// filters
 	let selected = ['movie', 'series'];

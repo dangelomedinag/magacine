@@ -23,6 +23,7 @@
 	export let progress = 0;
 	export let i = 1;
 	let showDetails = false;
+	let showModal: boolean = false;
 	let modal: Modal;
 
 	$: isFav = $FavMovies.some((m) => m.imdbid === movie.imdbid);
@@ -68,51 +69,62 @@
 		// const ok = confirm(mesage);
 
 		FavMovies.toogleFav(movie);
+		closeModal();
+	}
+
+	function openModal() {
+		showModal = true;
+		modal.open();
+	}
+	function closeModal() {
+		showModal = false;
 		modal.close();
 	}
 </script>
 
-<Modal bind:this={modal}>
-	<svelte:fragment slot="header">Favorites</svelte:fragment>
-	{#if !isFav}
-		<p class="modal-icon" style="color: springgreen;">
-			<Icon>{@html Plus}</Icon>
-		</p>
-	{:else}
-		<p class="modal-icon" style="color: var(--c-front);">
-			<Icon>{@html Trash}</Icon>
-		</p>
-	{/if}
-	<ul>
+{#if showDetails}
+	<Modal bind:this={modal}>
+		<svelte:fragment slot="header">Favorites</svelte:fragment>
 		{#if !isFav}
-			<li class="current">
-				<img class="favorites-img" src={movie.poster} alt={movie.plot} />
-			</li>
+			<p class="modal-icon" style="color: springgreen;">
+				<Icon>{@html Plus}</Icon>
+			</p>
+		{:else}
+			<p class="modal-icon" style="color: var(--c-front);">
+				<Icon>{@html Trash}</Icon>
+			</p>
 		{/if}
+		<ul>
+			{#if !isFav}
+				<li class="current">
+					<img class="favorites-img" src={movie.poster} alt={movie.plot} />
+				</li>
+			{/if}
 
-		{#each $FavMovies
-			.sort((a, b) => (a.imdbid === movie.imdbid ? -1 : 1))
-			.slice(0, 7) as item (item.uuid)}
-			<li class:current={item.imdbid === movie.imdbid}>
-				<img class="favorites-img" src={item.poster} alt={item.plot} />
-			</li>
-		{/each}
-	</ul>
-	<p class="text">{isFav ? 'Remove' : 'Add '} <strong>{movie.title}</strong> from favorites?</p>
-	<svelte:fragment slot="action">
-		<button class="cta" on:click={() => favoritesAction(movie)}>{isFav ? 'Remove' : 'Add'}</button>
-		<button on:click={modal.close}>cancel</button>
-		<a href="/favorites">favorites</a>
-	</svelte:fragment>
-</Modal>
-
+			{#each $FavMovies
+				.sort((a, b) => (a.imdbid === movie.imdbid ? -1 : 1))
+				.slice(0, 7) as item (item.uuid)}
+				<li class:current={item.imdbid === movie.imdbid}>
+					<img class="favorites-img" src={item.poster} alt={item.plot} />
+				</li>
+			{/each}
+		</ul>
+		<p class="text">{isFav ? 'Remove' : 'Add '} <strong>{movie.title}</strong> from favorites?</p>
+		<svelte:fragment slot="action">
+			<button class="cta" on:click={() => favoritesAction(movie)}>{isFav ? 'Remove' : 'Add'}</button
+			>
+			<button on:click={modal.close}>cancel</button>
+			<a href="/favorites">favorites</a>
+		</svelte:fragment>
+	</Modal>
+{/if}
 <figure
 	use:intersecting
 	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
 	class="item"
 	class:fav-active={isFav}
 >
-	<button on:click={modal.open} class="fav">
+	<button on:click={openModal} class="fav">
 		<Icon y="5%">{@html Star}</Icon>
 		{#if isFav}
 			<span>fav</span>
