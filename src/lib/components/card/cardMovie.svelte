@@ -1,43 +1,42 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 
 	import Icon from '$icons/icon.svelte';
 	import Star from '$icons/solid/star.svg?raw';
+	import Trash from '$icons/solid/trash.svg?raw';
+	import Plus from '$icons/solid/plus.svg?raw';
 
 	import ProgressLine from '$components/card/cardProgressLine.svelte';
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
 	import { FavMovies } from '$lib/stores/favoritesStore';
+	import type { MovieResult } from '$lib/types';
+	import Modal from '$components/ui/modal.svelte';
+	import { uuid } from '$helpers';
+	// import Trash from '$components/icons/outline/trash.svelte';
+	// import MovieItem from '$components/gridMovies/movieItem.svelte';
 
 	export let full = false;
 	export let details = true;
-	export let movie;
+	export let movie: MovieResult;
 	export let progress = 0;
-	export let i;
-	export let showDetails = false;
-	let promiseDetails = new Promise(() => {});
-
-	onMount(() => {
-		if (!details) promiseDetails = Promise.reject();
-	});
+	export let i = 1;
+	let showDetails = false;
+	let modal: Modal;
 
 	$: isFav = $FavMovies.some((m) => m.imdbid === movie.imdbid);
 
-	const callback = (entries, observer) => {
-		entries.forEach((entry) => {
+	const callback: IntersectionObserverCallback = (entries, observer) => {
+		entries.forEach(async (entry) => {
 			if (entry.isIntersecting) {
 				showDetails = true;
-				promiseDetails = loadDetails()
-					.catch((e) => e.message)
-					.finally(() => {
-						observer.disconnect();
-					});
+				observer.disconnect();
 			}
 		});
 	};
 
-	function intersecting(node, cb) {
+	function intersecting(node) {
 		if (!details) return;
 
 		let options = {
@@ -45,7 +44,7 @@
 			threshold: 0
 		};
 
-		let observer = new IntersectionObserver(cb, options);
+		let observer = new IntersectionObserver(callback, options);
 		observer.observe(node);
 
 		return {
@@ -55,31 +54,69 @@
 		};
 	}
 
-	async function loadDetails() {
+	async function getDetails() {
+		await new Promise((res) => setTimeout(res, 1000));
 		const req = await fetch('/api/' + movie.imdbid);
 		if (!req.ok) throw req;
-		const res = await req.json();
+		const res: MovieItem = await req.json();
 		return res;
+	}
+
+	function favoritesAction(movie: MovieItem) {
+		// const mesage = isFav ? 'Remove item of favorites?' : 'Add item of favorites?';
+		// modal.open();
+		// const ok = confirm(mesage);
+
+		FavMovies.toogleFav(movie);
+		modal.close();
 	}
 </script>
 
+<Modal bind:this={modal}>
+	<svelte:fragment slot="header">Favorites</svelte:fragment>
+	{#if !isFav}
+		<p class="modal-icon" style="color: springgreen;">
+			<Icon>{@html Plus}</Icon>
+		</p>
+	{:else}
+		<p class="modal-icon" style="color: var(--c-front);">
+			<Icon>{@html Trash}</Icon>
+		</p>
+	{/if}
+	<ul>
+		{#if !isFav}
+			<li class="current">
+				<img class="favorites-img" src={movie.poster} alt={movie.plot} />
+			</li>
+		{/if}
+
+		{#each $FavMovies
+			.sort((a, b) => (a.imdbid === movie.imdbid ? -1 : 1))
+			.slice(0, 7) as item (item.uuid)}
+			<li class:current={item.imdbid === movie.imdbid}>
+				<img class="favorites-img" src={item.poster} alt={item.plot} />
+			</li>
+		{/each}
+	</ul>
+	<p class="text">{isFav ? 'Remove' : 'Add '} <strong>{movie.title}</strong> from favorites?</p>
+	<svelte:fragment slot="action">
+		<button class="cta" on:click={() => favoritesAction(movie)}>{isFav ? 'Remove' : 'Add'}</button>
+		<button on:click={modal.close}>cancel</button>
+		<a href="/favorites">favorites</a>
+	</svelte:fragment>
+</Modal>
+
 <figure
-	use:intersecting={callback}
+	use:intersecting
 	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
 	class="item"
 	class:fav-active={isFav}
 >
-	<button
-		on:click={() => {
-			FavMovies.toogleFav(movie);
-		}}
-		class="fav"
-	>
-		<Icon y="5%"
-			>{@html Star}{#if isFav}
-				fav
-			{/if}</Icon
-		>
+	<button on:click={modal.open} class="fav">
+		<Icon y="5%">{@html Star}</Icon>
+		{#if isFav}
+			<span>fav</span>
+		{/if}
 	</button>
 	<a data-sveltekit-preload-code class="item-link" href="/movies/{movie.imdbid}">
 		<img loading="lazy" class="item-poster" src={movie.poster} alt={movie.title} />
@@ -96,24 +133,41 @@
 
 				<p class="movie-year">{movie.year}</p>
 
-				{#await promiseDetails}
-					wait...
-				{:then value}
-					<div style="display: flex; align-items: center;">
-						<img
-							class="rating-logo"
-							src="/imgs/imdb-logo.png"
-							alt="imdb trade mark"
-							loading="lazy"
-						/>
-						<div class="rating-wrapper">
-							<span class="rating-label">{(value.imdbrating / 2).toFixed(1)}</span>
+				{#if showDetails}
+					{#await getDetails()}
+						wait...
+					{:then value}
+						<div style="display: flex; align-items: center;">
+							<img
+								class="rating-logo"
+								src="/imgs/imdb-logo.png"
+								alt="imdb trade mark"
+								loading="lazy"
+							/>
+							<div class="rating-wrapper">
+								<span class="rating-label">{(+value.imdbrating / 2).toFixed(1)}</span>
+							</div>
+							<CardRatingStarts rating={value.imdbrating} />
 						</div>
-						<CardRatingStarts rating={value.imdbrating} />
-					</div>
-				{:catch}
-					<!--  -->
-				{/await}
+					{/await}
+				{/if}
+				<!-- {#await promiseDetails}
+						wait...
+					{:then value}
+						<div style="display: flex; align-items: center;">
+							<img
+								class="rating-logo"
+								src="/imgs/imdb-logo.png"
+								alt="imdb trade mark"
+								loading="lazy"
+							/>
+							<div class="rating-wrapper">
+								<span class="rating-label">{(value.imdbrating / 2).toFixed(1)}</span>
+							</div>
+							<CardRatingStarts rating={value.imdbrating} />
+						</div>
+					{:catch}
+					{/await} -->
 			</div>
 		</figcaption>
 	{/if}
@@ -125,15 +179,85 @@
 		--card-h: 350px;
 	} */
 
+	.text {
+		text-align: center;
+	}
+
+	.text > strong {
+		background-color: var(--c-front-dark);
+		border-radius: 4px;
+		padding-inline: 0.3em;
+		color: white;
+	}
+	ul {
+		position: relative;
+		display: flex;
+		height: 150px;
+		justify-content: center;
+		align-items: center;
+		padding: 0;
+		/* flex-wrap: wrap; */
+		list-style: none;
+	}
+
+	li.current {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1;
+		/* color: white; */
+	}
+
+	li img {
+		opacity: 0.2;
+	}
+
+	.current .favorites-img {
+		opacity: 1;
+		height: 100%;
+		border-radius: 5px;
+	}
+
+	.modal-icon {
+		display: block;
+		font-size: 2em;
+		text-align: center;
+		margin: 0;
+		/* position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center; */
+	}
+
+	.favorites-img {
+		display: block;
+		height: 80px;
+		width: auto;
+		object-fit: cover;
+	}
+
 	.fav {
 		--icon-size: 1.5rem;
 		/* display: none; */
 		font-weight: bold;
-
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
 		color: rgb(255, 221, 50);
 		background-color: #1f1c23;
-		padding: 0 0.3em;
+		/* padding: 0 0.3em; */
 		margin: 0.8em;
+		padding-inline: 0.2em;
+		padding-block: 0;
 		border-radius: 50vh;
 		/* width: calc(var(--icon-size) + 0.5rem);
 		height: calc(var(--icon-size) + 0.5rem); */
@@ -177,7 +301,7 @@
 		background-color: var(--c-main);
 		border: 1px solid var(--c-divider);
 		transition: transform 100ms ease-in-out;
-		box-shadow: var(--shadow-long);
+		/* box-shadow: var(--shadow-long); */
 	}
 
 	.item-link {
@@ -242,7 +366,7 @@
 		}
 
 		.fav-active .fav {
-			display: block;
+			display: flex;
 		}
 	}
 	@media (min-width: 768px) {
@@ -253,7 +377,7 @@
 		transform: translateY(-1%);
 	}
 	.item:hover .fav {
-		display: block;
+		display: flex;
 	}
 
 	.item:hover .movie-title {

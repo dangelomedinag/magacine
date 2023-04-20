@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import TitleMovie from '$components/movie/titleMovie.svelte';
 	import PlotMovie from '$components/movie/plotMovie.svelte';
 	import GendersMovie from '$components/movie/gendersMovie.svelte';
@@ -17,8 +17,9 @@
 	import { goto } from '$app/navigation';
 	import Link from '$components/icons/solid/link.svg?raw';
 	import { onMount } from 'svelte';
+	import type { MovieItem } from '$lib/types';
 
-	export let movie;
+	export let movie: MovieItem;
 	const {
 		plot,
 		title,
@@ -34,7 +35,7 @@
 		country
 	} = movie;
 
-	let modal;
+	let modal: Modal;
 
 	onMount(() => {
 		if (modal) {
@@ -42,6 +43,13 @@
 			if (url.hash === '#modal') modal.open();
 		}
 	});
+
+	function favoritesAction(movie: MovieItem) {
+		const mesage = isFav ? 'Remove item of favorites?' : 'Add item of favorites?';
+		const ok = confirm(mesage);
+
+		ok && FavMovies.toogleFav(movie);
+	}
 
 	$: isFav = $FavMovies.some((m) => m.imdbid === movie.imdbid);
 </script>
@@ -54,18 +62,18 @@
 
 <button on:click={modal.open} class="btn-details">more details</button>
 <div style="display: flex; gap:0.5em;">
-	<button on:click={() => FavMovies.toogleFav(movie)} class="btn-details" class:fav={isFav}>
+	<button on:click={() => favoritesAction(movie)} class="btn-details" class:fav={isFav}>
 		{#if isFav}
-			delete <Icon y="10%">{@html Star}</Icon>
+			remove fav
 		{:else}
-			add to favorites
+			add to favorites <Icon y="10%">{@html Star}</Icon>
 		{/if}
 	</button>
 	{#if isFav}
-		<button on:click={() => goto('/favorites')} class="btn-details">
+		<a href="/favorites" class="btn-details">
 			view favorites
 			<Icon y="13%">{@html Link}</Icon>
-		</button>
+		</a>
 	{/if}
 </div>
 
@@ -84,24 +92,29 @@
 		display: block;
 		width: 100%;
 		border: 1px solid var(--c-divider);
-		background-color: var(--c-main-content);
+		background-color: var(--c-divider);
 		color: inherit;
 		padding: 0.5em 0.2em;
 		border-radius: 5px;
 		cursor: pointer;
 		margin-top: 1em;
+		font-weight: bold;
+		text-align: center;
+		text-decoration: none;
 	}
 
 	.btn-details:hover {
-		/* background-color: var(--c-main); */
-		color: var(--c-front);
+		background-color: var(--c-front);
+		color: white;
 	}
-
-	.fav {
-		border-color: rgb(255, 221, 50);
-		color: rgb(255, 221, 50);
+	a.btn-details:hover {
+		text-decoration: underline;
+	}
+	.btn-details.fav {
+		background-color: rgb(251, 230, 124);
+		color: rgb(95, 83, 26);
 	}
 	.fav:hover {
-		color: var(--c-front) !important;
+		opacity: 0.8;
 	}
 </style>

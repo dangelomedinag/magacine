@@ -82,6 +82,7 @@
 
 <style>
 	.footer {
+		margin-top: 2em;
 		padding-bottom: 2em;
 		/* display: flex; */
 		/* flex-flow: row wrap; */

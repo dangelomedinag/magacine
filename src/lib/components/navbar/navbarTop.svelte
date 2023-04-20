@@ -239,7 +239,9 @@
 		top: 0;
 		z-index: 51;
 		overflow: hidden;
-		background-color: var(--c-main-content);
+		backdrop-filter: blur(15px);
+		/* background-color: var(--c-main); */
+		background-color: var(--bg-navbar);
 		border-bottom: 1px solid var(--c-divider);
 		box-shadow: var(--shadow-short);
 		transition: transform 0.3s ease-in-out, var(--transition-theme);

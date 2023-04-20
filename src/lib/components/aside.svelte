@@ -3,9 +3,6 @@
 
 	// icons
 	import Icon from '$icons/icon.svelte';
-	// import IconTest from './icons/iconTest.svelte';
-	// import HomeSvg from '$icons/solid/home.svg?raw';
-	import Home from '$icons/solid/home.svg?raw';
 	import ViewGridAdd from '$icons/solid/view-grid-add.svg?raw';
 	import InboxIn from '$icons/solid/inbox-in.svg?raw';
 	import UserGroup from '$icons/solid/user-group.svg?raw';
@@ -23,21 +20,23 @@
 	// stores
 	import { notiStore } from '$lib/stores/notifications-store';
 	import { themeStore } from '$lib/stores/theme-store';
+	import LogoNavbar from './ui/logo-navbar.svelte';
 </script>
 
 <div id="aside-wrapper">
-	<nav>
-		<span class="section">Menu</span>
-
-		<AsideItem href="/" on:tap>
-			<svelte:fragment slot="icon">
+	<!-- <nav> -->
+	<a href="/">
+		<LogoNavbar />
+	</a>
+	<span class="section">Menu</span>
+	<div>
+		<!-- <hr /> -->
+		<!-- <svelte:fragment slot="icon">
 				<Icon>
-					<!-- <Home /> -->
 					{@html Home}
 				</Icon>
-			</svelte:fragment>
-			Home
-		</AsideItem>
+			</svelte:fragment> -->
+		<!-- Home -->
 
 		<AsideItem
 			href="/discovery"
@@ -106,9 +105,10 @@
 			</svelte:fragment>
 			Search</AsideItem
 		>
-	</nav>
-
+	</div>
+	<!-- </nav> -->
 	<div>
+		<!-- <div> -->
 		<AsideItem href="/settings" on:tap>
 			<svelte:fragment slot="icon">
 				<Icon>{@html Cog}</Icon>
@@ -122,7 +122,7 @@
 			Help</AsideItem
 		>
 
-		<form method="post" action="/logout" style="display: contents;">
+		<form method="post" action="/logout">
 			<AsideItem on:tap type="submit">
 				<svelte:fragment slot="icon">
 					<Icon>{@html Logout}</Icon>
@@ -143,19 +143,31 @@
 			</svelte:fragment>
 			{$themeStore === 'dark' ? 'light' : 'dark'} theme
 		</AsideItem>
+		<!-- </div> -->
 	</div>
 </div>
 
 <style>
 	#aside-wrapper {
-		--icon-size: 1.5em;
+		--icon-size: 1.3em;
+		padding-inline: 1em;
+		padding-block-end: 1em;
 
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		height: 100%;
-		padding: 1em 0.4em 6em 0.4em;
 		color: var(--c-text-base);
+		max-height: 100dvh;
+	}
+
+	a {
+		display: flex;
+		gap: 0.4em;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid var(--c-divider);
+		padding-block: 0.8em;
+		margin-block-end: 1em;
 	}
 
 	hr {
@@ -165,6 +177,10 @@
 		border: 1px solid var(--c-divider);
 		background-color: var(--c-divider);
 		border-radius: 1px;
+	}
+
+	form {
+		width: 100%;
 	}
 
 	@media (max-height: 500px) {
@@ -193,13 +209,24 @@
 	}
 
 	.section {
-		display: none;
 		font-weight: 300;
 		opacity: 0.7;
 	}
 
-	@media (min-width: 992px) {
-		:global(aside.toggle) .section {
+	@media (min-width: 768px) {
+		#aside-wrapper {
+			position: sticky;
+			top: 0;
+			left: 0;
+		}
+
+		.section {
+			display: none;
+		}
+	}
+
+	@media (min-width: 1201px) {
+		.section {
 			display: block;
 		}
 	}

@@ -41,64 +41,62 @@
 	tabindex="0"
 	{title}
 >
-	<div class="wrapper">
-		<div class="icon">
-			<slot name="icon" />
-		</div>
-		<div class="label">
-			<slot />
-			{#if obj.length > 0}
-				<div class="notification">{obj[0].items.length ? obj[0].items.length : ''}</div>
-			{/if}
-		</div>
+	<!-- <div class="wrapper"> -->
+	<div class="icon">
+		<slot name="icon" />
 	</div>
+	<div class="label">
+		<slot />
+	</div>
+	{#if obj.length > 0}
+		<div class="notification">{obj[0].items.length ? obj[0].items.length : ''}</div>
+	{/if}
+	<!-- </div> -->
 </svelte:element>
 
 <style>
 	.link {
-		font-size: 0.9em;
+		/* font-size: 1em; */
+		position: relative;
 		font-weight: 700;
 		width: 100%;
-		display: block;
-		/* color: inherit; */
+		display: flex;
 		color: var(--aside-link);
-		/* opacity: var(--aside-link-opacity); */
 		opacity: 1;
 		text-decoration: none;
-		padding: 0.5em 0.6em;
+		/* width: min-content; */
+		/* flex-shrink: 0;
+		flex-grow: 0; */
 		margin: 0;
+		padding-inline: 1em;
+		padding-block: 0.3em;
 		margin-bottom: 0.2em;
-		position: relative;
-		line-height: 1rem;
+		/* position: relative; */
+		/* line-height: 1; */
 		background-color: transparent;
 		border: none;
 		text-align: left;
 		cursor: pointer;
 		transition: transform 0.2s ease-out;
 		border-radius: 50vh;
+		gap: 0.5em;
 	}
 	.link:hover {
 		opacity: 1;
 		background-color: var(--c-divider);
-		/* color: var(--c-front); */
 	}
-
 	.link:active {
 		transform: translateX(3%);
 	}
 
 	.notification {
-		font-size: 0.8em;
-		/* position: absolute; */
-		/* display: none; */
-		display: inline-block;
-		top: -50%;
-		right: -10px;
+		/* font-size: 0.8em; */
+		/* display: inline-block; */
+		/* top: 50%; */
+
 		background-color: var(--c-front);
 		color: var(--c-white);
-		padding: 0 7px;
-		/* padding-left: 5px;
-		padding-right: 5px; */
+		padding-inline: 5px;
 		border-radius: 5vh;
 	}
 
@@ -111,10 +109,11 @@
 	}
 
 	.wrapper {
+		/* width: auto;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		position: relative;
+		position: relative; */
 	}
 
 	.icon {
@@ -122,39 +121,44 @@
 		justify-content: center;
 		align-items: center;
 		position: relative;
-		color: var(--aside-link-icon);
+		/* color: var(--aside-link-icon); */
 	}
 
 	.label {
-		/* display: none; */
-		padding: 0 0.8em;
-		width: 250px;
 		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		border: 1px solid transparent;
-		/* background-color: white; */
-		/* color: var(--aside-link-label); */
-		/* position: relative; */
+		/* padding: 0 0.8em; */
+		/* border: 1px solid transparent; */
 	}
 
-	/* Small devices (landscape phones, 576px and up) */
-	@media (min-width: 576px) {
-		/* .link:hover .label {
-			display: inline-block;
+	@media (min-width: 768px) and (max-width: 1200px) {
+		.label {
+			display: none;
+		}
+
+		.notification {
 			position: absolute;
 			top: 0;
-			width: auto;
-			left: 100%;
-			background-color: white;
+			right: 0;
+			transform: translateX(50%);
+		}
+
+		.link:hover > .label,
+		.link:focus > .label {
+			position: absolute;
+			right: 0;
+			display: block;
+			white-space: nowrap;
+			transform: translateX(100%);
+			color: var(--c-main);
+			background-color: var(--c-main-invert);
 			border-radius: 50vh;
-			color: gray;
-		} */
+			padding-inline: 10px;
+			/* width: 100%; */
+		}
 	}
-	/* Medium devices (tablets, 768px and up) */
+	/*
 	@media (min-width: 768px) {
 	}
-	/* Large devices (desktops, 992px and up) */
 	@media (min-width: 992px) {
 		.link {
 			opacity: var(--aside-link-opacity);
@@ -196,16 +200,20 @@
 			box-shadow: var(--shadow-long);
 		}
 		:global(aside:not(.toggle)) .link:hover .notification {
-			/* background-color: var(--c-front); */
 			border-radius: 50vh;
-
-			/* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
-				0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
-				0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07); */
 		}
+		
 	}
-	/* Extra large devices (large desktops, 1200px and up) */
+	*/
 	@media (min-width: 1200px) {
-		/* … */
+		.label {
+			/* position: relative; */
+			/* display: block; */
+			/* white-space: nowrap; */
+			/* width: 250px; */
+			/* white-space: nowrap;
+			overflow: hidden; */
+			/* text-overflow: ellipsis; */
+		}
 	}
 </style>

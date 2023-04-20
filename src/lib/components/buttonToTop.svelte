@@ -26,7 +26,7 @@
 		position: fixed;
 		bottom: 5%;
 		right: 5%;
-		z-index: 110;
+		z-index: 999;
 		border-radius: 50vh;
 		width: 50px;
 		height: 50px;
@@ -47,5 +47,11 @@
 
 	button:active {
 		transform: translateY(5%);
+	}
+
+	@media (min-width: 768px) {
+		button {
+			display: none;
+		}
 	}
 </style>

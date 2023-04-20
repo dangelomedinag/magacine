@@ -14,6 +14,9 @@
 	import Icon from '$icons/icon.svelte';
 	import ArrowNarrowUp from '$icons/solid/arrow-narrow-up.svg?raw';
 	import X from '$icons/solid/x.svg?raw';
+	import GridCards from '$components/gridMovies/GridCards.svelte';
+	import SectionPage from '$components/ui/SectionPage.svelte';
+	import SearchCircle from '$icons/solid/search-circle.svg?raw';
 
 	let value = '';
 	let currentValue = '';
@@ -209,11 +212,14 @@
 	<title>Magacine - Search</title>
 </svelte:head>
 
-<NavbarTop search={false} />
+<!-- <NavbarTop search={false} /> -->
 
 <!-- <div class="contenta"> -->
+<SectionPage>
+	<span><Icon>{@html SearchCircle}</Icon> find your favorites</span>
+	<h1>Search</h1>
+</SectionPage>
 <div class="content wrapper">
-	<h1 style="text-align: center;">Search</h1>
 	<div class="search-container">
 		<form
 			on:reset={onReset}
@@ -296,14 +302,11 @@
 		{/each}
 	</div>
 	{#if errors}
-		<div style="padding-top: 1em; padding-bottom: 1em;" class="content">
-			<Alert {...errors.level}><span>{errors.message}</span></Alert>
-		</div>
+		<Alert {...errors.level}><span>{errors.message}</span></Alert>
 	{/if}
 	{#if movies}
-		<CarouselMovies details={false} {movies} title="{movies.totalResults} results" />
+		<GridCards {movies} />
 	{:else if errors?.level?.danger}
-		<!-- content here -->
 		<CarouselMovies details={false} movies={suggestionsMovies} title="suggestions" />
 	{/if}
 </div>
@@ -311,13 +314,13 @@
 <!-- </div> -->
 <style>
 	.wrapper {
-		padding-block: 3em;
+		/* padding-block: 3em; */
 	}
 
 	.search-container {
 		position: relative;
 		margin: 1em auto;
-		max-width: 800px;
+		max-width: 650px;
 		/* display: flex; */
 		/* height: 50px; */
 		/* outline: 1px solid red; */

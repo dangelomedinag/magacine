@@ -16,7 +16,7 @@
 	<title>Magacine - home</title>
 </svelte:head>
 
-<NavbarTop>
+<!-- <NavbarTop>
 	{#await data.stream.movies then _}
 		<a
 			data-sveltekit-replacestate
@@ -33,7 +33,7 @@
 			href="#index-movies">Series</a
 		>
 	{/await}
-</NavbarTop>
+</NavbarTop> -->
 
 <Hero />
 

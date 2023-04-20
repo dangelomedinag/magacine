@@ -1,9 +1,11 @@
 <script lang="ts">
 	import CardMovie from '$components/card/cardMovie.svelte';
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
+	import GridCards from '$components/gridMovies/GridCards.svelte';
 	import Icon from '$components/icons/icon.svelte';
 	import Film from '$components/icons/solid/film.svg?raw';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	import SectionPage from '$components/ui/SectionPage.svelte';
 	export let data;
 
 	type tabs = 'week' | 'month' | 'year';
@@ -13,48 +15,42 @@
 	};
 </script>
 
-<NavbarTop />
+<!-- <NavbarTop /> -->
 
-<div class="content header">
-	<span> <Icon>{@html Film}</Icon>this {active}</span>
+<SectionPage>
+	<span><Icon>{@html Film}</Icon>this {active}</span>
 	<h1>Next Releases</h1>
 	<div class="tabs">
 		{#each ['week', 'month', 'year'] as element}
 			<button class:active={active === element} on:click={() => setTab(element)}>{element}</button>
-
-			<!-- content here -->
 		{/each}
-		<!-- <button class:active={active === 'month'} on:click={() => setTab('month')}>this month</button>
-		<button class:active={active === 'year'} on:click={() => setTab('year')}>this year</button> -->
 	</div>
+</SectionPage>
+
+<div class="content">
+	{#if active === 'week'}
+		<GridCards movies={data.movies} />
+	{:else if active === 'month'}
+		<GridCards movies={{ ...data.movies, results: [...data.movies.results].reverse() }} />
+	{:else if active === 'year'}
+		<GridCards
+			movies={{
+				...data.movies,
+				results: [...data.movies.results].sort((a, b) => a.title.localeCompare(b.title))
+			}}
+		/>
+	{/if}
 </div>
 
-{#if active === 'week'}
-	<div class="content wrapper">
-		{#each data.movies.results as item, i (item.uuid)}
-			<CardMovie {i} movie={item} />
-		{/each}
-	</div>
-{:else if active === 'month'}
-	<div class="content wrapper">
-		{#each data.movies.results.reverse() as item, i (item.uuid)}
-			<CardMovie {i} movie={item} />
-		{/each}
-	</div>
-{:else if active === 'year'}
-	<div class="content wrapper">
-		{#each data.movies.results as item, i (item.uuid)}
-			<CardMovie {i} movie={item} />
-		{/each}
-	</div>
-{/if}
-
 <style>
-	.header {
-		/* background-color: var(--c-front); */
-		/* color: white; */
+	/* .header {
+		margin-block-start: 2em;
+		margin-inline: 2em;
+		border-radius: 15px;
 		padding-block: 2em;
+		border: 1px solid var(--c-divider);
 		background: linear-gradient(to right, var(--c-front) -600%, var(--c-main) 50%);
+		
 	}
 
 	h1 {
@@ -70,7 +66,7 @@
 		justify-content: center;
 		align-items: center;
 		gap: 0.5em;
-	}
+	} */
 
 	.wrapper {
 		display: grid;
@@ -104,6 +100,7 @@
 	}
 
 	.tabs {
+		/* padding-block: 1em; */
 		display: flex;
 		justify-content: center;
 		align-items: center;

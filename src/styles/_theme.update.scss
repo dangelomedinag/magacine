@@ -1,12 +1,13 @@
 :root {
 	color-scheme: dark light;
+	--bg-navbar: rgba(0, 0, 0, 0.3);
 	--c-white: white;
 	--c-dark: 242424;
 	--c-main-invert: white;
-	--c-main: #1f1c23;
-	--c-main-content: hsl(273, 13%, 16%);
+	--c-main: #141314;
+	--c-main-content: hsl(0, 0%, 0%);
 	--c-front: #e63946;
-	--c-front-dark: hsl(355, 63%, 35%);
+	--c-front-dark: #91212a;
 	--c-text-base: #f1faee;
 	--c-divider: rgba(255, 255, 255, 0.1);
 	--shadow-long: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
@@ -21,6 +22,7 @@
 }
 
 @mixin light-theme-scheme {
+	--bg-navbar: rgba(255, 255, 255, 0.3);
 	color-scheme: light;
 	--c-main-invert: #242424;
 	--c-main: #ffffff;
@@ -32,9 +34,10 @@
 
 @mixin dark-theme-scheme {
 	color-scheme: dark;
+	--bg-navbar: rgba(0, 0, 0, 0.3);
 	--c-main-invert: white;
-	--c-main: #1f1c23;
-	--c-main-content: hsl(273, 13%, 16%);
+	--c-main: #141314;
+	--c-main-content: hsl(0, 0%, 0%);
 	--c-text-base: #f1faee;
 	--c-text-invert: #161616;
 	--c-divider: rgba(255, 255, 255, 0.1);

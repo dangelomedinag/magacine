@@ -1,10 +1,15 @@
 <script lang="ts">
 	import MovieItem from '$components/gridMovies/movieItem.svelte';
+	import Icon from '$components/icons/icon.svelte';
+	import Search from '$icons/solid/search.svg?raw';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
-	import type { MovieResult } from '$lib/types';
+	import SectionPage from '$components/ui/SectionPage.svelte';
+	import type { MovieResult, MoviesResponse } from '$lib/types';
+	import GridCards from '$components/gridMovies/GridCards.svelte';
+	import Paginator from './Paginator.svelte';
 
 	export let data;
-	let arr = data.movies.results;
+	let arr = data.movies;
 	let active = 0;
 	// console.log(data);
 
@@ -62,87 +67,29 @@
 	// 	rawMovies = { ...data.movies };
 	// }
 
-	function setPage(page: number, results: MovieResult[]) {
+	function setPage(page: number, movies: MoviesResponse) {
 		if (page < 1) {
-			arr = data.movies?.results;
+			arr = data.movies;
 			active = page;
 			return;
 		}
 
-		arr = results;
+		arr = movies;
 		active = page;
 
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}
 </script>
 
-<NavbarTop>
-	<!-- <button
-		on:click={() => {
-			data.movies.results = rawMovies.results.filter((m) => m.type === 'movie');
-		}}>movies</button
-	>
-	<button
-		on:click={() => {
-			data.movies.results = rawMovies.results.filter((m) => m.type === 'series');
-		}}>series</button
-	>
-	<button
-		on:click={() => {
-			data.movies.results = rawMovies.results;
-		}}>all</button
-	> -->
-</NavbarTop>
-
-<!-- 
-<div class="content">
-	<h1>{data.movies.search} - all results</h1>
-
-	<div class="grid-movies">
-		{#each data.movies.results as movie (movie.uuid)}
-			<MovieItem {movie} />
-		{/each}
-	</div>
-	<div bind:this={element} class="loading">
-		{#if loading}
-			<Spinner position="relative" top={'30%'}>loading more...</Spinner>
-		{:else if stop}
-			<Alert>
-				<span>{data.movies.results.length} results</span> | there are <span>no more</span> movies/series
-				to show
-			</Alert>
-		{/if}
-	</div>
-</div>
-
-<h1>Hello world</h1> -->
-<div class="content">
+<SectionPage>
+	<span><Icon>{@html Search}</Icon> page: {active + 1}</span>
 	<h1>{data.movies?.search}</h1>
-	<p>page: {active} - all results</p>
+</SectionPage>
+<Paginator stream={data.stream} {active} {setPage} />
 
-	<div class="grid-movies">
-		{#each arr as movie (movie.uuid)}
-			<MovieItem {movie} />
-		{/each}
-	</div>
-
-	{#if data.stream}
-		{#await data.stream.data then value}
-			{#if Array.isArray(value)}
-				<div class="pages-wrapper">
-					<div class="wrapper">
-						{#each value as page, i}
-							<button
-								class:active={i === active}
-								class="button"
-								on:click={() => setPage(i, page.results)}>{i + 1}</button
-							>
-						{/each}
-					</div>
-				</div>
-			{/if}
-		{/await}
-	{/if}
+<div class="content">
+	<GridCards movies={arr} full />
+	<Paginator stream={data.stream} {active} {setPage} />
 </div>
 
 <style>
@@ -153,18 +100,15 @@
 	}
 
 	.pages-wrapper {
-		position: sticky;
-		width: 100%;
 		bottom: 3em;
-		margin-block: 2em;
 	}
 	.wrapper {
 		width: max-content;
-		background-color: var(--c-main-content);
+		border: 1px solid var(--c-divider);
 		border-radius: 50vh;
-		padding: 1em;
+		padding: 0.5em;
 		margin-inline: auto;
-		box-shadow: var(--shadow-long);
+		/* box-shadow: var(--shadow-long); */
 	}
 
 	.button {
@@ -177,8 +121,8 @@
 	}
 
 	.active {
-		/* color: red; */
-		background-color: var(--c-front-dark);
+		color: white;
+		background-color: var(--c-front);
 		border-radius: 100%;
 	}
 

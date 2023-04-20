@@ -9,6 +9,7 @@
 	// icons
 	import Icon from '$icons/icon.svelte';
 	import X from '$icons/solid/x.svg?raw';
+	import { afterNavigate } from '$app/navigation';
 
 	export let modal = false;
 	export let Zindex = '111';
@@ -23,19 +24,8 @@
 	});
 
 	export async function open() {
-		// console.log(document.activeElement);
-		// if (!currentElementFocus) {
-		// 	currentElementFocus = document.activeElement;
-
-		// 	(currentElementFocus as HTMLElement).blur();
-		// }
-
 		modal = true;
 		setBodyScroll(modal, ref);
-
-		// const URLhashed = new URL(location);
-		// URLhashed.hash = 'modal';
-		// await goto(URLhashed, { replaceState: true, noScroll: true });
 
 		if (browser) {
 			window.addEventListener('keydown', handleEsc);
@@ -43,9 +33,6 @@
 	}
 	export async function close() {
 		modal = false;
-		// const URLhashed = new URL(location);
-		// URLhashed.hash = '';
-		// await goto(URLhashed, { replaceState: true, noScroll: true });
 
 		setBodyScroll(modal);
 		if (currentElementFocus) currentElementFocus.focus();
@@ -80,6 +67,11 @@
 
 	onDestroy(() => {
 		if (browser) close();
+	});
+
+	afterNavigate(({ type }) => {
+		console.log(type);
+		if (type === 'link') close();
 	});
 </script>
 
@@ -119,7 +111,7 @@
 <style>
 	:root {
 		--modal-foreground: rgba(0, 0, 0, 0.8);
-		--modal-bg: var(--c-main-content);
+		--modal-bg: var(--c-main);
 	}
 
 	:global(body[data-theme='light']) {

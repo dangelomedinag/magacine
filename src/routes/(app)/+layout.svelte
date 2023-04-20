@@ -4,10 +4,12 @@
 
 	import ButtonToTop from '$components/buttonToTop.svelte';
 	import PriceTable from '$components/ui/priceTable.svelte';
-	import Modal from '$components/ui/modal.svelte';
+	// import Modal from '$components/ui/modal.svelte';
 
 	import { pricePlans } from '$lib/stores/plans-store';
 	import { onMount } from 'svelte';
+	import Layout from '$components/Layout.svelte';
+	import NavbarTop from '$components/navbar/navbarTop.svelte';
 
 	let toggle = false;
 
@@ -16,7 +18,7 @@
 		modal.open();
 	});
 
-	let modal: Modal;
+	// let modal: Modal;
 
 	function closeAside() {
 		toggle = false;
@@ -34,7 +36,31 @@
 	<title>Magacine - movies, series & all, in one place</title>
 </svelte:head>
 
-<Modal
+<Layout open={toggle} on:close-menu={toggleAside}>
+	<svelte:fragment slot="header">
+		<NavbarTop>
+			<!-- <button on:click={toggleAside}>click</button> -->
+		</NavbarTop>
+	</svelte:fragment>
+	<svelte:fragment slot="nav">
+		<Aside
+			on:tap={() => {
+				if (!matchMobile()) closeAside();
+			}}
+		/>
+	</svelte:fragment>
+
+	<slot />
+
+	<svelte:fragment slot="aside">aside</svelte:fragment>
+	<svelte:fragment slot="footer">
+		<Footer />
+	</svelte:fragment>
+</Layout>
+
+<ButtonToTop active={toggle} on:click={toggleAside} />
+
+<!-- <Modal
 	bind:this={modal}
 	on:close={() => {
 		pricePlans.set(false);
@@ -66,7 +92,7 @@
 		</div>
 		<Footer />
 	</main>
-</div>
+</div> -->
 
 <style>
 	.container {

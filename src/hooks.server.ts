@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { transformPageColorSchemePrefers } from '$lib/hooks';
+import { redirect } from '@sveltejs/kit';
 
 export async function handle({ event, resolve }) {
 	const authorization = event.cookies.get('token');
@@ -16,7 +17,7 @@ export async function handle({ event, resolve }) {
 				avatar: 'https://i.pravatar.cc/100?u=' + event.cookies.get('mc_username') + '@gmail.com'
 			};
 		} catch {
-			console.error('missing token');
+			console.log('missing token');
 		}
 	}
 

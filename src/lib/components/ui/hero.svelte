@@ -2,6 +2,7 @@
 	import { imgs } from '$lib/imgs';
 	import { slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import SectionPage from './SectionPage.svelte';
 
 	export let words = [
 		{ word: 'Movies', imgs: imgs.movie },
@@ -51,71 +52,74 @@
 	}
 </script>
 
-<section>
-	<div class="imgs-wrapper">
-		<img src={urls[0]} alt="hero spider man" loading="lazy" />
-		<img src={urls[1]} alt="hero spider man" loading="lazy" />
-		<img src={urls[2]} alt="hero spider man" loading="lazy" />
-		<img src={urls[3]} alt="hero spider man" loading="lazy" />
-	</div>
-
-	<div class="copy content">
-		<h1>
-			{#key word}
-				<span in:slide out:slide|local class="firstline">{word}<span class="comma">,</span> </span>
-			{/key}
-			<span class="secondline">{copy}</span>
-		</h1>
-		<p>
-			{paragraph}
-		</p>
-		<div class="indicators">
-			{#each words as _, i}
-				{@const index = i + 1}
-				<button
-					title="page indicator"
-					class="page"
-					on:click={() => setPage(index)}
-					disabled={currentPage == index}
-				/>
-			{/each}
+<SectionPage>
+	<svelte:fragment slot="background">
+		<div class="imgs-wrapper">
+			<img loading="lazy" src={urls[0]} alt="hero spider man" />
+			<img loading="lazy" src={urls[1]} alt="hero spider man" />
+			<img loading="lazy" src={urls[2]} alt="hero spider man" />
+			<img loading="lazy" src={urls[3]} alt="hero spider man" />
 		</div>
+	</svelte:fragment>
+
+	<h1>
+		{#key word}
+			<span in:slide out:slide|local class="firstline">{word}<span class="comma">,</span> </span>
+		{/key}
+		<span class="secondline">{copy}</span>
+	</h1>
+	<p>
+		{paragraph}
+	</p>
+	<div class="indicators">
+		{#each words as _, i}
+			{@const index = i + 1}
+			<button
+				title="page indicator"
+				class="page"
+				on:click={() => setPage(index)}
+				disabled={currentPage == index}
+			/>
+		{/each}
 	</div>
-</section>
+</SectionPage>
 
 <style>
-	section {
+	/* section {
 		position: relative;
-		margin-bottom: 1.5em;
-		border-bottom: 2px solid var(--c-front);
 	}
 
 	section > * {
 		flex-basis: calc(100% / 4);
-	}
+	} */
 
 	.imgs-wrapper {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		height: 300px;
+		pointer-events: none;
 	}
 
 	.imgs-wrapper > * {
-		flex-basis: calc(100% / 4);
+		flex-basis: 100%;
 	}
-	.imgs-wrapper::before {
+	/* .imgs-wrapper::before {
 		content: '';
 		position: absolute;
 		width: 100%;
 		height: 100%;
 		top: 0;
 		left: 0;
-		background-image: linear-gradient(to right, var(--c-main) 0, rgba(230, 57, 70, 0.6) 100%);
+		background-image: linear-gradient(to right, rgba(230, 57, 70, 0.2) 0, transparent 100%);
 		background-size: 100% 100%;
 		background-position: center;
 		background-repeat: no-repeat;
-	}
+	} */
 
 	img {
 		min-width: 0;
@@ -123,6 +127,7 @@
 		height: 100%;
 		object-fit: cover;
 		object-position: top;
+		opacity: 0.05;
 	}
 
 	.copy {
@@ -135,6 +140,7 @@
 		top: 0;
 		left: 0;
 		text-align: left;
+		/* padding: var(--gap-content); */
 	}
 
 	.page {
@@ -161,14 +167,8 @@
 		cursor: pointer;
 	}
 
-	h1 {
-		font-weight: bold;
-		font-size: 2rem;
-		margin-bottom: 0;
-		overflow: hidden;
-	}
-
 	.firstline {
+		font-weight: bold;
 		display: block;
 		color: var(--c-front);
 	}
@@ -182,7 +182,7 @@
 	}
 
 	.indicators {
-		margin: 0 auto;
-		padding-bottom: 1em;
+		/* margin: 0 auto; */
+		/* padding-bottom: 1em; */
 	}
 </style>

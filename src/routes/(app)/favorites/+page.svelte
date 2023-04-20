@@ -9,9 +9,17 @@
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import { FavMovies } from '$lib/stores/favoritesStore';
 	import CardMovie from '$components/card/cardMovie.svelte';
+	import SectionPage from '$components/ui/SectionPage.svelte';
+	import Film from '$icons/solid/film.svg?raw';
+	import Icon from '$components/icons/icon.svelte';
 </script>
 
-<NavbarTop />
+<SectionPage>
+	<span><Icon>{@html Film}</Icon>explore now</span>
+	<h1>Favorites</h1>
+</SectionPage>
+
+<!-- <NavbarTop /> -->
 
 <!-- {#if $FavMovies.length}
 	<div class="ajustment">
@@ -30,14 +38,14 @@
 		</Icon>
 	</div>
 {/if} -->
-<h1>Favorites</h1>
+<!-- <h1>Favorites</h1> -->
 
 <div class="content" class:wrapper={$FavMovies.length} style="padding-block: 3em;">
 	{#each $FavMovies as _, i (_.uuid)}
 		<CardMovie {i} movie={_} />
 	{:else}
 		<div class="empty-list">
-			<h1>nothing yet</h1>
+			<h3>nothing yet</h3>
 			<div class="rating-wrapper">
 				<CardRatingStarts
 					rating="4.3"
@@ -74,6 +82,7 @@
 <style>
 	.empty-list {
 		width: 100%;
+		text-align: center;
 	}
 	/* .ajustment {
 		display: flex;
@@ -92,10 +101,10 @@
 		gap: 1em;
 	}
 
-	h1 {
+	/* h1 {
 		text-align: center;
 		font-size: 2rem;
-	}
+	} */
 
 	p {
 		text-align: center;

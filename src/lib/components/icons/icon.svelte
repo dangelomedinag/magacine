@@ -1,7 +1,7 @@
 <script>
 	export let counter = false;
 	export let x = undefined;
-	export let y = undefined;
+	export let y = '6%';
 	export let deg = undefined;
 	export let style = undefined;
 	export let shadow = false;

@@ -30,7 +30,7 @@ body {
 	background-color: var(--c-main-content);
 	color: var(--c-text-base);
 	transition: var(--transition-theme);
-	font-size: 0.95em;
+	line-height: 1.5;
 }
 
 h1 {
@@ -49,11 +49,14 @@ button {
 	font-family: inherit;
 }
 
-button,
-a {
-	font-size: 1rem;
-	padding: 1px 6px;
+p {
+	line-height: 1.5rem;
 }
+// button,
+// a {
+// 	font-size: 1rem;
+// 	padding: 1px 6px;
+// }
 
 .content {
 	padding-left: var(--gap-content);

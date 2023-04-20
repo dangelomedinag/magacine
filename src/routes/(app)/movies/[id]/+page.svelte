@@ -72,12 +72,12 @@
 	>
 </svelte:head>
 
-<NavbarTop>
-	<a href="#info">info</a>
-	{#if !data.error}
-		<a href="#suggest">suggest</a>
-	{/if}
-</NavbarTop>
+<!-- <NavbarTop> -->
+<!-- <a href="#info">info</a>
+{#if !data.error}
+	<a href="#suggest">suggest</a>
+{/if} -->
+<!-- </NavbarTop> -->
 
 <div class="container">
 	<div class:movie={showPlayer} class:poster={!showPlayer}>
@@ -142,7 +142,7 @@
 	}
 
 	.poster {
-		background: linear-gradient(to top, transparent 10%, var(--c-front) 150%);
+		background: linear-gradient(to top, transparent 10%, var(--c-front) 200%);
 		position: relative;
 		text-align: center;
 		width: 100%;
@@ -198,7 +198,7 @@
 		.poster {
 			width: 50%;
 			position: sticky;
-			top: 2em;
+			top: 0;
 		}
 		.info {
 			width: 50%;

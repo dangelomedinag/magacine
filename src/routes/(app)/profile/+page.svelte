@@ -30,7 +30,7 @@
 	}
 </script>
 
-<NavbarTop />
+<!-- <NavbarTop /> -->
 
 <div class="wrapper">
 	<img src={$page.data.user.avatar} alt="" />

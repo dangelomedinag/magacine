@@ -3,8 +3,9 @@
 
 	// components
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
-	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	// import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import Hero from '$components/ui/hero.svelte';
+	import GridCards from '$components/gridMovies/GridCards.svelte';
 
 	export let data;
 	/* let movies = [];
@@ -53,11 +54,13 @@
 	<title>Magacine - Discovery</title>
 </svelte:head>
 
-<NavbarTop>
+<!-- <NavbarTop> -->
+<div>
 	<button on:click={() => setTab('Suspense')} class:active={act === 'Suspense'}>Suspense</button>
 	<button on:click={() => setTab('Terror')} class:active={act === 'Terror'}>Terror</button>
 	<button on:click={() => setTab('Comedy')} class:active={act === 'Comedy'}>Comedy</button>
-</NavbarTop>
+</div>
+<!-- </NavbarTop> -->
 
 {#if act === 'Suspense'}
 	<Hero
@@ -69,10 +72,7 @@
 	/>
 	<CarouselMovies movies={data.movies[0]} full title={act} />
 
-	<CarouselMovies
-		movies={data.movies[1]}
-		title="{act} {data.movies[1]?.totalResults ?? 'loading'} results"
-	/>
+	<GridCards details movies={data.movies[1]} />
 {/if}
 
 {#if data.defer}
