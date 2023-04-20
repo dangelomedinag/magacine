@@ -4,14 +4,16 @@
 
 	import ButtonToTop from '$components/buttonToTop.svelte';
 	import PriceTable from '$components/ui/priceTable.svelte';
-	// import Modal from '$components/ui/modal.svelte';
+	import Modal from '$components/ui/modal.svelte';
 
 	import { pricePlans } from '$lib/stores/plans-store';
 	import { onMount } from 'svelte';
 	import Layout from '$components/Layout.svelte';
 	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	import { page } from '$app/stores';
 
 	let toggle = false;
+	let modal: Modal;
 
 	onMount(() => {
 		if (!$pricePlans) return;
@@ -36,9 +38,20 @@
 	<title>Magacine - movies, series & all, in one place</title>
 </svelte:head>
 
+<Modal
+	bind:this={modal}
+	on:close={() => {
+		pricePlans.set(false);
+		pricePlans.saveLocalStorage();
+	}}
+>
+	<svelte:fragment slot="header">¡Wellcome!</svelte:fragment>
+	<PriceTable />
+</Modal>
+
 <Layout open={toggle} on:close-menu={toggleAside}>
 	<svelte:fragment slot="header">
-		<NavbarTop>
+		<NavbarTop search={$page.data.layout?.search ?? true}>
 			<!-- <button on:click={toggleAside}>click</button> -->
 		</NavbarTop>
 	</svelte:fragment>
@@ -60,16 +73,7 @@
 
 <ButtonToTop active={toggle} on:click={toggleAside} />
 
-<!-- <Modal
-	bind:this={modal}
-	on:close={() => {
-		pricePlans.set(false);
-		pricePlans.saveLocalStorage();
-	}}
->
-	<svelte:fragment slot="header">¡Wellcome!</svelte:fragment>
-	<PriceTable />
-</Modal>
+<!-- 
 
 <div class="wrapper">
 	<ButtonToTop active={toggle} on:click={toggleAside} />

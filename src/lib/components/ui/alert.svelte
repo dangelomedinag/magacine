@@ -10,6 +10,7 @@
 	import Flag from '$icons/outline/flag.svelte';
 	import X from '$icons/solid/x.svg?raw';
 	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 
 	export let success = false,
 		warn = false,
@@ -24,7 +25,9 @@
 
 	onDestroy(() => {
 		if (activeElement) activeElement.focus();
-		document.body.removeEventListener('focusout', setActiveElement);
+		if (browser) {
+			document.body.removeEventListener('focusout', setActiveElement);
+		}
 		active = false;
 	});
 
@@ -89,6 +92,7 @@
 		border: 1px solid var(--c-divider);
 		border-radius: 5px;
 		background-color: var(--alert-bg);
+		margin-block: 0.3em;
 	}
 
 	.alert--success {

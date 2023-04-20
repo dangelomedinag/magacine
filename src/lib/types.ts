@@ -51,6 +51,7 @@ export interface MoviesResponse {
 	totalResults: number;
 	search: string;
 	query: string;
+	message?: string;
 	[index: string]: any;
 }
 
