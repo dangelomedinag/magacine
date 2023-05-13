@@ -6,7 +6,7 @@
 	// import minusSmall from '$icons/solid/minus-small.svg?raw';
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
 	// import CarouselMovies from '$components/card/carouselMovies.svelte';
-	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	// import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import { FavMovies } from '$lib/stores/favoritesStore';
 	import CardMovie from '$components/card/cardMovie.svelte';
 	import SectionPage from '$components/ui/SectionPage.svelte';

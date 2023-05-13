@@ -30,18 +30,20 @@
 </script>
 
 <div class="wrapper">
-	<img src={$page.data.user.avatar} alt="" />
-	<h1>{$page.data.user.username}</h1>
-	<p>{$page.data.user.name}</p>
-	<form method="POST" use:enhance>
-		<select name="theme" id="theme" value={$themeStore} on:change={changes}>
-			<option value="system">system</option>
-			<option value="dark">dark</option>
-			<option value="light">light</option>
-		</select>
+	{#if $page.data.user}
+		<img src={$page.data.user.avatar} alt="dsadas" />
+		<h1>{$page.data.user.username}</h1>
+		<p>{$page.data.user.name}</p>
+		<form method="POST" use:enhance>
+			<select name="theme" id="theme" value={$themeStore} on:change={changes}>
+				<option value="system">system</option>
+				<option value="dark">dark</option>
+				<option value="light">light</option>
+			</select>
 
-		<button type="submit">save changes</button>
-	</form>
+			<button type="submit">save changes</button>
+		</form>
+	{/if}
 </div>
 
 <style>
