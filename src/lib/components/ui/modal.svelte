@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import { onDestroy, onMount, createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
-	import { fly } from 'svelte/transition';
+	import { fly, scale } from 'svelte/transition';
 
 	import { setBodyScroll } from '$helpers';
 
@@ -61,7 +61,6 @@
 	function focusOnMount(node: HTMLElement) {
 		if (node.children.length > 0) {
 			let children = node.children[0];
-			console.log(children.tagName);
 			if (children.tagName === 'A' || children.tagName === 'BUTTON') children.focus();
 		}
 	}
@@ -87,7 +86,7 @@
 		bind:this={ref}
 		tabindex="-1"
 		style:z-index={Zindex}
-		in:fly={{ y: 100, duration: 500, easing: quintOut }}
+		in:scale={{ start: 0.9, duration: 500, easing: quintOut }}
 		class="modal"
 	>
 		{#if btnClose}

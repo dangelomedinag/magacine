@@ -139,7 +139,7 @@
 	@media (prefers-color-scheme: dark) {
 		@include dark-theme;
 
-		:global(:root.light) {
+		:global(:root[data-root-theme='light']) {
 			@include light-theme;
 		}
 	}
@@ -147,7 +147,7 @@
 	@media (prefers-color-scheme: light) {
 		@include light-theme;
 
-		:global(:root.dark) {
+		:global(:root[data-root-theme='dark']) {
 			@include light-theme;
 		}
 	}
@@ -163,18 +163,22 @@
 	} */
 
 	svg {
-		/* outline: 1px solid red; */
 		height: 25px;
-		// padding-block: 1em;
+	}
+	#cine,
+	#maga {
+		display: none;
 	}
 
-	@media (min-width: 768px) and (max-width: 1200px) {
+	@media (min-width: 768px) {
+		#iso {
+			padding-inline: 0.4em;
+		}
+
 		#cine,
 		#maga {
-			display: none;
+			display: initial;
 		}
-	}
-	@media (min-width: 768px) {
 	}
 	@media (min-width: 992px) {
 	}

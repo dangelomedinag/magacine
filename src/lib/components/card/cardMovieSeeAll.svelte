@@ -1,10 +1,12 @@
-<script>
-	export let posters;
-	export let query;
+<script lang="ts">
+	import type { MoviesResponse } from '$lib/types';
+
+	export let posters: string[];
+	export let query: MoviesResponse['query'];
 </script>
 
 <div class="item">
-	<a class="item-link" href="/movies?{query}">
+	<a class="item-link" href="/movies?{encodeURI(query)}">
 		{#each posters as src}
 			<img {src} alt="grid background the all posters" />
 		{/each}
@@ -46,7 +48,7 @@
 		max-width: var(--card-w);
 		position: relative;
 		margin: 0;
-		margin-right: 1em;
+		/* margin-right: 1em; */
 		border: 1px solid rgba(128, 128, 128, 0.3);
 		transition: transform 100ms ease-in-out;
 	}

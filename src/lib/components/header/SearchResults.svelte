@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import { page } from '$app/stores';
@@ -10,12 +10,13 @@
 	import Icon from '$icons/icon.svelte';
 
 	// icons
-	import Film from '$icons/outline/film.svelte';
-	import DesktopComputer from '$icons/outline/desktop-computer.svelte';
-	import Collection from '$icons/outline/collection.svelte';
+	import Film from '$icons/solid/film.svg?raw';
+	import DesktopComputer from '$icons/solid/desktop-computer.svg?raw';
+	import Collection from '$icons/solid/collection.svg?raw';
 	import { onMount } from 'svelte';
+	import type { MoviesResponse } from '$lib/types';
 
-	export let results;
+	export let results: Promise<MoviesResponse>;
 	let suggestionsMovies = undefined;
 
 	onMount(() => {
@@ -39,6 +40,9 @@
 		</li>
 		{#each response.results as movie, i (movie.uuid)}
 			<li class="list__item" in:fly={{ x: 60, easing: quintInOut, delay: 50 * i }}>
+				<!-- <a href="/movies/{movie.imdbid}">
+
+				</a> -->
 				<img src={movie.poster} alt={movie.title} />
 				<span class="n-top">{i + 1}</span>
 				<span class="info-wrapper">
@@ -49,11 +53,11 @@
 						<span class="icon">
 							<Icon y="20%">
 								{#if movie.type === 'movie'}
-									<Film />
+									{@html Film}
 								{:else if movie.type === 'game'}
-									<DesktopComputer />
+									{@html DesktopComputer}
 								{:else if movie.type === 'series'}
-									<Collection />
+									{@html Collection}
 								{/if}
 							</Icon>
 						</span>

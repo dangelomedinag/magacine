@@ -1,6 +1,5 @@
 <script>
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
-	import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import Alert from '$components/ui/alert.svelte';
 	import VideoPlayer from '$components/movie/videoPlayer.svelte';
 	import YearMovie from '$components/movie/yearMovie.svelte';
@@ -10,80 +9,36 @@
 	//icons
 	import Icon from '$icons/icon.svelte';
 	import Play from '$icons/solid/play.svg?raw';
+	import { scale } from 'svelte/transition';
 
 	export let data;
 	let showPlayer = false;
-	// let suggestionsMovies;
 
-	// onMount(() => {
-	// 	getSuggest();
-	// });
-
-	// async function getSuggest() {
-	// 	suggestionsMovies = null;
-
-	// 	const { genre, plot } = data.movie;
-	// 	let selected;
-	// 	if (plot) {
-	// 		const plotArr = plot.split(' ');
-	// 		const plotArrFilter = plotArr.filter((word) => word.length > 4 && !word.includes('-'));
-	// 		selected = plotArrFilter[randomInt(plotArrFilter.length - 1)];
-	// 	} else {
-	// 		if (genre.length > 0) {
-	// 			selected = genre[randomInt(genre.length - 1)];
-	// 		}
-	// 	}
-
-	// 	try {
-	// 		if (!selected) throw Error('no content for now');
-
-	// 		const req = await fetch(
-	// 			'/api?s=' + selected.toLowerCase().replace(/\.|\(|\)|"|'|,|\$|-/g, '')
-	// 		);
-	// 		if (!req.ok) throw Error('bad request');
-
-	// 		suggestionsMovies = await req.json();
-	// 	} catch (error) {
-	// 		suggestionsMovies = Error(error.message);
-	// 	}
-	// }
-
-	// afterNavigate(({ from, to }) => {
-	// 	if (
-	// 		from &&
-	// 		to &&
-	// 		from.url.pathname.startsWith('/movies/') &&
-	// 		to.url.pathname.startsWith('/movies/')
-	// 	) {
-	// 		if (from.url.pathname !== to.url.pathname) {
-	// 			getSuggest();
-	// 			showPlayer = false;
-	// 		}
-	// 	}
-	// });
-
-	// $: console.log(data);
+	function generateTitle() {
+		const title = data.movie?.title;
+		return title ? `${title} - Magacine` : 'Magacine';
+	}
 </script>
 
 <svelte:head>
-	<title
-		>{data.movie?.title.length > 14 ? `${data.movie.title.slice(0, 13)}...` : data.movie.title} - {data
-			.movie.type}</title
-	>
+	<title>{generateTitle()}</title>
 </svelte:head>
 
-<!-- <NavbarTop> -->
-<!-- <a href="#info">info</a>
-{#if !data.error}
-	<a href="#suggest">suggest</a>
-{/if} -->
-<!-- </NavbarTop> -->
-
-<div class="container">
-	<div class:movie={showPlayer} class:poster={!showPlayer}>
+<div class="container content">
+	<div class="content" class:movie={showPlayer} class:poster={!showPlayer}>
 		{#if !showPlayer}
-			<img class="image" src={data.movie.poster} alt={data.movie.title} />
-			<button class="btn-play" on:click={() => (showPlayer = !showPlayer)}>
+			<img
+				in:scale|local={{ start: 0.9 }}
+				class="image"
+				src={data.movie.poster}
+				alt={data.movie.title}
+			/>
+			<button
+				class="btn-play"
+				on:click={() => {
+					showPlayer = !showPlayer;
+				}}
+			>
 				<Icon style="background-color: white; border-radius: 50vh;" shadow>
 					{@html Play}
 				</Icon>
@@ -93,13 +48,22 @@
 				<RuntimeMovie value={data.movie.runtime} />
 			</div>
 		{:else}
-			<VideoPlayer />
+			<VideoPlayer
+				on:ended={() => {
+					setTimeout(() => {
+						showPlayer = !showPlayer;
+					}, 1000);
+				}}
+			/>
+			<button
+				on:click={() => {
+					showPlayer = !showPlayer;
+				}}>dasd</button
+			>
 		{/if}
 	</div>
 	<div class="info content" id="info">
-		{#key data.movie}
-			<InfoMovie movie={data.movie} />
-		{/key}
+		<InfoMovie movie={data.movie} />
 	</div>
 </div>
 
@@ -107,15 +71,28 @@
 	{#if data.error}
 		<div style="width: 100%;" class="content">
 			<Alert warn>
-				For now we do <span>not have related movies or series</span>
+				{@html data.error}
 			</Alert>
 		</div>
-	{/if}
-	{#if data.stream}
+	{:else if data.stream}
 		{#await data.stream.suggestions}
 			<CarouselMovies movies={undefined} details={false} title="loading" />
 		{:then value}
-			<CarouselMovies movies={value} details={false} title="Suggestions" />
+			{#if value.message}
+				<div style="width: 100%;" class="content">
+					<Alert warn>
+						{@html data.error ?? '<span>No content related to your last search</span>'}
+					</Alert>
+				</div>
+			{:else}
+				<CarouselMovies movies={value} details={false} title="Suggestions" />
+			{/if}
+		{:catch error}
+			<div style="width: 100%;" class="content">
+				<Alert warn>
+					{@html data.error ?? '<span>No content related to your last search</span>'}
+				</Alert>
+			</div>
 		{/await}
 	{/if}
 </div>
@@ -134,6 +111,7 @@
 	.container {
 		display: flex;
 		flex-direction: column;
+		margin-top: 1em;
 	}
 
 	.poster,
@@ -141,17 +119,32 @@
 		padding-top: 2em;
 	}
 
-	.poster {
+	.poster,
+	.movie {
+		transition: width 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 		background: linear-gradient(to top, transparent 10%, var(--c-front) 200%);
-		position: relative;
+		border-radius: 15px;
+	}
+
+	.poster {
+		/* position: relative; */
+		/* z-index: -1; */
 		text-align: center;
 		width: 100%;
 		height: 100%;
+
+		/* filter: contrast(10%) brightness(100%); */
 		/* transition: background 0.3s linear; */
+	}
+
+	.info {
+		max-width: 700px;
+		margin-inline: auto;
 	}
 
 	.movie {
 		width: 100%;
+		background: linear-gradient(to top, transparent 10%, var(--c-front) 200%);
 	}
 
 	.image {
@@ -191,15 +184,16 @@
 			flex-wrap: wrap;
 		}
 
-		.movie {
+		/* .movie {
 			width: 100%;
-		}
+		} */
 
 		.poster {
 			width: 50%;
-			position: sticky;
+			/* position: sticky; */
 			top: 0;
 		}
+
 		.info {
 			width: 50%;
 		}

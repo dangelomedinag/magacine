@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import { themeStore } from '$lib/stores/theme-store';
 
 	function getColorSchemePrefers() {
@@ -29,8 +28,6 @@
 		}
 	}
 </script>
-
-<!-- <NavbarTop /> -->
 
 <div class="wrapper">
 	<img src={$page.data.user.avatar} alt="" />

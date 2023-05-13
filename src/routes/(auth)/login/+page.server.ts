@@ -1,6 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { dev } from '$app/environment';
+import { env } from '$env/dynamic/private';
 import jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import dbusers from './dbusers.json';
 import { timeoutPromise } from '$helpers';
 
@@ -9,14 +11,6 @@ export async function load({ locals }) {
 		user: locals?.user
 	};
 }
-
-let cookieOpts = {
-	path: '/',
-	httpOnly: true,
-	sameSite: 'strict',
-	secure: process.env.NODE_ENV === 'production',
-	maxAge: 60 * 60 * 24 * 7
-};
 
 export const actions = {
 	default: async ({ request, cookies }) => {
@@ -45,9 +39,6 @@ export const actions = {
 		const user = dbusers.filter((u) => u.username === 'dangelomedinag')[0];
 		const comparedPass = await bcrypt.compare(password, dbusers[0].hash);
 
-		// if (!user) {
-		// 	return fail(404, { errors: 'email/username not exist', username });
-		// }
 		if (!comparedPass) {
 			return fail(404, {
 				errors: 'invalid credentials',
@@ -59,22 +50,22 @@ export const actions = {
 		// eslint-disable-next-line no-unused-vars
 		const { hash, ...payload } = user;
 
-		const token = jwt.sign(payload, '123', { expiresIn: `${15 * 60 * 1000}` });
+		const token = jwt.sign(payload, env.JWT_TOKEN_SECRET, { expiresIn: '1h' });
 
-		cookies.set('refresh_token', user.refresh_token, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'strict',
-			secure: process.env.NODE_ENV === 'production',
-			maxAge: 60 * 60 * 24 * 7
-		});
+		// cookies.set('refresh_token', user.refresh_token, {
+		// 	path: '/',
+		// 	httpOnly: true,
+		// 	sameSite: 'strict',
+		// 	secure: !dev,
+		// 	maxAge: 15000
+		// });
 
 		cookies.set('token', token, {
 			path: '/',
 			httpOnly: true,
 			sameSite: 'strict',
-			secure: process.env.NODE_ENV === 'production',
-			maxAge: 60 * 60 * 24 * 7
+			secure: !dev,
+			maxAge: 60 * 60
 		});
 
 		throw redirect(303, '/');

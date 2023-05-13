@@ -1,111 +1,108 @@
-<script>
-	import { onMount } from 'svelte';
-
-	// components
+<script lang="ts">
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
-	// import NavbarTop from '$components/navbar/navbarTop.svelte';
 	import Hero from '$components/ui/hero.svelte';
 	import GridCards from '$components/gridMovies/GridCards.svelte';
 
 	export let data;
-	/* let movies = [];
-	let imgs;
-	onMount(async () => {
-		const reqs = [
-			fetch('/api?s=saw').then((r) => {
-				// if (!r.ok) throw r;
-				return r.json();
-			}),
-			fetch('/api?s=blood').then((r) => {
-				// if (!r.ok) throw r;
-				return r.json();
-			}),
-			fetch('/api?s=horror').then((r) => {
-				// if (!r.ok) throw r;
-				return r.json();
-			}),
-			fetch('/api?s=horror&page=2').then((r) => {
-				// if (!r.ok) throw r;
-				return r.json();
-			}),
-			fetch('/api?s=comedy').then((r) => {
-				// if (!r.ok) throw r;
-				return r.json();
-			}),
-			fetch('/api?s=comedy&page=2').then((r) => {
-				// if (!r.ok) throw r;
-				return r.json();
-			})
-		];
 
-		const res = await Promise.all(reqs);
-		const data = res.map((e) => (e.message ? new Error(e.message) : e));
-
-		movies = data;
-		// imgs = data.map((r) => r.results.map((m) => m.poster).slice(0, 4));
-	}); */
-
-	let act = 'Suspense';
-
-	const setTab = (tab) => (act = tab);
+	type Tab = 'Suspense' | 'Terror' | 'Comedy';
+	let tabs: Tab[] = ['Suspense', 'Terror', 'Comedy'];
+	let active: Tab | string = 'Suspense';
+	const updateActiveTab = (e: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => {
+		const target = e.currentTarget;
+		const tab = target?.dataset?.tab;
+		active = tab ?? active;
+	};
 </script>
 
 <svelte:head>
 	<title>Magacine - Discovery</title>
 </svelte:head>
 
-<!-- <NavbarTop> -->
 <div>
-	<button on:click={() => setTab('Suspense')} class:active={act === 'Suspense'}>Suspense</button>
-	<button on:click={() => setTab('Terror')} class:active={act === 'Terror'}>Terror</button>
-	<button on:click={() => setTab('Comedy')} class:active={act === 'Comedy'}>Comedy</button>
+	<button data-tab="Suspense" on:click={updateActiveTab} class:active={active === 'Suspense'}
+		>Suspense</button
+	>
+	{#if data.defer}
+		{#await data.defer.movies then movies}
+			<button data-tab="Terror" on:click={updateActiveTab} class:active={active === 'Terror'}
+				>Terror</button
+			>
+			<button data-tab="Comedy" on:click={updateActiveTab} class:active={active === 'Comedy'}
+				>Comedy</button
+			>
+		{/await}
+	{/if}
 </div>
-<!-- </NavbarTop> -->
-
-{#if act === 'Suspense'}
+{#key active}
 	<Hero
-		words={[
-			{ word: act, imgs: data.images },
-			{ word: 'Blood', imgs: data.images }
-		]}
-		copy="all, in Magacine"
+		word={active}
+		images={data.images}
+		copy="Discover everything we have for you."
+		paragraph=""
 	/>
-	<CarouselMovies movies={data.movies[0]} full title={act} />
+{/key}
+
+{#if active === 'Suspense'}
+	<CarouselMovies movies={data.movies[0]} full title={active} />
 
 	<GridCards details movies={data.movies[1]} />
 {/if}
 
 {#if data.defer}
 	{#await data.defer.movies then movies}
-		{#if act === 'Terror'}
-			{@const images = movies.map((r) => r.results.map((m) => m.poster).slice(0, 4))}
-			<Hero words={[{ word: act, imgs: images[0] }]} />
+		{#if active === 'Terror'}
 			<CarouselMovies
 				movies={movies[0]}
 				full
-				title="{act} {movies[0]?.totalResults ?? 'loading'} results"
+				title="{active} {movies[0]?.totalResults ?? 'loading'} results"
 				--card-w="240px"
 				--card-h="390px"
 			/>
 			<CarouselMovies
 				movies={movies[1]}
-				title="{act} {movies[1]?.totalResults ?? 'loading'} results"
+				title="{active} {movies[1]?.totalResults ?? 'loading'} results"
 			/>
 		{/if}
-		{#if act === 'Comedy'}
-			{@const images = movies.map((r) => r.results.map((m) => m.poster).slice(0, 4))}
-			<Hero words={[{ word: act, imgs: images[2] }]} />
+		{#if active === 'Comedy'}
 			<CarouselMovies
 				movies={movies[2]}
 				full
-				title="{act} {movies[2]?.totalResults ?? 'loading'} results"
+				title="{active} {movies[2]?.totalResults ?? 'loading'} results"
 				--card-w="240px"
 				--card-h="370px"
 			/>
 			<CarouselMovies
 				movies={movies[3]}
-				title="{act} {movies[3]?.totalResults ?? 'loading'} results"
+				title="{active} {movies[3]?.totalResults ?? 'loading'} results"
 			/>
 		{/if}
 	{/await}
 {/if}
+
+<style>
+	div {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 1em;
+		gap: 0.5em;
+	}
+
+	button {
+		background-color: transparent;
+		border-color: transparent;
+		font-weight: bold;
+		padding-block: 0.3em;
+		padding-inline: 0.5em;
+		border-radius: 5px;
+		opacity: 0.5;
+		cursor: pointer;
+	}
+
+	.active {
+		opacity: 1;
+		background-color: var(--c-front);
+		color: white;
+	}
+</style>

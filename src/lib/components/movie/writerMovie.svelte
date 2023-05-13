@@ -1,5 +1,5 @@
 <script>
-	import { listFormat } from '$lib/helpers';
+	import { listFormat } from '$helpers';
 
 	export let value;
 </script>

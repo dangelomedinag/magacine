@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto, invalidate, invalidateAll } from '$app/navigation';
 	import { onMount, tick } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
@@ -21,15 +21,15 @@
 
 	let value = '';
 	let currentValue = '';
-	let input;
+	let input: HTMLElement;
 	let showSuggest = false;
 	let autocomplete: MoviesResponse;
 	let lastValue = '';
-	let movies = undefined;
-	let lastSearch: MoviesResponse;
-	let timer = undefined;
-	let timerErrors = undefined;
-	let errors = undefined;
+	let movies: MoviesResponse | undefined = undefined;
+	let lastSearch: MoviesResponse | [] = [];
+	let timer: NodeJS.Timeout | undefined = undefined;
+	let timerErrors: NodeJS.Timeout | undefined = undefined;
+	let errors: { level: { [index: string]: boolean }; message: string } | undefined = undefined;
 
 	let loading = false;
 
@@ -106,14 +106,14 @@
 		}
 	}
 
-	async function updateUrlSearchParam(searchString) {
-		const url = new URL(location);
+	async function updateUrlSearchParam(searchString: string) {
+		const url = new URL(location.toString());
 		url.searchParams.set('s', searchString);
 
 		if (selected.length == 1) url.searchParams.set('type', selected[0]);
 		else if (url.searchParams.has('type')) url.searchParams.delete('type');
 
-		await goto(url.href, { replaceState: true });
+		await goto(url.href, { keepFocus: true, invalidateAll: true });
 	}
 
 	async function getMovies() {
@@ -158,6 +158,9 @@
 		}
 
 		const res = await req.json();
+		if (res.message) {
+			throw { level: { danger: true }, message: res.message };
+		}
 		loading = false;
 		return res;
 	}
@@ -198,6 +201,22 @@
 
 	const filterAutocomplete = () =>
 		autocomplete.results.filter((r) => r.title.trim().slice(value.length).length > 1);
+
+	afterNavigate(async ({ type, from, to }) => {
+		if (type === 'popstate') {
+			if (from?.url.search !== to?.url.search) {
+				await invalidate('search:load');
+				if (data.movies) {
+					if (data.movies?.message) {
+						errors = { level: { danger: true }, message: data.movies?.message };
+					} else {
+						value = data.movies?.search;
+						movies = data.movies;
+					}
+				}
+			}
+		}
+	});
 </script>
 
 <svelte:head>
@@ -242,6 +261,16 @@
 					{@const word = item.title.trim().toLowerCase().slice(0, value.length)}
 					{@const rest = item.title.trim().toLowerCase().slice(value.length)}
 					<button
+						on:mouseenter={() => {
+							input.value += rest;
+						}}
+						on:focusin={() => {
+							input.value = value;
+							input.value += rest;
+						}}
+						on:mouseleave={() => {
+							input.value = value;
+						}}
 						in:fly={{ y: 15, delay: 20 * i, duration: 150, easing: quintInOut }}
 						class="suggest-item"
 						on:click={() => setValue(item)}

@@ -1,5 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 
+export function load() {
+	return {};
+}
+
 export const actions = {
 	default: async ({ cookies, locals, request }) => {
 		if (!locals.user) {

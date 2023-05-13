@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
 
@@ -7,22 +7,19 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let href = undefined;
-	export let title = undefined;
-	export let type = undefined;
+	export let href: string | undefined = undefined;
+	export let title: string | undefined = undefined;
+	export let type: string | undefined = undefined;
+	export let autoClose = true;
 
-	function tap(node) {
-		function sendEvent() {
-			dispatch('tap');
-		}
+	function closeNavbar() {
+		const element = document.querySelector('nav.open');
+		element?.classList.remove('open');
+	}
 
-		node.addEventListener('click', sendEvent);
-
-		return {
-			destroy() {
-				node.removeEventListener('click', sendEvent);
-			}
-		};
+	function handleClick(e) {
+		if (autoClose) closeNavbar();
+		dispatch('click', e);
 	}
 
 	$: active = $page.url.pathname === href ?? false;
@@ -36,8 +33,7 @@
 	class="link"
 	class:active
 	{href}
-	on:click
-	use:tap
+	on:click={handleClick}
 	tabindex="0"
 	{title}
 >
@@ -72,7 +68,7 @@
 		padding-block: 0.3em;
 		margin-bottom: 0.2em;
 		/* position: relative; */
-		/* line-height: 1; */
+		line-height: inherit;
 		background-color: transparent;
 		border: none;
 		text-align: left;
@@ -130,6 +126,7 @@
 		/* border: 1px solid transparent; */
 	}
 
+	/* 769px fix 768 real size */
 	@media (min-width: 768px) and (max-width: 1200px) {
 		.label {
 			display: none;
@@ -145,10 +142,12 @@
 		.link:hover > .label,
 		.link:focus > .label {
 			position: absolute;
-			right: 0;
+			right: -10px;
+			top: 50%;
+			/* transform: translateY(-50%); */
 			display: block;
 			white-space: nowrap;
-			transform: translateX(100%);
+			transform: translate(100%, -50%);
 			color: var(--c-main);
 			background-color: var(--c-main-invert);
 			border-radius: 50vh;

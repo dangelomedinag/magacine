@@ -52,7 +52,7 @@
 	:root {
 		@include light-theme-scheme;
 	}
-	:root.dark {
+	:root[data-root-theme='dark'] {
 		@include dark-theme-scheme;
 	}
 }
@@ -64,7 +64,7 @@
 	:root {
 		@include dark-theme-scheme;
 	}
-	:root.light {
+	:root[data-root-theme='light'] {
 		@include light-theme-scheme;
 	}
 }

@@ -1,3 +1,11 @@
+export type User = {
+	username: string;
+	name: string;
+	lastname: string;
+	role: string;
+	avatar: string;
+};
+
 export interface MovieItem {
 	title: string;
 	year: string;
@@ -65,10 +73,11 @@ export interface OMDBMoviesItem {
 }
 
 export interface OMDBMoviesResponse {
-	Search?: OMDBMoviesItem[];
-	totalResults?: string;
 	Response: 'True' | 'False';
+	Search: OMDBMoviesItem[];
+	totalResults: string;
 	Error: string;
+
 	[index: string]: any;
 }
 

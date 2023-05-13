@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Footer from '$components/footer.svelte';
-	import Aside from '$components/aside.svelte';
+	import Navbar from '$components/navbar/Navbar.svelte';
 
 	import ButtonToTop from '$components/buttonToTop.svelte';
 	import PriceTable from '$components/ui/priceTable.svelte';
@@ -8,11 +8,10 @@
 
 	import { pricePlans } from '$lib/stores/plans-store';
 	import { onMount } from 'svelte';
-	import Layout from '$components/Layout.svelte';
-	import NavbarTop from '$components/navbar/navbarTop.svelte';
+	import BackgroundFlares from '$components/BackgroundFlares.svelte';
+	import Header from '$components/header/Header.svelte';
 	import { page } from '$app/stores';
 
-	let toggle = false;
 	let modal: Modal;
 
 	onMount(() => {
@@ -22,16 +21,16 @@
 
 	// let modal: Modal;
 
-	function closeAside() {
-		toggle = false;
+	function closeNavbar() {
+		document.querySelector('.app > nav')?.classList.remove('open');
 	}
-	function toggleAside() {
-		toggle = !toggle;
+	function toggleNavbar() {
+		document.querySelector('.app > nav')?.classList.toggle('open');
 	}
 
-	function matchMobile() {
-		return matchMedia('(min-width: 992px)').matches;
-	}
+	// function matchMobile() {
+	// 	return matchMedia('(min-width: 992px)').matches;
+	// }
 </script>
 
 <svelte:head>
@@ -51,11 +50,9 @@
 	</Modal>
 {/if}
 
-<Layout open={toggle} on:close-menu={toggleAside}>
+<!-- <Layout open={toggle} on:close-menu={toggleAside}>
 	<svelte:fragment slot="header">
-		<NavbarTop search={$page.data.layout?.search ?? true}>
-			<!-- <button on:click={toggleAside}>click</button> -->
-		</NavbarTop>
+		<Header search={$page.data.layout?.search ?? true} />
 	</svelte:fragment>
 	<svelte:fragment slot="nav">
 		<Aside
@@ -71,132 +68,111 @@
 	<svelte:fragment slot="footer">
 		<Footer />
 	</svelte:fragment>
-</Layout>
-
-<ButtonToTop active={toggle} on:click={toggleAside} />
-
-<!-- 
-
-<div class="wrapper">
-	<ButtonToTop active={toggle} on:click={toggleAside} />
-	<aside class="sidebar" class:toggle>
-		<Aside
-			on:tap={() => {
-				if (!matchMobile()) closeAside();
-			}}
-		/>
-	</aside>
-	<main
-		class="main"
-		on:keydown
-		on:click={() => {
-			if (!matchMobile()) closeAside();
-		}}
-	>
-		<div class="container">
-			<slot />
-		</div>
-		<Footer />
+</Layout> -->
+<BackgroundFlares />
+<div class="app">
+	<header>
+		<Header search={$page.data.layout?.search ?? true} />
+	</header>
+	<nav on:click|self={closeNavbar} on:keydown>
+		<Navbar />
+	</nav>
+	<main>
+		<slot />
 	</main>
-</div> -->
+	<aside>aside</aside>
+	<footer>
+		<Footer />
+	</footer>
+	<ButtonToTop on:click={toggleNavbar} />
+</div>
 
 <style>
-	.container {
-		display: flex;
-		flex-direction: column;
+	/* @media (min-width: 576px) {} */
+	/* @media (min-width: 768px) {} */
+	/* @media (min-width: 992px) {} */
+	/* @media (min-width: 1200px) {} */
+
+	.app {
+		display: grid;
+		grid-template-rows: min-content minmax(100vh, 1fr) min-content;
 	}
 
-	.wrapper {
-		display: flex;
-		justify-content: center;
-		max-width: 1400px;
-		margin: 0 auto;
-	}
-
-	.main {
-		width: 100%;
-		height: 100%;
-		min-height: 100vh;
-		background-color: var(--c-main);
-		transition: var(--transition-theme);
-	}
-	.toggle + .main::after {
-		content: '';
-		height: 100%;
-		width: 100%;
-		user-select: none;
-		cursor: pointer;
-		/* opacity: 0.5; */
-		backdrop-filter: blur(3px);
-		--webkit-backdrop-filter: blur(3px);
-		background-color: rgba(0, 0, 0, 0.6);
-		/* background-color: var(--c-front); */
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: 95;
-	}
-
-	.sidebar {
-		height: 100vh;
-		width: auto;
-		position: fixed;
+	header {
+		position: sticky;
 		top: 0;
 		left: 0;
 		z-index: 100;
-		/* backdrop-filter: blur(20px); */
-		background-color: var(--c-main-content);
-		/* background-color: #1a171e; */
-		transition: transform 0.4s cubic-bezier(0.83, 0, 0.25, 0.99), var(--transition-theme);
-		transform: translateX(-100%);
-		border-right: 1px solid var(--c-divider);
-	}
-	.toggle {
-		transform: translateX(0);
 	}
 
-	@media (min-width: 576px) {
-		/* button {
-			display: none;
-		} */
+	nav {
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 110;
+		will-change: backdrop-filter;
+		pointer-events: none;
 	}
+
+	:global(nav.open) {
+		pointer-events: initial;
+		backdrop-filter: blur(3px);
+	}
+
+	aside {
+		display: none;
+	}
+	main {
+		overflow: hidden;
+	}
+
+	/* @media (min-width: 640px) {
+	} */
+
+	/* @media (min-width: 720px) {
+	} */
 
 	@media (min-width: 768px) {
+		.app {
+			grid-template-columns: min-content 1fr;
+			grid-template-rows: min-content minmax(100vh, 1fr) min-content;
+		}
+
+		nav {
+			grid-row: 2 / 3;
+			position: initial;
+			display: block;
+			pointer-events: initial;
+			z-index: 0;
+			/* border-right: 1px solid transparent;
+			backdrop-filter: none;
+			visibility: visible; */
+		}
+
+		/* :global(nav.open) {
+		} */
+
+		header {
+			grid-column: 1 / -1;
+		}
+
+		main {
+			grid-column: 2 / -1;
+		}
+
+		footer {
+			grid-column: 1 / -1;
+		}
 	}
 
-	@media (min-width: 992px) {
-		.main {
-			width: 95%;
+	@media (min-width: 1024px) {
+		main {
+			grid-column: auto;
 		}
-		.sidebar {
-			transform: translateX(0);
-			display: block;
-			position: -webkit-sticky;
-			position: sticky;
-			top: 0;
-			width: 5%;
-		}
-		.toggle {
-			/* transform: translateX(0); */
-			width: 20%;
-		}
-		.toggle + main {
-			width: 80%;
-		}
-		.toggle + .main::after {
-			/* content: ''; */
-			display: none;
-		}
-		/* .main {
-			width: 80%;
-		}
-		.sidebar {
-			display: block;
-			width: 20%;
-		} */
 	}
-	@media (min-width: 1200px) {
-	}
-	@media (min-width: 992px) {
+
+	@media (min-width: 1280px) {
 	}
 </style>

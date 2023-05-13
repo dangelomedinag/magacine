@@ -1,7 +1,3 @@
-<script>
-	// import Film from '$icons/solid/film.svelte?raw';
-</script>
-
 <div class="sec-header">
 	<slot name="background" />
 	<div class="content">
@@ -13,6 +9,7 @@
 	.sec-header {
 		overflow: hidden;
 		position: relative;
+		z-index: -1;
 		margin-block: 2em;
 		margin-inline: var(--gap-content);
 		border-radius: 15px;
@@ -42,7 +39,16 @@
 		gap: 0.5em;
 	}
 
-	/* button {
+	.sec-header > .content > :global(.tabs) {
+		padding-top: 0.5em;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5em;
+		flex-wrap: wrap;
+	}
+
+	.sec-header > .content :global(button) {
 		background-color: transparent;
 		border: 1px solid transparent;
 		padding-inline: 1em;
@@ -51,17 +57,9 @@
 		font-size: 0.9em;
 	}
 
-	.active {
+	.sec-header > .content :global(.active) {
 		box-shadow: var(--shadow-long);
 		color: white;
 		background-color: var(--c-front);
 	}
-
-	.tabs {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 0.5em;
-		flex-wrap: wrap;
-	} */
 </style>

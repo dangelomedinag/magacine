@@ -7,16 +7,17 @@
 	export let active = false;
 </script>
 
-<button title="scroll to top" on:click>
-	{#if !active}
-		<Icon>
+<button title="close navbar" on:click>
+	<Icon>
+		<div class="menu">
 			<MenuAlt2 />
-		</Icon>
-	{:else}
+		</div>
 		<Icon>
-			<X />
+			<div class="x">
+				<X />
+			</div>
 		</Icon>
-	{/if}
+	</Icon>
 </button>
 
 <style>
@@ -33,7 +34,7 @@
 		background-color: var(--c-front);
 		color: white;
 		border: none;
-		display: flex;
+		/* display: none; */
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
@@ -47,6 +48,16 @@
 
 	button:active {
 		transform: translateY(5%);
+	}
+
+	:global(nav) ~ button .x {
+		display: none;
+	}
+	:global(nav.open) ~ button .x {
+		display: flex;
+	}
+	:global(nav.open) ~ button .menu {
+		display: none;
 	}
 
 	@media (min-width: 768px) {

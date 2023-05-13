@@ -1,9 +1,9 @@
-<script>
-	export let counter = false;
-	export let x = undefined;
-	export let y = undefined;
-	export let deg = undefined;
-	export let style = undefined;
+<script lang="ts">
+	export let counter: string | undefined = undefined;
+	export let x: string | undefined = undefined;
+	export let y: string | undefined = undefined;
+	export let deg: string | undefined = undefined;
+	export let style: string | undefined = undefined;
 	export let shadow = false;
 	let Class = '';
 	export { Class as class };

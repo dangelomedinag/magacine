@@ -4,17 +4,18 @@
 
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import Check from '$icons/outline/check.svelte';
-	import Exclamation from '$icons/outline/exclamation.svelte';
-	import ExclamationCircle from '$icons/outline/exclamation-circle.svelte';
-	import Flag from '$icons/outline/flag.svelte';
+	import Check from '$icons/solid/check.svg?raw';
+	import Exclamation from '$icons/solid/exclamation.svg?raw';
+	import ExclamationCircle from '$icons/solid/exclamation-circle.svg?raw';
+	import Flag from '$icons/solid/flag.svg?raw';
 	import X from '$icons/solid/x.svg?raw';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 
 	export let success = false,
 		warn = false,
-		danger = false;
+		danger = false,
+		close = false;
 
 	let active = false;
 
@@ -48,30 +49,32 @@
 	<div class="alert__icon">
 		{#if success}
 			<Icon>
-				<Check />
+				{@html Check}
 			</Icon>
 		{:else if warn}
 			<Icon>
-				<Exclamation />
+				{@html Exclamation}
 			</Icon>
 		{:else if danger}
 			<Icon>
-				<ExclamationCircle />
+				{@html ExclamationCircle}
 			</Icon>
 		{:else}
 			<Icon>
-				<Flag />
+				{@html Flag}
 			</Icon>
 		{/if}
 	</div>
 	<span class="alert__message">
 		<slot />
 	</span>
-	<button type="button" on:click>
-		<Icon>
-			{@html X}
-		</Icon>
-	</button>
+	{#if close}
+		<button type="button" on:click>
+			<Icon>
+				{@html X}
+			</Icon>
+		</button>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -106,19 +109,16 @@
 			--alert-icon: #66bb6a;
 			--alert-text: #cce8cd;
 			--alert-bg: #0c130d;
-			/* --alert-border: rgb(0, 70, 35); */
 		}
 		.alert--warn {
 			--alert-icon: #ffa726;
 			--alert-text: #ffe2b7;
 			--alert-bg: #191207;
-			// --alert-border: rgb(70, 70, 0);
 		}
 		.alert--danger {
 			--alert-icon: #f44336;
 			--alert-text: #f4c7c7;
 			--alert-bg: #160b0b;
-			// --alert-border: rgb(128, 44, 44);
 		}
 	}
 
@@ -127,27 +127,26 @@
 			--alert-icon: #ed6c02;
 			--alert-text: #663c00;
 			--alert-bg: #fff4e5;
-			/* --alert-border: rgb(219 195 70); */
 		}
 		.alert--danger {
 			--alert-icon: #d32f2f;
 			--alert-text: #5f2120;
 			--alert-bg: #fdeded;
-			// --alert-border: rgb(128, 44, 44);
 		}
 	}
 
 	@media (prefers-color-scheme: dark) {
 		@include dark-theme;
 
-		:global(:root.light) {
+		:global(:root[data-root-theme='light']) {
 			@include light-theme;
 		}
 	}
+
 	@media (prefers-color-scheme: light) {
 		@include light-theme;
 
-		:global(:root.dark) {
+		:global(:root[data-root-theme='dark']) {
 			@include light-theme;
 		}
 	}

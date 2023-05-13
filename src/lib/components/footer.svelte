@@ -1,4 +1,4 @@
-<footer class="footer content">
+<div class="footer content">
 	<div class="footer__addr">
 		<h1 class="footer__logo">magacine</h1>
 
@@ -78,15 +78,15 @@
 			<span>Made with <span class="heart">♥</span> remotely for Dangelo Medina</span>
 		</div>
 	</div>
-</footer>
+</div>
 
 <style>
 	.footer {
-		margin-top: 2em;
+		/* margin-top: 2em; */
 		padding-bottom: 2em;
 		/* display: flex; */
 		/* flex-flow: row wrap; */
-		background-color: var(--c-main);
+		/* background-color: var(--c-main); */
 		border-top: 1px solid rgba(230, 230, 230, 0.2);
 	}
 
@@ -153,7 +153,7 @@
 	a:hover {
 		opacity: 1;
 		color: var(--c-front);
-		border-left: 1px solid var(--c-front);
+		/* border-left: 1px solid var(--c-front); */
 	}
 
 	.legal {

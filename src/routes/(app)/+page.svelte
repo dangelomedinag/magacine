@@ -1,7 +1,6 @@
 <script lang="ts">
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import Hero from '$components/ui/hero.svelte';
-	import NavbarTop from '$components/navbar/navbarTop.svelte';
 
 	export let data;
 
@@ -16,27 +15,10 @@
 	<title>Magacine - home</title>
 </svelte:head>
 
-<!-- <NavbarTop>
-	{#await data.stream.movies then _}
-		<a
-			data-sveltekit-replacestate
-			class:active={act === 'movies'}
-			on:click={() => setTab('movies')}
-			href="#index-movies">Movies</a
-		>
-	{/await}
-	{#await data.stream.series then _}
-		<a
-			data-sveltekit-replacestate
-			class:active={act === 'series'}
-			on:click={() => setTab('series')}
-			href="#index-movies">Series</a
-		>
-	{/await}
-</NavbarTop> -->
-
 <Hero />
 
+<button on:click={() => setTab('movies')}>movies</button>
+<button on:click={() => setTab('series')}>series</button>
 {#if data.stream}
 	<div id="index-movies">
 		{#await data.stream.movies then value}
@@ -44,7 +26,7 @@
 				<CarouselMovies
 					details={false}
 					movies={value}
-					title="Our pick for {data.user.name ?? 'you'}"
+					title="Our pick for {data?.user?.name ?? 'you'}"
 				/>
 			{/if}
 		{/await}
@@ -53,7 +35,7 @@
 				<CarouselMovies
 					details={false}
 					movies={value}
-					title="Our pick for {data.user.name ?? 'you'}"
+					title="Our pick for {data?.user?.name ?? 'you'}"
 				/>
 			{/if}
 		{/await}

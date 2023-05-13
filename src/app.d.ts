@@ -1,18 +1,16 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+import type { User } from '$lib/types';
+
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user?: {
-				username: string;
-				name: string;
-				lastname: string;
-				role: string;
-				avatar: string;
-			};
+			user?: User;
 		}
-		// interface PageData {}
+		interface PageData {
+			user?: User;
+		}
 		// interface Platform {}
 	}
 }

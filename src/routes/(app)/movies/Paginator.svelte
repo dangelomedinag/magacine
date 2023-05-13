@@ -3,38 +3,51 @@
 	import ChevronRight from '$icons/solid/chevron-right.svg?raw';
 	import ChevronLeft from '$icons/solid/chevron-left.svg?raw';
 	import type { MoviesResponse } from '$lib/types';
+	import { goto } from '$app/navigation';
+	import { tick } from 'svelte';
+	import Spinner from '$components/ui/spinner.svelte';
 
-	type streamResponse = { data: Promise<MoviesResponse[]> };
-	export let stream: streamResponse | undefined;
 	export let active: number;
-	export let setPage: (page: number, movies: MoviesResponse) => void;
+	export let arr: MoviesResponse;
+	export let setPage: (page: number, cb: () => Promise<void>) => void;
+	export let url: URL;
+	export let showPaginator: boolean;
+	$: pages = Math.round(arr.results.length / 10);
+	async function updateUrl() {
+		await tick();
+		url.searchParams.set('page', (active + 1).toString());
+		await goto(url, { noScroll: true, keepFocus: true });
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	}
 </script>
 
-{#if stream}
-	{#await stream.data then value}
-		{#if Array.isArray(value)}
-			<div class="pages-wrapper">
-				<button
-					class="nav"
-					on:click={() => setPage(active - 1, value[active - 1])}
-					disabled={active == 0}><Icon>{@html ChevronLeft}</Icon></button
+<div class="pages-wrapper">
+	{#if showPaginator}
+		<button
+			class="nav button"
+			on:click={() => setPage(active - 1, updateUrl)}
+			disabled={active == 0}><Icon>{@html ChevronLeft}</Icon></button
+		>
+		<div class="wrapper">
+			{#each { length: pages } as _, i}
+				<button class:active={i === active} class="button" on:click={() => setPage(i, updateUrl)}
+					>{i + 1}</button
 				>
-				<div class="wrapper">
-					{#each value as movies, i}
-						<button class:active={i === active} class="button" on:click={() => setPage(i, movies)}
-							>{i + 1}</button
-						>
-					{/each}
-				</div>
-				<button
-					class="nav"
-					on:click={() => setPage(active + 1, value[active + 1])}
-					disabled={active == value.length - 1}><Icon>{@html ChevronRight}</Icon></button
-				>
-			</div>
-		{/if}
-	{/await}
-{/if}
+			{/each}
+		</div>
+		<button
+			class="nav button"
+			on:click={() => setPage(active + 1, updateUrl)}
+			disabled={active >= pages - 1}><Icon>{@html ChevronRight}</Icon></button
+		>
+	{:else}
+		<div class="wrapper">
+			<button class="loading" disabled={true}
+				>loading...<Spinner position="relative" size="2.5rem" /></button
+			>
+		</div>
+	{/if}
+</div>
 
 <style>
 	.pages-wrapper {
@@ -47,15 +60,27 @@
 		border: 1px solid var(--c-divider);
 		border-radius: 50vh;
 		padding: 0.5em;
+		position: relative;
 	}
 
 	button {
 		background-color: transparent;
 		border: 1px solid transparent;
-		width: 2em;
-		height: 2em;
 		border-radius: 100%;
 		padding: 0;
+		height: 2em;
+	}
+
+	.button {
+		width: 2em;
+	}
+
+	.loading {
+		display: inline-flex;
+		padding-inline: 1em;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
 	}
 
 	.nav {
