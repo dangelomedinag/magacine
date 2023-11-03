@@ -9,7 +9,7 @@
 	.sec-header {
 		overflow: hidden;
 		position: relative;
-		z-index: -1;
+		z-index: 1;
 		margin-block: 2em;
 		margin-inline: var(--gap-content);
 		border-radius: 15px;

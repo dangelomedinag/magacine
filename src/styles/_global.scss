@@ -84,5 +84,5 @@ p {
 button:not(:disabled):focus,
 a:not(:disabled):focus {
 	outline-offset: 2px;
-	outline: 1px dashed #e63946;
+	outline: 1px dashed var(--c-divider);
 }

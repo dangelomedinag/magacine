@@ -13,6 +13,7 @@
 	let tabs: Tab[] = ['week', 'month', 'year'];
 	let active: Tab | string = 'week';
 	const updateActiveTab = (e: ButtonMouseEvent) => {
+		console.log('dasdas');
 		const target = e.currentTarget;
 		const tab = target?.dataset?.tab;
 		active = tab ?? active;
@@ -37,6 +38,3 @@
 <div class="content">
 	<GridCards {movies} />
 </div>
-
-<style>
-</style>
