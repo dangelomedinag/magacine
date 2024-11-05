@@ -1,8 +1,8 @@
 <script>
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
 
-	export let value;
-	export let ratings;
+	/** @type {{value: any, ratings: any}} */
+	let { value, ratings } = $props();
 </script>
 
 {#if value}

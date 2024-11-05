@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { createEventDispatcher, tick } from 'svelte';
 	import Alert from '$components/ui/alert.svelte';
@@ -6,9 +8,13 @@
 	import Spinner from '$components/ui/spinner.svelte';
 	import type { ActionData } from '../../../routes/(auth)/login/$types';
 	const dispatch = createEventDispatcher();
-	export let form: ActionData = null;
-	export let loading = false;
-	export let handlerSubmit: SubmitFunction = ({ form: FormElement }) => {
+	interface Props {
+		form?: ActionData;
+		loading?: boolean;
+		handlerSubmit?: SubmitFunction;
+	}
+
+	let { form = $bindable(null), loading = $bindable(false), handlerSubmit = ({ form: FormElement }) => {
 		loading = true;
 		return async (complete) => {
 			if (complete.result.type === 'failure') {
@@ -17,8 +23,8 @@
 			loading = false;
 			dispatch('result', complete);
 		};
-	};
-	let element: HTMLFormElement;
+	} }: Props = $props();
+	let element: HTMLFormElement = $state();
 	const completeInputs = ({ invalid }: { invalid: boolean }) => {
 		if (element) {
 			element.username.value = invalid ? 'invalid' : 'magacineuser';
@@ -52,7 +58,7 @@
 			minlength="3"
 			required
 			disabled={loading}
-			on:input={(e) => {
+			oninput={(e) => {
 				if (form?.username) {
 					if (form.username !== e.currentTarget.value) {
 						form.username = '';
@@ -74,7 +80,7 @@
 			required
 			minlength="3"
 			disabled={loading}
-			on:input={(e) => {
+			oninput={(e) => {
 				if (form?.password) {
 					if (form.password !== e.currentTarget.value) form.password = '';
 					if (!form.username && !form.password) form = null;
@@ -99,7 +105,7 @@
 		><input id="remember" type="checkbox" checked disabled={loading} /> Remember me
 	</label>
 	<!-- <a href={'#'} on:click={() => completeInput()} class="link">remember me</a> -->
-	<a href={'#'} on:click|preventDefault={() => completeInputs({ invalid: true })} class="link"
+	<a href={'#'} onclick={preventDefault(() => completeInputs({ invalid: true }))} class="link"
 		>Need help?</a
 	>
 </div>

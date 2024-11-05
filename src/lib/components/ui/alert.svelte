@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { quintInOut } from 'svelte/easing';
 	import { fly, slide } from 'svelte/transition';
 
@@ -12,10 +15,21 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 
-	export let success = false,
+	interface Props {
+		success?: boolean;
+		warn?: boolean;
+		danger?: boolean;
+		close?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		success = false,
 		warn = false,
 		danger = false,
-		close = false;
+		close = false,
+		children
+	}: Props = $props();
 
 	let active = false;
 
@@ -37,10 +51,10 @@
 	}
 </script>
 
-<svelte:body on:focusout={setActiveElement} />
+<svelte:body onfocusout={setActiveElement} />
 
 <div
-	transition:slide|local={{ axis: 'y', duration: 600, easing: quintInOut }}
+	transition:slide={{ axis: 'y', duration: 600, easing: quintInOut }}
 	class="alert"
 	class:alert--warn={warn}
 	class:alert--danger={danger}
@@ -66,10 +80,10 @@
 		{/if}
 	</div>
 	<span class="alert__message">
-		<slot />
+		{@render children?.()}
 	</span>
 	{#if close}
-		<button type="button" on:click>
+		<button type="button" onclick={bubble('click')}>
 			<Icon>
 				{@html X}
 			</Icon>

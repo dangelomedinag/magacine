@@ -3,7 +3,8 @@
 	import Icon from '$icons/icon.svelte';
 	import ColorSwatch from '$icons/outline/color-swatch.svelte';
 
-	export let value;
+	/** @type {{value: any}} */
+	let { value } = $props();
 </script>
 
 {#if value}

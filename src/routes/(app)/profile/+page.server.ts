@@ -7,7 +7,7 @@ export function load() {
 export const actions = {
 	default: async ({ cookies, locals, request }) => {
 		if (!locals.user) {
-			throw redirect(307, '/login');
+			redirect(307, '/login');
 		}
 		const fields = await request.formData();
 

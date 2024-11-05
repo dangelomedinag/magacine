@@ -46,9 +46,11 @@
 	<span class="section">Menu</span>
 	<div>
 		<Item href="/">
-			<svelte:fragment slot="icon">
-				<Icon>{@html Home}</Icon>
-			</svelte:fragment>
+			{#snippet icon()}
+					
+					<Icon>{@html Home}</Icon>
+				
+					{/snippet}
 			Home</Item
 		>
 
@@ -58,16 +60,20 @@
 				notiStore.update((store) => store.filter((r) => r.label !== '/discovery'));
 			}}
 		>
-			<svelte:fragment slot="icon">
-				<Icon>{@html ViewGridAdd}</Icon>
-			</svelte:fragment>
+			{#snippet icon()}
+					
+					<Icon>{@html ViewGridAdd}</Icon>
+				
+					{/snippet}
 			Discovery</Item
 		>
 
 		<Item href="/soon">
-			<svelte:fragment slot="icon">
-				<Icon>{@html InboxIn}</Icon>
-			</svelte:fragment>
+			{#snippet icon()}
+					
+					<Icon>{@html InboxIn}</Icon>
+				
+					{/snippet}
 			Comming soon</Item
 		>
 
@@ -77,9 +83,11 @@
 				notiStore.update((store) => store.filter((r) => r.label !== '/community'));
 			}}
 		>
-			<svelte:fragment slot="icon">
-				<Icon>{@html UserGroup}</Icon>
-			</svelte:fragment>
+			{#snippet icon()}
+					
+					<Icon>{@html UserGroup}</Icon>
+				
+					{/snippet}
 			Community
 		</Item>
 
@@ -101,9 +109,11 @@
 		> -->
 		{#if $page.data.user}
 			<Item href="/favorites">
-				<svelte:fragment slot="icon">
-					<Icon>{@html Star}</Icon>
-				</svelte:fragment>
+				{#snippet icon()}
+							
+						<Icon>{@html Star}</Icon>
+					
+							{/snippet}
 				Favorites</Item
 			>
 		{/if}
@@ -114,9 +124,11 @@
 			Downloaded</Item
 		> -->
 		<Item href="/search">
-			<svelte:fragment slot="icon">
-				<Icon>{@html Search}</Icon>
-			</svelte:fragment>
+			{#snippet icon()}
+					
+					<Icon>{@html Search}</Icon>
+				
+					{/snippet}
 			Search</Item
 		>
 	</div>
@@ -139,9 +151,11 @@
 		{#if $page.data.user}
 			<form method="post" action="/logout">
 				<Item type="submit">
-					<svelte:fragment slot="icon">
-						<Icon>{@html Logout}</Icon>
-					</svelte:fragment>
+					{#snippet icon()}
+									
+							<Icon>{@html Logout}</Icon>
+						
+									{/snippet}
 					Logout
 				</Item>
 			</form>
@@ -155,15 +169,17 @@
 			title="toggle theme"
 			autoClose={false}
 		>
-			<svelte:fragment slot="icon">
-				<Icon>
-					{#if $themeStore === 'dark'}
-						{@html Sun}
-					{:else}
-						{@html Moon}
-					{/if}
-				</Icon>
-			</svelte:fragment>
+			{#snippet icon()}
+					
+					<Icon>
+						{#if $themeStore === 'dark'}
+							{@html Sun}
+						{:else}
+							{@html Moon}
+						{/if}
+					</Icon>
+				
+					{/snippet}
 			{$themeStore === 'dark' ? 'light' : 'dark'} theme
 		</Item>
 	</div>

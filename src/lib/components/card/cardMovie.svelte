@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { onMount, tick } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
@@ -21,16 +23,26 @@
 	// import Trash from '$components/icons/outline/trash.svelte';
 	// import MovieItem from '$components/gridMovies/movieItem.svelte';
 
-	export let full = false;
-	export let details = true;
-	export let movie: MovieResult;
-	export let progress = 0;
-	export let i = 1;
-	let showDetails = false;
-	let showModal: boolean = false;
-	let modal: Modal;
+	interface Props {
+		full?: boolean;
+		details?: boolean;
+		movie: MovieResult;
+		progress?: number;
+		i?: number;
+	}
 
-	$: isFav = $FavMovies.some((m) => m.imdbid === movie.imdbid);
+	let {
+		full = false,
+		details = true,
+		movie,
+		progress = 0,
+		i = 1
+	}: Props = $props();
+	let showDetails = $state(false);
+	let showModal: boolean = $state(false);
+	let modal: Modal = $state();
+
+	let isFav = $derived($FavMovies.some((m) => m.imdbid === movie.imdbid));
 
 	const callback: IntersectionObserverCallback = (entries, observer) => {
 		entries.forEach(async (entry) => {
@@ -90,19 +102,25 @@
 {#if showModal}
 	{#if $page.data.user}
 		<Modal bind:this={modal}>
-			<svelte:fragment slot="header">Favorites</svelte:fragment>
+			{#snippet header()}
+						Favorites
+					{/snippet}
 			<AddToFavorites {movie} {isFav} />
 
-			<svelte:fragment slot="action">
-				<button class="cta" on:click={() => favoritesAction(movie)}
-					>{isFav ? 'Remove' : 'Add'}</button
-				>
-				<button on:click={modal.close}>cancel</button>
-			</svelte:fragment>
+			{#snippet action()}
+					
+					<button class="cta" onclick={() => favoritesAction(movie)}
+						>{isFav ? 'Remove' : 'Add'}</button
+					>
+					<button onclick={modal.close}>cancel</button>
+				
+					{/snippet}
 		</Modal>
 	{:else}
 		<Modal bind:this={modal}>
-			<svelte:fragment slot="header">login to continue</svelte:fragment>
+			{#snippet header()}
+						login to continue
+					{/snippet}
 			<h3 style="font-size: 1.5rem; margin-block: 0; ">Login</h3>
 			<p style="margin-block-start: 0.5rem;">
 				Sign in and enjoy the Magazine to the fullest, see details or add to favorites.
@@ -120,12 +138,12 @@
 {/if}
 <figure
 	use:intersecting
-	in:fade={{ duration: 600, easing: quintInOut, delay: 50 * i }}
+	in:fade|global={{ duration: 600, easing: quintInOut, delay: 50 * i }}
 	class="item"
 	class:fav-active={isFav}
 >
 	{#if $page.data.user}
-		<button on:click={openModal} class="fav">
+		<button onclick={openModal} class="fav">
 			<Icon y="5%">{@html Star}</Icon>
 			{#if isFav}
 				<span>fav</span>
@@ -137,7 +155,7 @@
 			<img loading="lazy" class="item-poster" src={movie.poster} alt={movie.title} />
 		</a>
 	{:else}
-		<a class="item-link" href="/movies/{movie.imdbid}" on:click|preventDefault={openModal}>
+		<a class="item-link" href="/movies/{movie.imdbid}" onclick={preventDefault(openModal)}>
 			<img loading="lazy" class="item-poster" src={movie.poster} alt={movie.title} />
 		</a>
 	{/if}

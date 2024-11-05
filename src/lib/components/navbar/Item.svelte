@@ -7,10 +7,23 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let href: string | undefined = undefined;
-	export let title: string | undefined = undefined;
-	export let type: string | undefined = undefined;
-	export let autoClose = true;
+	interface Props {
+		href?: string | undefined;
+		title?: string | undefined;
+		type?: string | undefined;
+		autoClose?: boolean;
+		icon?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		href = undefined,
+		title = undefined,
+		type = undefined,
+		autoClose = true,
+		icon,
+		children
+	}: Props = $props();
 
 	function closeNavbar() {
 		const element = document.querySelector('nav.open');
@@ -22,9 +35,9 @@
 		dispatch('click', e);
 	}
 
-	$: active = $page.url.pathname === href ?? false;
+	let active = $derived($page.url.pathname === href ?? false);
 
-	$: obj = $notiStore.filter((e) => e.label === href);
+	let obj = $derived($notiStore.filter((e) => e.label === href));
 </script>
 
 <svelte:element
@@ -33,16 +46,16 @@
 	class="link"
 	class:active
 	{href}
-	on:click={handleClick}
+	onclick={handleClick}
 	tabindex="0"
 	{title}
 >
 	<!-- <div class="wrapper"> -->
 	<div class="icon">
-		<slot name="icon" />
+		{@render icon?.()}
 	</div>
 	<div class="label">
-		<slot />
+		{@render children?.()}
 	</div>
 	{#if obj.length > 0}
 		<div class="notification">{obj[0].items.length ? obj[0].items.length : ''}</div>

@@ -1,21 +1,27 @@
 <script>
-	export let top = 'initial';
-	export let left = 'initial';
-	export let right = 'initial';
-	export let bottom = 'initial';
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+	/** @type {{top?: string, left?: string, right?: string, bottom?: string}} */
+	let {
+		top = 'initial',
+		left = 'initial',
+		right = 'initial',
+		bottom = 'initial'
+	} = $props();
 </script>
 
 <div
-	on:click={() => {
+	onclick={() => {
 		if (document.body.dataset.theme === 'light') document.body.dataset.theme = 'dark';
 		else document.body.dataset.theme = 'light';
 	}}
-	on:keydown
+	onkeydown={bubble('keydown')}
 	style:top
 	style:left
 	style:right
 	style:bottom
-/>
+></div>
 
 <style>
 	div {

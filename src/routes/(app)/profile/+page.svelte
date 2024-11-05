@@ -35,7 +35,7 @@
 		<h1>{$page.data.user.username}</h1>
 		<p>{$page.data.user.name}</p>
 		<form method="POST" use:enhance>
-			<select name="theme" id="theme" value={$themeStore} on:change={changes}>
+			<select name="theme" id="theme" value={$themeStore} onchange={changes}>
 				<option value="system">system</option>
 				<option value="dark">dark</option>
 				<option value="light">light</option>

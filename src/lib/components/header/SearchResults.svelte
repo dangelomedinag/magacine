@@ -16,8 +16,12 @@
 	import { onMount } from 'svelte';
 	import type { MoviesResponse } from '$lib/types';
 
-	export let results: Promise<MoviesResponse>;
-	let suggestionsMovies = undefined;
+	interface Props {
+		results: Promise<MoviesResponse>;
+	}
+
+	let { results }: Props = $props();
+	let suggestionsMovies = $state(undefined);
 
 	onMount(() => {
 		results.catch(() => {
@@ -39,7 +43,7 @@
 			{response.search} - {response.totalResults} results
 		</li>
 		{#each response.results as movie, i (movie.uuid)}
-			<li class="list__item" in:fly={{ x: 60, easing: quintInOut, delay: 50 * i }}>
+			<li class="list__item" in:fly|global={{ x: 60, easing: quintInOut, delay: 50 * i }}>
 				<!-- <a href="/movies/{movie.imdbid}">
 
 				</a> -->

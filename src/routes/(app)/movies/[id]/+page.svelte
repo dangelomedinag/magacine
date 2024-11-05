@@ -11,8 +11,9 @@
 	import Play from '$icons/solid/play.svg?raw';
 	import { scale } from 'svelte/transition';
 
-	export let data;
-	let showPlayer = false;
+	/** @type {{data: any}} */
+	let { data } = $props();
+	let showPlayer = $state(false);
 
 	function generateTitle() {
 		const title = data.movie?.title;
@@ -28,14 +29,14 @@
 	<div class="content" class:movie={showPlayer} class:poster={!showPlayer}>
 		{#if !showPlayer}
 			<img
-				in:scale|local={{ start: 0.9 }}
+				in:scale={{ start: 0.9 }}
 				class="image"
 				src={data.movie.poster}
 				alt={data.movie.title}
 			/>
 			<button
 				class="btn-play"
-				on:click={() => {
+				onclick={() => {
 					showPlayer = !showPlayer;
 				}}
 			>
@@ -56,7 +57,7 @@
 				}}
 			/>
 			<button
-				on:click={() => {
+				onclick={() => {
 					showPlayer = !showPlayer;
 				}}>dasd</button
 			>

@@ -1,7 +1,8 @@
 <script>
 	import { listFormat } from '$helpers';
 
-	export let value;
+	/** @type {{value: any}} */
+	let { value } = $props();
 </script>
 
 {#if value}

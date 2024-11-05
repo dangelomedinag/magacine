@@ -1,7 +1,8 @@
 <script>
 	import Icon from '$icons/icon.svelte';
 	import Clock from '$icons/outline/clock.svelte';
-	export let value;
+	/** @type {{value: any}} */
+	let { value } = $props();
 </script>
 
 {#if value}

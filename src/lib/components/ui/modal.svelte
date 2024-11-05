@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { self, createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { browser } from '$app/environment';
 	import { onDestroy, onMount, createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
@@ -11,12 +14,26 @@
 	import X from '$icons/solid/x.svg?raw';
 	import { afterNavigate } from '$app/navigation';
 
-	export let modal = false;
-	export let Zindex = '111';
-	export let btnClose = true;
+	interface Props {
+		modal?: boolean;
+		Zindex?: string;
+		btnClose?: boolean;
+		header?: import('svelte').Snippet;
+		action?: import('svelte').Snippet<[any]>;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		modal = $bindable(false),
+		Zindex = '111',
+		btnClose = true,
+		header,
+		action,
+		children
+	}: Props = $props();
 
 	let currentElementFocus: Element | null = null;
-	let ref: HTMLElement;
+	let ref: HTMLElement = $state();
 	const dispatch = createEventDispatcher();
 
 	onMount(async () => {
@@ -79,31 +96,31 @@
 	<div
 		style:z-index={Zindex}
 		class="foreground content"
-		on:click|self={clickForeground}
-		on:keydown
-	/>
+		onclick={self(clickForeground)}
+		onkeydown={bubble('keydown')}
+	></div>
 	<section
 		bind:this={ref}
 		tabindex="-1"
 		style:z-index={Zindex}
-		in:scale={{ start: 0.9, duration: 500, easing: quintOut }}
+		in:scale|global={{ start: 0.9, duration: 500, easing: quintOut }}
 		class="modal"
 	>
 		{#if btnClose}
-			<button tabindex="0" on:click={close} class="modal__close"> <Icon>{@html X}</Icon></button>
+			<button tabindex="0" onclick={close} class="modal__close"> <Icon>{@html X}</Icon></button>
 		{/if}
 
-		{#if $$slots.header}
+		{#if header}
 			<header class="modal__header">
-				<slot name="header" />
+				{@render header?.()}
 			</header>
 		{/if}
 
-		<div class="modal__container" class:paddingtotal={!$$slots.action}>
-			<slot />
+		<div class="modal__container" class:paddingtotal={!action}>
+			{@render children?.()}
 		</div>
-		<div class="modal__actions" class:paddingTop={$$slots.action} use:focusOnMount>
-			<slot name="action" {close} />
+		<div class="modal__actions" class:paddingTop={action} use:focusOnMount>
+			{@render action?.({ close, })}
 		</div>
 	</section>
 {/if}

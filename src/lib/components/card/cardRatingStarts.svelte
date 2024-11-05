@@ -4,8 +4,8 @@
 	import StarSolid from '$icons/solid/star.svg?raw';
 	import StarOutline from '$icons/outline/star.svelte';
 
-	export let rating;
-	export let block = false;
+	/** @type {{rating: any, block?: boolean}} */
+	let { rating, block = false } = $props();
 	const starsLenght = 5;
 	const stars = [1, 2, 3, 4, 5];
 	const percent = Math.floor(rating) * 0.1;

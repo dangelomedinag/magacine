@@ -2,8 +2,9 @@
 	import Icon from '$icons/icon.svelte';
 	import ExternalLink from '$icons/solid/external-link.svg?raw';
 
-	export let value;
-	let arr;
+	/** @type {{value: any}} */
+	let { value } = $props();
+	let arr = $state();
 	if (value) {
 		arr = !value.includes(',') ? [value] : value.split(',');
 	}

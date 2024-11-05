@@ -1,11 +1,15 @@
 <script>
-	export let color = 'var(--c-front)';
-	export let position = 'static';
-	export let size = '5rem';
-	export let top = false;
-	export let left = false;
-	export let right = false;
-	export let bottom = false;
+	/** @type {{color?: string, position?: string, size?: string, top?: boolean, left?: boolean, right?: boolean, bottom?: boolean, children?: import('svelte').Snippet}} */
+	let {
+		color = 'var(--c-front)',
+		position = 'static',
+		size = '5rem',
+		top = false,
+		left = false,
+		right = false,
+		bottom = false,
+		children
+	} = $props();
 </script>
 
 <div
@@ -19,10 +23,10 @@
 	style:height={size}
 	style="border-color: {color}; --size-spin:{size};"
 >
-	<span />
-	<span />
+	<span></span>
+	<span></span>
 </div>
-<div><slot /></div>
+<div>{@render children?.()}</div>
 
 <style>
 	.lds-ripple {

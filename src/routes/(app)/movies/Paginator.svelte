@@ -7,12 +7,22 @@
 	import { tick } from 'svelte';
 	import Spinner from '$components/ui/spinner.svelte';
 
-	export let active: number;
-	export let arr: MoviesResponse;
-	export let setPage: (page: number, cb: () => Promise<void>) => void;
-	export let url: URL;
-	export let showPaginator: boolean;
-	$: pages = Math.round(arr.results.length / 10);
+	interface Props {
+		active: number;
+		arr: MoviesResponse;
+		setPage: (page: number, cb: () => Promise<void>) => void;
+		url: URL;
+		showPaginator: boolean;
+	}
+
+	let {
+		active,
+		arr,
+		setPage,
+		url,
+		showPaginator
+	}: Props = $props();
+	let pages = $derived(Math.round(arr.results.length / 10));
 	async function updateUrl() {
 		await tick();
 		url.searchParams.set('page', (active + 1).toString());
@@ -25,19 +35,19 @@
 	{#if showPaginator}
 		<button
 			class="nav button"
-			on:click={() => setPage(active - 1, updateUrl)}
+			onclick={() => setPage(active - 1, updateUrl)}
 			disabled={active == 0}><Icon>{@html ChevronLeft}</Icon></button
 		>
 		<div class="wrapper">
 			{#each { length: pages } as _, i}
-				<button class:active={i === active} class="button" on:click={() => setPage(i, updateUrl)}
+				<button class:active={i === active} class="button" onclick={() => setPage(i, updateUrl)}
 					>{i + 1}</button
 				>
 			{/each}
 		</div>
 		<button
 			class="nav button"
-			on:click={() => setPage(active + 1, updateUrl)}
+			onclick={() => setPage(active + 1, updateUrl)}
 			disabled={active >= pages - 1}><Icon>{@html ChevronRight}</Icon></button
 		>
 	{:else}

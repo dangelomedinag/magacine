@@ -47,7 +47,7 @@
 				<li
 					animate:flip={{ easing: quintOut, delay: 200 }}
 					class="notification__item"
-					out:fly|local={{ easing: quintOut, x: 100 }}
+					out:fly={{ easing: quintOut, x: 100 }}
 					class:notification__item--unread={!el.read}
 				>
 					<div class="notification__container">
@@ -56,22 +56,22 @@
 								<a
 									href={el.href}
 									class="notification__element"
-									on:click={() => onClickItem(item.id, el.id)}>{@html el.detail}</a
+									onclick={() => onClickItem(item.id, el.id)}>{@html el.detail}</a
 								>
 							{:else}
 								<button
 									class="notification__element"
-									on:click={() => MarkAsReadItem(item.id, el.id)}
+									onclick={() => MarkAsReadItem(item.id, el.id)}
 								>
 									{@html el.detail}
 								</button>
 							{/if}
 						</div>
 						<div class="notification__actions">
-							<button class="actions__btn" on:click={() => DeleteItem(item.id, el.id)}
+							<button class="actions__btn" onclick={() => DeleteItem(item.id, el.id)}
 								><Icon>{@html Trash}</Icon></button
 							>
-							<button class="actions__btn" on:click={() => MarkAsReadItem(item.id, el.id)}>
+							<button class="actions__btn" onclick={() => MarkAsReadItem(item.id, el.id)}>
 								<Icon>
 									{#if !el.read}
 										{@html Eye}

@@ -1,7 +1,8 @@
 <script>
 	import Icon from '$icons/icon.svelte';
 	import Calendar from '$icons/outline/calendar.svelte';
-	export let value;
+	/** @type {{value: any}} */
+	let { value } = $props();
 </script>
 
 {#if value}

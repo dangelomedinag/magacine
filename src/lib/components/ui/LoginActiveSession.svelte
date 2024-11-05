@@ -1,6 +1,10 @@
 <script lang="ts">
 	import type { User } from '$lib/types';
-	export let user: User;
+	interface Props {
+		user: User;
+	}
+
+	let { user }: Props = $props();
 </script>
 
 <form action="/logout" method="post" class="form">

@@ -3,10 +3,19 @@
 	import CardMovieSeeAll from '$components/card/cardMovieSeeAll.svelte';
 	import type { MoviesResponse } from '$lib/types';
 
-	export let movies: MoviesResponse;
-	export let details: boolean = false;
-	export let full: boolean | undefined = undefined;
-	export let seeAll: boolean | undefined = true;
+	interface Props {
+		movies: MoviesResponse;
+		details?: boolean;
+		full?: boolean | undefined;
+		seeAll?: boolean | undefined;
+	}
+
+	let {
+		movies,
+		details = false,
+		full = undefined,
+		seeAll = true
+	}: Props = $props();
 </script>
 
 <div class="grid">

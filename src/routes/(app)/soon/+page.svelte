@@ -1,17 +1,23 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import GridCards from '$components/gridMovies/GridCards.svelte';
 	import SectionPage from '$components/ui/SectionPage.svelte';
 	// icons
 	import Icon from '$components/icons/icon.svelte';
 	import Film from '$components/icons/solid/film.svg?raw';
 
-	export let data;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 
 	type Tab = 'week' | 'month' | 'year';
 	type ButtonMouseEvent = MouseEvent & { currentTarget: EventTarget & HTMLButtonElement };
 
 	let tabs: Tab[] = ['week', 'month', 'year'];
-	let active: Tab | string = 'week';
+	let active: Tab | string = $state('week');
 	const updateActiveTab = (e: ButtonMouseEvent) => {
 		console.log('dasdas');
 		const target = e.currentTarget;
@@ -19,8 +25,10 @@
 		active = tab ?? active;
 	};
 
-	let movies = data.movies;
-	$: if (active) movies = { ...data.movies, results: data.movies.results.reverse() };
+	let movies = $state(data.movies);
+	run(() => {
+		if (active) movies = { ...data.movies, results: data.movies.results.reverse() };
+	});
 </script>
 
 <SectionPage>
@@ -28,7 +36,7 @@
 	<h1>Next Releases</h1>
 	<div class="tabs">
 		{#each tabs as element}
-			<button data-tab={element} class:active={active === element} on:click={updateActiveTab}
+			<button data-tab={element} class:active={active === element} onclick={updateActiveTab}
 				>{element}</button
 			>
 		{/each}

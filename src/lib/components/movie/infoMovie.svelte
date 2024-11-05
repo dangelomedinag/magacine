@@ -19,7 +19,11 @@
 	import { onMount, tick } from 'svelte';
 	import type { MovieItem } from '$lib/types';
 
-	export let movie: MovieItem;
+	interface Props {
+		movie: MovieItem;
+	}
+
+	let { movie }: Props = $props();
 	const {
 		plot,
 		title,
@@ -35,8 +39,8 @@
 		country
 	} = movie;
 
-	let modal: Modal;
-	let showModal: boolean = false;
+	let modal: Modal = $state();
+	let showModal: boolean = $state(false);
 
 	async function openModal() {
 		showModal = true;
@@ -58,7 +62,7 @@
 		ok && FavMovies.toogleFav(movie);
 	}
 
-	$: isFav = $FavMovies.some((m) => m.imdbid === movie.imdbid);
+	let isFav = $derived($FavMovies.some((m) => m.imdbid === movie.imdbid));
 </script>
 
 <TitleMovie value={title} />
@@ -67,9 +71,9 @@
 <LangMovie value={language} />
 <RatingMovie value={imdbrating} {ratings} />
 
-<button on:click={openModal} class="btn-details">more details</button>
+<button onclick={openModal} class="btn-details">more details</button>
 <div style="display: flex; gap:0.5em;">
-	<button on:click={() => favoritesAction(movie)} class="btn-details" class:fav={isFav}>
+	<button onclick={() => favoritesAction(movie)} class="btn-details" class:fav={isFav}>
 		{#if isFav}
 			remove fav
 		{:else}

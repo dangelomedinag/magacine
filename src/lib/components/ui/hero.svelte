@@ -2,21 +2,31 @@
 	import { imgs } from '$lib/imgs';
 	import SectionPage from './SectionPage.svelte';
 
-	export let word = 'Movies and Series';
-	export let copy = 'in one place.';
-	export let paragraph =
-		'Everything you want to see, without limits or commercials, and more movies and series are added every week!';
-	export let images = imgs.movie;
+	interface Props {
+		word?: string;
+		copy?: string;
+		paragraph?: string;
+		images?: any;
+	}
+
+	let {
+		word = 'Movies and Series',
+		copy = 'in one place.',
+		paragraph = 'Everything you want to see, without limits or commercials, and more movies and series are added every week!',
+		images = imgs.movie
+	}: Props = $props();
 </script>
 
 <SectionPage>
-	<svelte:fragment slot="background">
-		<div class="imgs-wrapper">
-			{#each images as image}
-				<img loading="lazy" src={image} alt="hero poster series and movies" />
-			{/each}
-		</div>
-	</svelte:fragment>
+	{#snippet background()}
+	
+			<div class="imgs-wrapper">
+				{#each images as image}
+					<img loading="lazy" src={image} alt="hero poster series and movies" />
+				{/each}
+			</div>
+		
+	{/snippet}
 
 	<h1>
 		<span class="firstline">{word}<span class="comma">,</span></span>

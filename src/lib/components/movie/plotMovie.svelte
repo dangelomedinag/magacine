@@ -1,6 +1,7 @@
 <script>
-	export let value;
-	let open = false;
+	/** @type {{value: any}} */
+	let { value } = $props();
+	let open = $state(false);
 	let lengthOfCut = 151;
 
 	function getCut(str) {
@@ -35,7 +36,7 @@
 			<span>{@html value}</span>
 		</details>
 		{#if getCut(value).details}
-			<button on:click={toggleExpand}>
+			<button onclick={toggleExpand}>
 				{#if open}
 					show less
 				{:else}

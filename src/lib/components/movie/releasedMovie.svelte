@@ -1,5 +1,6 @@
 <script>
-	export let value;
+	/** @type {{value: any}} */
+	let { value } = $props();
 </script>
 
 {#if value}

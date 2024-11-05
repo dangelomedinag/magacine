@@ -3,11 +3,15 @@
 	import Hero from '$components/ui/hero.svelte';
 	import GridCards from '$components/gridMovies/GridCards.svelte';
 
-	export let data;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 
 	type Tab = 'Suspense' | 'Terror' | 'Comedy';
 	let tabs: Tab[] = ['Suspense', 'Terror', 'Comedy'];
-	let active: Tab | string = 'Suspense';
+	let active: Tab | string = $state('Suspense');
 	const updateActiveTab = (e: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => {
 		const target = e.currentTarget;
 		const tab = target?.dataset?.tab;
@@ -20,15 +24,15 @@
 </svelte:head>
 
 <div>
-	<button data-tab="Suspense" on:click={updateActiveTab} class:active={active === 'Suspense'}
+	<button data-tab="Suspense" onclick={updateActiveTab} class:active={active === 'Suspense'}
 		>Suspense</button
 	>
 	{#if data.defer}
 		{#await data.defer.movies then movies}
-			<button data-tab="Terror" on:click={updateActiveTab} class:active={active === 'Terror'}
+			<button data-tab="Terror" onclick={updateActiveTab} class:active={active === 'Terror'}
 				>Terror</button
 			>
-			<button data-tab="Comedy" on:click={updateActiveTab} class:active={active === 'Comedy'}
+			<button data-tab="Comedy" onclick={updateActiveTab} class:active={active === 'Comedy'}
 				>Comedy</button
 			>
 		{/await}

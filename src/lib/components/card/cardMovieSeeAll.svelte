@@ -1,8 +1,12 @@
 <script lang="ts">
 	import type { MoviesResponse } from '$lib/types';
 
-	export let posters: string[];
-	export let query: MoviesResponse['query'];
+	interface Props {
+		posters: string[];
+		query: MoviesResponse['query'];
+	}
+
+	let { posters, query }: Props = $props();
 </script>
 
 <div class="item">

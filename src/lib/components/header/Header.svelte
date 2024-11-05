@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { self, createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { onMount, tick } from 'svelte';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 
@@ -27,19 +30,23 @@
 	import { enhance } from '$app/forms';
 	import LoginForm from '$components/ui/LoginForm.svelte';
 
-	export let search = true,
-		bell = true,
-		profile = true;
-	let modalSearch: Modal;
-	let modalSession: Modal;
-	let modalNotification: Modal;
-	let searchInput = false;
-	let results;
-	let showModalSearch: boolean = false;
-	let showModalSession: boolean = false;
-	let showModalNotification: boolean = false;
-	let scrollY: number;
-	$: down = scrollY > 40;
+	interface Props {
+		search?: boolean;
+		bell?: boolean;
+		profile?: boolean;
+	}
+
+	let { search = true, bell = true, profile = true }: Props = $props();
+	let modalSearch: Modal = $state();
+	let modalSession: Modal = $state();
+	let modalNotification: Modal = $state();
+	let searchInput = $state(false);
+	let results = $state();
+	let showModalSearch: boolean = $state(false);
+	let showModalSession: boolean = $state(false);
+	let showModalNotification: boolean = $state(false);
+	let scrollY: number = $derived(scrollY > 40);
+	
 
 	async function openModal(modal: string) {
 		if (modal === 'search') showModalSearch = true;
@@ -128,7 +135,7 @@
 		<div class="right header_slots" class:esconder={searchInput}>
 			{#if search}
 				{#if !searchInput}
-					<button title="search" class="search-first header-item" on:click={toggleSearchInput}>
+					<button title="search" class="search-first header-item" onclick={toggleSearchInput}>
 						<Icon>
 							{@html Search}
 						</Icon>
@@ -136,7 +143,7 @@
 				{/if}
 			{/if}
 			{#if bell}
-				<button title="notification" class="header-item" on:click={() => openModal('notification')}>
+				<button title="notification" class="header-item" onclick={() => openModal('notification')}>
 					<Icon counter={$notiStore.length.toString()}>
 						{#if $notiStore.length}
 							{@html BellSolid}
@@ -149,7 +156,7 @@
 			<ThemeToggle />
 			{#if profile}
 				{#if $page.data.user}
-					<button title="session" class="header-item" on:click={() => openModal('session')}>
+					<button title="session" class="header-item" onclick={() => openModal('session')}>
 						<Icon>
 							{@html UserCircle}
 						</Icon>
@@ -158,7 +165,7 @@
 						</span>
 					</button>
 				{:else}
-					<button class="header-item sign-in" on:click={() => openModal('session')}>sign in</button>
+					<button class="header-item sign-in" onclick={() => openModal('session')}>sign in</button>
 				{/if}
 			{/if}
 		</div>
@@ -166,29 +173,35 @@
 </div>
 
 {#if searchInput}
-	<div class="foreground" on:click|self={() => (searchInput = false)} on:keydown />
+	<div class="foreground" onclick={self(() => (searchInput = false))} onkeydown={bubble('keydown')}></div>
 {/if}
 
 {#if showModalSession}
 	{#if $page.data.user}
 		<Modal bind:this={modalSession} btnClose={false}>
-			<svelte:fragment slot="header">
-				Session <Icon y="10%">{@html UserCircle}</Icon>
-			</svelte:fragment>
+			{#snippet header()}
+					
+					Session <Icon y="10%">{@html UserCircle}</Icon>
+				
+					{/snippet}
 			<SessionModal />
 
-			<svelte:fragment slot="action">
-				<form method="post" action="/logout" style="display: contents;">
-					<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
-				</form>
-				<button on:click={modalSession.close} class="cta">close</button>
-			</svelte:fragment>
+			{#snippet action()}
+					
+					<form method="post" action="/logout" style="display: contents;">
+						<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
+					</form>
+					<button onclick={modalSession.close} class="cta">close</button>
+				
+					{/snippet}
 		</Modal>
 	{:else}
 		<Modal bind:this={modalSession} btnClose={false}>
-			<svelte:fragment slot="header">
-				login <Icon y="10%">{@html UserCircle}</Icon>
-			</svelte:fragment>
+			{#snippet header()}
+					
+					login <Icon y="10%">{@html UserCircle}</Icon>
+				
+					{/snippet}
 			<LoginForm
 				on:result={async ({ detail }) => {
 					if (detail.result.type === 'redirect') {
@@ -226,39 +239,45 @@
 
 {#if showModalSearch}
 	<Modal bind:this={modalSearch}>
-		<svelte:fragment slot="header">
-			{#await results}
-				<Icon y="10%">{@html Search}</Icon> Searching...
-			{:then _}
-				<Icon y="10%">{@html Search}</Icon> Search
-			{:catch _}
-				<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
-			{/await}
-		</svelte:fragment>
+		{#snippet header()}
+			
+				{#await results}
+					<Icon y="10%">{@html Search}</Icon> Searching...
+				{:then _}
+					<Icon y="10%">{@html Search}</Icon> Search
+				{:catch _}
+					<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
+				{/await}
+			
+			{/snippet}
 		<SearchResults {results} />
 
-		<svelte:fragment slot="action">
-			{#await results then response}
-				<a
-					use:focusIn
-					data-sveltekit-reload
-					href="/movies?s={encodeURI(response.search)}"
-					class="cta"
-					on:click={() => (searchInput = false)}>show all</a
-				>
-			{:catch}
-				<button use:focusIn on:click={modalSearch.close}>close</button>
-			{/await}
-		</svelte:fragment>
+		{#snippet action()}
+			
+				{#await results then response}
+					<a
+						use:focusIn
+						data-sveltekit-reload
+						href="/movies?s={encodeURI(response.search)}"
+						class="cta"
+						onclick={() => (searchInput = false)}>show all</a
+					>
+				{:catch}
+					<button use:focusIn onclick={modalSearch.close}>close</button>
+				{/await}
+			
+			{/snippet}
 	</Modal>
 {/if}
 
 {#if showModalNotification}
 	<Modal bind:this={modalNotification}>
-		<svelte:fragment slot="header">
-			<Icon y="10%">{@html BellSolid}</Icon>
-			{$notiStore.length ?? ''} Notifications
-		</svelte:fragment>
+		{#snippet header()}
+			
+				<Icon y="10%">{@html BellSolid}</Icon>
+				{$notiStore.length ?? ''} Notifications
+			
+			{/snippet}
 		<Notification on:clickItem={() => modalNotification.close()} />
 	</Modal>
 {/if}

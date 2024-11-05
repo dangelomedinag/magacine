@@ -5,9 +5,13 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { tick } from 'svelte';
 
-	export let form;
+	interface Props {
+		form: any;
+	}
 
-	let loading = false;
+	let { form }: Props = $props();
+
+	let loading = $state(false);
 
 	const handlerSubmit = (({ form }) => {
 		loading = true;

@@ -1,7 +1,12 @@
+<script>
+	/** @type {{background?: import('svelte').Snippet, children?: import('svelte').Snippet}} */
+	let { background, children } = $props();
+</script>
+
 <div class="sec-header">
-	<slot name="background" />
+	{@render background?.()}
 	<div class="content">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>
 

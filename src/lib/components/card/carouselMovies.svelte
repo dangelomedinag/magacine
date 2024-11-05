@@ -20,11 +20,23 @@
 	type CarouselMoviesProp = undefined | MoviesResponse | Error;
 
 	// props
-	export let movies: CarouselMoviesProp = undefined;
-	export let full = false;
-	export let title: string = '';
-	export let details = true;
-	export let position = 'relative';
+	interface Props {
+		movies?: CarouselMoviesProp;
+		full?: boolean;
+		title?: string;
+		details?: boolean;
+		position?: string;
+		error?: import('svelte').Snippet<[any]>;
+	}
+
+	let {
+		movies = undefined,
+		full = false,
+		title = '',
+		details = true,
+		position = 'relative',
+		error
+	}: Props = $props();
 </script>
 
 <div class="carousel-wrapper" style:position>
@@ -34,7 +46,7 @@
 
 	{#if movies}
 		{#if movies instanceof Error}
-			<slot name="error" message={movies.message} />
+			{@render error?.({ message: movies.message, })}
 		{:else}
 			<header class="carousel-header content">
 				<h3 class="header-title">{title}</h3>

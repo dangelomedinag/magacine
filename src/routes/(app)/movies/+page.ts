@@ -55,7 +55,7 @@ export async function load({ url, fetch, setHeaders }) {
 		// @ts-ignore
 		const res = await err.json();
 		// @ts-ignore
-		throw error(err.status, res.message);
+		error(err.status, res.message);
 	}
 	// }
 }

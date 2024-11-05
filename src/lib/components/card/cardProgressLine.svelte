@@ -1,9 +1,10 @@
 <script>
-	export let value = 0;
+	/** @type {{value?: number}} */
+	let { value = 0 } = $props();
 </script>
 
 <div class="progress">
-	<div class="value" style="width: {value}%;" />
+	<div class="value" style="width: {value}%;"></div>
 </div>
 
 <style>

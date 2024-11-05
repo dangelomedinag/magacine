@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	import { writable } from 'svelte/store';
 	import { onMount, onDestroy } from 'svelte';
 	export const ActiveTab = writable<string>('');
@@ -6,7 +6,12 @@
 </script>
 
 <script lang="ts">
-	export let name: string;
+	interface Props {
+		name: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { name, children }: Props = $props();
 
 	onMount(() => {
 		Tabs.update((v) => (v.includes(name) ? v : [...v, name]));
@@ -17,9 +22,9 @@
 		console.log('destroyed', { name });
 	});
 
-	$: active = $ActiveTab === name;
+	let active = $derived($ActiveTab === name);
 </script>
 
 {#if active}
-	<slot />
+	{@render children?.()}
 {/if}

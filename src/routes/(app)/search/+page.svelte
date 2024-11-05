@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { afterNavigate, goto, invalidate, invalidateAll } from '$app/navigation';
 	import { onMount, tick } from 'svelte';
 	import { fly } from 'svelte/transition';
@@ -17,24 +19,28 @@
 	import Search from '$icons/solid/search.svg?raw';
 	import type { MoviesResponse } from '$lib/types';
 
-	export let data;
+	interface Props {
+		data: any;
+	}
 
-	let value = '';
+	let { data }: Props = $props();
+
+	let value = $state('');
 	let currentValue = '';
-	let input: HTMLElement;
-	let showSuggest = false;
+	let input: HTMLElement = $state();
+	let showSuggest = $state(false);
 	let autocomplete: MoviesResponse;
-	let lastValue = '';
-	let movies: MoviesResponse | undefined = undefined;
-	let lastSearch: MoviesResponse | [] = [];
+	let lastValue = $state('');
+	let movies: MoviesResponse | undefined = $state(undefined);
+	let lastSearch: MoviesResponse | [] = $state([]);
 	let timer: NodeJS.Timeout | undefined = undefined;
 	let timerErrors: NodeJS.Timeout | undefined = undefined;
-	let errors: { level: { [index: string]: boolean }; message: string } | undefined = undefined;
+	let errors: { level: { [index: string]: boolean }; message: string } | undefined = $state(undefined);
 
 	let loading = false;
 
 	// filters
-	let selected = ['movie', 'series'];
+	let selected = $state(['movie', 'series']);
 	let options = [
 		{ value: 'movie', label: 'movies' },
 		{ value: 'series', label: 'series' }
@@ -225,7 +231,7 @@
 
 <div class="content search-wrapper">
 	<div class="search-container">
-		<form id="search-form" on:reset={onReset} on:submit|preventDefault={submit}>
+		<form id="search-form" onreset={onReset} onsubmit={preventDefault(submit)}>
 			<div class="form-section">
 				<label for="search-input" class="form-item search-label"><Icon>{@html Search}</Icon></label>
 			</div>
@@ -238,8 +244,8 @@
 				placeholder="ej. spider-man"
 				autocomplete="off"
 				required
-				on:focus={onFocus}
-				on:input={onInput}
+				onfocus={onFocus}
+				oninput={onInput}
 				bind:this={input}
 				bind:value
 			/>
@@ -253,7 +259,7 @@
 		{#if showSuggest}
 			<div class="wrapper-suggest scroolbar-prettie">
 				<!-- {#if filterAutocomplete().length > 0} -->
-				<button type="button" class="suggest-item btn-close" on:click={closeSuggestions}>
+				<button type="button" class="suggest-item btn-close" onclick={closeSuggestions}>
 					<Icon y="10%">{@html X}</Icon>
 				</button>
 				<!-- {/if} -->
@@ -261,19 +267,19 @@
 					{@const word = item.title.trim().toLowerCase().slice(0, value.length)}
 					{@const rest = item.title.trim().toLowerCase().slice(value.length)}
 					<button
-						on:mouseenter={() => {
+						onmouseenter={() => {
 							input.value += rest;
 						}}
-						on:focusin={() => {
+						onfocusin={() => {
 							input.value = value;
 							input.value += rest;
 						}}
-						on:mouseleave={() => {
+						onmouseleave={() => {
 							input.value = value;
 						}}
-						in:fly={{ y: 15, delay: 20 * i, duration: 150, easing: quintInOut }}
+						in:fly|global={{ y: 15, delay: 20 * i, duration: 150, easing: quintInOut }}
 						class="suggest-item"
-						on:click={() => setValue(item)}
+						onclick={() => setValue(item)}
 					>
 						...{rest}</button
 					>
@@ -290,7 +296,7 @@
 				>
 					<input
 						tabindex="0"
-						on:change={() => {
+						onchange={() => {
 							lastValue = '';
 							lastSearch = undefined;
 						}}

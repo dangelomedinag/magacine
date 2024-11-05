@@ -1,4 +1,7 @@
 <script>
+	import { createBubbler, preventDefault } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
@@ -10,7 +13,7 @@
 	import Trash from '$icons/solid/trash.svg?raw';
 
 	const dispatch = createEventDispatcher();
-	let value = '';
+	let value = $state('');
 	function handleEsc(e) {
 		if (e.key === 'Escape') {
 			e.preventDefault();
@@ -46,7 +49,7 @@
 	}
 </script>
 
-<form on:submit|preventDefault on:reset={reset} in:scale={{ easing: quintOut }}>
+<form onsubmit={preventDefault(bubble('submit'))} onreset={reset} in:scale|global={{ easing: quintOut }}>
 	{#if value?.length > 0}
 		<button class="btn" type="reset">
 			<Icon>
@@ -54,7 +57,7 @@
 			</Icon>
 		</button>
 	{:else}
-		<button class="btn" type="reset" on:click={() => dispatch('close')}>
+		<button class="btn" type="reset" onclick={() => dispatch('close')}>
 			<Icon>
 				{@html X}
 			</Icon>

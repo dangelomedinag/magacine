@@ -6,7 +6,7 @@ export async function load({ fetch }) {
 
 	if (!req.ok) {
 		const res = await req.json();
-		throw error(500, res.message);
+		error(500, res.message);
 	}
 
 	const res: Promise<MoviesResponse> = req.json();

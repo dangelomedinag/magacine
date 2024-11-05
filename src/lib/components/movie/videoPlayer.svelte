@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { quintInOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 	/* script here */
@@ -7,8 +10,8 @@
 <div class="video">
 	<div class="video__container">
 		<video
-			on:ended
-			in:scale={{ start: 0.9 }}
+			onended={bubble('ended')}
+			in:scale|global={{ start: 0.9 }}
 			class="video__player"
 			src="/video/countdown.mp4"
 			controls

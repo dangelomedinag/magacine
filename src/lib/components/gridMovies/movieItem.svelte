@@ -1,10 +1,11 @@
 <script>
 	import { fly, scale } from 'svelte/transition';
 
-	export let movie;
+	/** @type {{movie: any}} */
+	let { movie } = $props();
 </script>
 
-<a in:fly={{ duration: 300, y: '5%' }} href="movies/{movie.imdbid}">
+<a in:fly|global={{ duration: 300, y: '5%' }} href="movies/{movie.imdbid}">
 	<img loading="lazy" src={movie.poster} alt="poster of movie - {movie.title}" />
 </a>
 

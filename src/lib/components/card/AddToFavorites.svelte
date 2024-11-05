@@ -2,8 +2,12 @@
 	import { FavMovies } from '$lib/stores/favoritesStore';
 	import type { MovieResult } from '$lib/types';
 
-	export let movie: MovieResult;
-	export let isFav: boolean;
+	interface Props {
+		movie: MovieResult;
+		isFav: boolean;
+	}
+
+	let { movie, isFav }: Props = $props();
 </script>
 
 <!-- {#if !isFav}

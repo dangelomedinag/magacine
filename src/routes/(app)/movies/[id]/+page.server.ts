@@ -45,6 +45,6 @@ export async function load({ fetch, params, setHeaders, locals }) {
 
 		return response;
 	} catch (err) {
-		throw error(404, `${params.id} - ${err.message}`);
+		error(404, `${params.id} - ${err.message}`);
 	}
 }

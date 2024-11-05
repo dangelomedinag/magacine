@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { setCookieColorTheme, timeoutPromise, toggleColorTheme } from '$helpers';
 	import { themeStore } from '$lib/stores/theme-store';
-	let loading = false;
+	let loading = $state(false);
 	let timeoutID: NodeJS.Timeout | undefined = undefined;
 	// function handleChange() {
 	// 	if (timeoutID) clearTimeout(timeoutID);
@@ -58,10 +58,10 @@
 </script>
 
 <!-- {#if $themeStore} -->
-<button use:getTheme class="toggle-switch" disabled={loading} on:click={handleChange}>
+<button use:getTheme class="toggle-switch" disabled={loading} onclick={handleChange}>
 	<div class="label">
-		<div class="input" />
-		<span class="slider" />
+		<div class="input"></div>
+		<span class="slider"></span>
 	</div>
 </button>
 

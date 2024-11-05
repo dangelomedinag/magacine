@@ -1,12 +1,26 @@
 <script lang="ts">
-	export let counter: string | undefined = undefined;
-	export let x: string | undefined = undefined;
-	export let y: string | undefined = undefined;
-	export let deg: string | undefined = undefined;
-	export let style: string | undefined = undefined;
-	export let shadow = false;
-	let Class = '';
-	export { Class as class };
+	interface Props {
+		counter?: string | undefined;
+		x?: string | undefined;
+		y?: string | undefined;
+		deg?: string | undefined;
+		style?: string | undefined;
+		shadow?: boolean;
+		class?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		counter = undefined,
+		x = undefined,
+		y = undefined,
+		deg = undefined,
+		style = undefined,
+		shadow = false,
+		class: Class = '',
+		children
+	}: Props = $props();
+	
 </script>
 
 <div
@@ -21,7 +35,7 @@
 		? `rotate(${deg})`
 		: ''}
 >
-	<slot />
+	{@render children?.()}
 	{#if counter}
 		<div class="counter">{counter}</div>
 	{/if}

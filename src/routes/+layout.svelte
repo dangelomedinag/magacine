@@ -8,6 +8,8 @@
 	import { themeStore } from '$lib/stores/theme-store';
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import '../styles/_global.scss';
+	/** @type {{children?: import('svelte').Snippet}} */
+	let { children } = $props();
 
 	// function getColorSchemePrefers(event) {
 	// 	if (event) return event.matches ? 'light' : 'dark';
@@ -65,7 +67,7 @@
 	<MediaQueries bottom="0" />
 {/if}
 
-<slot />
+{@render children?.()}
 
 <!-- <style global lang="scss">
 	@use 'src/styles/global';

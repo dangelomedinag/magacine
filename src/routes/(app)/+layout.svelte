@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { self, createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import Footer from '$components/footer.svelte';
 	import Navbar from '$components/navbar/Navbar.svelte';
 
@@ -11,8 +14,13 @@
 	import BackgroundFlares from '$components/BackgroundFlares.svelte';
 	import Header from '$components/header/Header.svelte';
 	import { page } from '$app/stores';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	let modal: Modal;
+	let { children }: Props = $props();
+
+	let modal: Modal = $state();
 
 	onMount(() => {
 		if (!$pricePlans) return;
@@ -45,7 +53,9 @@
 			pricePlans.saveLocalStorage();
 		}}
 	>
-		<svelte:fragment slot="header">¡Wellcome!</svelte:fragment>
+		{#snippet header()}
+				¡Wellcome!
+			{/snippet}
 		<PriceTable />
 	</Modal>
 {/if}
@@ -74,11 +84,11 @@
 	<header>
 		<Header search={$page.data.layout?.search ?? true} />
 	</header>
-	<nav on:click|self={closeNavbar} on:keydown>
+	<nav onclick={self(closeNavbar)} onkeydown={bubble('keydown')}>
 		<Navbar />
 	</nav>
 	<main>
-		<slot />
+		{@render children?.()}
 	</main>
 	<aside>aside</aside>
 	<footer>

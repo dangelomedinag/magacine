@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 export const actions = {
 	default: ({ cookies, locals }) => {
 		if (!locals.user) {
-			throw redirect(301, '/login');
+			redirect(301, '/login');
 		}
 
 		const opts = {
@@ -15,6 +15,6 @@ export const actions = {
 		cookies.delete('refresh_token', opts);
 		cookies.delete('mc_theme', opts);
 
-		throw redirect(303, '/login');
+		redirect(303, '/login');
 	}
 };

@@ -1,16 +1,19 @@
 <script>
 	import { onMount } from 'svelte';
-	export let icon;
-	export let name = '';
-	export let type = 'solid';
-	export let counter = false;
-	export let x = undefined;
-	export let y = undefined;
-	export let deg = undefined;
-	export let style = undefined;
-	export let shadow = false;
-	let Class = '';
-	export { Class as class };
+	/** @type {{icon: any, name?: string, type?: string, counter?: boolean, x?: any, y?: any, deg?: any, style?: any, shadow?: boolean, class?: string}} */
+	let {
+		icon = $bindable(),
+		name = '',
+		type = 'solid',
+		counter = false,
+		x = undefined,
+		y = undefined,
+		deg = undefined,
+		style = undefined,
+		shadow = false,
+		class: Class = ''
+	} = $props();
+	
 	onMount(async () => {
 		icon = await import(`./${type}/${name}.svg?raw`);
 	});

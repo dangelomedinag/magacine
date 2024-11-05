@@ -2,9 +2,13 @@
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import Hero from '$components/ui/hero.svelte';
 
-	export let data;
+	interface Props {
+		data: any;
+	}
 
-	let act = 'movies';
+	let { data }: Props = $props();
+
+	let act = $state('movies');
 
 	const setTab = (tab: string) => {
 		act = tab;
@@ -17,8 +21,8 @@
 
 <Hero />
 
-<button on:click={() => setTab('movies')}>movies</button>
-<button on:click={() => setTab('series')}>series</button>
+<button onclick={() => setTab('movies')}>movies</button>
+<button onclick={() => setTab('series')}>series</button>
 {#if data.stream}
 	<div id="index-movies">
 		{#await data.stream.movies then value}

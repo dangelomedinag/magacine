@@ -9,13 +9,17 @@
 	import { onMount } from 'svelte';
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 
-	export let data;
-	let arr = data.movies;
-	let arrSliced = arr;
-	let showPaginator = false;
-	let url: URL;
-	let active = 0;
-	let preview = true;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
+	let arr = $state(data.movies);
+	let arrSliced = $state(arr);
+	let showPaginator = $state(false);
+	let url: URL = $state();
+	let active = $state(0);
+	let preview = $state(true);
 	// $: console.log(active);
 
 	onMount(async () => {

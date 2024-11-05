@@ -25,7 +25,7 @@ export async function handle({ event, resolve }) {
 
 	if (event.url.pathname.startsWith('/profile') || event.url.pathname.startsWith('/movies/')) {
 		if (!event.locals.user) {
-			throw redirect(303, '/login');
+			redirect(303, '/login');
 		}
 	}
 
