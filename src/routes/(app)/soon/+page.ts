@@ -9,7 +9,7 @@ export async function load({ fetch }) {
 		error(500, res.message);
 	}
 
-	const res: Promise<MoviesResponse> = req.json();
+	const res: MoviesResponse = await req.json();
 
 	return {
 		movies: res
