@@ -2,6 +2,7 @@
 	import CarouselMovies from '$components/card/carouselMovies.svelte';
 	import Hero from '$components/ui/hero.svelte';
 	import GridCards from '$components/gridMovies/GridCards.svelte';
+	import Tabs from '$components/ui/Tabs.svelte';
 
 	interface Props {
 		data: any;
@@ -9,43 +10,22 @@
 
 	let { data }: Props = $props();
 
-	type Tab = 'Suspense' | 'Terror' | 'Comedy';
-	let tabs: Tab[] = ['Suspense', 'Terror', 'Comedy'];
-	let active: Tab | string = $state('Suspense');
-	const updateActiveTab = (e: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => {
-		const target = e.currentTarget;
-		const tab = target?.dataset?.tab;
-		active = tab ?? active;
-	};
+	const tabs = ['Suspense', 'Terror', 'Comedy'] as const;
+	let active: (typeof tabs)[number] = $state('Suspense');
 </script>
 
 <svelte:head>
 	<title>Magacine - Discovery</title>
 </svelte:head>
 
-<div>
-	<button data-tab="Suspense" onclick={updateActiveTab} class:active={active === 'Suspense'}
-		>Suspense</button
-	>
-	{#if data.defer}
-		{#await data.defer.movies then movies}
-			<button data-tab="Terror" onclick={updateActiveTab} class:active={active === 'Terror'}
-				>Terror</button
-			>
-			<button data-tab="Comedy" onclick={updateActiveTab} class:active={active === 'Comedy'}
-				>Comedy</button
-			>
-		{/await}
-	{/if}
-</div>
-{#key active}
-	<Hero
-		word={active}
-		images={data.images}
-		copy="Discover everything we have for you."
-		paragraph=""
-	/>
-{/key}
+<Hero
+	word={active}
+	images={data.images}
+	copy="Discover everything we have for you."
+	paragraph="only available on magacine"
+/>
+
+<Tabs {tabs} bind:active></Tabs>
 
 {#if active === 'Suspense'}
 	<CarouselMovies movies={data.movies[0]} full title={active} />
@@ -67,8 +47,7 @@
 				movies={movies[1]}
 				title="{active} {movies[1]?.totalResults ?? 'loading'} results"
 			/>
-		{/if}
-		{#if active === 'Comedy'}
+		{:else if active === 'Comedy'}
 			<CarouselMovies
 				movies={movies[2]}
 				full

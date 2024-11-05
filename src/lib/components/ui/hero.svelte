@@ -19,13 +19,11 @@
 
 <SectionPage>
 	{#snippet background()}
-	
-			<div class="imgs-wrapper">
-				{#each images as image}
-					<img loading="lazy" src={image} alt="hero poster series and movies" />
-				{/each}
-			</div>
-		
+		<div class="imgs-wrapper">
+			{#each images as image}
+				<img loading="lazy" src={image} alt="hero poster series and movies" />
+			{/each}
+		</div>
 	{/snippet}
 
 	<h1>

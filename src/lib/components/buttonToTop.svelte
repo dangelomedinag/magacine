@@ -1,17 +1,17 @@
-<script>
-	import { createBubbler } from 'svelte/legacy';
-
-	const bubble = createBubbler();
+<script lang="ts">
 	// icons
 	import Icon from '$icons/icon.svelte';
 	import MenuAlt2 from '$icons/outline/menu-alt-2.svelte';
 	import X from '$icons/outline/x.svelte';
+	import type { HTMLButtonAttributes } from 'svelte/elements';
 
-	/** @type {{active?: boolean}} */
-	let { active = false } = $props();
+	interface Props {
+		active?: boolean;
+	}
+	let { active = false, ...rest }: Props & HTMLButtonAttributes = $props();
 </script>
 
-<button title="close navbar" onclick={bubble('click')}>
+<button title="close navbar" {...rest}>
 	<Icon>
 		<div class="menu">
 			<MenuAlt2 />

@@ -5,15 +5,11 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { tick } from 'svelte';
 
-	interface Props {
-		form: any;
-	}
-
-	let { form }: Props = $props();
+	let { form } = $props();
 
 	let loading = $state(false);
 
-	const handlerSubmit = (({ form }) => {
+	const handlerSubmit = (({ formElement }) => {
 		loading = true;
 		return async ({ update, result }) => {
 			await update();
@@ -23,7 +19,7 @@
 			if (result.type === 'failure') {
 				await tick();
 
-				form.username.focus();
+				formElement.username.focus();
 			}
 		};
 	}) satisfies SubmitFunction;

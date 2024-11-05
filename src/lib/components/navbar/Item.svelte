@@ -40,7 +40,7 @@
 	let obj = $derived($notiStore.filter((e) => e.label === href));
 </script>
 
-<svelte:element
+<!-- <svelte:element
 	this={href ? 'a' : 'button'}
 	type={href ? undefined : type ? type : undefined}
 	class="link"
@@ -50,6 +50,20 @@
 	tabindex="0"
 	{title}
 >
+	<div class="icon">
+		{@render icon?.()}
+	</div>
+	<div class="label">
+		{@render children?.()}
+	</div>
+	{#if obj.length > 0}
+		<div class="notification">{obj[0].items.length ? obj[0].items.length : ''}</div>
+	{/if}
+</svelte:element> -->
+
+<!-- sssssssssssssssssss -->
+
+{#snippet itemElement()}
 	<!-- <div class="wrapper"> -->
 	<div class="icon">
 		{@render icon?.()}
@@ -61,7 +75,17 @@
 		<div class="notification">{obj[0].items.length ? obj[0].items.length : ''}</div>
 	{/if}
 	<!-- </div> -->
-</svelte:element>
+{/snippet}
+
+{#if href}
+	<a class="link" class:active {href} onclick={handleClick} tabindex="0" {title}>
+		{@render itemElement()}
+	</a>
+{:else}
+	<button type="button" class="link" class:active onclick={handleClick} tabindex="0" {title}>
+		{@render itemElement()}
+	</button>
+{/if}
 
 <style>
 	.link {
@@ -157,6 +181,7 @@
 			position: absolute;
 			right: -10px;
 			top: 50%;
+			/* z-index: 999999999999999; */
 			/* transform: translateY(-50%); */
 			display: block;
 			white-space: nowrap;

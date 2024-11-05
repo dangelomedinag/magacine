@@ -45,8 +45,8 @@
 	let showModalSearch: boolean = $state(false);
 	let showModalSession: boolean = $state(false);
 	let showModalNotification: boolean = $state(false);
-	let scrollY: number = $derived(scrollY > 40);
-	
+	let scrollY: number = $state();
+	let down: number = $derived(scrollY > 40);
 
 	async function openModal(modal: string) {
 		if (modal === 'search') showModalSearch = true;
@@ -173,35 +173,34 @@
 </div>
 
 {#if searchInput}
-	<div class="foreground" onclick={self(() => (searchInput = false))} onkeydown={bubble('keydown')}></div>
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="foreground"
+		onclick={self(() => (searchInput = false))}
+		onkeydown={bubble('keydown')}
+	></div>
 {/if}
 
 {#if showModalSession}
 	{#if $page.data.user}
 		<Modal bind:this={modalSession} btnClose={false}>
 			{#snippet header()}
-					
-					Session <Icon y="10%">{@html UserCircle}</Icon>
-				
-					{/snippet}
+				Session <Icon y="10%">{@html UserCircle}</Icon>
+			{/snippet}
 			<SessionModal />
 
 			{#snippet action()}
-					
-					<form method="post" action="/logout" style="display: contents;">
-						<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
-					</form>
-					<button onclick={modalSession.close} class="cta">close</button>
-				
-					{/snippet}
+				<form method="post" action="/logout" style="display: contents;">
+					<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
+				</form>
+				<button onclick={modalSession.close} class="cta">close</button>
+			{/snippet}
 		</Modal>
 	{:else}
 		<Modal bind:this={modalSession} btnClose={false}>
 			{#snippet header()}
-					
-					login <Icon y="10%">{@html UserCircle}</Icon>
-				
-					{/snippet}
+				login <Icon y="10%">{@html UserCircle}</Icon>
+			{/snippet}
 			<LoginForm
 				on:result={async ({ detail }) => {
 					if (detail.result.type === 'redirect') {
@@ -240,44 +239,38 @@
 {#if showModalSearch}
 	<Modal bind:this={modalSearch}>
 		{#snippet header()}
-			
-				{#await results}
-					<Icon y="10%">{@html Search}</Icon> Searching...
-				{:then _}
-					<Icon y="10%">{@html Search}</Icon> Search
-				{:catch _}
-					<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
-				{/await}
-			
-			{/snippet}
+			{#await results}
+				<Icon y="10%">{@html Search}</Icon> Searching...
+			{:then _}
+				<Icon y="10%">{@html Search}</Icon> Search
+			{:catch _}
+				<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
+			{/await}
+		{/snippet}
 		<SearchResults {results} />
 
 		{#snippet action()}
-			
-				{#await results then response}
-					<a
-						use:focusIn
-						data-sveltekit-reload
-						href="/movies?s={encodeURI(response.search)}"
-						class="cta"
-						onclick={() => (searchInput = false)}>show all</a
-					>
-				{:catch}
-					<button use:focusIn onclick={modalSearch.close}>close</button>
-				{/await}
-			
-			{/snippet}
+			{#await results then response}
+				<a
+					use:focusIn
+					data-sveltekit-reload
+					href="/movies?s={encodeURI(response.search)}"
+					class="cta"
+					onclick={() => (searchInput = false)}>show all</a
+				>
+			{:catch}
+				<button use:focusIn onclick={modalSearch.close}>close</button>
+			{/await}
+		{/snippet}
 	</Modal>
 {/if}
 
 {#if showModalNotification}
 	<Modal bind:this={modalNotification}>
 		{#snippet header()}
-			
-				<Icon y="10%">{@html BellSolid}</Icon>
-				{$notiStore.length ?? ''} Notifications
-			
-			{/snippet}
+			<Icon y="10%">{@html BellSolid}</Icon>
+			{$notiStore.length ?? ''} Notifications
+		{/snippet}
 		<Notification on:clickItem={() => modalNotification.close()} />
 	</Modal>
 {/if}
@@ -319,7 +312,9 @@
 		/* background-color: var(--bg-navbar); */
 		/* background-color: var(--c-main); */
 		box-shadow: var(--shadow-short);
-		transition: transform 0.3s ease-in-out, var(--transition-theme);
+		transition:
+			transform 0.3s ease-in-out,
+			var(--transition-theme);
 	}
 	.header.down {
 		border-bottom: 1px solid var(--c-divider);

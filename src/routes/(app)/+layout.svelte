@@ -54,8 +54,8 @@
 		}}
 	>
 		{#snippet header()}
-				¡Wellcome!
-			{/snippet}
+			¡Wellcome!
+		{/snippet}
 		<PriceTable />
 	</Modal>
 {/if}
@@ -84,7 +84,7 @@
 	<header>
 		<Header search={$page.data.layout?.search ?? true} />
 	</header>
-	<nav onclick={self(closeNavbar)} onkeydown={bubble('keydown')}>
+	<nav>
 		<Navbar />
 	</nav>
 	<main>
@@ -94,7 +94,7 @@
 	<footer>
 		<Footer />
 	</footer>
-	<ButtonToTop on:click={toggleNavbar} />
+	<ButtonToTop onclick={toggleNavbar} />
 </div>
 
 <style>
@@ -155,7 +155,7 @@
 			position: initial;
 			display: block;
 			pointer-events: initial;
-			z-index: 0;
+			z-index: 1;
 			/* border-right: 1px solid transparent;
 			backdrop-filter: none;
 			visibility: visible; */

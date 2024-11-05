@@ -105,8 +105,8 @@
 	</g>
 </svg>
 
-<style lang="scss">
-	@mixin dark-theme {
+<style>
+	@media (prefers-color-scheme: dark) {
 		#maga {
 			fill: white;
 		}
@@ -119,9 +119,24 @@
 		#cine {
 			fill: var(--c-front);
 		}
+
+		:global(:root[data-root-theme='light']) {
+			#maga {
+				fill: var(--c-text-base);
+			}
+			#iso .stroke {
+				fill: var(--c-front);
+			}
+			#iso .fill {
+				fill: transparent;
+			}
+			#cine {
+				fill: var(--c-front);
+			}
+		}
 	}
 
-	@mixin light-theme {
+	@media (prefers-color-scheme: light) {
 		#maga {
 			fill: var(--c-text-base);
 		}
@@ -134,21 +149,20 @@
 		#cine {
 			fill: var(--c-front);
 		}
-	}
-
-	@media (prefers-color-scheme: dark) {
-		@include dark-theme;
-
-		:global(:root[data-root-theme='light']) {
-			@include light-theme;
-		}
-	}
-
-	@media (prefers-color-scheme: light) {
-		@include light-theme;
 
 		:global(:root[data-root-theme='dark']) {
-			@include light-theme;
+			#maga {
+				fill: var(--c-text-base);
+			}
+			#iso .stroke {
+				fill: var(--c-front);
+			}
+			#iso .fill {
+				fill: transparent;
+			}
+			#cine {
+				fill: var(--c-front);
+			}
 		}
 	}
 

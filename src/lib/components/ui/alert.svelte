@@ -23,13 +23,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let {
-		success = false,
-		warn = false,
-		danger = false,
-		close = false,
-		children
-	}: Props = $props();
+	let { success = false, warn = false, danger = false, close = false, children }: Props = $props();
 
 	let active = false;
 
@@ -91,7 +85,7 @@
 	{/if}
 </div>
 
-<style lang="scss">
+<style>
 	.alert {
 		--alert-text: var(--c-text-base);
 		--alert-bg: transparent;
@@ -118,7 +112,7 @@
 		--alert-bg: #edf7ed;
 	}
 
-	@mixin dark-theme {
+	@media (prefers-color-scheme: dark) {
 		.alert--success {
 			--alert-icon: #66bb6a;
 			--alert-text: #cce8cd;
@@ -134,9 +128,22 @@
 			--alert-text: #f4c7c7;
 			--alert-bg: #160b0b;
 		}
+
+		:global(:root[data-root-theme='light']) {
+			.alert--warn {
+				--alert-icon: #ed6c02;
+				--alert-text: #663c00;
+				--alert-bg: #fff4e5;
+			}
+			.alert--danger {
+				--alert-icon: #d32f2f;
+				--alert-text: #5f2120;
+				--alert-bg: #fdeded;
+			}
+		}
 	}
 
-	@mixin light-theme {
+	@media (prefers-color-scheme: light) {
 		.alert--warn {
 			--alert-icon: #ed6c02;
 			--alert-text: #663c00;
@@ -147,21 +154,18 @@
 			--alert-text: #5f2120;
 			--alert-bg: #fdeded;
 		}
-	}
-
-	@media (prefers-color-scheme: dark) {
-		@include dark-theme;
-
-		:global(:root[data-root-theme='light']) {
-			@include light-theme;
-		}
-	}
-
-	@media (prefers-color-scheme: light) {
-		@include light-theme;
 
 		:global(:root[data-root-theme='dark']) {
-			@include light-theme;
+			.alert--warn {
+				--alert-icon: #ed6c02;
+				--alert-text: #663c00;
+				--alert-bg: #fff4e5;
+			}
+			.alert--danger {
+				--alert-icon: #d32f2f;
+				--alert-text: #5f2120;
+				--alert-bg: #fdeded;
+			}
 		}
 	}
 
@@ -181,7 +185,7 @@
 	button {
 		--icon-size: 1em;
 
-		// width: 100%;
+		/* // width: 100%; */
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;

@@ -47,10 +47,8 @@
 	<div>
 		<Item href="/">
 			{#snippet icon()}
-					
-					<Icon>{@html Home}</Icon>
-				
-					{/snippet}
+				<Icon>{@html Home}</Icon>
+			{/snippet}
 			Home</Item
 		>
 
@@ -61,19 +59,15 @@
 			}}
 		>
 			{#snippet icon()}
-					
-					<Icon>{@html ViewGridAdd}</Icon>
-				
-					{/snippet}
+				<Icon>{@html ViewGridAdd}</Icon>
+			{/snippet}
 			Discovery</Item
 		>
 
 		<Item href="/soon">
 			{#snippet icon()}
-					
-					<Icon>{@html InboxIn}</Icon>
-				
-					{/snippet}
+				<Icon>{@html InboxIn}</Icon>
+			{/snippet}
 			Comming soon</Item
 		>
 
@@ -84,10 +78,8 @@
 			}}
 		>
 			{#snippet icon()}
-					
-					<Icon>{@html UserGroup}</Icon>
-				
-					{/snippet}
+				<Icon>{@html UserGroup}</Icon>
+			{/snippet}
 			Community
 		</Item>
 
@@ -110,10 +102,8 @@
 		{#if $page.data.user}
 			<Item href="/favorites">
 				{#snippet icon()}
-							
-						<Icon>{@html Star}</Icon>
-					
-							{/snippet}
+					<Icon>{@html Star}</Icon>
+				{/snippet}
 				Favorites</Item
 			>
 		{/if}
@@ -125,10 +115,8 @@
 		> -->
 		<Item href="/search">
 			{#snippet icon()}
-					
-					<Icon>{@html Search}</Icon>
-				
-					{/snippet}
+				<Icon>{@html Search}</Icon>
+			{/snippet}
 			Search</Item
 		>
 	</div>
@@ -152,10 +140,8 @@
 			<form method="post" action="/logout">
 				<Item type="submit">
 					{#snippet icon()}
-									
-							<Icon>{@html Logout}</Icon>
-						
-									{/snippet}
+						<Icon>{@html Logout}</Icon>
+					{/snippet}
 					Logout
 				</Item>
 			</form>
@@ -170,16 +156,14 @@
 			autoClose={false}
 		>
 			{#snippet icon()}
-					
-					<Icon>
-						{#if $themeStore === 'dark'}
-							{@html Sun}
-						{:else}
-							{@html Moon}
-						{/if}
-					</Icon>
-				
-					{/snippet}
+				<Icon>
+					{#if $themeStore === 'dark'}
+						{@html Sun}
+					{:else}
+						{@html Moon}
+					{/if}
+				</Icon>
+			{/snippet}
 			{$themeStore === 'dark' ? 'light' : 'dark'} theme
 		</Item>
 	</div>
@@ -247,7 +231,7 @@
 
 	@media (max-height: 500px) {
 		.navbar-wrapper {
-			overflow-y: auto;
+			/* overflow-y: auto; */
 		}
 		.navbar-wrapper::-webkit-scrollbar {
 			width: 5px;
