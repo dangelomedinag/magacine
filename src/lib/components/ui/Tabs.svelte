@@ -2,14 +2,17 @@
 	type Props = {
 		tabs: T;
 		active: (typeof tabs)[number];
+		onchange?: (event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => void;
 	};
 
-	let { tabs, active = $bindable(tabs[0]) }: Props = $props();
+	let { tabs, active = $bindable(tabs[0]), onchange }: Props = $props();
 
 	const updateActiveTab = (e: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => {
 		const target = e.currentTarget;
 		const tab = target?.dataset?.tab;
 		active = tab ?? active;
+
+		onchange?.(e);
 	};
 </script>
 

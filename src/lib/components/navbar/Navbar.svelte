@@ -45,41 +45,27 @@
 <div class="navbar-wrapper">
 	<span class="section">Menu</span>
 	<div>
-		<Item href="/">
-			{#snippet icon()}
-				<Icon>{@html Home}</Icon>
-			{/snippet}
-			Home</Item
-		>
+		<Item href="/" icon={Home}>Home</Item>
 
 		<Item
 			href="/discovery"
-			on:click={() => {
+			icon={ViewGridAdd}
+			onclick={() => {
 				notiStore.update((store) => store.filter((r) => r.label !== '/discovery'));
 			}}
 		>
-			{#snippet icon()}
-				<Icon>{@html ViewGridAdd}</Icon>
-			{/snippet}
 			Discovery</Item
 		>
 
-		<Item href="/soon">
-			{#snippet icon()}
-				<Icon>{@html InboxIn}</Icon>
-			{/snippet}
-			Comming soon</Item
-		>
+		<Item href="/soon" icon={InboxIn}>Comming soon</Item>
 
 		<Item
 			href="/community"
-			on:click={() => {
+			icon={UserGroup}
+			onclick={() => {
 				notiStore.update((store) => store.filter((r) => r.label !== '/community'));
 			}}
 		>
-			{#snippet icon()}
-				<Icon>{@html UserGroup}</Icon>
-			{/snippet}
 			Community
 		</Item>
 
@@ -87,68 +73,29 @@
 
 		<span class="section">Library</span>
 
-		<!-- <Item href="/recent" >
-			<svelte:fragment slot="icon">
-				<Icon>{@html Save}</Icon>
-			</svelte:fragment>
-			Recent</Item
-		> -->
-		<!-- <Item href="/bookmarked" >
-			<svelte:fragment slot="icon">
-				<Icon>{@html Bookmark}</Icon>
-			</svelte:fragment>
-			Bookmarked</Item
-		> -->
+		<!-- <Item href="/recent" icon={Save}>Recent</Item> -->
+		<!-- <Item href="/bookmarked" icon={Bookmark}>Bookmarked</Item> -->
+
 		{#if $page.data.user}
-			<Item href="/favorites">
-				{#snippet icon()}
-					<Icon>{@html Star}</Icon>
-				{/snippet}
-				Favorites</Item
-			>
+			<Item href="/favorites" icon={Star}>Favorites</Item>
 		{/if}
-		<!-- <Item href="/download" >
-			<svelte:fragment slot="icon">
-				<Icon>{@html Download}</Icon>
-			</svelte:fragment>
-			Downloaded</Item
-		> -->
-		<Item href="/search">
-			{#snippet icon()}
-				<Icon>{@html Search}</Icon>
-			{/snippet}
-			Search</Item
-		>
+
+		<!-- <Item href="/download" icon={Download}>Downloaded</Item> -->
+
+		<Item href="/search" icon={Search}>Search</Item>
 	</div>
-	<!-- </nav> -->
 	<div>
-		<!-- <div> -->
-		<!-- <Item href="/settings" >
-			<svelte:fragment slot="icon">
-				<Icon>{@html Cog}</Icon>
-			</svelte:fragment>
-			Settings</Item
-		> -->
-		<!-- <Item href="/help" >
-			<svelte:fragment slot="icon">
-				<Icon>{@html InformationCircle}</Icon>
-			</svelte:fragment>
-			Help</Item
-		> -->
+		<!-- <Item href="/settings" icon={Cog}>Settings</Item> -->
+		<!-- <Item href="/help" icon={InformationCircle}>Help</Item> -->
 
 		{#if $page.data.user}
 			<form method="post" action="/logout">
-				<Item type="submit">
-					{#snippet icon()}
-						<Icon>{@html Logout}</Icon>
-					{/snippet}
-					Logout
-				</Item>
+				<Item type="submit" icon={Logout}>Logout</Item>
 			</form>
 		{/if}
 
 		<Item
-			on:click={() => {
+			onclick={() => {
 				toggleColorTheme();
 				setCookieColorTheme($themeStore);
 			}}
@@ -257,6 +204,11 @@
 	.section {
 		font-weight: 300;
 		opacity: 0.7;
+		font-size: 0.8rem;
+		display: block;
+		padding-block: 1em;
+		font-family: monospace;
+		/* letter-spacing: 4px; */
 	}
 
 	@media (min-width: 768px) {

@@ -17,15 +17,18 @@
 	let tabs = ['week', 'month', 'year'] as const;
 	let active: (typeof tabs)[number] = $state('week');
 	let movies = $state(data.movies);
-	$effect(() => {
-		if (active) movies = { ...data.movies, results: data.movies.results?.reverse() };
-	});
 </script>
 
 <SectionPage>
 	<span><Icon>{@html Film}</Icon>this {active}</span>
 	<h1>Next Releases</h1>
-	<Tabs {tabs} bind:active></Tabs>
+	<Tabs
+		{tabs}
+		bind:active
+		onchange={() => {
+			movies.results.reverse();
+		}}
+	></Tabs>
 </SectionPage>
 
 <div class="content">

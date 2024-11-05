@@ -28,7 +28,11 @@
 <Tabs {tabs} bind:active></Tabs>
 
 {#if active === 'Suspense'}
-	<CarouselMovies movies={data.movies[0]} full title={active} />
+	<CarouselMovies
+		movies={data.movies[0]}
+		full
+		title="{active} {data.movies[0]?.totalResults ?? 'loading'} results"
+	/>
 
 	<GridCards details movies={data.movies[1]} />
 {/if}

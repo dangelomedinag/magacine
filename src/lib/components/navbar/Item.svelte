@@ -1,19 +1,18 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { createEventDispatcher } from 'svelte';
+	import Icon from '$icons/icon.svelte';
 
 	// stores
 	import { notiStore } from '$lib/stores/notifications-store';
-
-	const dispatch = createEventDispatcher();
 
 	interface Props {
 		href?: string | undefined;
 		title?: string | undefined;
 		type?: string | undefined;
 		autoClose?: boolean;
-		icon?: import('svelte').Snippet;
+		icon?: import('svelte').Snippet | string;
 		children?: import('svelte').Snippet;
+		onclick?: () => void;
 	}
 
 	let {
@@ -22,7 +21,8 @@
 		type = undefined,
 		autoClose = true,
 		icon,
-		children
+		children,
+		onclick
 	}: Props = $props();
 
 	function closeNavbar() {
@@ -32,10 +32,10 @@
 
 	function handleClick(e) {
 		if (autoClose) closeNavbar();
-		dispatch('click', e);
+		onclick?.();
 	}
 
-	let active = $derived($page.url.pathname === href ?? false);
+	let active = $derived($page.url.pathname === href);
 
 	let obj = $derived($notiStore.filter((e) => e.label === href));
 </script>
@@ -66,7 +66,11 @@
 {#snippet itemElement()}
 	<!-- <div class="wrapper"> -->
 	<div class="icon">
-		{@render icon?.()}
+		{#if typeof icon === 'string'}
+			<Icon>{@html icon}</Icon>
+		{:else}
+			{@render icon?.()}
+		{/if}
 	</div>
 	<div class="label">
 		{@render children?.()}
