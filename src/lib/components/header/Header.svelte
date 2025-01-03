@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { self, createBubbler } from 'svelte/legacy';
+	import { self } from 'svelte/legacy';
 
-	const bubble = createBubbler();
 	import { tick } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 
@@ -38,9 +37,12 @@
 	}
 
 	let { search = true, bell = true, profile = true, ...rest }: Props = $props();
-	let modalSearch = $state<Modal>();
-	let modalSession = $state<Modal>();
-	let modalNotification = $state<Modal>();
+	// svelte-ignore non_reactive_update
+	let modalSearch: Modal;
+	// svelte-ignore non_reactive_update
+	let modalSession: Modal;
+	// svelte-ignore non_reactive_update
+	let modalNotification: Modal;
 	let searchInput = $state(false);
 	let inputRef = $state<HTMLInputElement>();
 	let results = $state<Promise<MoviesResponse>>();
@@ -169,7 +171,7 @@
 				<form method="post" action="/logout" style="display: contents;">
 					<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
 				</form>
-				<button onclick={modalSession?.close} class="cta">close</button>
+				<button onclick={modalSession.close} class="cta">close</button>
 			{/snippet}
 		</Modal>
 	{:else}
@@ -181,7 +183,7 @@
 				on:result={async ({ detail }) => {
 					if (detail.result.type === 'redirect') {
 						await invalidateAll();
-						modalSession?.close();
+						modalSession.close();
 					}
 				}}
 			/>
@@ -213,7 +215,7 @@
 						onclick={() => (searchInput = false)}>show all</a
 					>
 				{:catch}
-					<button use:focusIn onclick={modalSearch?.close}>close</button>
+					<button use:focusIn onclick={modalSearch.close}>close</button>
 				{/await}
 			{/if}
 		{/snippet}
@@ -226,7 +228,7 @@
 			<Icon y="10%">{@html BellSolid}</Icon>
 			{$notiStore.length ?? ''} Notifications
 		{/snippet}
-		<Notification on:clickItem={() => modalNotification?.close()} />
+		<Notification on:clickItem={() => modalNotification.close()} />
 	</Modal>
 {/if}
 
