@@ -1,5 +1,6 @@
 <script>
-	import 'normalize.css';
+	import '../app.css';
+	// import 'normalize.css';
 	import '../styles/_global.css';
 	import { dev } from '$app/environment';
 	import MediaQueries from '$components/dev/mediaQueries.svelte';
