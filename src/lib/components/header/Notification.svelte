@@ -1,6 +1,5 @@
-<script>
+<script lang="ts">
 	import { quintOut } from 'svelte/easing';
-	import { createEventDispatcher } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 
@@ -12,9 +11,7 @@
 
 	import { notiStore } from '$lib/stores/notifications-store';
 
-	const dispatch = createEventDispatcher();
-
-	function MarkAsReadItem(parentId, itemId) {
+	function MarkAsReadItem(parentId: string, itemId: string) {
 		notiStore.update((value) => {
 			let parentIndex = value.findIndex((e) => e.id === parentId);
 			let itemIndex = value[parentIndex].items.findIndex((r) => r.id === itemId);
@@ -22,7 +19,7 @@
 			return value;
 		});
 	}
-	function DeleteItem(parentId, itemId) {
+	function DeleteItem(parentId: string, itemId: string) {
 		notiStore.update((value) => {
 			let parentIndex = value.findIndex((e) => e.id === parentId);
 			value[parentIndex].items = value[parentIndex].items.filter((r) => r.id !== itemId);
@@ -32,10 +29,9 @@
 			return value;
 		});
 	}
-	function onClickItem(parentId, itemId) {
+	function onClickItem(parentId: string, itemId: string) {
 		MarkAsReadItem(parentId, itemId);
 		DeleteItem(parentId, itemId);
-		dispatch('clickItem');
 	}
 </script>
 
@@ -52,7 +48,7 @@
 				>
 					<div class="notification__container">
 						<div class="notification__details">
-							{#if el.href}
+							{#if 'href' in el}
 								<a
 									href={el.href}
 									class="notification__element"

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
-	import { page } from '$app/stores';
 
 	// components
 	import Spinner from '$lib/components/ui/spinner.svelte';
@@ -17,14 +16,14 @@
 	import type { MoviesResponse } from '$lib/types';
 
 	interface Props {
-		results: Promise<MoviesResponse>;
+		results: Promise<MoviesResponse> | undefined;
 	}
 
 	let { results }: Props = $props();
 	let suggestionsMovies = $state(undefined);
 
 	onMount(() => {
-		results.catch(() => {
+		results?.catch(() => {
 			getSuggestions();
 		});
 	});
@@ -35,52 +34,54 @@
 	}
 </script>
 
-{#await results}
-	<Spinner />
-{:then response}
-	<ul class="list">
-		<li class="total-results">
-			{response.search} - {response.totalResults} results
-		</li>
-		{#each response.results as movie, i (movie.uuid)}
-			<li class="list__item" in:fly|global={{ x: 60, easing: quintInOut, delay: 50 * i }}>
-				<!-- <a href="/movies/{movie.imdbid}">
-
-				</a> -->
-				<img src={movie.poster} alt={movie.title} />
-				<span class="n-top">{i + 1}</span>
-				<span class="info-wrapper">
-					<div class="title">
-						{movie.title} - {movie.year}
-					</div>
-					<div class="type">
-						<span class="icon">
-							<Icon y="20%">
-								{#if movie.type === 'movie'}
-									{@html Film}
-								{:else if movie.type === 'game'}
-									{@html DesktopComputer}
-								{:else if movie.type === 'series'}
-									{@html Collection}
-								{/if}
-							</Icon>
-						</span>
-						{movie.type}
-					</div>
-				</span>
+{#if results}
+	{#await results}
+		<Spinner />
+	{:then response}
+		<ul class="list">
+			<li class="total-results">
+				{response.search} - {response.totalResults} results
 			</li>
-		{/each}
-	</ul>
-{:catch error}
-	<div class="toast-wrapper">
-		<Alert danger>
-			<span>
-				{error.message}
-			</span>
-		</Alert>
-	</div>
-	<CarouselMovies details={false} movies={suggestionsMovies} title="suggestions" />
-{/await}
+			{#each response.results as movie, i (movie.uuid)}
+				<li class="list__item" in:fly|global={{ x: 60, easing: quintInOut, delay: 50 * i }}>
+					<!-- <a href="/movies/{movie.imdbid}">
+
+          </a> -->
+					<img src={movie.poster} alt={movie.title} />
+					<span class="n-top">{i + 1}</span>
+					<span class="info-wrapper">
+						<div class="title">
+							{movie.title} - {movie.year}
+						</div>
+						<div class="type">
+							<span class="icon">
+								<Icon y="20%">
+									{#if movie.type === 'movie'}
+										{@html Film}
+									{:else if movie.type === 'series'}
+										{@html Collection}
+									{:else}
+										{@html DesktopComputer}
+									{/if}
+								</Icon>
+							</span>
+							{movie.type}
+						</div>
+					</span>
+				</li>
+			{/each}
+		</ul>
+	{:catch error}
+		<div class="toast-wrapper">
+			<Alert danger>
+				<span>
+					{error.message}
+				</span>
+			</Alert>
+		</div>
+		<CarouselMovies details={false} movies={suggestionsMovies} title="suggestions" />
+	{/await}
+{/if}
 
 <style>
 	.toast-wrapper {

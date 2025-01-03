@@ -7,7 +7,7 @@
 	import Spinner from '$lib/components/ui/spinner.svelte';
 	import CardMovie from '$components/card/cardMovie.svelte';
 	import CardMovieSeeAll from '$components/card/cardMovieSeeAll.svelte';
-	import type { MovieItem, MoviesResponse } from '$lib/types';
+	import type { MoviesResponse } from '$lib/types';
 
 	// interface CarouselMoviesData {
 	// 	results: MovieItem[];
@@ -26,7 +26,7 @@
 		title?: string;
 		details?: boolean;
 		position?: string;
-		error?: import('svelte').Snippet<[any]>;
+		error?: import('svelte').Snippet<[{ message: string }]>;
 	}
 
 	let {
@@ -46,7 +46,7 @@
 
 	{#if movies}
 		{#if movies instanceof Error}
-			{@render error?.({ message: movies.message, })}
+			{@render error?.({ message: movies.message })}
 		{:else}
 			<header class="carousel-header content">
 				<h3 class="header-title">{title}</h3>

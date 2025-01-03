@@ -23,8 +23,6 @@
 	color: var(--c-text-base);
 }
 
-
-
 /*
 * Light Theme Colors
 */
@@ -42,13 +40,13 @@
 	}
 	:root[data-root-theme='dark'] {
 		color-scheme: dark;
-	--bg-navbar: rgba(0, 0, 0, 0.3);
-	--c-main-invert: white;
-	--c-main: #141314;
-	--c-main-content: hsl(0, 0%, 0%);
-	--c-text-base: #f1faee;
-	--c-text-invert: #161616;
-	--c-divider: rgba(255, 255, 255, 0.1);
+		--bg-navbar: rgba(0, 0, 0, 0.3);
+		--c-main-invert: white;
+		--c-main: #141314;
+		--c-main-content: hsl(0, 0%, 0%);
+		--c-text-base: #f1faee;
+		--c-text-invert: #161616;
+		--c-divider: rgba(255, 255, 255, 0.1);
 		/* @include dark-theme-scheme; */
 	}
 }
@@ -59,13 +57,13 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		color-scheme: dark;
-	--bg-navbar: rgba(0, 0, 0, 0.3);
-	--c-main-invert: white;
-	--c-main: #141314;
-	--c-main-content: hsl(0, 0%, 0%);
-	--c-text-base: #f1faee;
-	--c-text-invert: #161616;
-	--c-divider: rgba(255, 255, 255, 0.1);
+		--bg-navbar: rgba(0, 0, 0, 0.3);
+		--c-main-invert: white;
+		--c-main: #141314;
+		--c-main-content: hsl(0, 0%, 0%);
+		--c-text-base: #f1faee;
+		--c-text-invert: #161616;
+		--c-divider: rgba(255, 255, 255, 0.1);
 		/* @include dark-theme-scheme; */
 	}
 	:root[data-root-theme='light'] {

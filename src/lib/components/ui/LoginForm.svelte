@@ -17,10 +17,11 @@
 	let {
 		form = $bindable(null),
 		loading = $bindable(false),
-		handlerSubmit = ({ form: FormElement }) => {
+		handlerSubmit = () => {
 			loading = true;
 			return async (complete) => {
 				if (complete.result.type === 'failure') {
+					//@ts-ignore
 					form = complete.result.data;
 				}
 				loading = false;
@@ -28,7 +29,7 @@
 			};
 		}
 	}: Props = $props();
-	let element: HTMLFormElement = $state();
+	let element = $state<HTMLFormElement>();
 	const completeInputs = ({ invalid }: { invalid: boolean }) => {
 		if (element) {
 			element.username.value = invalid ? 'invalid' : 'magacineuser';
@@ -99,8 +100,14 @@
 		disabled={loading}
 	/>
 	{#if form?.errors}
-		<Alert warn close on:click={() => (form.errors = '')}
-			><span>Message:</span> {form?.errors}</Alert
+		<Alert
+			warn
+			close
+			onclose={() => {
+				//@ts-ignore
+				form = undefined;
+				console.log('ljdshjkh');
+			}}><span>Message:</span> {form?.errors}</Alert
 		>
 	{/if}
 </form>
@@ -108,9 +115,13 @@
 	<label for="remember" class="link"
 		><input id="remember" type="checkbox" checked disabled={loading} /> Remember me
 	</label>
-	<!-- <a href={'#'} on:click={() => completeInput()} class="link">remember me</a> -->
-	<a href={'#'} onclick={preventDefault(() => completeInputs({ invalid: true }))} class="link"
-		>Need help?</a
+	<a
+		href={'#'}
+		onclick={(e) => {
+			e.preventDefault();
+			completeInputs({ invalid: true });
+		}}
+		class="link">Need help?</a
 	>
 </div>
 

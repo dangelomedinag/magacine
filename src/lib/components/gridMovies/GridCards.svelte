@@ -10,12 +10,7 @@
 		seeAll?: boolean | undefined;
 	}
 
-	let {
-		movies,
-		details = false,
-		full = undefined,
-		seeAll = true
-	}: Props = $props();
+	let { movies, details = false, full = undefined, seeAll = true }: Props = $props();
 </script>
 
 <div class="grid">

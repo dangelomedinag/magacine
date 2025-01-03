@@ -10,14 +10,14 @@ type SearchLoadResponse<T = MoviesResponse> = {
 
 const get = async (request: Promise<Response>): Promise<MoviesResponse> => {
 	const res = await request;
-	const json = await res.json() as MoviesResponse;
+	const json = (await res.json()) as MoviesResponse;
 	return json;
 };
 
 export async function load({ fetch, url, depends }) {
 	depends('search:load');
 
-	let data: SearchLoadResponse = {
+	const data: SearchLoadResponse = {
 		movies: undefined,
 		suggest: {
 			movies: null
@@ -27,13 +27,12 @@ export async function load({ fetch, url, depends }) {
 
 	const searchParams = url.searchParams;
 	const searchText = searchParams.has('s');
-  
+
 	if (searchText) {
 		const request = fetch('/api?' + searchParams.toString());
-		const response = await get(request)
-      
-    data.movies = response;
+		const response = await get(request);
 
+		data.movies = response;
 	}
 
 	const requestSuggest = fetch('/api?s=marvel');

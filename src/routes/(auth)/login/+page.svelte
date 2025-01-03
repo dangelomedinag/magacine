@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import LoginActiveSession from '$components/ui/LoginActiveSession.svelte';
 	import LoginForm from '$components/ui/LoginForm.svelte';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -9,7 +9,7 @@
 
 	let loading = $state(false);
 
-	const handlerSubmit = (({ formElement }) => {
+	const handlerSubmit: SubmitFunction = ({ formElement }) => {
 		loading = true;
 		return async ({ update, result }) => {
 			await update();
@@ -19,10 +19,10 @@
 			if (result.type === 'failure') {
 				await tick();
 
-				formElement.username.focus();
+				formElement.username?.focus();
 			}
 		};
-	}) satisfies SubmitFunction;
+	};
 </script>
 
 <svelte:head>
@@ -31,9 +31,9 @@
 
 <main class="login">
 	<div class="container">
-		{#if $page.data.user}
+		{#if page.data.user}
 			<h1 class="title">Session</h1>
-			<LoginActiveSession user={$page.data.user} />
+			<LoginActiveSession user={page.data.user} />
 		{:else}
 			<h1 class="title">Sign in</h1>
 			<LoginForm {loading} {form} {handlerSubmit} />

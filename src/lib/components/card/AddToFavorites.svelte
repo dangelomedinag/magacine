@@ -27,7 +27,7 @@
 	{/if}
 
 	{#each $FavMovies
-		.sort((a, b) => (a.imdbid === movie.imdbid ? -1 : 1))
+		.sort((a) => (a.imdbid === movie.imdbid ? -1 : 1))
 		.slice(0, 7) as item (item.uuid)}
 		<li class:current={item.imdbid === movie.imdbid}>
 			<img class="favorites-img" src={item.poster} alt={item.plot} />

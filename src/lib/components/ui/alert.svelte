@@ -182,8 +182,8 @@
 		color: var(--alert-icon);
 	}
 
-	.alert__message {
-	}
+	/* .alert__message {
+	} */
 	.alert__message :global(span) {
 		font-weight: bold;
 	}

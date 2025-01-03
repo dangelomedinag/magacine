@@ -13,7 +13,7 @@
 		shadow = false,
 		class: Class = ''
 	} = $props();
-	
+
 	onMount(async () => {
 		icon = await import(`./${type}/${name}.svg?raw`);
 	});
@@ -26,10 +26,10 @@
 	style:transform={x
 		? `translateX(${x})`
 		: '' + y
-		? `translateY(${y})`
-		: '' + deg
-		? `rotate(${deg})`
-		: ''}
+			? `translateY(${y})`
+			: '' + deg
+				? `rotate(${deg})`
+				: ''}
 >
 	<!-- <slot /> -->
 	{#if icon}

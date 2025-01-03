@@ -7,7 +7,7 @@ export async function handle({ event, resolve }) {
 	const authorization = event.cookies.get('token');
 	if (authorization && authorization !== '') {
 		try {
-			//@ts-ignore
+			//@ts-expect-error dsdsa
 			const { username, name, lastname, role } = jwt.verify(authorization, env.JWT_TOKEN_SECRET);
 
 			event.locals.user = {
@@ -18,7 +18,7 @@ export async function handle({ event, resolve }) {
 				avatar: 'https://i.pravatar.cc/100?u=' + event.cookies.get('mc_username') + '@gmail.com'
 			};
 		} catch (e) {
-			console.log(e.message, event.url.pathname);
+			console.log((e as Error).message, event.url.pathname);
 			event.locals.user = undefined;
 		}
 	}

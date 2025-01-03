@@ -1,8 +1,4 @@
-<script>
-	import { createBubbler, preventDefault } from 'svelte/legacy';
-
-	const bubble = createBubbler();
-	import { createEventDispatcher } from 'svelte';
+<script lang="ts">
 	import { quintOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 
@@ -12,12 +8,14 @@
 	import Search from '$icons/solid/search.svg?raw';
 	import Trash from '$icons/solid/trash.svg?raw';
 
-	const dispatch = createEventDispatcher();
+	let { inputRef = $bindable(null), onesc, onclose, submit } = $props();
+
 	let value = $state('');
-	function handleEsc(e) {
+
+	function handleEsc(e: KeyboardEvent) {
 		if (e.key === 'Escape') {
 			e.preventDefault();
-			dispatch('esc');
+			onesc();
 		}
 	}
 
@@ -29,7 +27,7 @@
 		window.addEventListener('keydown', handleEsc);
 	}
 
-	function focus(node) {
+	function focus(node: HTMLInputElement) {
 		window.addEventListener('keydown', handleEsc);
 		node.addEventListener('focus', keydownScape);
 		node.addEventListener('blur', removeKeyListener);
@@ -43,13 +41,13 @@
 		};
 	}
 
-	function reset(e) {
-		e.target.x.focus();
+	function reset() {
+		inputRef.focus();
 		value = '';
 	}
 </script>
 
-<form onsubmit={preventDefault(bubble('submit'))} onreset={reset} in:scale|global={{ easing: quintOut }}>
+<form onsubmit={submit} onreset={() => reset()} in:scale|global={{ easing: quintOut }}>
 	{#if value?.length > 0}
 		<button class="btn" type="reset">
 			<Icon>
@@ -57,13 +55,14 @@
 			</Icon>
 		</button>
 	{:else}
-		<button class="btn" type="reset" onclick={() => dispatch('close')}>
+		<button class="btn" type="reset" onclick={() => onclose()}>
 			<Icon>
 				{@html X}
 			</Icon>
 		</button>
 	{/if}
 	<input
+		bind:this={inputRef}
 		bind:value
 		use:focus
 		class="searchBox"

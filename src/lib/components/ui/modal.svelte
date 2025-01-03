@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { self, createBubbler } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { browser } from '$app/environment';
 	import { onDestroy, onMount, createEventDispatcher } from 'svelte';
 	import { quintOut } from 'svelte/easing';
@@ -15,12 +12,14 @@
 	import { afterNavigate } from '$app/navigation';
 
 	interface Props {
+		onclose?: () => void;
 		modal?: boolean;
 		Zindex?: string;
 		btnClose?: boolean;
 		header?: import('svelte').Snippet;
 		action?: import('svelte').Snippet<[any]>;
 		children?: import('svelte').Snippet;
+		onkeydown?: (e: KeyboardEvent & { currentTarget: EventTarget & HTMLDivElement }) => void;
 	}
 
 	let {
@@ -29,12 +28,13 @@
 		btnClose = true,
 		header,
 		action,
-		children
+		children,
+		onkeydown,
+		onclose
 	}: Props = $props();
 
 	let currentElementFocus: Element | null = null;
-	let ref: HTMLElement = $state();
-	const dispatch = createEventDispatcher();
+	let ref: HTMLElement | undefined = $state(undefined);
 
 	onMount(async () => {
 		console.log('modal');
@@ -53,10 +53,10 @@
 		modal = false;
 
 		setBodyScroll(modal);
-		if (currentElementFocus) currentElementFocus.focus();
+		if (currentElementFocus) (currentElementFocus as HTMLElement).focus();
 
 		window.removeEventListener('keydown', handleEsc);
-		dispatch('close');
+		onclose?.();
 	}
 	export function toogle() {
 		if (modal) close();
@@ -67,7 +67,7 @@
 		close();
 	}
 
-	function handleEsc(e) {
+	function handleEsc(e: KeyboardEvent) {
 		if (e.key === 'Escape') {
 			e.preventDefault();
 			close();
@@ -77,8 +77,9 @@
 
 	function focusOnMount(node: HTMLElement) {
 		if (node.children.length > 0) {
-			let children = node.children[0];
-			if (children.tagName === 'A' || children.tagName === 'BUTTON') children.focus();
+			let childrenNode = node.children[0];
+			if (childrenNode.tagName === 'A' || childrenNode.tagName === 'BUTTON')
+				(childrenNode as HTMLElement).focus();
 		}
 	}
 
@@ -90,14 +91,28 @@
 		// console.log(type);
 		if (type === 'link') close();
 	});
+
+	function self<T>(fn: T) {
+		return function (...args: any[]) {
+			var event = /** @type {Event} */ (args[0]);
+			// @ts-ignore
+			if (event.target === this) {
+				// @ts-ignore
+				fn?.apply(this, args);
+			}
+		};
+	}
 </script>
 
 {#if modal}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		style:z-index={Zindex}
 		class="foreground content"
 		onclick={self(clickForeground)}
-		onkeydown={bubble('keydown')}
+		onkeydown={(e) => {
+			onkeydown?.(e);
+		}}
 	></div>
 	<section
 		bind:this={ref}
@@ -120,7 +135,7 @@
 			{@render children?.()}
 		</div>
 		<div class="modal__actions" class:paddingTop={action} use:focusOnMount>
-			{@render action?.({ close, })}
+			{@render action?.({ close })}
 		</div>
 	</section>
 {/if}
@@ -158,8 +173,12 @@
 		background-color: var(--modal-bg);
 		border-radius: 10px;
 		border: 2px solid var(--c-divider);
-		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
-			0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
+		box-shadow:
+			0 1px 1px rgba(0, 0, 0, 0.11),
+			0 2px 2px rgba(0, 0, 0, 0.11),
+			0 4px 4px rgba(0, 0, 0, 0.11),
+			0 8px 8px rgba(0, 0, 0, 0.11),
+			0 16px 16px rgba(0, 0, 0, 0.11),
 			0 32px 32px rgba(0, 0, 0, 0.11);
 		overflow: hidden;
 	}
@@ -290,10 +309,4 @@
 	.modal__container::-webkit-scrollbar-thumb:hover {
 		background: #555;
 	}
-
-	/* @media (min-width: 992px) {
-		.modal {
-			max-width: 50vw;
-		}
-	} */
 </style>

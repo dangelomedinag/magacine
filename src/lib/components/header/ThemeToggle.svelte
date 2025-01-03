@@ -1,8 +1,12 @@
 <script lang="ts">
-	import { setCookieColorTheme, timeoutPromise, toggleColorTheme } from '$helpers';
+	import { setCookieColorTheme, toggleColorTheme } from '$helpers';
 	import { themeStore } from '$lib/stores/theme-store';
 	let loading = $state(false);
+
+	//@ts-ignore
 	let timeoutID: NodeJS.Timeout | undefined = undefined;
+
+	// setTimeout()
 	// function handleChange() {
 	// 	if (timeoutID) clearTimeout(timeoutID);
 
@@ -58,7 +62,13 @@
 </script>
 
 <!-- {#if $themeStore} -->
-<button use:getTheme class="toggle-switch" disabled={loading} onclick={handleChange}>
+<button
+	aria-label="toggle theme mode"
+	use:getTheme
+	class="toggle-switch"
+	disabled={loading}
+	onclick={handleChange}
+>
 	<div class="label">
 		<div class="input"></div>
 		<span class="slider"></span>

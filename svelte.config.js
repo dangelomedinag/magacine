@@ -10,7 +10,7 @@ const config = {
 			$helpers: 'src/lib/helpers',
 			$icons: 'src/lib/components/icons'
 		}
-	},
+	}
 	// preprocess: vitePreprocess()
 };
 

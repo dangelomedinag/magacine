@@ -82,7 +82,7 @@
 
 	async function updateUrlSearchParam(searchString: string) {
 		const url = new URL(location.toString());
-		const replaceState = !Boolean(url.searchParams.size);
+		const replaceState = !url.searchParams.size;
 		url.searchParams.set('s', searchString);
 
 		if (selected.length == 1) url.searchParams.set('type', selected[0]);

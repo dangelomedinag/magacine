@@ -15,13 +15,7 @@
 		showPaginator: boolean;
 	}
 
-	let {
-		active,
-		arr,
-		setPage,
-		url,
-		showPaginator
-	}: Props = $props();
+	let { active, arr, setPage, url, showPaginator }: Props = $props();
 	let pages = $derived(Math.round(arr.results.length / 10));
 	async function updateUrl() {
 		await tick();
@@ -33,10 +27,8 @@
 
 <div class="pages-wrapper">
 	{#if showPaginator}
-		<button
-			class="nav button"
-			onclick={() => setPage(active - 1, updateUrl)}
-			disabled={active == 0}><Icon>{@html ChevronLeft}</Icon></button
+		<button class="nav button" onclick={() => setPage(active - 1, updateUrl)} disabled={active == 0}
+			><Icon>{@html ChevronLeft}</Icon></button
 		>
 		<div class="wrapper">
 			{#each { length: pages } as _, i}

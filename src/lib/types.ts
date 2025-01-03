@@ -29,20 +29,20 @@ export interface MovieItem {
 	type: string;
 	dvd: string;
 	boxoffice: string;
-	production: any;
-	website: any;
+	production: unknown;
+	website: unknown;
 	response: boolean;
 	uuid: string;
-	[index: string]: any;
+	[index: string]: unknown;
 }
 
 export interface Rating {
 	source: string;
 	value: string;
-	[index: string]: any;
+	[index: string]: unknown;
 }
 
-export type typeResult = 'movie' | 'series' | 'episode';
+export type typeResult = 'movie' | 'series' | 'episode' | 'game';
 
 export interface MovieResult {
 	title: string;
@@ -51,7 +51,7 @@ export interface MovieResult {
 	type: typeResult;
 	poster: string;
 	uuid: string;
-	[index: string]: any;
+	[index: string]: unknown;
 }
 
 export interface MoviesResponse {
@@ -60,7 +60,7 @@ export interface MoviesResponse {
 	search: string;
 	query: string;
 	message?: string;
-	[index: string]: any;
+	[index: string]: unknown;
 }
 
 export interface OMDBMoviesItem {
@@ -69,7 +69,7 @@ export interface OMDBMoviesItem {
 	imdbID: string;
 	Type: string;
 	Poster: string;
-	[index: string]: any;
+	[index: string]: unknown;
 }
 
 export interface OMDBMoviesResponse {
@@ -78,7 +78,7 @@ export interface OMDBMoviesResponse {
 	totalResults: string;
 	Error: string;
 
-	[index: string]: any;
+	[index: string]: unknown;
 }
 
 export interface OMDBMovie {
@@ -107,11 +107,11 @@ export interface OMDBMovie {
 	Production: string;
 	Website: string;
 	Response: string;
-	[index: string]: any;
+	[index: string]: unknown;
 }
 
 export interface OMDBRating {
 	Source: string;
 	Value: string;
-	[index: string]: any;
+	[index: string]: unknown;
 }

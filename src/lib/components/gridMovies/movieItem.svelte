@@ -1,5 +1,5 @@
 <script>
-	import { fly, scale } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 
 	/** @type {{movie: any}} */
 	let { movie } = $props();

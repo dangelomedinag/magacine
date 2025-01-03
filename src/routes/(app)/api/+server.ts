@@ -42,7 +42,7 @@ async function getResource({ url, setHeaders, fetch }: RequestEvent) {
 	}
 
 	if (year) {
-		let currentYear = new Date().getFullYear();
+		const currentYear = new Date().getFullYear();
 		const n = +year;
 		if (!isNaN(n) && n <= currentYear) api.searchParams.set('y', n.toString());
 		else {
@@ -86,7 +86,7 @@ async function getResource({ url, setHeaders, fetch }: RequestEvent) {
 	const rest = +json.totalResults <= 10 ? +json.totalResults - json.Search.length : false;
 
 	const results = json.Search.map((m) => {
-		let obj: Partial<OMDBMoviesResponse> = {};
+		const obj: Partial<OMDBMoviesResponse> = {};
 		for (const key in m) {
 			if (key === 'Year' && m[key].endsWith('–')) obj[key.toLowerCase()] = m[key].slice(0, -1);
 			else obj[key.toLowerCase()] = m[key];

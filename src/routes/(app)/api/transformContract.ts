@@ -2,7 +2,7 @@ import { uuid } from '$helpers';
 import type { OMDBMovie, MovieItem } from '$lib/types';
 
 export function transform(movie: OMDBMovie) {
-	let obj: Partial<MovieItem> = {};
+	const obj: Partial<MovieItem> = {};
 	obj.uuid = uuid();
 
 	for (const key in movie) {
@@ -20,7 +20,7 @@ export function transform(movie: OMDBMovie) {
 			let newArray = [];
 
 			newArray = movie[key].map((e) => {
-				let newRatings: { [index: string]: any } = {};
+				const newRatings: { [index: string]: any } = {};
 
 				if (!Array.isArray(e) && typeof e === 'object') {
 					for (const k in e) {

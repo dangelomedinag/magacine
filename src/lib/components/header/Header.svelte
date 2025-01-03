@@ -2,12 +2,11 @@
 	import { self, createBubbler } from 'svelte/legacy';
 
 	const bubble = createBubbler();
-	import { onMount, tick } from 'svelte';
-	import { afterNavigate, invalidateAll } from '$app/navigation';
+	import { tick } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	// icons
 	import Icon from '$icons/icon.svelte';
-	import Home from '$icons/solid/home.svg?raw';
 	import Search from '$icons/solid/search.svg?raw';
 	import UserCircle from '$icons/solid/user-circle.svg?raw';
 	import Bell from '$icons/outline/bell.svelte';
@@ -27,88 +26,64 @@
 	import { page } from '$app/stores';
 	import { notiStore } from '$lib/stores/notifications-store';
 	import LogoNavbar from '$components/ui/logo-navbar.svelte';
-	import { enhance } from '$app/forms';
+	// import { enhance } from '$app/forms';
 	import LoginForm from '$components/ui/LoginForm.svelte';
+	import type { MoviesResponse } from '$lib/types';
 
 	interface Props {
 		search?: boolean;
 		bell?: boolean;
 		profile?: boolean;
+		onkeydown: () => void;
 	}
 
-	let { search = true, bell = true, profile = true }: Props = $props();
-	let modalSearch: Modal = $state();
-	let modalSession: Modal = $state();
-	let modalNotification: Modal = $state();
+	let { search = true, bell = true, profile = true, ...rest }: Props = $props();
+	let modalSearch = $state<Modal>();
+	let modalSession = $state<Modal>();
+	let modalNotification = $state<Modal>();
 	let searchInput = $state(false);
-	let results = $state();
+	let inputRef = $state<HTMLInputElement>();
+	let results = $state<Promise<MoviesResponse>>();
 	let showModalSearch: boolean = $state(false);
 	let showModalSession: boolean = $state(false);
 	let showModalNotification: boolean = $state(false);
-	let scrollY: number = $state();
-	let down: number = $derived(scrollY > 40);
+	let scrollY = $state(0);
+	let down = $derived(scrollY > 40);
 
 	async function openModal(modal: string) {
 		if (modal === 'search') showModalSearch = true;
 		if (modal === 'session') showModalSession = true;
 		if (modal === 'notification') showModalNotification = true;
 		await tick();
-		if (modal === 'search') modalSearch.open();
-		if (modal === 'session') modalSession.open();
-		if (modal === 'notification') modalNotification.open();
+		if (modal === 'search') modalSearch?.open();
+		if (modal === 'session') modalSession?.open();
+		if (modal === 'notification') modalNotification?.open();
 	}
 
-	function submit(e) {
-		let query = e.target.x.value.trim();
+	async function submit(e: MouseEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+		e.preventDefault();
+		if (!inputRef) return;
+
+		let query = inputRef.value.trim();
 		let url = new URL('/api', location.origin);
 		url.searchParams.set('limit', '3');
-		url.searchParams.set('s', query);
+		if (query) url.searchParams.set('s', query);
 
-		results = fetch(url.href).then(async (r) => {
-			if (!r.ok) {
-				const error = await r.json();
-				throw error;
-			}
+		// results =
 
-			return r.json();
-		});
+		let res = await fetch(url.href);
+		if (!res.ok) {
+			const error = res.statusText;
+			throw error;
+		}
+		const json = res.json() as Promise<MoviesResponse>;
+		results = json;
 
-		e.target.x.focus();
+		inputRef.focus();
 		openModal('search').then();
 	}
 
-	// afterNavigate(() => {
-	// 	document.querySelector('nav.navbar').style.transform = `translateY(0px)`;
-	// });
-
-	let lastScroll = 0;
-	let expand;
-
-	// onMount(() => {
-	// 	const navbar = document.querySelector('nav.navbar');
-	// 	let leftContainer;
-	// 	function alternatedNavbar() {
-	// 		let currentScroll = window.pageYOffset;
-	// 		if (!leftContainer) leftContainer = document.querySelector('div.left').offsetHeight;
-	// 		if (window.scrollY > 150) {
-	// 			if (currentScroll - lastScroll > 0) {
-	// 				navbar.style.transform = `translateY(-${leftContainer + 2}px)`;
-	// 				expand = true;
-	// 			} else {
-	// 				navbar.style.transform = `translateY(0px)`;
-	// 				expand = false;
-	// 			}
-	// 		}
-	// 		lastScroll = currentScroll;
-	// 	}
-
-	// 	if (!matchMedia('(min-width: 576px)').matches) {
-	// 		window.addEventListener('scroll', alternatedNavbar);
-	// 	}
-	// 	return () => window.removeEventListener('scroll', alternatedNavbar);
-	// });
-
-	function focusIn(node) {
+	function focusIn(node: HTMLElement) {
 		node.focus();
 	}
 
@@ -128,8 +103,7 @@
 		</div>
 		<div class="center header_slots">
 			{#if searchInput}
-				<SearchForm on:esc={toggleSearchInput} on:submit={submit} on:close={toggleSearchInput} />
-				<!-- content here -->
+				<SearchForm bind:inputRef onesc={toggleSearchInput} {submit} onclose={toggleSearchInput} />
 			{/if}
 		</div>
 		<div class="right header_slots" class:esconder={searchInput}>
@@ -177,7 +151,9 @@
 	<div
 		class="foreground"
 		onclick={self(() => (searchInput = false))}
-		onkeydown={bubble('keydown')}
+		onkeydown={() => {
+			rest.onkeydown?.();
+		}}
 	></div>
 {/if}
 
@@ -193,7 +169,7 @@
 				<form method="post" action="/logout" style="display: contents;">
 					<button type="submit">logout <Icon y="10%"><Logout /></Icon></button>
 				</form>
-				<button onclick={modalSession.close} class="cta">close</button>
+				<button onclick={modalSession?.close} class="cta">close</button>
 			{/snippet}
 		</Modal>
 	{:else}
@@ -205,33 +181,10 @@
 				on:result={async ({ detail }) => {
 					if (detail.result.type === 'redirect') {
 						await invalidateAll();
-						modalSession.close();
+						modalSession?.close();
 					}
 				}}
 			/>
-
-			<!-- <form
-				method="post"
-				action="/login"
-				id="form-login"
-				use:enhance={() => {
-					return async ({ update, result }) => {
-						console.log(result);
-						if (result.type === 'redirect') {
-							await invalidateAll();
-							modalSession.close();
-						}
-					};
-				}}
-			>
-				<input type="text" name="username" id="password" />
-				<input type="text" name="password" id="password" />
-			</form> -->
-
-			<!-- <svelte:fragment slot="action">
-				<button class="cta" form="form-login">login</button>
-				<button on:click={modalSession.close}>close</button>
-			</svelte:fragment> -->
 		</Modal>
 	{/if}
 {/if}
@@ -241,26 +194,28 @@
 		{#snippet header()}
 			{#await results}
 				<Icon y="10%">{@html Search}</Icon> Searching...
-			{:then _}
+			{:then}
 				<Icon y="10%">{@html Search}</Icon> Search
-			{:catch _}
+			{:catch}
 				<Icon y="10%"><ExclamationCircle /></Icon> Ooops!
 			{/await}
 		{/snippet}
 		<SearchResults {results} />
 
 		{#snippet action()}
-			{#await results then response}
-				<a
-					use:focusIn
-					data-sveltekit-reload
-					href="/movies?s={encodeURI(response.search)}"
-					class="cta"
-					onclick={() => (searchInput = false)}>show all</a
-				>
-			{:catch}
-				<button use:focusIn onclick={modalSearch.close}>close</button>
-			{/await}
+			{#if results}
+				{#await results then response}
+					<a
+						use:focusIn
+						data-sveltekit-reload
+						href="/movies?s={encodeURI(response.search)}"
+						class="cta"
+						onclick={() => (searchInput = false)}>show all</a
+					>
+				{:catch}
+					<button use:focusIn onclick={modalSearch?.close}>close</button>
+				{/await}
+			{/if}
 		{/snippet}
 	</Modal>
 {/if}
@@ -271,7 +226,7 @@
 			<Icon y="10%">{@html BellSolid}</Icon>
 			{$notiStore.length ?? ''} Notifications
 		{/snippet}
-		<Notification on:clickItem={() => modalNotification.close()} />
+		<Notification on:clickItem={() => modalNotification?.close()} />
 	</Modal>
 {/if}
 
@@ -385,36 +340,6 @@
 	.center > :global(a.active) {
 		border-bottom: 2px solid var(--c-front);
 		opacity: 1;
-	}
-
-	@media (min-width: 576px) {
-		/* .navbar-wrapper {
-			flex-wrap: nowrap;
-		} */
-		/* .center {
-			max-width: 600px;
-		} */
-		/* .center > :global(button) {
-			flex: 0 1 auto;
-		} */
-		/* .search-first {
-			display: inline-flex;
-		} */
-		/* .esconder {
-			visibility: hidden;
-			opacity: 0;
-		} */
-	}
-
-	.search-second {
-		display: none !important;
-		margin-left: auto !important;
-	}
-
-	.center.block > :global(button + .search-second),
-	.center.block > :global(a + .search-second)
-	/* :global(.center.block) > :global(a + .search-second) */ {
-		display: inline-flex !important;
 	}
 
 	.username {

@@ -20,7 +20,6 @@
 		class: Class = '',
 		children
 	}: Props = $props();
-	
 </script>
 
 <div
@@ -30,10 +29,10 @@
 	style:transform={x
 		? `translateX(${x})`
 		: '' + y
-		? `translateY(${y})`
-		: '' + deg
-		? `rotate(${deg})`
-		: ''}
+			? `translateY(${y})`
+			: '' + deg
+				? `rotate(${deg})`
+				: ''}
 >
 	{@render children?.()}
 	{#if counter}

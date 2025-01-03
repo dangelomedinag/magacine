@@ -12,7 +12,7 @@ export const listFormat = (
 	const intl = new Intl.ListFormat(language, opts);
 	return intl.format(array);
 };
-export const setBodyScroll = (state: boolean, ref: HTMLElement) => {
+export const setBodyScroll = (state: boolean, ref?: HTMLElement) => {
 	import('$app/environment').then(({ browser }) => {
 		if (browser) {
 			const body = document.body;

@@ -18,7 +18,7 @@ export const actions = {
 			expires: new Date(0)
 		};
 
-		let cookieOpts = {
+		const cookieOpts = {
 			path: '/',
 			httpOnly: true,
 			sameSite: true,

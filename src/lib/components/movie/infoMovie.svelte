@@ -89,7 +89,7 @@
 </div>
 
 {#if showModal}
-	<Modal bind:this={modal} Zindex="110" on:close={() => (showModal = false)}>
+	<Modal bind:this={modal} Zindex="110" onclose={() => (showModal = false)}>
 		<ReleasedMovie value={released} />
 		<DirectorMovie value={director} />
 		<WriterMovie value={writer} />

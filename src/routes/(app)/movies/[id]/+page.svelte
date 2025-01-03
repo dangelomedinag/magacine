@@ -26,7 +26,7 @@
 	<title>{generateTitle()}</title>
 </svelte:head>
 
-<div class="container content">
+<div class="content container">
 	<div class="content" class:movie={showPlayer} class:poster={!showPlayer}>
 		{#if !showPlayer}
 			<img in:scale={{ start: 0.9 }} class="image" src={data.movie.poster} alt={data.movie.title} />

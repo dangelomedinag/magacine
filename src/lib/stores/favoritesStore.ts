@@ -1,14 +1,14 @@
 import { writable } from 'svelte/store';
-import type { MovieItem } from '$lib/types';
+import type { MovieResult } from '$lib/types';
 
 function customStore() {
-	const { subscribe, update, set } = writable<MovieItem[]>([]);
+	const { subscribe, update, set } = writable<MovieResult[]>([]);
 
 	return {
 		subscribe,
 		update,
 		set,
-		toogleFav: (movie: MovieItem) => {
+		toogleFav: (movie: MovieResult) => {
 			return update((currentMovies) => {
 				// const hasIndex = currentMovies.findIndex((m) => m.imdbid === selectedMovie.imdbid);
 				// if (hasIndex) {

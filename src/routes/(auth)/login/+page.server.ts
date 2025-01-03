@@ -47,7 +47,6 @@ export const actions = {
 			});
 		}
 
-		// eslint-disable-next-line no-unused-vars
 		const { hash, ...payload } = user;
 
 		const token = jwt.sign(payload, env.JWT_TOKEN_SECRET, { expiresIn: '1h' });

@@ -2,6 +2,7 @@
 	// icons
 	import Icon from '$icons/icon.svelte';
 	import StarSolid from '$icons/solid/star.svg?raw';
+	// import StarOutline from '$icons/outline/star.svg?raw';
 	import StarOutline from '$icons/outline/star.svelte';
 
 	/** @type {{rating: any, block?: boolean}} */
@@ -19,6 +20,7 @@
 		{#if fill}
 			<Icon style="color: var(--rating-stars);">
 				<StarOutline />
+				<!-- {@html StarOutline} -->
 			</Icon>
 		{:else}
 			<Icon style="color: var(--rating-stars-fill);">

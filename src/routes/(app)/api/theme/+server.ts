@@ -12,7 +12,7 @@ export async function PUT({ request, cookies }) {
 		);
 	}
 
-	let cookieOpts = {
+	const cookieOpts = {
 		path: '/',
 		httpOnly: true,
 		sameSite: 'strict',

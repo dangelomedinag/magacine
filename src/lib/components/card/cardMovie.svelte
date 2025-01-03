@@ -1,46 +1,35 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
-
-	import { onMount, tick } from 'svelte';
+	import { tick } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 
 	import Icon from '$icons/icon.svelte';
 	import Star from '$icons/solid/star.svg?raw';
-	import Trash from '$icons/solid/trash.svg?raw';
-	import Plus from '$icons/solid/plus.svg?raw';
+	// import Trash from '$icons/solid/trash.svg?raw';
+	// import Plus from '$icons/solid/plus.svg?raw';
 
 	import ProgressLine from '$components/card/cardProgressLine.svelte';
 	import CardRatingStarts from '$components/card/cardRatingStarts.svelte';
 	import AddToFavorites from '$components/card/AddToFavorites.svelte';
 	import { FavMovies } from '$lib/stores/favoritesStore';
-	import type { MovieResult } from '$lib/types';
+	import type { MovieItem, MovieResult } from '$lib/types';
 	import Modal from '$components/ui/modal.svelte';
 	import { page } from '$app/stores';
 	import LoginForm from '$components/ui/LoginForm.svelte';
 	import { invalidateAll } from '$app/navigation';
-	// import { uuid } from '$helpers';
-	// import Trash from '$components/icons/outline/trash.svelte';
-	// import MovieItem from '$components/gridMovies/movieItem.svelte';
 
 	interface Props {
 		full?: boolean;
 		details?: boolean;
 		movie: MovieResult;
-		progress?: number;
+		progress?: unknown;
 		i?: number;
 	}
 
-	let {
-		full = false,
-		details = true,
-		movie,
-		progress = 0,
-		i = 1
-	}: Props = $props();
+	let { full = false, details = true, movie, progress = 0, i = 1 }: Props = $props();
 	let showDetails = $state(false);
 	let showModal: boolean = $state(false);
-	let modal: Modal = $state();
+	let modal = $state<Modal>();
 
 	let isFav = $derived($FavMovies.some((m) => m.imdbid === movie.imdbid));
 
@@ -53,7 +42,7 @@
 		});
 	};
 
-	function intersecting(node) {
+	function intersecting(node: HTMLElement) {
 		if (!details) return;
 
 		let options = {
@@ -75,11 +64,11 @@
 		await new Promise((res) => setTimeout(res, 1000));
 		const req = await fetch('/api/' + movie.imdbid);
 		if (!req.ok) throw req;
-		const res: MovieItem = await req.json();
+		const res = (await req.json()) as MovieItem;
 		return res;
 	}
 
-	function favoritesAction(movie: MovieItem) {
+	function favoritesAction(movie: MovieResult) {
 		// const mesage = isFav ? 'Remove item of favorites?' : 'Add item of favorites?';
 		// modal.open();
 		// const ok = confirm(mesage);
@@ -91,11 +80,11 @@
 	async function openModal() {
 		showModal = true;
 		await tick();
-		modal.open();
+		modal?.open();
 	}
 	function closeModal() {
 		showModal = false;
-		modal.close();
+		modal?.close();
 	}
 </script>
 
@@ -103,24 +92,22 @@
 	{#if $page.data.user}
 		<Modal bind:this={modal}>
 			{#snippet header()}
-						Favorites
-					{/snippet}
+				Favorites
+			{/snippet}
 			<AddToFavorites {movie} {isFav} />
 
 			{#snippet action()}
-					
-					<button class="cta" onclick={() => favoritesAction(movie)}
-						>{isFav ? 'Remove' : 'Add'}</button
-					>
-					<button onclick={modal.close}>cancel</button>
-				
-					{/snippet}
+				<button class="cta" onclick={() => favoritesAction(movie)}
+					>{isFav ? 'Remove' : 'Add'}</button
+				>
+				<button onclick={modal?.close}>cancel</button>
+			{/snippet}
 		</Modal>
 	{:else}
 		<Modal bind:this={modal}>
 			{#snippet header()}
-						login to continue
-					{/snippet}
+				login to continue
+			{/snippet}
 			<h3 style="font-size: 1.5rem; margin-block: 0; ">Login</h3>
 			<p style="margin-block-start: 0.5rem;">
 				Sign in and enjoy the Magazine to the fullest, see details or add to favorites.
@@ -129,7 +116,7 @@
 				on:result={async ({ detail }) => {
 					if (detail.result.type === 'redirect') {
 						await invalidateAll();
-						modal.close();
+						modal?.close();
 					}
 				}}
 			/>
@@ -155,7 +142,14 @@
 			<img loading="lazy" class="item-poster" src={movie.poster} alt={movie.title} />
 		</a>
 	{:else}
-		<a class="item-link" href="/movies/{movie.imdbid}" onclick={preventDefault(openModal)}>
+		<a
+			class="item-link"
+			href="/movies/{movie.imdbid}"
+			onclick={(e) => {
+				e.preventDefault();
+				openModal();
+			}}
+		>
 			<img loading="lazy" class="item-poster" src={movie.poster} alt={movie.title} />
 		</a>
 	{/if}

@@ -5,10 +5,7 @@
 	import X from '$icons/outline/x.svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 
-	interface Props {
-		active?: boolean;
-	}
-	let { active = false, ...rest }: Props & HTMLButtonAttributes = $props();
+	let { ...rest }: HTMLButtonAttributes = $props();
 </script>
 
 <button title="close navbar" {...rest}>

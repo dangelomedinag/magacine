@@ -1,6 +1,9 @@
-<script>
-	/** @type {{value?: number}} */
-	let { value = 0 } = $props();
+<script lang="ts">
+	type Props = {
+		value: unknown;
+	};
+
+	let { value = 0 }: Props = $props();
 </script>
 
 <div class="progress">

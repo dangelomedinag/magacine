@@ -66,30 +66,3 @@
 		{/if}
 	{/await}
 {/if}
-
-<style>
-	div {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin-top: 1em;
-		gap: 0.5em;
-	}
-
-	button {
-		background-color: transparent;
-		border-color: transparent;
-		font-weight: bold;
-		padding-block: 0.3em;
-		padding-inline: 0.5em;
-		border-radius: 5px;
-		opacity: 0.5;
-		cursor: pointer;
-	}
-
-	.active {
-		opacity: 1;
-		background-color: var(--c-front);
-		color: white;
-	}
-</style>
