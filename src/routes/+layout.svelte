@@ -5,7 +5,7 @@
 	import '../styles/_global.css';
 	import { dev } from '$app/environment';
 	import MediaQueries from '$components/dev/mediaQueries.svelte';
-	injectAnalytics();
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	/** @type {{children?: import('svelte').Snippet}} */
 	let { children } = $props();
