@@ -9,6 +9,7 @@
 	//icons
 	import Icon from '$icons/icon.svelte';
 	import Play from '$icons/solid/play.svg?raw';
+	import Film from '$icons/solid/film.svg?raw';
 	import { scale } from 'svelte/transition';
 
 	/** @type {{data: any}} */
@@ -28,12 +29,7 @@
 <div class="container content">
 	<div class="content" class:movie={showPlayer} class:poster={!showPlayer}>
 		{#if !showPlayer}
-			<img
-				in:scale={{ start: 0.9 }}
-				class="image"
-				src={data.movie.poster}
-				alt={data.movie.title}
-			/>
+			<img in:scale={{ start: 0.9 }} class="image" src={data.movie.poster} alt={data.movie.title} />
 			<button
 				class="btn-play"
 				onclick={() => {
@@ -57,9 +53,15 @@
 				}}
 			/>
 			<button
+				class="show-poster"
 				onclick={() => {
 					showPlayer = !showPlayer;
-				}}>dasd</button
+				}}
+			>
+				<Icon y="10%">
+					{@html Film}
+				</Icon>
+				show poster</button
 			>
 		{/if}
 	</div>
@@ -154,8 +156,13 @@
 		max-width: 100%;
 		max-height: 500px;
 		margin: 1em auto;
-		box-shadow: 0 1px 2px rgb(0 0 0 / 7%), 0 2px 4px rgb(0 0 0 / 7%), 0 4px 8px rgb(0 0 0 / 7%),
-			0 8px 16px rgb(0 0 0 / 7%), 0 16px 32px rgb(0 0 0 / 7%), 0 32px 64px rgb(0 0 0 / 7%);
+		box-shadow:
+			0 1px 2px rgb(0 0 0 / 7%),
+			0 2px 4px rgb(0 0 0 / 7%),
+			0 4px 8px rgb(0 0 0 / 7%),
+			0 8px 16px rgb(0 0 0 / 7%),
+			0 16px 32px rgb(0 0 0 / 7%),
+			0 32px 64px rgb(0 0 0 / 7%);
 		border-radius: 10px;
 		border: 1px solid rgb(255 255 255 / 7%);
 		overflow: hidden;
@@ -230,6 +237,18 @@
 		text-transform: capitalize;
 		font-weight: bold;
 		line-height: 2rem;
+	}
+
+	.show-poster {
+		background-color: var(--c-front-dark);
+		text-align: center;
+		border-radius: 5px;
+		border: 1px solid var(--c-front-dark);
+		color: white;
+		padding-inline: 0.5rem;
+		padding-block: 0.2rem;
+		font-size: 0.7rem;
+		text-transform: uppercase;
 	}
 
 	/* @media (min-width: 576px) {}

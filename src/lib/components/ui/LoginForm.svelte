@@ -14,16 +14,20 @@
 		handlerSubmit?: SubmitFunction;
 	}
 
-	let { form = $bindable(null), loading = $bindable(false), handlerSubmit = ({ form: FormElement }) => {
-		loading = true;
-		return async (complete) => {
-			if (complete.result.type === 'failure') {
-				form = complete.result.data;
-			}
-			loading = false;
-			dispatch('result', complete);
-		};
-	} }: Props = $props();
+	let {
+		form = $bindable(null),
+		loading = $bindable(false),
+		handlerSubmit = ({ form: FormElement }) => {
+			loading = true;
+			return async (complete) => {
+				if (complete.result.type === 'failure') {
+					form = complete.result.data;
+				}
+				loading = false;
+				dispatch('result', complete);
+			};
+		}
+	}: Props = $props();
 	let element: HTMLFormElement = $state();
 	const completeInputs = ({ invalid }: { invalid: boolean }) => {
 		if (element) {
@@ -53,7 +57,7 @@
 			type="text"
 			name="username"
 			id="username"
-			placeholder="✅ any word ❌ 'invalid' or 'non-existent'"
+			placeholder="any word"
 			autocomplete="off"
 			minlength="3"
 			required
@@ -76,7 +80,7 @@
 			type="password"
 			name="password"
 			id="password"
-			placeholder="✅ 'superpassword' ❌ any other word"
+			placeholder="superpassword"
 			required
 			minlength="3"
 			disabled={loading}

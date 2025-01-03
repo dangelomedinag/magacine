@@ -1,7 +1,7 @@
 import type { MoviesResponse } from '$lib/types.js';
 
 type SearchLoadResponse<T = MoviesResponse> = {
-	movies?: Promise<T>;
+	movies?: MoviesResponse;
 	suggest: {
 		movies: null | Promise<T>;
 	};
@@ -10,11 +10,11 @@ type SearchLoadResponse<T = MoviesResponse> = {
 
 const get = async (request: Promise<Response>): Promise<MoviesResponse> => {
 	const res = await request;
-	const json = await res.json();
+	const json = await res.json() as MoviesResponse;
 	return json;
 };
 
-export function load({ fetch, url, depends }) {
+export async function load({ fetch, url, depends }) {
 	depends('search:load');
 
 	let data: SearchLoadResponse = {
@@ -27,11 +27,13 @@ export function load({ fetch, url, depends }) {
 
 	const searchParams = url.searchParams;
 	const searchText = searchParams.has('s');
-	searchParams.toString();
+  
 	if (searchText) {
 		const request = fetch('/api?' + searchParams.toString());
-		const response = get(request);
-		data.movies = response;
+		const response = await get(request)
+      
+    data.movies = response;
+
 	}
 
 	const requestSuggest = fetch('/api?s=marvel');

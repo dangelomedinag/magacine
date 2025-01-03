@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
-
 	import { afterNavigate, goto, invalidate, invalidateAll } from '$app/navigation';
 	import { onMount, tick } from 'svelte';
 	import { fly } from 'svelte/transition';
@@ -18,16 +16,18 @@
 	import SearchCircle from '$icons/solid/search-circle.svg?raw';
 	import Search from '$icons/solid/search.svg?raw';
 	import type { MoviesResponse } from '$lib/types';
+	import Error from '../../+error.svelte';
 
-	interface Props {
-		data: any;
-	}
+	// interface Props {
+	// 	data: any;
+	// }
 
-	let { data }: Props = $props();
+	let { data } = $props();
 
 	let value = $state('');
 	let currentValue = '';
-	let input: HTMLElement = $state();
+	let input = $state() as HTMLInputElement;
+	let form: HTMLFormElement;
 	let showSuggest = $state(false);
 	let autocomplete: MoviesResponse;
 	let lastValue = $state('');
@@ -35,18 +35,19 @@
 	let lastSearch: MoviesResponse | [] = $state([]);
 	let timer: NodeJS.Timeout | undefined = undefined;
 	let timerErrors: NodeJS.Timeout | undefined = undefined;
-	let errors: { level: { [index: string]: boolean }; message: string } | undefined = $state(undefined);
+	let errors: { level: { [index: string]: boolean }; message: string } | undefined =
+		$state(undefined);
 
-	let loading = false;
+	let loading = $state(false);
 
 	// filters
-	let selected = $state(['movie', 'series']);
+	let selected = $state(['movie' /* , 'series' */]);
 	let options = [
 		{ value: 'movie', label: 'movies' },
 		{ value: 'series', label: 'series' }
 	];
 
-	onMount(async () => {
+	onMount(() => {
 		if (data.movies) {
 			if (data.movies?.message) {
 				errors = { level: { danger: true }, message: data.movies?.message };
@@ -57,7 +58,123 @@
 		}
 	});
 
-	function openSuggestions() {
+	async function submit(
+		e: SubmitEvent & {
+			currentTarget: EventTarget & HTMLFormElement;
+		}
+	) {
+		e.preventDefault();
+
+		loading = true;
+		try {
+			movies = await getData(value);
+		} catch (err) {
+			if (err instanceof Error) {
+				console.error(err);
+			}
+			ErrorHandler(err as { type: string; message: string });
+		} finally {
+			loading = false;
+			showSuggest = false;
+		}
+		await updateUrlSearchParam(value);
+	}
+
+	async function updateUrlSearchParam(searchString: string) {
+		const url = new URL(location.toString());
+		const replaceState = !Boolean(url.searchParams.size);
+		url.searchParams.set('s', searchString);
+
+		if (selected.length == 1) url.searchParams.set('type', selected[0]);
+		else if (url.searchParams.has('type')) url.searchParams.delete('type');
+
+		await goto(url.href, { replaceState, keepFocus: true, invalidateAll: false });
+	}
+
+	async function getData(searchString: string) {
+		// if (searchString.length < 3) {
+		// 	throw { level: { warn: true }, message: CODE.too_short };
+		// }
+
+		loading = true;
+
+		const Params = new URLSearchParams('');
+		Params.set('s', searchString);
+
+		if (selected.length == 1) {
+			Params.set('type', selected[0]);
+		}
+
+		const req = await fetch('/api?' + Params.toString());
+
+		if (!req.ok) {
+			const res = await req.json();
+			throw { type: 'request', message: res.message };
+		}
+
+		const res = (await req.json()) as MoviesResponse;
+		if (res.message) {
+			throw { type: 'info', message: res.message };
+		}
+		loading = false;
+		return res;
+	}
+
+	const ErrorHandler = ({ type, message }: { type: string; message: string }) => {
+		if (type === 'request') {
+			errors = { level: { danger: true }, message: message };
+		}
+		if (type === 'info') {
+			errors = { level: { danger: true }, message: message };
+		}
+	};
+
+	const delay = (fn: () => void, ms = 800) => setTimeout(fn, ms);
+
+	function oninput() {
+		// console.log(value);
+		if (value.length < 1) return;
+
+		if (timer) clearTimeout(timer);
+		errors = undefined;
+		loading = true;
+		timer = delay(() => {
+			getData(value)
+				.then((res) => {
+					autocomplete = res;
+					showSuggest = true;
+				})
+				.catch((e) => {
+					console.log(e);
+				})
+				.finally(() => {
+					loading = false;
+				});
+		}, 1000);
+	}
+
+	const filterAutocomplete = () =>
+		autocomplete.results
+			.filter((r) => r.title.trim().slice(value.length).length > 1)
+			.sort((a, b) => a.title.length - b.title.length);
+
+	afterNavigate(async ({ type, from, to }) => {
+		if (type === 'popstate') {
+			if (from?.url.search !== to?.url.search) {
+				await invalidate('search:load');
+				if (data.movies) {
+					if (data.movies?.message) {
+						errors = { level: { danger: true }, message: data.movies?.message };
+					} else {
+						value = data.movies?.search;
+						movies = data.movies;
+					}
+				}
+			}
+		}
+	});
+
+	/* function openSuggestions() {
 		if (!lastSearch) {
 			return;
 		}
@@ -173,7 +290,7 @@
 
 	const getInputValue = () => input.value.trim().toLowerCase();
 
-	const delay = (fn, ms = 800) => setTimeout(fn, ms);
+	const delay = (fn: () => void, ms = 800) => setTimeout(fn, ms);
 
 	function onInput() {
 		showSuggest = false;
@@ -222,7 +339,7 @@
 				}
 			}
 		}
-	});
+	}); */
 </script>
 
 <svelte:head>
@@ -231,11 +348,13 @@
 
 <div class="content search-wrapper">
 	<div class="search-container">
-		<form id="search-form" onreset={onReset} onsubmit={preventDefault(submit)}>
+		<form bind:this={form} id="search-form" onsubmit={submit}>
 			<div class="form-section">
 				<label for="search-input" class="form-item search-label"><Icon>{@html Search}</Icon></label>
 			</div>
 			<input
+				bind:this={input}
+				bind:value
 				type="search"
 				name="search-input"
 				id="search-input"
@@ -244,10 +363,7 @@
 				placeholder="ej. spider-man"
 				autocomplete="off"
 				required
-				onfocus={onFocus}
-				oninput={onInput}
-				bind:this={input}
-				bind:value
+				{oninput}
 			/>
 			<div class="form-section">
 				<button type="submit" class="form-item form-btn btn-submit" disabled={errors?.level?.warn}
@@ -258,28 +374,25 @@
 
 		{#if showSuggest}
 			<div class="wrapper-suggest scroolbar-prettie">
-				<!-- {#if filterAutocomplete().length > 0} -->
-				<button type="button" class="suggest-item btn-close" onclick={closeSuggestions}>
+				<button
+					type="button"
+					class="suggest-item btn-close"
+					onclick={() => {
+						/* closeSuggestions */
+					}}
+				>
 					<Icon y="10%">{@html X}</Icon>
 				</button>
-				<!-- {/if} -->
 				{#each filterAutocomplete() as item, i (item.uuid)}
 					{@const word = item.title.trim().toLowerCase().slice(0, value.length)}
 					{@const rest = item.title.trim().toLowerCase().slice(value.length)}
 					<button
-						onmouseenter={() => {
-							input.value += rest;
-						}}
-						onfocusin={() => {
-							input.value = value;
-							input.value += rest;
-						}}
-						onmouseleave={() => {
-							input.value = value;
-						}}
 						in:fly|global={{ y: 15, delay: 20 * i, duration: 150, easing: quintInOut }}
 						class="suggest-item"
-						onclick={() => setValue(item)}
+						onclick={() => {
+							value = item.title.toLowerCase();
+							form.requestSubmit();
+						}}
 					>
 						...{rest}</button
 					>
@@ -287,7 +400,6 @@
 			</div>
 		{/if}
 		<div class="filter-container">
-			<!-- <div class="filter-group"> -->
 			{#each options as item}
 				<label
 					for="radio-{item.value}"
@@ -295,11 +407,6 @@
 					class:option--active={selected.includes(item.value)}
 				>
 					<input
-						tabindex="0"
-						onchange={() => {
-							lastValue = '';
-							lastSearch = undefined;
-						}}
 						id="radio-{item.value}"
 						class="check-item"
 						type="checkbox"
@@ -309,13 +416,12 @@
 					<span class="check-label">{item.label}</span>
 				</label>
 			{/each}
-			<!-- </div> -->
 		</div>
 	</div>
 </div>
-<div class="content">
+<div class="content" class:loading>
 	{#if errors}
-		<Alert {...errors.level} on:click={() => (errors = undefined)}
+		<Alert {...errors.level} onclose={() => (errors = undefined)}
 			><span>{errors.message}</span></Alert
 		>
 	{/if}
@@ -337,27 +443,18 @@
 
 <style>
 	.loading {
-		/* position: absolute;
-		top: 0;
-		left: 0; */
-		height: 3px;
-		background-color: var(--c-front);
-		/* width: 0px; */
+		opacity: 0.2;
 	}
 
 	.search-wrapper {
 		position: relative;
-		/* background-color: var(--c-main); */
-		/* border-bottom: 1px solid var(--c-front); */
 	}
 
 	.search-container {
-		/* padding-inline: 1em; */
 		padding-block: 1em;
 		border: 1px solid transparent;
 		max-width: 600px;
 		margin-inline: auto;
-		/* border-radius: 15px; */
 	}
 
 	#search-form {
@@ -397,7 +494,6 @@
 	}
 	.search-input:focus {
 		outline: none;
-		/* background-color: rgba(128, 128, 128, 0.03); */
 	}
 
 	.btn-submit {
@@ -433,56 +529,37 @@
 		margin-top: 1em;
 	}
 
-	/* .filter-group {
-		margin-top: 1em;
-		border: 1px solid transparent;
-	} */
-
 	.option {
-		position: relative;
-		display: inline-block;
-		font-weight: bold;
-		min-width: 100px;
 		text-align: center;
-		/* margin-inline: 0.2em; */
-	}
-
-	.check-item {
-		position: absolute;
-		display: block;
-		width: 100%;
-		height: 100%;
-		all: initial;
-		z-index: 1;
-		border-radius: 50vh;
-	}
-	.check-item:focus {
-		outline: 1px dashed grey;
-		outline-offset: 2px;
-	}
-	.check-item:hover ~ .check-label {
-		background-color: var(--c-divider);
-	}
-
-	.check-label {
-		display: inline-block;
-		width: 100%;
-		border-radius: 50vh;
-		padding-inline: 0.6em;
-		padding-block: 0.4em;
+		border: 1px solid transparent;
 		color: var(--c-text-basee);
 		opacity: 0.5;
-	}
+		width: 100%;
+		max-width: 100px;
+		border-radius: 50vh;
 
-	.check-item:checked ~ .check-label {
+		&:hover {
+			background-color: var(--c-divider);
+		}
+		&:focus-within {
+			outline: 1px solid rgba(128, 128, 128, 0.5);
+			outline-offset: 2px;
+		}
+	}
+	.option:has(:checked) {
+		border: 1px solid red;
 		opacity: 1;
 		background-color: var(--c-front);
 		color: white;
 	}
+	.check-item {
+		pointer-events: none;
+		position: absolute;
+		all: initial;
+	}
 
 	.wrapper-suggest {
 		display: flex;
-		/* flex-wrap: wrap; */
 		max-width: 100%;
 		overflow-x: auto;
 		gap: 0.2em;
@@ -536,189 +613,4 @@
 	.scroolbar-prettie::-webkit-scrollbar-thumb:hover {
 		background-color: #555;
 	}
-
-	/* .wrapper {
-	}
-
-	.search-container {
-		position: relative;
-	}
-
-	.search-box {
-		display: flex;
-		color: var(--c-text-base);
-		border: 1px solid rgba(128, 128, 128, 0.3);
-		overflow: hidden;
-		border-radius: 50vh;
-	}
-
-	.search-box--open {
-		border-radius: 20px;
-		border-bottom-left-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-
-	#mysearch {
-		color: inherit;
-		font-size: 1.3rem;
-		font-weight: bold;
-		display: block;
-		height: 100%;
-		width: 100%;
-		background-color: transparent;
-		border: none;
-		outline: none;
-		padding-left: 0.5em;
-		padding-right: 0.5em;
-		padding-top: 0.25em;
-		padding-bottom: 0.25em;
-	}
-
-	#mysearch:hover,
-	#mysearch:focus,
-	.btn-clear:hover {
-		background-color: var(--c-divider);
-	}
-
-	.btn-search:hover {
-		background-color: var(--c-front-dark);
-	}
-
-	.btn-search:disabled {
-		color: rgba(255, 255, 255, 0.2);
-		background-color: rgba(255, 0, 0, 0.1);
-		cursor: not-allowed;
-	}
-	.btn-search:focus {
-		background-color: var(--c-front);
-	}
-
-	.btn-search {
-		cursor: pointer;
-		color: white;
-		background-color: var(--c-front);
-		border: none;
-		padding-left: 1em;
-		padding-right: 1em;
-	}
-
-	.btn-clear {
-		cursor: pointer;
-		color: inherit;
-		background-color: transparent;
-		border: none;
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		width: 40px;
-		position: relative;
-	}
-
-	.btn-clear:active {
-		background-color: var(--c-front);
-	}
-	.btn-clear:focus {
-		background-color: rgba(255, 255, 255, 0.1);
-		border: none;
-		outline: none;
-	}
-
-	.autocomplete-container {
-		width: 100%;
-		position: absolute;
-		background-color: var(--c-main-content);
-		opacity: 0.95;
-		display: block;
-		z-index: 50;
-		bottom: 0;
-		transform: translateY(100%);
-		border-bottom-right-radius: 20px;
-		border-bottom-left-radius: 20px;
-		overflow-y: auto;
-		max-height: 40vh;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
-			0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07),
-			0 32px 64px rgba(0, 0, 0, 0.07);
-	}
-
-	.autocomplete-container--open {
-		border: 1px solid var(--c-divider);
-	}
-
-	.autocomplete-container::-webkit-scrollbar {
-		width: 5px;
-		border-radius: 10px;
-	}
-
-	.autocomplete-container::-webkit-scrollbar-track {
-		background: rgba(128, 128, 128, 0.05);
-		margin: 10px;
-		border-radius: 10px;
-		overflow: hidden;
-	}
-
-	.autocomplete-container::-webkit-scrollbar-thumb {
-		background: rgba(255, 255, 255, 0.05);
-	}
-
-	.autocomplete-container::-webkit-scrollbar-thumb:hover {
-		background: #555;
-	}
-
-	.item {
-		text-align: left;
-		width: 100%;
-		background-color: transparent;
-		display: block;
-		border: none;
-		color: inherit;
-		padding: 0.5em 1em;
-		cursor: pointer;
-	}
-
-	.item:hover,
-	.item:focus {
-		background-color: var(--c-front);
-		color: white;
-	}
-
-	.filters {
-		font-size: 0.9em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-		padding-top: 1em;
-		padding-bottom: 1em;
-	}
-
-	.option {
-		text-align: center;
-		border: 1px solid transparent;
-
-		width: 100%;
-		max-width: 80px;
-		padding: 0.5em 0;
-		cursor: pointer;
-	}
-
-	.option span {
-		display: block;
-		padding-bottom: 0.5em;
-	}
-
-	.option:hover {
-		background-color: rgba(255, 255, 255, 0.1);
-	}
-
-	.option--active {
-		border-top: 1px solid var(--c-front);
-	}
-
-	.check-item {
-		display: block;
-		margin: 0 auto;
-		text-align: center;
-		accent-color: var(--c-front);
-	} */
 </style>

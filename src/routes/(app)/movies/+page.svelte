@@ -68,7 +68,7 @@
 
 <SectionPage>
 	<span><Icon>{@html Search}</Icon> page: {active + 1}</span>
-	<h1>{data.movies?.search}</h1>
+	<h1>{decodeURIComponent(data.movies?.search)}</h1>
 </SectionPage>
 
 <Paginator {showPaginator} {active} {url} {arr} {setPage} />

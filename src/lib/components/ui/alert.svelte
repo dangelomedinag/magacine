@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { createBubbler } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { quintInOut } from 'svelte/easing';
-	import { fly, slide } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 
 	// icons
 	import Icon from '$icons/icon.svelte';
@@ -20,20 +17,29 @@
 		warn?: boolean;
 		danger?: boolean;
 		close?: boolean;
+		onclose?: (e: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) => void;
 		children?: import('svelte').Snippet;
 	}
 
-	let { success = false, warn = false, danger = false, close = false, children }: Props = $props();
+	let {
+		success = false,
+		warn = false,
+		danger = false,
+		close = false,
+		children,
+		onclose
+	}: Props = $props();
 
 	let active = false;
-
 	let activeElement: EventTarget | null;
+
+	window;
 	onMount(() => {
 		active = true;
 	});
 
 	onDestroy(() => {
-		if (activeElement) activeElement.focus();
+		if (activeElement) (activeElement as HTMLElement).focus();
 		if (browser) {
 			document.body.removeEventListener('focusout', setActiveElement);
 		}
@@ -77,7 +83,7 @@
 		{@render children?.()}
 	</span>
 	{#if close}
-		<button type="button" onclick={bubble('click')}>
+		<button type="button" onclick={(e) => onclose?.(e)}>
 			<Icon>
 				{@html X}
 			</Icon>
