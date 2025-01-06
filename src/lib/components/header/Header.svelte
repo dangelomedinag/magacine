@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { self } from 'svelte/legacy';
-
 	import { tick } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 
@@ -37,12 +35,14 @@
 	}
 
 	let { search = true, bell = true, profile = true, ...rest }: Props = $props();
+
 	// svelte-ignore non_reactive_update
 	let modalSearch: Modal;
 	// svelte-ignore non_reactive_update
 	let modalSession: Modal;
 	// svelte-ignore non_reactive_update
 	let modalNotification: Modal;
+
 	let searchInput = $state(false);
 	let inputRef = $state<HTMLInputElement>();
 	let results = $state<Promise<MoviesResponse>>();
@@ -91,6 +91,17 @@
 
 	function toggleSearchInput() {
 		searchInput = !searchInput;
+	}
+
+	function self(fn: () => void) {
+		return function (...args: any[]) {
+			var event = /** @type {Event} */ (args[0]);
+			// @ts-ignore
+			if (event.target === this) {
+				// @ts-ignore
+				fn?.apply(this, args);
+			}
+		};
 	}
 </script>
 
